@@ -459,6 +459,152 @@ async def get_music_info(music_id: str):
     
     return music_library.get(music_id)
 
+# =============  MUSIC ENDPOINTS =============
+
+@api_router.get("/music/library", response_model=List[dict])
+async def get_music_library(
+    category: Optional[str] = None,
+    search: Optional[str] = None,
+    trending: Optional[bool] = None,
+    limit: int = 50,
+    offset: int = 0
+):
+    """Get music library with filtering options"""
+    
+    # All music from library
+    all_music = [
+        {
+            'id': 'music_trending_1',
+            'title': 'Aesthetic Vibes',
+            'artist': 'TrendyBeats',
+            'duration': 30,
+            'url': '/music/aesthetic-vibes.mp3',
+            'cover': 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=center',
+            'category': 'Trending',
+            'isOriginal': False,
+            'isTrending': True,
+            'uses': 2500000,
+            'waveform': [0.2, 0.5, 0.8, 0.9, 0.7, 0.9, 0.4, 0.6, 0.8, 0.9, 0.5, 0.7, 0.9, 0.8, 0.6, 0.8, 0.4, 0.7, 0.5, 0.9]
+        },
+        {
+            'id': 'music_trending_2',
+            'title': 'Viral Dance Beat',
+            'artist': 'ViralHits',
+            'duration': 45,
+            'url': '/music/viral-dance.mp3',
+            'cover': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop&crop=center',
+            'category': 'Trending',
+            'isOriginal': False,
+            'isTrending': True,
+            'uses': 1800000,
+            'waveform': [0.8, 0.9, 0.7, 0.9, 0.8, 1.0, 0.6, 0.9, 0.8, 0.7, 0.9, 0.8, 1.0, 0.7, 0.9, 0.8, 0.6, 0.9, 0.8, 0.7]
+        },
+        {
+            'id': 'music_pop_1',
+            'title': 'Pop Sensation',
+            'artist': 'Chart Toppers',
+            'duration': 35,
+            'url': '/music/pop-sensation.mp3',
+            'cover': 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=center',
+            'category': 'Pop',
+            'isOriginal': False,
+            'uses': 750000,
+            'waveform': [0.5, 0.7, 0.4, 0.8, 0.3, 0.6, 0.9, 0.2, 0.7, 0.5, 0.8, 0.4, 0.6, 0.9, 0.3, 0.7, 0.5, 0.8, 0.2, 0.6]
+        },
+        {
+            'id': 'music_hiphop_1',
+            'title': 'Urban Beat',
+            'artist': 'City Sounds',
+            'duration': 52,
+            'url': '/music/urban-beat.mp3',
+            'cover': 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&h=400&fit=crop&crop=center',
+            'category': 'Hip-Hop',
+            'isOriginal': False,
+            'uses': 680000,
+            'waveform': [0.6, 0.8, 0.4, 0.9, 0.3, 0.7, 0.5, 0.8, 0.2, 0.6, 0.9, 0.4, 0.7, 0.3, 0.8, 0.5, 0.9, 0.2, 0.6, 0.7]
+        },
+        {
+            'id': 'music_chill_1',
+            'title': 'Summer Vibes',
+            'artist': 'Chill Master',
+            'duration': 38,
+            'url': '/music/summer-vibes.mp3',
+            'cover': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop&crop=center',
+            'category': 'Chill',
+            'isOriginal': False,
+            'uses': 640000,
+            'waveform': [0.4, 0.6, 0.3, 0.7, 0.5, 0.8, 0.3, 0.6, 0.9, 0.2, 0.5, 0.7, 0.4, 0.8, 0.6, 0.3, 0.7, 0.5, 0.8, 0.4]
+        },
+        {
+            'id': 'music_electronic_1',
+            'title': 'Electronic Pulse',
+            'artist': 'Synth Wave',
+            'duration': 48,
+            'url': '/music/electronic-pulse.mp3',
+            'cover': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop&crop=center',
+            'category': 'Electronic',
+            'isOriginal': False,
+            'uses': 520000,
+            'waveform': [0.8, 0.3, 0.9, 0.2, 0.7, 0.5, 0.8, 0.4, 0.9, 0.1, 0.6, 0.8, 0.3, 0.9, 0.2, 0.7, 0.5, 0.8, 0.4, 0.9]
+        },
+        {
+            'id': 'music_latin_1',
+            'title': 'Reggaeton Flow',
+            'artist': 'Latino Beats',
+            'duration': 42,
+            'url': '/music/reggaeton-flow.mp3',
+            'cover': 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&h=400&fit=crop&crop=center',
+            'category': 'Latin',
+            'isOriginal': False,
+            'uses': 850000,
+            'waveform': [0.7, 0.8, 0.6, 0.9, 0.5, 0.8, 0.7, 0.9, 0.4, 0.8, 0.6, 0.9, 0.7, 0.8, 0.5, 0.9, 0.6, 0.8, 0.7, 0.9]
+        },
+        {
+            'id': 'music_dance_1',
+            'title': 'Dance Revolution 2025',
+            'artist': 'DJ TikTok',
+            'duration': 60,
+            'url': '/music/dance-revolution.mp3',
+            'cover': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop&crop=center',
+            'category': 'Dance',
+            'isOriginal': False,
+            'uses': 1200000,
+            'waveform': [0.1, 0.9, 0.3, 0.8, 0.6, 0.4, 0.9, 0.2, 0.7, 0.5, 0.8, 0.3, 0.6, 0.9, 0.4, 0.7, 0.2, 0.8, 0.5, 0.9]
+        }
+    ]
+    
+    filtered_music = all_music.copy()
+    
+    # Apply filters
+    if category and category != 'Todas':
+        filtered_music = [m for m in filtered_music if m['category'] == category]
+    
+    if search:
+        search_lower = search.lower()
+        filtered_music = [m for m in filtered_music if 
+            search_lower in m['title'].lower() or 
+            search_lower in m['artist'].lower() or
+            search_lower in m['category'].lower()
+        ]
+    
+    if trending is True:
+        filtered_music = [m for m in filtered_music if m.get('isTrending', False)]
+    
+    # Sort by uses (popularity)
+    filtered_music.sort(key=lambda x: x.get('uses', 0), reverse=True)
+    
+    # Apply pagination
+    total = len(filtered_music)
+    filtered_music = filtered_music[offset:offset + limit]
+    
+    return {
+        'music': filtered_music,
+        'total': total,
+        'limit': limit,
+        'offset': offset,
+        'has_more': offset + limit < total
+    }
+
 # =============  NOTIFICATION UTILITIES =============
 
 async def send_mention_notifications(mentioned_users: List[str], poll_id: str, current_user: UserResponse):
