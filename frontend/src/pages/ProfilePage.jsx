@@ -12,7 +12,7 @@ import ShareModal from '../components/ShareModal';
 import TikTokProfileGrid from '../components/TikTokProfileGrid';
 import TikTokScrollView from '../components/TikTokScrollView';
 import AvatarUpload from '../components/AvatarUpload';
-import { Settings, Users, Vote, Trophy, Heart, Share, ArrowLeft, AtSign, Bookmark, Grid3X3, Check, Share2 } from 'lucide-react';
+import { Settings, Users, Vote, Trophy, Heart, Share, ArrowLeft, AtSign, Bookmark, Grid3X3, Check, Share2, UserPlus, UserCheck } from 'lucide-react';
 import pollService from '../services/pollService';
 import { useToast } from '../hooks/use-toast';
 import { useAuth } from '../contexts/AuthContext';
