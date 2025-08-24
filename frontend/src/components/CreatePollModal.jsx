@@ -67,6 +67,16 @@ const CreatePollModal = ({ onCreatePoll, children, isOpen: externalIsOpen, onClo
   const [selectedMusic, setSelectedMusic] = useState(null);
   const [showMusicSelector, setShowMusicSelector] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
+  
+  // New states for user mentions and video playback
+  const [mentionedUsers, setMentionedUsers] = useState([]);
+  const [videoPlaybackSettings, setVideoPlaybackSettings] = useState({
+    playbackMode: 'sequential',
+    autoplay: true,
+    muted: false,
+    loop: false
+  });
+  
   const { toast } = useToast();
 
   // Use external control if provided, otherwise use internal state
