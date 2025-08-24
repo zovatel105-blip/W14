@@ -193,7 +193,7 @@ const MusicSelector = ({ onSelectMusic, selectedMusic, pollTitle = '' }) => {
   };
 
   // Obtener categorías principales para mostrar
-  const mainCategories = ['Trending', 'Pop', 'Hip-Hop', 'Electronic', 'Latin', 'Chill'];
+  const mainCategories = ['Trending', 'Reggaeton', 'Trap', 'Urbano Español', 'Pop Latino', 'Hip-Hop'];
 
   return (
     <div className="space-y-3 bg-white">
