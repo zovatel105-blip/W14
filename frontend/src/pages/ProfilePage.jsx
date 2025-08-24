@@ -67,7 +67,7 @@ const ProfilePage = () => {
   const [followingLoading, setFollowingLoading] = useState(false);
   const { toast } = useToast();
   const { user: authUser, refreshUser } = useAuth();
-  const { getUserFollowers, getUserFollowing } = useFollow();
+  const { getUserFollowers, getUserFollowing, followUser, unfollowUser, isFollowing, getFollowStatus } = useFollow();
   const { userId } = useParams();
   const navigate = useNavigate();
   const { shareModal, shareProfile, closeShareModal } = useShare();
