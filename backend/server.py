@@ -2224,6 +2224,7 @@ async def get_poll_by_id(
                     "verified": option_user.get("is_verified", False),
                     "followers": "1K"  # Placeholder
                 },
+                "mentioned_users": option.get("mentioned_users", []),  # Include mentioned users
                 "media": {
                     "type": option.get("media_type"),
                     "url": media_url,
