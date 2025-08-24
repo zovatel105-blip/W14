@@ -581,12 +581,13 @@ const TikTokPollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, onCr
             )}
           </div>
           
-          {/* Music Player - Right side, same height as buttons */}
+          {/* Music Player - Right side, same height as buttons con autoplay */}
           {poll.music && (
             <MusicPlayer
               music={poll.music}
               isVisible={isActive}
               onTogglePlay={handleMusicToggle}
+              autoPlay={true}  // ✅ REPRODUCCIÓN AUTOMÁTICA ACTIVADA
               className="flex-shrink-0"
             />
           )}
