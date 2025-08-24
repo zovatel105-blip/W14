@@ -285,6 +285,16 @@ async def create_or_get_oauth_user(oauth_data: Dict, ip_address: str, user_agent
         
         return user
 
+# =============  NOTIFICATION UTILITIES =============
+
+async def send_mention_notifications(mentioned_users: List[str], poll_id: str, current_user: UserResponse):
+    """Send notifications to mentioned users"""
+    # TODO: Implement notification system for mentioned users
+    # This is a placeholder function that will be implemented later
+    # For now, we'll just log the mentions
+    print(f"Sending mention notifications to {mentioned_users} for poll {poll_id} by user {current_user.username}")
+    pass
+
 # Basic API endpoint
 @api_router.get("/")
 async def get_api_info():
