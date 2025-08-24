@@ -98,6 +98,60 @@ const TikTokPollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, onCr
     }
   }, [authorUserId, currentUser, getFollowStatus]);
 
+  // Activar contexto de audio y reproducción automática
+  useEffect(() => {
+    const handleAutoPlay = async () => {
+      // Solo reproducir si está activo y tiene música
+      if (isActive && poll.music && poll.music.preview_url) {
+        try {
+          // Activar contexto de audio si no está activado
+          if (!audioContextActivated) {
+            const activated = await audioManager.activateAudioContext();
+            setAudioContextActivated(activated);
+          }
+
+          // Reproducir música automáticamente
+          await audioManager.play(poll.music.preview_url, {
+            startTime: 0,
+            loop: true // Loop para que suene mientras se ve el post
+          });
+
+          setIsMusicPlaying(true);
+          console.log(`🎵 Auto-playing: ${poll.music.title} - ${poll.music.artist}`);
+          
+        } catch (error) {
+          console.error('Error en autoplay:', error);
+        }
+      } else if (!isActive && isMusicPlaying) {
+        // Pausar cuando ya no está activo
+        await audioManager.pause();
+        setIsMusicPlaying(false);
+        console.log('⏸️ Auto-paused music');
+      }
+    };
+
+    handleAutoPlay();
+  }, [isActive, poll.music, audioContextActivated]);
+
+  // Activar audio context en primera interacción
+  useEffect(() => {
+    const activateOnFirstInteraction = async () => {
+      if (!audioContextActivated) {
+        const activated = await audioManager.activateAudioContext();
+        setAudioContextActivated(activated);
+      }
+    };
+
+    // Activar en cualquier click o touch
+    document.addEventListener('click', activateOnFirstInteraction, { once: true });
+    document.addEventListener('touchstart', activateOnFirstInteraction, { once: true });
+
+    return () => {
+      document.removeEventListener('click', activateOnFirstInteraction);
+      document.removeEventListener('touchstart', activateOnFirstInteraction);
+    };
+  }, [audioContextActivated]);
+
   const handleVote = (optionId) => {
     if (!poll.userVote) {
       onVote(poll.id, optionId);
