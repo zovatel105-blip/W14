@@ -12,13 +12,15 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Textarea } from './ui/textarea';
-import { Plus, X, Sparkles, Upload, Image, Video, Play, Music, Send } from 'lucide-react';
+import { Plus, X, Sparkles, Upload, Image, Video, Play, Music, Send, AtSign, Settings } from 'lucide-react';
 import { useToast } from '../hooks/use-toast';
 import { fileToBase64 } from '../services/mockData';
 import pollService from '../services/pollService';
 import MusicSelector from './MusicSelector';
 import PollOptionUpload from './PollOptionUpload';
 import UploadWidget from './UploadWidget';
+import UserMentionInput from './UserMentionInput';
+import VideoPlaybackSettings from './VideoPlaybackSettings';
 
 const MediaUploadPreview = ({ media, onRemove, isVideo = false }) => {
   if (!media) return null;
