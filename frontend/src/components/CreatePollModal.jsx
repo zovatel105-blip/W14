@@ -112,9 +112,37 @@ const CreatePollModal = ({ onCreatePoll, children, isOpen: externalIsOpen, onClo
         url: base64,
       };
 
-      // Para videos, crear thumbnail básico
+      // Para videos, crear thumbnail con imagen placeholder más efectiva
       if (isVideo) {
-        mediaData.thumbnail = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjE2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4gIDxyZWN0IHdpZHRoPSIyMDAiIGhlaWdodD0iMTYwIiBmaWxsPSIjMzMzIi8+ICA8cG9seWdvbiBwb2ludHM9IjgwLDYwIDEyMCw4MCA4MCwxMDAiIGZpbGw9IiNmZmYiLz4gIDx0ZXh0IHg9IjEwMCIgeT0iMTM1IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTIiIGZpbGw9IiNmZmYiPlZpZGVvPC90ZXh0Pjwvc3ZnPg==';
+        // Crear un thumbnail con una imagen sólida en lugar de SVG
+        const canvas = document.createElement('canvas');
+        canvas.width = 400;
+        canvas.height = 600;
+        const ctx = canvas.getContext('2d');
+        
+        // Fondo degradado
+        const gradient = ctx.createLinearGradient(0, 0, 0, 600);
+        gradient.addColorStop(0, '#1f2937');
+        gradient.addColorStop(1, '#111827');
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, 400, 600);
+        
+        // Ícono de play
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.moveTo(160, 250);
+        ctx.lineTo(160, 350);
+        ctx.lineTo(240, 300);
+        ctx.closePath();
+        ctx.fill();
+        
+        // Texto "Video"
+        ctx.fillStyle = '#ffffff';
+        ctx.font = '20px Arial';
+        ctx.textAlign = 'center';
+        ctx.fillText('Video', 200, 380);
+        
+        mediaData.thumbnail = canvas.toDataURL('image/png');
       }
 
       updateOption(index, 'media', mediaData);
