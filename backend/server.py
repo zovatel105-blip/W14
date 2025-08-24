@@ -1459,15 +1459,60 @@ async def get_image_dimensions(file_path: Path) -> tuple[Optional[int], Optional
         return None, None
 
 async def get_video_info(file_path: Path) -> tuple[Optional[int], Optional[int], Optional[float]]:
-    """Get basic video info - simple implementation"""
+    """Get video info and generate thumbnail"""
     try:
-        # For now, return reasonable default values for videos
-        # In a full implementation, you'd use ffprobe or similar
-        # This allows videos to be processed correctly
-        return 1280, 720, 30.0  # Default HD resolution, 30 seconds duration
+        # Use OpenCV to get video information and generate thumbnail
+        cap = cv2.VideoCapture(str(file_path))
+        
+        if not cap.isOpened():
+            print(f"Could not open video: {file_path}")
+            return 1280, 720, 30.0  # Return defaults if can't open
+        
+        # Get video properties
+        frame_count = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+        fps = cap.get(cv2.CAP_PROP_FPS)
+        width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+        height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        
+        duration = frame_count / fps if fps > 0 else 30.0
+        
+        # Generate thumbnail from middle frame
+        middle_frame = frame_count // 2 if frame_count > 0 else 0
+        cap.set(cv2.CAP_PROP_POS_FRAMES, middle_frame)
+        
+        ret, frame = cap.read()
+        if ret:
+            # Create thumbnail directory if it doesn't exist
+            thumbnail_dir = file_path.parent / "thumbnails"
+            thumbnail_dir.mkdir(exist_ok=True)
+            
+            # Generate thumbnail filename
+            thumbnail_filename = f"{file_path.stem}_thumbnail.jpg"
+            thumbnail_path = thumbnail_dir / thumbnail_filename
+            
+            # Resize frame to thumbnail size (maintain aspect ratio)
+            max_size = 800
+            if width > height:
+                new_width = max_size
+                new_height = int(height * (max_size / width))
+            else:
+                new_height = max_size
+                new_width = int(width * (max_size / height))
+            
+            resized_frame = cv2.resize(frame, (new_width, new_height), interpolation=cv2.INTER_AREA)
+            
+            # Save thumbnail
+            cv2.imwrite(str(thumbnail_path), resized_frame, [cv2.IMWRITE_JPEG_QUALITY, 85])
+            print(f"Generated thumbnail: {thumbnail_path}")
+            
+        cap.release()
+        
+        return width, height, duration
+        
     except Exception as e:
         print(f"Error getting video info: {e}")
-        return None, None, None
+        # Return reasonable defaults on error
+        return 1280, 720, 30.0
 
 async def save_upload_file(file: UploadFile, file_path: Path) -> int:
     """Save uploaded file to disk and return file size"""
