@@ -272,12 +272,12 @@ const CreatePollModal = ({ onCreatePoll, children, isOpen: externalIsOpen, onClo
       // Reset form
       setTitle('');
       setOptions([
-        { text: '', media: null },
-        { text: '', media: null }
+        { text: '', media: null, mentionedUsers: [] },
+        { text: '', media: null, mentionedUsers: [] }
       ]);
       setSelectedMusic(null);
       setShowMusicSelector(false);
-      setMentionedUsers([]);
+      setMentionedUsers([]); // Keep for legacy compatibility
       setVideoPlaybackSettings({
         playbackMode: 'sequential',
         autoplay: true,
