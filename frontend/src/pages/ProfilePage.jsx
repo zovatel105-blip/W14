@@ -174,7 +174,7 @@ const ProfilePage = () => {
         displayName: option.user.displayName,
         avatar: option.user.avatar,
         verified: option.user.verified || false,
-        followers: option.user.followers || '1K',
+        followers: option.user.followers || 0,
         bio: 'Bio from option data'
       }))
     ])
