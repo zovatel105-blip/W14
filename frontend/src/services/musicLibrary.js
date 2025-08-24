@@ -333,31 +333,39 @@ export const getRecommendedMusic = (pollTitle) => {
   
   // Recomendaciones basadas en palabras clave más amplias
   if (title.includes('outfit') || title.includes('moda') || title.includes('vestido') || title.includes('fashion')) {
-    return getMusicByCategory('Pop').concat(getMusicByCategory('Trending')).slice(0, 6);
+    return getMusicByCategory('Reggaeton').concat(getMusicByCategory('Pop Latino')).slice(0, 6);
   }
   
   if (title.includes('comida') || title.includes('receta') || title.includes('cocina') || title.includes('food')) {
-    return getMusicByCategory('Chill').concat(getMusicByCategory('Acoustic')).slice(0, 6);
+    return getMusicByCategory('Chill').concat(getMusicByCategory('Pop Latino')).slice(0, 6);
   }
   
   if (title.includes('baile') || title.includes('dance') || title.includes('tiktok') || title.includes('bailar')) {
-    return getMusicByCategory('Dance').concat(getMusicByCategory('Electronic')).slice(0, 6);
+    return getMusicByCategory('Reggaeton').concat(getMusicByCategory('Trap')).slice(0, 6);
   }
 
   if (title.includes('workout') || title.includes('gym') || title.includes('ejercicio') || title.includes('fitness')) {
-    return getMusicByCategory('Hip-Hop').concat(getMusicByCategory('Electronic')).slice(0, 6);
+    return getMusicByCategory('Trap').concat(getMusicByCategory('Hip-Hop')).slice(0, 6);
   }
 
   if (title.includes('relax') || title.includes('chill') || title.includes('calm') || title.includes('study')) {
-    return getMusicByCategory('Chill').concat(getMusicByCategory('Acoustic')).slice(0, 6);
+    return getMusicByCategory('Chill').concat(getMusicByCategory('Pop Latino')).slice(0, 6);
   }
 
   if (title.includes('party') || title.includes('fiesta') || title.includes('celebrar') || title.includes('night')) {
-    return getMusicByCategory('Latin').concat(getMusicByCategory('Dance')).slice(0, 6);
+    return getMusicByCategory('Reggaeton').concat(getMusicByCategory('Trap')).slice(0, 6);
+  }
+
+  if (title.includes('morad') || title.includes('urban') || title.includes('español') || title.includes('spain')) {
+    return getMusicByCategory('Urbano Español').concat(getMusicByCategory('Trap')).slice(0, 6);
+  }
+
+  if (title.includes('bad bunny') || title.includes('reggaeton') || title.includes('latino')) {
+    return getMusicByCategory('Reggaeton').concat(getMusicByCategory('Trap')).slice(0, 6);
   }
   
-  // Devolver música trending por defecto
-  return getTrendingMusic().slice(0, 6);
+  // Devolver música trending por defecto (con énfasis en reggaeton)
+  return getTrendingMusic().concat(getMusicByCategory('Reggaeton')).slice(0, 6);
 };
 
 // Función para formatear duración
