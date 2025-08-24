@@ -480,6 +480,15 @@ const CreatePollModal = ({ onCreatePoll, children, isOpen: externalIsOpen, onClo
               </Button>
             )}
           </div>
+
+          {/* Configuración de reproducción de video */}
+          {getVideosFromOptions().length > 0 && (
+            <VideoPlaybackSettings 
+              videos={getVideosFromOptions()}
+              onSettingsChange={handleVideoPlaybackSettingsChange}
+              className="mt-6"
+            />
+          )}
         </form>
 
         <DialogFooter className="border-t border-gray-100 pt-4 sm:pt-8 px-2 gap-2 sm:gap-4 flex-col sm:flex-row space-y-2 sm:space-y-0">
