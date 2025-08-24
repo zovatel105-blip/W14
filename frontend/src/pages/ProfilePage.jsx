@@ -147,6 +147,81 @@ const ProfilePage = () => {
     loadFollowStats();
   }, [authUser?.id, userId, getUserFollowers, getUserFollowing]);
 
+  // Load followers list when tab is activated
+  const loadFollowersList = async () => {
+    if (followersLoading) return;
+    
+    setFollowersLoading(true);
+    try {
+      const targetUserId = userId || authUser?.id;
+      const followersData = await getUserFollowers(targetUserId);
+      setFollowersList(followersData.followers || []);
+    } catch (error) {
+      console.error('Error loading followers list:', error);
+      toast({
+        title: "Error",
+        description: "No se pudieron cargar los seguidores",
+        variant: "destructive",
+      });
+    } finally {
+      setFollowersLoading(false);
+    }
+  };
+
+  // Load following list when tab is activated
+  const loadFollowingList = async () => {
+    if (followingLoading) return;
+    
+    setFollowingLoading(true);
+    try {
+      const targetUserId = userId || authUser?.id;
+      const followingData = await getUserFollowing(targetUserId);
+      setFollowingList(followingData.following || []);
+    } catch (error) {
+      console.error('Error loading following list:', error);
+      toast({
+        title: "Error", 
+        description: "No se pudo cargar la lista de siguiendo",
+        variant: "destructive",
+      });
+    } finally {
+      setFollowingLoading(false);
+    }
+  };
+
+  // Handle follow/unfollow actions
+  const handleFollowToggle = async (user) => {
+    try {
+      if (isFollowing(user.id)) {
+        await unfollowUser(user.id);
+        toast({
+          title: "Dejaste de seguir",
+          description: `Ya no sigues a @${user.username}`,
+        });
+      } else {
+        await followUser(user.id);
+        toast({
+          title: "¡Ahora sigues!",
+          description: `Ahora sigues a @${user.username}`,
+        });
+      }
+      
+      // Refresh the lists after follow action
+      if (activeTab === 'followers') {
+        await loadFollowersList();
+      } else if (activeTab === 'following') {
+        await loadFollowingList();
+      }
+    } catch (error) {
+      console.error('Error toggling follow:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo actualizar el seguimiento",
+        variant: "destructive",
+      });
+    }
+  };
+
   // Create a comprehensive user database from actual polls
   const allUsers = [
     // Add current authenticated user
