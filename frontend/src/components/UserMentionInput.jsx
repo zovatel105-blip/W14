@@ -34,19 +34,32 @@ const UserMentionInput = ({
   const searchUsers = async (query) => {
     setLoading(true);
     try {
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 300));
+      const backendUrl = process.env.REACT_APP_BACKEND_URL || import.meta.env.REACT_APP_BACKEND_URL;
+      const token = localStorage.getItem('token');
       
-      // Filter mock users based on query
-      const filtered = mockUsers.filter(user => 
-        user.username.toLowerCase().includes(query.toLowerCase()) ||
-        user.displayName.toLowerCase().includes(query.toLowerCase())
-      ).slice(0, 5); // Limit to 5 suggestions
+      const response = await fetch(`${backendUrl}/api/users/search?q=${encodeURIComponent(query)}`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
       
+      if (!response.ok) {
+        throw new Error('Failed to search users');
+      }
+      
+      const data = await response.json();
+      // Limit to 5 suggestions
+      const filtered = data.slice(0, 5);
       setSuggestions(filtered);
     } catch (error) {
       console.error('Error searching users:', error);
-      setSuggestions([]);
+      // Fallback to mock data if API fails
+      const filtered = mockUsers.filter(user => 
+        user.username.toLowerCase().includes(query.toLowerCase()) ||
+        user.displayName.toLowerCase().includes(query.toLowerCase())
+      ).slice(0, 5);
+      setSuggestions(filtered);
     } finally {
       setLoading(false);
     }
