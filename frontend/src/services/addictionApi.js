@@ -1,5 +1,5 @@
 // Ultra-Addictive API Service
-const API_BASE = process.env.REACT_APP_BACKEND_URL || import.meta.env.REACT_APP_BACKEND_URL;
+const API_BASE = process.env.REACT_APP_BACKEND_URL;
 
 class AddictionAPI {
   
