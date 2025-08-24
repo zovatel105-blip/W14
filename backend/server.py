@@ -22,6 +22,8 @@ from user_agents import parse
 import aiofiles
 from PIL import Image
 import mimetypes
+import cv2
+import numpy as np
 
 # Import models
 from models import (
