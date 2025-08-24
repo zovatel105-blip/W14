@@ -1606,11 +1606,13 @@ async def upload_file(
         file_size = await save_upload_file(file, file_path)
         
         # Get dimensions/duration based on file type
-        width = height = duration = None
+        width = height = duration = thumbnail_url = None
         if file_type == FileType.IMAGE:
             width, height = await get_image_dimensions(file_path)
         elif file_type == FileType.VIDEO:
             width, height, duration = await get_video_info(file_path)
+            # Generate thumbnail URL for videos
+            thumbnail_url = get_video_thumbnail_url(str(file_path), upload_type)
         
         # Create database record
         uploaded_file = UploadedFile(
@@ -1623,6 +1625,7 @@ async def upload_file(
             uploader_id=current_user.id,
             file_path=str(file_path),
             public_url=public_url,
+            thumbnail_url=thumbnail_url,
             width=width,
             height=height,
             duration=duration
@@ -1639,6 +1642,7 @@ async def upload_file(
             file_format=uploaded_file.file_format,
             file_size=uploaded_file.file_size,
             public_url=uploaded_file.public_url,
+            thumbnail_url=uploaded_file.thumbnail_url,
             width=uploaded_file.width,
             height=uploaded_file.height,
             duration=uploaded_file.duration,
