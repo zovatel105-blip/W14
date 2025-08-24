@@ -111,6 +111,38 @@ const ProfilePage = () => {
     loadUserPolls();
   }, [authUser?.id, authUser?.username, userId, toast]);
 
+  // Load follow statistics
+  useEffect(() => {
+    const loadFollowStats = async () => {
+      if (!authUser?.id && !userId) return;
+      
+      setFollowStatsLoading(true);
+      try {
+        const targetUserId = userId || authUser?.id;
+        
+        // Load followers and following counts
+        const [followersData, followingData] = await Promise.all([
+          getUserFollowers(targetUserId),
+          getUserFollowing(targetUserId)
+        ]);
+        
+        setFollowersCount(followersData.total || 0);
+        setFollowingCount(followingData.total || 0);
+        
+        console.log(`User ${targetUserId} - Followers: ${followersData.total}, Following: ${followingData.total}`);
+      } catch (error) {
+        console.error('Error loading follow stats:', error);
+        // Don't show toast for follow stats errors to avoid spam
+        setFollowersCount(0);
+        setFollowingCount(0);
+      } finally {
+        setFollowStatsLoading(false);
+      }
+    };
+
+    loadFollowStats();
+  }, [authUser?.id, userId, getUserFollowers, getUserFollowing]);
+
   // Create a comprehensive user database from actual polls
   const allUsers = [
     // Add current authenticated user
