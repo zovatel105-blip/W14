@@ -87,7 +87,7 @@ const CreatePollModal = ({ onCreatePoll, children, isOpen: externalIsOpen, onClo
 
   const addOption = () => {
     if (options.length < 4) {
-      setOptions([...options, { text: '', media: null }]);
+      setOptions([...options, { text: '', media: null, mentionedUsers: [] }]);
     }
   };
 
