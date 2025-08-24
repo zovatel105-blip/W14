@@ -164,7 +164,7 @@ const ProfilePage = () => {
         displayName: poll.authorUser.displayName,
         avatar: poll.authorUser.avatar,
         verified: poll.authorUser.verified || false,
-        followers: poll.authorUser.followers || '1K',
+        followers: poll.authorUser.followers || 0,
         bio: 'Bio from poll data'
       }] : []),
       // Option users
