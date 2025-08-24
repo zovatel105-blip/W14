@@ -292,155 +292,162 @@ async def get_music_info(music_id: str):
     if not music_id:
         return None
     
-    # Music library - Enhanced like TikTok
+    # Music library - Enhanced like TikTok with real artists
     music_library = {
         # TRENDING
         'music_trending_1': {
             'id': 'music_trending_1',
-            'title': 'Aesthetic Vibes',
-            'artist': 'TrendyBeats',
-            'duration': 30,
-            'url': '/music/aesthetic-vibes.mp3',
+            'title': 'LA BOTELLA',
+            'artist': 'Morad',
+            'duration': 195,
+            'url': '/music/morad-la-botella.mp3',
             'cover': 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=center',
             'category': 'Trending',
             'isOriginal': False,
             'isTrending': True,
-            'uses': 2500000
+            'uses': 8500000
         },
         'music_trending_2': {
             'id': 'music_trending_2',
-            'title': 'Viral Dance Beat',
-            'artist': 'ViralHits',
-            'duration': 45,
-            'url': '/music/viral-dance.mp3',
+            'title': 'Un Verano Sin Ti',
+            'artist': 'Bad Bunny',
+            'duration': 208,
+            'url': '/music/bad-bunny-verano.mp3',
             'cover': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop&crop=center',
             'category': 'Trending',
             'isOriginal': False,
             'isTrending': True,
-            'uses': 1800000
+            'uses': 12500000
         },
         'music_trending_3': {
             'id': 'music_trending_3',
-            'title': 'Chill Aesthetic',
-            'artist': 'ChillVibesOnly',
-            'duration': 40,
-            'url': '/music/chill-aesthetic.mp3',
-            'cover': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop&crop=center',
-            'category': 'Trending',
-            'isOriginal': True,
-            'isTrending': True,
-            'uses': 950000
-        },
-        
-        # POP
-        'music_pop_1': {
-            'id': 'music_pop_1',
-            'title': 'Pop Sensation',
-            'artist': 'Chart Toppers',
-            'duration': 35,
-            'url': '/music/pop-sensation.mp3',
-            'cover': 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=center',
-            'category': 'Pop',
-            'isOriginal': False,
-            'uses': 750000
-        },
-        'music_pop_2': {
-            'id': 'music_pop_2',
-            'title': 'Bubblegum Dreams',
-            'artist': 'Sweet Melody',
-            'duration': 32,
-            'url': '/music/bubblegum-dreams.mp3',
+            'title': 'TQG',
+            'artist': 'Karol G ft. Shakira',
+            'duration': 192,
+            'url': '/music/karol-g-tqg.mp3',
             'cover': 'https://images.unsplash.com/photo-1520262494112-9fe481d36ec3?w=400&h=400&fit=crop&crop=center',
-            'category': 'Pop',
+            'category': 'Trending',
             'isOriginal': False,
-            'uses': 420000
+            'isTrending': True,
+            'uses': 9800000
         },
         
-        # HIP-HOP
-        'music_hiphop_1': {
-            'id': 'music_hiphop_1',
-            'title': 'Urban Beat',
-            'artist': 'City Sounds',
-            'duration': 52,
-            'url': '/music/urban-beat.mp3',
+        # REGGAETON
+        'music_reggaeton_1': {
+            'id': 'music_reggaeton_1',
+            'title': 'Me Porto Bonito',
+            'artist': 'Bad Bunny x Chencho Corleone',
+            'duration': 178,
+            'url': '/music/bad-bunny-me-porto-bonito.mp3',
             'cover': 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&h=400&fit=crop&crop=center',
-            'category': 'Hip-Hop',
+            'category': 'Reggaeton',
             'isOriginal': False,
-            'uses': 680000
+            'uses': 7200000
         },
-        'music_hiphop_2': {
-            'id': 'music_hiphop_2',
-            'title': 'Street Rhythm',
-            'artist': 'Underground Kings',
-            'duration': 48,
-            'url': '/music/street-rhythm.mp3',
+        'music_reggaeton_2': {
+            'id': 'music_reggaeton_2',
+            'title': 'Provenza',
+            'artist': 'Karol G',
+            'duration': 213,
+            'url': '/music/karol-g-provenza.mp3',
+            'cover': 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=400&fit=crop&crop=center',
+            'category': 'Reggaeton',
+            'isOriginal': False,
+            'uses': 6800000
+        },
+        'music_reggaeton_3': {
+            'id': 'music_reggaeton_3',
+            'title': 'FERXXO 100',
+            'artist': 'Feid',
+            'duration': 185,
+            'url': '/music/feid-ferxxo-100.mp3',
+            'cover': 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=center',
+            'category': 'Reggaeton',
+            'isOriginal': False,
+            'uses': 4500000
+        },
+        'music_collab_1': {
+            'id': 'music_collab_1',
+            'title': 'Tití Me Preguntó',
+            'artist': 'Bad Bunny',
+            'duration': 224,
+            'url': '/music/bad-bunny-titi-me-pregunto.mp3',
             'cover': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop&crop=center',
-            'category': 'Hip-Hop',
-            'isOriginal': True,
-            'uses': 330000
+            'category': 'Reggaeton',
+            'isOriginal': False,
+            'uses': 11200000
         },
         
-        # ELECTRONIC
-        'music_electronic_1': {
-            'id': 'music_electronic_1',
-            'title': 'Electronic Pulse',
-            'artist': 'Synth Wave',
-            'duration': 48,
-            'url': '/music/electronic-pulse.mp3',
+        # TRAP
+        'music_trap_1': {
+            'id': 'music_trap_1',
+            'title': 'BZRP Music Sessions #52',
+            'artist': 'Quevedo x Bizarrap',
+            'duration': 201,
+            'url': '/music/quevedo-bzrp-52.mp3',
             'cover': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop&crop=center',
-            'category': 'Electronic',
+            'category': 'Trap',
             'isOriginal': False,
-            'uses': 520000
+            'uses': 15200000
         },
-        'music_electronic_2': {
-            'id': 'music_electronic_2',
-            'title': 'Neon Nights',
-            'artist': 'CyberBeats',
-            'duration': 55,
-            'url': '/music/neon-nights.mp3',
-            'cover': 'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?w=400&h=400&fit=crop&crop=center',
-            'category': 'Electronic',
-            'isOriginal': True,
-            'uses': 290000
-        },
-        
-        # LATIN
-        'music_latin_1': {
-            'id': 'music_latin_1',
-            'title': 'Reggaeton Flow',
-            'artist': 'Latino Beats',
-            'duration': 42,
-            'url': '/music/reggaeton-flow.mp3',
-            'cover': 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&h=400&fit=crop&crop=center',
-            'category': 'Latin',
+        'music_trap_3': {
+            'id': 'music_trap_3',
+            'title': 'MOTOROLA',
+            'artist': 'Morad',
+            'duration': 189,
+            'url': '/music/morad-motorola.mp3',
+            'cover': 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=center',
+            'category': 'Trap',
             'isOriginal': False,
-            'uses': 850000
+            'uses': 6100000
         },
         
-        # CHILL
-        'music_chill_1': {
-            'id': 'music_chill_1',
-            'title': 'Summer Vibes',
-            'artist': 'Chill Master',
-            'duration': 38,
-            'url': '/music/summer-vibes.mp3',
-            'cover': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop&crop=center',
-            'category': 'Chill',
+        # URBANO ESPAÑOL
+        'music_urbano_esp_1': {
+            'id': 'music_urbano_esp_1',
+            'title': 'DURMIENDO EN EL SUELO',
+            'artist': 'Morad',
+            'duration': 176,
+            'url': '/music/morad-durmiendo-suelo.mp3',
+            'cover': 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=center',
+            'category': 'Urbano Español',
             'isOriginal': False,
-            'uses': 640000
+            'uses': 4200000
+        },
+        'music_urbano_esp_2': {
+            'id': 'music_urbano_esp_2',
+            'title': 'NO TE PIENSO',
+            'artist': 'Morad',
+            'duration': 198,
+            'url': '/music/morad-no-te-pienso.mp3',
+            'cover': 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=center',
+            'category': 'Urbano Español',
+            'isOriginal': False,
+            'uses': 3700000
         },
         
-        # DANCE
-        'music_dance_1': {
-            'id': 'music_dance_1',
-            'title': 'Dance Revolution 2025',
-            'artist': 'DJ TikTok',
-            'duration': 60,
-            'url': '/music/dance-revolution.mp3',
-            'cover': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop&crop=center',
-            'category': 'Dance',
+        # POP LATINO
+        'music_pop_latino_1': {
+            'id': 'music_pop_latino_1',
+            'title': 'Flowers',
+            'artist': 'Miley Cyrus (Remix Latino)',
+            'duration': 201,
+            'url': '/music/miley-flowers-remix.mp3',
+            'cover': 'https://images.unsplash.com/photo-1520262494112-9fe481d36ec3?w=400&h=400&fit=crop&crop=center',
+            'category': 'Pop Latino',
             'isOriginal': False,
-            'uses': 1200000
+            'uses': 8900000
+        },
+        'music_pop_latino_2': {
+            'id': 'music_pop_latino_2',
+            'title': 'MAMIII',
+            'artist': 'Becky G x Karol G',
+            'duration': 187,
+            'url': '/music/becky-g-mamiii.mp3',
+            'cover': 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=400&fit=crop&crop=center',
+            'category': 'Pop Latino',
+            'isOriginal': False,
+            'uses': 6300000
         },
         
         # ORIGINAL SOUND
