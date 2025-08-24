@@ -299,6 +299,7 @@ class PollResponse(BaseModel):
     is_featured: bool
     tags: List[str]
     category: Optional[str]
+    mentioned_users: List[str] = []  # List of user IDs mentioned in the poll
     created_at: datetime
     time_ago: str  # Campo calculado como "hace 2 horas"
 
