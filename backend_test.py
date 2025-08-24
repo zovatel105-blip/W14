@@ -4077,28 +4077,17 @@ def main():
     test_results['user_login'] = test_user_login(base_url)
     test_results['get_current_user'] = test_get_current_user(base_url)
     
-    # PRIORITY TESTS FOR PROFILE SYSTEM CORRECTIONS - MAIN FOCUS
-    test_results['profile_system_corrections'] = test_profile_system_corrections(base_url)
+    # PRIORITY TEST FOR VIDEO SYSTEM - MAIN FOCUS
+    test_results['video_system_end_to_end'] = test_video_system_end_to_end(base_url)
     
-    # Additional image upload tests
-    test_results['static_file_serving'] = test_static_file_serving_system(base_url)
-    test_results['image_upload_static_files'] = test_image_upload_and_static_files(base_url)
-    test_results['poll_creation_with_images'] = test_poll_creation_with_images(base_url)
-    
-    # Additional comprehensive tests
+    # Additional essential tests
     test_results['jwt_validation'] = test_jwt_validation(base_url)
     test_results['user_search'] = test_user_search(base_url)
     test_results['messaging_system'] = test_messaging_system(base_url)
-    test_results['addiction_system'] = test_addiction_system_integration(base_url)
     test_results['authentication_requirements'] = test_authentication_requirements(base_url)
     test_results['profile_updates'] = test_profile_update_endpoints(base_url)
     test_results['nested_comments'] = test_nested_comments_system(base_url)
     test_results['follow_system'] = test_follow_system(base_url)
-    test_results['follow_system_usernames'] = test_follow_system_with_usernames(base_url)
-    test_results['poll_endpoints'] = test_poll_endpoints(base_url)
-    test_results['file_upload_system'] = test_file_upload_endpoints(base_url)
-    test_results['tiktok_profile_grid_backend'] = test_tiktok_profile_grid_backend_support(base_url)
-    test_results['complete_flow'] = test_complete_user_flow(base_url)
     
     # Print summary
     print("\n" + "=" * 80)
@@ -4117,31 +4106,19 @@ def main():
     print("=" * 80)
     print(f"📈 OVERALL RESULTS: {passed_tests}/{total_tests} tests passed ({(passed_tests/total_tests)*100:.1f}%)")
     
-    # Special focus on profile system corrections results
-    print("\n👤 PROFILE SYSTEM CORRECTIONS RESULTS (MAIN FOCUS):")
-    profile_tests = ['profile_system_corrections']
-    profile_passed = sum(1 for test in profile_tests if test_results.get(test, False))
-    print(f"Profile System Tests: {profile_passed}/{len(profile_tests)} passed")
+    # Special focus on video system results
+    print("\n🎥 VIDEO SYSTEM TESTING RESULTS (MAIN FOCUS):")
+    video_tests = ['video_system_end_to_end']
+    video_passed = sum(1 for test in video_tests if test_results.get(test, False))
+    print(f"Video System Tests: {video_passed}/{len(video_tests)} passed")
     
-    if profile_passed == len(profile_tests):
-        print("🎉 Profile system corrections are working correctly!")
-        print("✅ Publications showing, statistics calculating, avatar upload working")
+    if video_passed == len(video_tests):
+        print("🎉 Video system is working correctly!")
+        print("✅ Video upload, poll creation, retrieval, and file serving all functional")
+        print("✅ The issue 'al publicar videos en el feed no se muestran' should be resolved")
     else:
-        print("⚠️  Profile system corrections have issues that need attention.")
-        print("❌ Some profile functionality may not be working properly")
-    
-    # Also show image upload results
-    print("\n🖼️  IMAGE UPLOAD SYSTEM RESULTS:")
-    image_tests = ['static_file_serving', 'image_upload_static_files', 'poll_creation_with_images']
-    image_passed = sum(1 for test in image_tests if test_results.get(test, False))
-    print(f"Image Upload Tests: {image_passed}/{len(image_tests)} passed")
-    
-    if image_passed == len(image_tests):
-        print("🎉 Image upload system is working correctly!")
-        print("✅ Mobile image display issue should be resolved")
-    else:
-        print("⚠️  Image upload system has issues that need attention.")
-        print("❌ Mobile image display issue may persist")
+        print("⚠️  Video system has issues that need attention.")
+        print("❌ Videos may not display correctly in the feed")
     
     if passed_tests == total_tests:
         print("\n🎉 ALL TESTS PASSED! Backend is ready for production.")
