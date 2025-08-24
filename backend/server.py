@@ -336,7 +336,9 @@ async def search_itunes_track(artist: str, track: str):
         return None
 
 async def get_music_info(music_id: str):
-    """Get music information from music library"""
+    """
+    Get music information by ID with automatic iTunes preview fetching
+    """
     if not music_id:
         return None
     
