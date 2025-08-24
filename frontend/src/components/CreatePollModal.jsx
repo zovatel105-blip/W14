@@ -397,12 +397,25 @@ const CreatePollModal = ({ onCreatePoll, children, isOpen: externalIsOpen, onClo
                   <div className="w-10 h-10 sm:w-14 sm:h-14 bg-gray-800 rounded-2xl flex items-center justify-center text-white font-bold text-sm sm:text-xl shadow-lg flex-shrink-0">
                     {String.fromCharCode(65 + index)}
                   </div>
-                  <Input
-                    placeholder={`Descripción para la opción ${index + 1}`}
-                    value={option.text}
-                    onChange={(e) => updateOption(index, 'text', e.target.value)}
-                    className="flex-1 border-2 border-gray-200 focus:ring-2 focus:ring-gray-400 focus:border-transparent rounded-2xl h-10 sm:h-14 text-sm sm:text-lg bg-white px-3 sm:px-6"
-                  />
+                  <div className="flex-1">
+                    <UserMentionInput
+                      placeholder={`Descripción para la opción ${index + 1}... Usa @ para mencionar usuarios`}
+                      value={option.text}
+                      onChange={(newText) => updateOption(index, 'text', newText)}
+                      onMentionSelect={(user) => {
+                        const currentMentioned = option.mentionedUsers || [];
+                        const exists = currentMentioned.find(u => u.id === user.id);
+                        if (!exists) {
+                          updateOption(index, 'mentionedUsers', [...currentMentioned, user]);
+                          toast({
+                            title: "Usuario mencionado",
+                            description: `@${user.username} será notificado en la opción ${String.fromCharCode(65 + index)}`,
+                          });
+                        }
+                      }}
+                      className="border-2 border-gray-200 focus:ring-2 focus:ring-gray-400 focus:border-transparent rounded-2xl min-h-[50px] text-sm sm:text-lg bg-white px-3 sm:px-6 py-2 sm:py-3"
+                    />
+                  </div>
                   {options.length > 2 && (
                     <Button
                       type="button"
@@ -415,6 +428,45 @@ const CreatePollModal = ({ onCreatePoll, children, isOpen: externalIsOpen, onClo
                     </Button>
                   )}
                 </div>
+
+                {/* Usuarios mencionados en esta opción */}
+                {option.mentionedUsers && option.mentionedUsers.length > 0 && (
+                  <div className="bg-purple-50 border border-purple-200 rounded-xl p-3">
+                    <div className="flex items-center gap-2 mb-2">
+                      <AtSign className="w-4 h-4 text-purple-600" />
+                      <Label className="text-xs font-semibold text-purple-700">
+                        Mencionados en opción {String.fromCharCode(65 + index)} ({option.mentionedUsers.length})
+                      </Label>
+                    </div>
+                    <div className="flex flex-wrap gap-1">
+                      {option.mentionedUsers.map((user) => (
+                        <div
+                          key={user.id}
+                          className="flex items-center gap-1 bg-white border border-purple-300 rounded-md px-2 py-1 text-xs"
+                        >
+                          <AtSign className="w-3 h-3 text-purple-600" />
+                          <span className="font-medium text-gray-900">@{user.username}</span>
+                          {user.is_verified && (
+                            <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                          )}
+                          <button
+                            type="button"
+                            onClick={() => {
+                              const updatedMentioned = option.mentionedUsers.filter(u => u.id !== user.id);
+                              updateOption(index, 'mentionedUsers', updatedMentioned);
+                            }}
+                            className="ml-1 text-gray-400 hover:text-red-500 transition-colors"
+                          >
+                            <X className="w-2 h-2" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                    <p className="text-xs text-purple-600 mt-1">
+                      Serán notificados cuando se vote por esta opción
+                    </p>
+                  </div>
+                )}
 
                 {/* Media Upload with new PollOptionUpload component */}
                 <div className="space-y-4">
