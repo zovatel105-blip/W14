@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: ELIMINAR REPRODUCTOR DE MÚSICA SUPERIOR: Eliminar el reproductor de música superior del feed dejando solo el de abajo.
+user_problem_statement: EXPANDIR BIBLIOTECA MUSICAL CON ARTISTAS REALES: Expandir la biblioteca musical del creador de contenido para incluir canciones de artistas populares como Morad, Bad Bunny, Karol G y otros artistas urbanos populares en TikTok.
 
 backend:
   - task: "Corrección Bug de Menciones en Publicaciones"
