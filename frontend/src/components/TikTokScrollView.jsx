@@ -16,6 +16,8 @@ import { ChevronUp, ChevronDown, Heart, MessageCircle, Send, Bookmark, MoreHoriz
 import { Button } from './ui/button';
 import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
 import { useToast } from '../hooks/use-toast';
+import audioManager from '../services/AudioManager';
+import realMusicService from '../services/realMusicService';
 
 // Componente UserButton clickeable
 const UserButton = ({ user, percentage, isSelected, isWinner, onClick, onUserClick, optionIndex }) => (
