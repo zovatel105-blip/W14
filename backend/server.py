@@ -516,7 +516,25 @@ async def get_music_info(music_id: str):
         }
     }
     
-    return music_library.get(music_id)
+    music_info = music_library.get(music_id)
+    if not music_info:
+        return None
+    
+    # If preview_url is None, try to fetch from iTunes API
+    if music_info.get('preview_url') is None:
+        try:
+            itunes_result = await search_itunes_track(music_info['artist'], music_info['title'])
+            if itunes_result and itunes_result.get('preview_url'):
+                # Update the music info with real preview URL
+                music_info = music_info.copy()  # Create a copy to avoid modifying the original
+                music_info['preview_url'] = itunes_result['preview_url']
+                print(f"✅ Fetched real preview URL for {music_info['title']} - {music_info['artist']}")
+            else:
+                print(f"⚠️ Could not fetch preview URL for {music_info['title']} - {music_info['artist']}")
+        except Exception as e:
+            print(f"❌ Error fetching iTunes preview for {music_info['title']}: {str(e)}")
+    
+    return music_info
 
 # =============  REAL MUSIC PREVIEW ENDPOINTS =============
 
