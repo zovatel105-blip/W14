@@ -209,9 +209,9 @@ const ProfilePage = () => {
       }
       
       // Refresh the lists after follow action
-      if (activeTab === 'followers') {
+      if (showFollowersModal) {
         await loadFollowersList();
-      } else if (activeTab === 'following') {
+      } else if (showFollowingModal) {
         await loadFollowingList();
       }
     } catch (error) {
@@ -222,6 +222,17 @@ const ProfilePage = () => {
         variant: "destructive",
       });
     }
+  };
+
+  // Handle clicks on followers/following stats
+  const handleFollowersClick = async () => {
+    setShowFollowersModal(true);
+    await loadFollowersList();
+  };
+
+  const handleFollowingClick = async () => {
+    setShowFollowingModal(true);
+    await loadFollowingList();
   };
 
   // Create a comprehensive user database from actual polls
