@@ -12,7 +12,9 @@ import {
   VolumeX, 
   Check,
   Sparkles,
-  Clock
+  Clock,
+  TrendingUp,
+  Users
 } from 'lucide-react';
 import { 
   musicLibrary, 
@@ -20,7 +22,9 @@ import {
   getMusicByCategory, 
   searchMusic, 
   getRecommendedMusic,
-  formatDuration 
+  getTrendingMusic,
+  formatDuration,
+  formatUses
 } from '../services/musicLibrary';
 
 const MusicWaveform = ({ waveform, isPlaying, duration = 30 }) => {
