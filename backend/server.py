@@ -287,6 +287,40 @@ async def create_or_get_oauth_user(oauth_data: Dict, ip_address: str, user_agent
 
 # =============  MUSIC UTILITIES =============
 
+async def search_itunes_track(artist: str, track: str):
+    """Search iTunes API for real song preview"""
+    try:
+        # Construct search query
+        query = f"{artist} {track}".strip()
+        url = "https://itunes.apple.com/search"
+        params = {
+            'term': query,
+            'media': 'music',
+            'entity': 'song',
+            'limit': 1,
+            'country': 'US'  # Can be changed to ES for Spanish market
+        }
+        
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url, params=params) as response:
+                if response.status == 200:
+                    data = await response.json()
+                    if data.get('results') and len(data['results']) > 0:
+                        result = data['results'][0]
+                        return {
+                            'preview_url': result.get('previewUrl'),
+                            'artwork_url': result.get('artworkUrl100', '').replace('100x100', '400x400'),
+                            'artist_name': result.get('artistName'),
+                            'track_name': result.get('trackName'),
+                            'duration_ms': result.get('trackTimeMillis', 30000),
+                            'genre': result.get('primaryGenreName'),
+                            'iTunes_id': result.get('trackId')
+                        }
+        return None
+    except Exception as e:
+        print(f"Error searching iTunes: {e}")
+        return None
+
 async def get_music_info(music_id: str):
     """Get music information from music library"""
     if not music_id:
