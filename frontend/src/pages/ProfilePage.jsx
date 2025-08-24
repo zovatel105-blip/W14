@@ -152,7 +152,7 @@ const ProfilePage = () => {
       displayName: authUser.display_name,
       avatar: authUser.avatar_url,
       verified: authUser.is_verified || false,
-      followers: '1K', // Placeholder
+      followers: followersCount || 0, // Use real data for current user
       bio: authUser.bio || ''
     }] : []),
     // Add users from polls
