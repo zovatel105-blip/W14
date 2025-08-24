@@ -2179,6 +2179,13 @@ async def get_poll_by_id(
     for option in poll.get("options", []):
         option_user = option_users_dict.get(option["user_id"])
         if option_user:
+            media_url = option.get("media_url")
+            
+            # Get thumbnail URL for videos
+            thumbnail_url = option.get("thumbnail_url")
+            if not thumbnail_url and media_url and option.get("media_type") == "video":
+                thumbnail_url = await get_thumbnail_for_media_url(media_url)
+            
             option_dict = {
                 "id": option["id"],
                 "text": option["text"],
@@ -2192,9 +2199,9 @@ async def get_poll_by_id(
                 },
                 "media": {
                     "type": option.get("media_type"),
-                    "url": option.get("media_url"),
-                    "thumbnail": option.get("thumbnail_url")
-                } if option.get("media_url") else None
+                    "url": media_url,
+                    "thumbnail": thumbnail_url
+                } if media_url else None
             }
             options.append(option_dict)
     
