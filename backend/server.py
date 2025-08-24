@@ -1458,6 +1458,29 @@ async def get_image_dimensions(file_path: Path) -> tuple[Optional[int], Optional
         print(f"Error getting image dimensions: {e}")
         return None, None
 
+async def get_thumbnail_for_media_url(media_url: str) -> Optional[str]:
+    """Get thumbnail URL from uploaded_files collection based on media URL"""
+    try:
+        if not media_url:
+            return None
+            
+        # Extract filename from media URL
+        # URLs are like: /api/uploads/general/filename.mp4
+        if "/api/uploads/" in media_url:
+            filename = media_url.split("/")[-1]
+            
+            # Query uploaded_files collection
+            uploaded_file = await db.uploaded_files.find_one({"filename": filename})
+            
+            if uploaded_file and uploaded_file.get("thumbnail_url"):
+                return uploaded_file["thumbnail_url"]
+                
+        return None
+        
+    except Exception as e:
+        print(f"Error getting thumbnail for media URL {media_url}: {e}")
+        return None
+
 async def get_video_info(file_path: Path) -> tuple[Optional[int], Optional[int], Optional[float]]:
     """Get video info and generate thumbnail"""
     try:
