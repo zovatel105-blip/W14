@@ -1958,11 +1958,17 @@ async def create_poll(
         options=[opt.dict() for opt in options],  # Store as dict in MongoDB
         music_id=poll_data.music_id,
         tags=poll_data.tags,
-        category=poll_data.category
+        category=poll_data.category,
+        mentioned_users=poll_data.mentioned_users,
+        video_playback_settings=poll_data.video_playback_settings
     )
     
     # Insert into database
     await db.polls.insert_one(poll.dict())
+    
+    # TODO: Send notifications to mentioned users
+    if poll_data.mentioned_users:
+        await send_mention_notifications(poll_data.mentioned_users, poll.id, current_user)
     
     # Return poll response
     options_response = []
