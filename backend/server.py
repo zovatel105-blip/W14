@@ -285,6 +285,99 @@ async def create_or_get_oauth_user(oauth_data: Dict, ip_address: str, user_agent
         
         return user
 
+# =============  MUSIC UTILITIES =============
+
+async def get_music_info(music_id: str):
+    """Get music information from music library"""
+    if not music_id:
+        return None
+    
+    # Music library - could be from database or external service
+    music_library = {
+        'music_1': {
+            'id': 'music_1',
+            'title': 'Style & Fashion',
+            'artist': 'Fashion Beats',
+            'duration': 30,
+            'url': '/music/style-fashion.mp3',
+            'cover': 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=center',
+            'category': 'Moda',
+            'isOriginal': False
+        },
+        'music_2': {
+            'id': 'music_2',
+            'title': 'Cooking Vibes',
+            'artist': 'Kitchen Beats',
+            'duration': 45,
+            'url': '/music/cooking-vibes.mp3',
+            'cover': 'https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=400&h=400&fit=crop&crop=center',
+            'category': 'Comida',
+            'isOriginal': True
+        },
+        'music_3': {
+            'id': 'music_3',
+            'title': 'Dance Revolution 2025',
+            'artist': 'DJ TikTok',
+            'duration': 60,
+            'url': '/music/dance-revolution.mp3',
+            'cover': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop&crop=center',
+            'category': 'Baile',
+            'isOriginal': False
+        },
+        'music_4': {
+            'id': 'music_4',
+            'title': 'Summer Vibes',
+            'artist': 'Chill Master',
+            'duration': 38,
+            'url': '/music/summer-vibes.mp3',
+            'cover': 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop&crop=center',
+            'category': 'Chill',
+            'isOriginal': False
+        },
+        'music_5': {
+            'id': 'music_5',
+            'title': 'Urban Beat',
+            'artist': 'City Sounds',
+            'duration': 52,
+            'url': '/music/urban-beat.mp3',
+            'cover': 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=400&h=400&fit=crop&crop=center',
+            'category': 'Hip Hop',
+            'isOriginal': False
+        },
+        'music_6': {
+            'id': 'music_6',
+            'title': 'Acoustic Dream',
+            'artist': 'Folk Vibes',
+            'duration': 42,
+            'url': '/music/acoustic-dream.mp3',
+            'cover': 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=center',
+            'category': 'Acústico',
+            'isOriginal': True
+        },
+        'music_7': {
+            'id': 'music_7',
+            'title': 'Electronic Pulse',
+            'artist': 'Synth Wave',
+            'duration': 48,
+            'url': '/music/electronic-pulse.mp3',
+            'cover': 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop&crop=center',
+            'category': 'Electrónica',
+            'isOriginal': False
+        },
+        'music_8': {
+            'id': 'music_8',
+            'title': 'Pop Sensation',
+            'artist': 'Chart Toppers',
+            'duration': 35,
+            'url': '/music/pop-sensation.mp3',
+            'cover': 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&h=400&fit=crop&crop=center',
+            'category': 'Pop',
+            'isOriginal': False
+        }
+    }
+    
+    return music_library.get(music_id)
+
 # =============  NOTIFICATION UTILITIES =============
 
 async def send_mention_notifications(mentioned_users: List[str], poll_id: str, current_user: UserResponse):
