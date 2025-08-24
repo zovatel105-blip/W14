@@ -754,8 +754,8 @@ const ProfilePage = () => {
           />
           <StatCard
             icon={Vote}
-            label="Votaciones"
-            value={displayUser.totalPolls}
+            label="Votos Recibidos"
+            value={displayUser.totalVotes.toLocaleString()}
             color="green"
           />
           <StatCard
