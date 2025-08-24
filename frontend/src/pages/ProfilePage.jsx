@@ -65,6 +65,8 @@ const ProfilePage = () => {
   const [followingList, setFollowingList] = useState([]);
   const [followersLoading, setFollowersLoading] = useState(false);
   const [followingLoading, setFollowingLoading] = useState(false);
+  const [showFollowersModal, setShowFollowersModal] = useState(false);
+  const [showFollowingModal, setShowFollowingModal] = useState(false);
   const { toast } = useToast();
   const { user: authUser, refreshUser } = useAuth();
   const { getUserFollowers, getUserFollowing, followUser, unfollowUser, isFollowing, getFollowStatus } = useFollow();
