@@ -88,7 +88,7 @@ const UserMentionInput = ({
         // For empty query, show recent users or mock users
         setLoading(true);
         try {
-          const backendUrl = process.env.REACT_APP_BACKEND_URL || import.meta.env.REACT_APP_BACKEND_URL;
+          const backendUrl = process.env.REACT_APP_BACKEND_URL;
           const token = localStorage.getItem('token');
           
           const response = await fetch(`${backendUrl}/api/users/search?q=`, {
