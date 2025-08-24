@@ -347,6 +347,7 @@ class UploadedFile(BaseModel):
     uploader_id: str  # User who uploaded
     file_path: str  # Local file path
     public_url: str  # URL to access file
+    thumbnail_url: Optional[str] = None  # Thumbnail URL for videos
     width: Optional[int] = None  # For images/videos
     height: Optional[int] = None  # For images/videos
     duration: Optional[float] = None  # For videos in seconds
