@@ -4320,6 +4320,268 @@ def test_real_music_system(base_url):
     print(f"\nReal Music System Tests Summary: {success_count}/8+ tests passed")
     return success_count >= 6  # At least 6 out of 8+ tests should pass
 
+def test_music_investigation(base_url):
+    """URGENT INVESTIGATION: Test music system in feed - why music is not playing"""
+    print("\n=== 🎵 URGENT MUSIC INVESTIGATION - FEED MUSIC NOT PLAYING ===")
+    
+    if not auth_tokens:
+        print("❌ No auth tokens available for music investigation")
+        return False
+    
+    headers = {"Authorization": f"Bearer {auth_tokens[0]}"}
+    success_count = 0
+    total_tests = 0
+    
+    print("🔍 INVESTIGATING: User reports music not playing in feed")
+    print("📋 TESTING PLAN:")
+    print("1. ✅ Check polls in database and their music_id")
+    print("2. ✅ Test GET /api/polls for music structure")
+    print("3. ✅ Verify if polls have preview_url in music field")
+    print("4. ✅ Test /api/music/library-with-previews for real URLs")
+    print("5. ✅ Test /api/music/search iTunes API functionality")
+    print("-" * 60)
+    
+    # Test 1: Check what polls exist and their music structure
+    print("\n🔍 TEST 1: Checking polls in database and music_id...")
+    total_tests += 1
+    try:
+        response = requests.get(f"{base_url}/polls", headers=headers, timeout=15)
+        print(f"GET /api/polls Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            polls_data = response.json()
+            polls = polls_data.get('polls', []) if isinstance(polls_data, dict) else polls_data
+            print(f"✅ Found {len(polls)} polls in database")
+            
+            # Analyze music data in polls
+            polls_with_music = 0
+            polls_with_preview_url = 0
+            
+            for i, poll in enumerate(polls[:5]):  # Check first 5 polls
+                print(f"\n📊 Poll {i+1}: '{poll.get('title', 'No title')[:50]}...'")
+                print(f"   Author: {poll.get('author', {}).get('username', 'Unknown')}")
+                
+                music = poll.get('music')
+                if music:
+                    polls_with_music += 1
+                    print(f"   🎵 Music ID: {music.get('id', 'No ID')}")
+                    print(f"   🎵 Title: {music.get('title', 'No title')}")
+                    print(f"   🎵 Artist: {music.get('artist', 'No artist')}")
+                    
+                    preview_url = music.get('preview_url')
+                    if preview_url:
+                        polls_with_preview_url += 1
+                        print(f"   ✅ Preview URL: {preview_url[:80]}...")
+                    else:
+                        print(f"   ❌ Preview URL: None")
+                else:
+                    print(f"   ❌ No music data")
+            
+            print(f"\n📈 MUSIC ANALYSIS RESULTS:")
+            print(f"   Total polls: {len(polls)}")
+            print(f"   Polls with music: {polls_with_music}")
+            print(f"   Polls with preview_url: {polls_with_preview_url}")
+            
+            if polls_with_preview_url == 0:
+                print(f"   🚨 CRITICAL ISSUE: NO POLLS HAVE PREVIEW_URL!")
+            
+            success_count += 1
+        else:
+            print(f"❌ Failed to get polls: {response.text}")
+            
+    except Exception as e:
+        print(f"❌ Error checking polls: {e}")
+    
+    # Test 2: Test music library with previews endpoint
+    print(f"\n🔍 TEST 2: Testing /api/music/library-with-previews...")
+    total_tests += 1
+    try:
+        response = requests.get(f"{base_url}/music/library-with-previews?limit=10", 
+                              headers=headers, timeout=20)
+        print(f"GET /api/music/library-with-previews Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            music_list = data.get('music', [])
+            print(f"✅ Retrieved {len(music_list)} tracks with previews")
+            print(f"   Has real previews: {data.get('has_real_previews', False)}")
+            print(f"   Source: {data.get('source', 'Unknown')}")
+            
+            real_previews_count = 0
+            for i, track in enumerate(music_list[:3]):  # Check first 3 tracks
+                print(f"\n🎵 Track {i+1}: {track.get('title', 'No title')} - {track.get('artist', 'No artist')}")
+                preview_url = track.get('preview_url')
+                if preview_url and preview_url.startswith('https://'):
+                    real_previews_count += 1
+                    print(f"   ✅ Real Preview URL: {preview_url[:80]}...")
+                    print(f"   🎵 Source: {track.get('source', 'Unknown')}")
+                else:
+                    print(f"   ❌ No valid preview URL")
+            
+            print(f"\n📈 LIBRARY ANALYSIS:")
+            print(f"   Tracks with real preview URLs: {real_previews_count}/{len(music_list)}")
+            
+            if real_previews_count > 0:
+                print(f"   ✅ iTunes API is working and providing real previews!")
+                success_count += 1
+            else:
+                print(f"   🚨 ISSUE: No real preview URLs found in library")
+                
+        else:
+            print(f"❌ Failed to get music library: {response.text}")
+            
+    except Exception as e:
+        print(f"❌ Error testing music library: {e}")
+    
+    # Test 3: Test iTunes search API directly
+    print(f"\n🔍 TEST 3: Testing iTunes Search API directly...")
+    total_tests += 1
+    try:
+        # Test with Bad Bunny - Me Porto Bonito (known to have preview)
+        response = requests.get(f"{base_url}/music/search?artist=Bad Bunny&track=Me Porto Bonito", 
+                              headers=headers, timeout=20)
+        print(f"GET /api/music/search Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            print(f"✅ iTunes search successful: {data.get('success', False)}")
+            
+            if data.get('success') and data.get('music'):
+                music = data['music']
+                print(f"   🎵 Found: {music.get('title')} - {music.get('artist')}")
+                print(f"   🎵 Preview URL: {music.get('preview_url', 'None')[:80]}...")
+                print(f"   🎵 Source: {music.get('source', 'Unknown')}")
+                
+                if music.get('preview_url'):
+                    print(f"   ✅ iTunes API is providing real preview URLs!")
+                    success_count += 1
+                else:
+                    print(f"   ❌ No preview URL in iTunes response")
+            else:
+                print(f"   ❌ iTunes search failed or no results")
+                print(f"   Message: {data.get('message', 'No message')}")
+                
+        else:
+            print(f"❌ iTunes search failed: {response.text}")
+            
+    except Exception as e:
+        print(f"❌ Error testing iTunes search: {e}")
+    
+    # Test 4: Test with different artists
+    print(f"\n🔍 TEST 4: Testing iTunes API with different artists...")
+    total_tests += 1
+    try:
+        test_artists = [
+            ("Karol G", "TQG"),
+            ("Morad", "LA BOTELLA"),
+            ("Bad Bunny", "Un Verano Sin Ti")
+        ]
+        
+        working_searches = 0
+        for artist, track in test_artists:
+            print(f"\n   Testing: {artist} - {track}")
+            response = requests.get(f"{base_url}/music/search?artist={artist}&track={track}", 
+                                  headers=headers, timeout=15)
+            
+            if response.status_code == 200:
+                data = response.json()
+                if data.get('success') and data.get('music', {}).get('preview_url'):
+                    working_searches += 1
+                    print(f"   ✅ Found preview for {artist} - {track}")
+                else:
+                    print(f"   ⚠️ No preview found for {artist} - {track}")
+            else:
+                print(f"   ❌ Search failed for {artist} - {track}")
+        
+        print(f"\n📈 ITUNES API ANALYSIS:")
+        print(f"   Working searches: {working_searches}/{len(test_artists)}")
+        
+        if working_searches > 0:
+            success_count += 1
+            print(f"   ✅ iTunes API is functional for some tracks")
+        else:
+            print(f"   🚨 ISSUE: iTunes API not working for any test tracks")
+            
+    except Exception as e:
+        print(f"❌ Error testing multiple artists: {e}")
+    
+    # Test 5: Create a poll with music and verify structure
+    print(f"\n🔍 TEST 5: Creating poll with music to test integration...")
+    total_tests += 1
+    try:
+        poll_data = {
+            "title": "¿Cuál es tu canción favorita para el feed?",
+            "options": [
+                {"text": "Bad Bunny - Me Porto Bonito", "media_url": "", "media_type": "none"},
+                {"text": "Karol G - TQG", "media_url": "", "media_type": "none"},
+                {"text": "Morad - LA BOTELLA", "media_url": "", "media_type": "none"}
+            ],
+            "music_id": "music_reggaeton_1",  # Bad Bunny - Me Porto Bonito
+            "category": "music",
+            "expires_at": None
+        }
+        
+        response = requests.post(f"{base_url}/polls", json=poll_data, headers=headers, timeout=15)
+        print(f"POST /api/polls Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            created_poll = response.json()
+            print(f"✅ Poll created successfully with music")
+            print(f"   Poll ID: {created_poll.get('id')}")
+            
+            # Check if music data is included
+            music = created_poll.get('music')
+            if music:
+                print(f"   🎵 Music included: {music.get('title')} - {music.get('artist')}")
+                print(f"   🎵 Preview URL: {music.get('preview_url', 'None')}")
+                
+                if music.get('preview_url'):
+                    print(f"   ✅ Poll has preview URL - should play in feed!")
+                    success_count += 1
+                else:
+                    print(f"   🚨 CRITICAL: Poll created but NO preview_url!")
+            else:
+                print(f"   🚨 CRITICAL: Poll created but NO music data!")
+                
+        else:
+            print(f"❌ Failed to create poll with music: {response.text}")
+            
+    except Exception as e:
+        print(f"❌ Error creating poll with music: {e}")
+    
+    # FINAL ANALYSIS AND RECOMMENDATIONS
+    print(f"\n" + "="*60)
+    print(f"🎵 MUSIC INVESTIGATION RESULTS")
+    print(f"="*60)
+    print(f"Tests passed: {success_count}/{total_tests}")
+    
+    if success_count >= 3:
+        print(f"✅ MUSIC SYSTEM STATUS: PARTIALLY WORKING")
+        print(f"\n🔍 FINDINGS:")
+        print(f"   • iTunes API endpoints are functional")
+        print(f"   • Real preview URLs can be obtained")
+        print(f"   • Issue likely in poll creation or frontend integration")
+        
+        print(f"\n💡 RECOMMENDATIONS:")
+        print(f"   1. Check if polls are being created with music_id")
+        print(f"   2. Verify get_music_info() returns preview_url for static library")
+        print(f"   3. Ensure frontend is checking poll.music.preview_url correctly")
+        print(f"   4. Consider updating static music library with real preview URLs")
+        
+    else:
+        print(f"❌ MUSIC SYSTEM STATUS: MAJOR ISSUES DETECTED")
+        print(f"\n🚨 CRITICAL ISSUES:")
+        print(f"   • iTunes API may not be working properly")
+        print(f"   • Static music library lacks preview URLs")
+        print(f"   • Poll creation not including music data")
+        
+        print(f"\n🔧 URGENT FIXES NEEDED:")
+        print(f"   1. Fix iTunes API integration")
+        print(f"   2. Update static music library with preview URLs")
+        print(f"   3. Ensure poll creation includes music data")
+    
+    return success_count >= 3
+
 def main():
     """Main test execution function"""
     print("🎵 REAL MUSIC SYSTEM TESTING - iTunes API Integration")
