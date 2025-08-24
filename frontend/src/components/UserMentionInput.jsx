@@ -85,7 +85,31 @@ const UserMentionInput = ({
       if (query.length >= 1) {
         searchUsers(query);
       } else {
-        setSuggestions(mockUsers.slice(0, 5));
+        // For empty query, show recent users or mock users
+        setLoading(true);
+        try {
+          const backendUrl = process.env.REACT_APP_BACKEND_URL || import.meta.env.REACT_APP_BACKEND_URL;
+          const token = localStorage.getItem('token');
+          
+          const response = await fetch(`${backendUrl}/api/users/search?q=`, {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          });
+          
+          if (response.ok) {
+            const data = await response.json();
+            setSuggestions(data.slice(0, 5));
+          } else {
+            setSuggestions(mockUsers.slice(0, 5));
+          }
+        } catch (error) {
+          console.error('Error loading users:', error);
+          setSuggestions(mockUsers.slice(0, 5));
+        } finally {
+          setLoading(false);
+        }
       }
     } else {
       setShowSuggestions(false);
