@@ -25,11 +25,18 @@ const TikTokProfileGrid = ({ polls, onPollClick }) => {
     }
 
     return poll.options.map(option => {
-      if (option.media && option.media.thumbnail) {
-        return option.media.thumbnail;
-      }
-      if (option.media && option.media.url) {
-        return option.media.url;
+      if (option.media) {
+        // For videos, prefer thumbnail over the video URL
+        if (option.media.type === 'video') {
+          return option.media.thumbnail || option.media.url;
+        }
+        // For images, use thumbnail first, then URL
+        if (option.media.thumbnail) {
+          return option.media.thumbnail;
+        }
+        if (option.media.url) {
+          return option.media.url;
+        }
       }
       // Fallback image for options without media
       return 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=400&h=600&fit=crop&crop=center';
