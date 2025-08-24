@@ -1923,6 +1923,7 @@ async def get_polls(
             is_featured=poll_data["is_featured"],
             tags=poll_data.get("tags", []),
             category=poll_data.get("category"),
+            mentioned_users=poll_data.get("mentioned_users", []),  # Include mentioned users
             created_at=poll_data["created_at"],
             time_ago=calculate_time_ago(poll_data["created_at"])
         )
