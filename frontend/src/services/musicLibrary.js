@@ -257,48 +257,89 @@ export const musicCategories = [
 // Función para obtener música por categoría
 export const getMusicByCategory = (category) => {
   if (category === 'Todas') {
-    return musicLibrary;
+    // Mostrar trending primero, luego el resto ordenado por usos
+    return musicLibrary.sort((a, b) => {
+      if (a.isTrending && !b.isTrending) return -1;
+      if (!a.isTrending && b.isTrending) return 1;
+      return (b.uses || 0) - (a.uses || 0);
+    });
   }
-  return musicLibrary.filter(music => music.category === category);
+  return musicLibrary
+    .filter(music => music.category === category)
+    .sort((a, b) => (b.uses || 0) - (a.uses || 0));
 };
 
 // Función para buscar música por título o artista
 export const searchMusic = (query) => {
   if (!query.trim()) {
-    return musicLibrary;
+    return getMusicByCategory('Todas');
   }
   
   const searchTerm = query.toLowerCase();
-  return musicLibrary.filter(music => 
-    music.title.toLowerCase().includes(searchTerm) ||
-    music.artist.toLowerCase().includes(searchTerm)
-  );
+  return musicLibrary
+    .filter(music => 
+      music.title.toLowerCase().includes(searchTerm) ||
+      music.artist.toLowerCase().includes(searchTerm) ||
+      music.category.toLowerCase().includes(searchTerm)
+    )
+    .sort((a, b) => (b.uses || 0) - (a.uses || 0));
+};
+
+// Función para obtener música trending
+export const getTrendingMusic = () => {
+  return musicLibrary
+    .filter(music => music.isTrending)
+    .sort((a, b) => (b.uses || 0) - (a.uses || 0));
 };
 
 // Función para obtener música recomendada basada en el contenido del poll
 export const getRecommendedMusic = (pollTitle) => {
   const title = pollTitle.toLowerCase();
   
-  // Recomendaciones basadas en palabras clave
-  if (title.includes('outfit') || title.includes('moda') || title.includes('vestido')) {
-    return getMusicByCategory('Moda');
+  // Recomendaciones basadas en palabras clave más amplias
+  if (title.includes('outfit') || title.includes('moda') || title.includes('vestido') || title.includes('fashion')) {
+    return getMusicByCategory('Pop').concat(getMusicByCategory('Trending')).slice(0, 6);
   }
   
-  if (title.includes('comida') || title.includes('receta') || title.includes('cocina')) {
-    return getMusicByCategory('Comida');
+  if (title.includes('comida') || title.includes('receta') || title.includes('cocina') || title.includes('food')) {
+    return getMusicByCategory('Chill').concat(getMusicByCategory('Acoustic')).slice(0, 6);
   }
   
-  if (title.includes('baile') || title.includes('dance') || title.includes('tiktok')) {
-    return getMusicByCategory('Baile');
+  if (title.includes('baile') || title.includes('dance') || title.includes('tiktok') || title.includes('bailar')) {
+    return getMusicByCategory('Dance').concat(getMusicByCategory('Electronic')).slice(0, 6);
+  }
+
+  if (title.includes('workout') || title.includes('gym') || title.includes('ejercicio') || title.includes('fitness')) {
+    return getMusicByCategory('Hip-Hop').concat(getMusicByCategory('Electronic')).slice(0, 6);
+  }
+
+  if (title.includes('relax') || title.includes('chill') || title.includes('calm') || title.includes('study')) {
+    return getMusicByCategory('Chill').concat(getMusicByCategory('Acoustic')).slice(0, 6);
+  }
+
+  if (title.includes('party') || title.includes('fiesta') || title.includes('celebrar') || title.includes('night')) {
+    return getMusicByCategory('Latin').concat(getMusicByCategory('Dance')).slice(0, 6);
   }
   
-  // Devolver música popular por defecto
-  return musicLibrary.slice(0, 4);
+  // Devolver música trending por defecto
+  return getTrendingMusic().slice(0, 6);
 };
 
 // Función para formatear duración
 export const formatDuration = (seconds) => {
+  if (seconds === 0) return 'Original';
   const minutes = Math.floor(seconds / 60);
   const remainingSeconds = seconds % 60;
   return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+};
+
+// Función para formatear número de usos
+export const formatUses = (uses) => {
+  if (uses >= 1000000) {
+    return `${(uses / 1000000).toFixed(1)}M`;
+  }
+  if (uses >= 1000) {
+    return `${(uses / 1000).toFixed(1)}K`;
+  }
+  return uses.toString();
 };
