@@ -1,0 +1,249 @@
+import React, { useState, useRef, useEffect } from 'react';
+import { Search, User } from 'lucide-react';
+import { Textarea } from './ui/textarea';
+
+const UserMentionInput = ({ 
+  value, 
+  onChange, 
+  placeholder, 
+  className,
+  onMentionSelect,
+  ...props 
+}) => {
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
+  const [mentionQuery, setMentionQuery] = useState('');
+  const [cursorPosition, setCursorPosition] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const textareaRef = useRef(null);
+  const suggestionsRef = useRef(null);
+
+  // Mock users for suggestions (in production, this would come from API)
+  const mockUsers = [
+    { id: '1', username: 'progamer_alex', displayName: 'Alex ProGamer', verified: true },
+    { id: '2', username: 'artmaster_studio', displayName: 'Art Master', verified: false },
+    { id: '3', username: 'music_lover_99', displayName: 'Music Lover', verified: false },
+    { id: '4', username: 'tech_guru_2024', displayName: 'Tech Guru', verified: true },
+    { id: '5', username: 'fitness_queen', displayName: 'Fitness Queen', verified: true },
+    { id: '6', username: 'foodie_explorer', displayName: 'Foodie Explorer', verified: false },
+    { id: '7', username: 'travel_addict', displayName: 'Travel Addict', verified: true },
+    { id: '8', username: 'book_worm_reader', displayName: 'Book Worm', verified: false }
+  ];
+
+  // Search for users when typing after @
+  const searchUsers = async (query) => {
+    setLoading(true);
+    try {
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 300));
+      
+      // Filter mock users based on query
+      const filtered = mockUsers.filter(user => 
+        user.username.toLowerCase().includes(query.toLowerCase()) ||
+        user.displayName.toLowerCase().includes(query.toLowerCase())
+      ).slice(0, 5); // Limit to 5 suggestions
+      
+      setSuggestions(filtered);
+    } catch (error) {
+      console.error('Error searching users:', error);
+      setSuggestions([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle text change and mention detection
+  const handleTextChange = (e) => {
+    const newValue = e.target.value;
+    const cursorPos = e.target.selectionStart;
+    
+    onChange(newValue);
+    setCursorPosition(cursorPos);
+
+    // Check if user is typing a mention
+    const textBeforeCursor = newValue.slice(0, cursorPos);
+    const mentionMatch = textBeforeCursor.match(/@([a-zA-Z0-9_]*)$/);
+    
+    if (mentionMatch) {
+      const query = mentionMatch[1];
+      setMentionQuery(query);
+      setShowSuggestions(true);
+      
+      if (query.length >= 1) {
+        searchUsers(query);
+      } else {
+        setSuggestions(mockUsers.slice(0, 5));
+      }
+    } else {
+      setShowSuggestions(false);
+      setSuggestions([]);
+      setMentionQuery('');
+    }
+  };
+
+  // Handle mention selection
+  const handleMentionSelect = (user) => {
+    const textBeforeCursor = value.slice(0, cursorPosition);
+    const textAfterCursor = value.slice(cursorPosition);
+    
+    // Find the @ symbol position
+    const mentionStart = textBeforeCursor.lastIndexOf('@');
+    const beforeMention = textBeforeCursor.slice(0, mentionStart);
+    
+    // Replace the @query with @username
+    const newValue = beforeMention + `@${user.username} ` + textAfterCursor;
+    
+    onChange(newValue);
+    setShowSuggestions(false);
+    setSuggestions([]);
+    setMentionQuery('');
+    
+    // Call callback if provided
+    if (onMentionSelect) {
+      onMentionSelect(user);
+    }
+
+    // Focus back to textarea
+    setTimeout(() => {
+      if (textareaRef.current) {
+        const newCursorPos = beforeMention.length + user.username.length + 2; // +2 for @ and space
+        textareaRef.current.focus();
+        textareaRef.current.setSelectionRange(newCursorPos, newCursorPos);
+      }
+    }, 0);
+  };
+
+  // Handle keyboard navigation
+  const handleKeyDown = (e) => {
+    if (!showSuggestions || suggestions.length === 0) return;
+
+    if (e.key === 'Escape') {
+      setShowSuggestions(false);
+      setSuggestions([]);
+      return;
+    }
+
+    if (e.key === 'Tab' || e.key === 'Enter') {
+      e.preventDefault();
+      if (suggestions.length > 0) {
+        handleMentionSelect(suggestions[0]);
+      }
+      return;
+    }
+  };
+
+  // Close suggestions when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        suggestionsRef.current && 
+        !suggestionsRef.current.contains(event.target) &&
+        !textareaRef.current.contains(event.target)
+      ) {
+        setShowSuggestions(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  return (
+    <div className="relative">
+      <Textarea
+        ref={textareaRef}
+        value={value}
+        onChange={handleTextChange}
+        onKeyDown={handleKeyDown}
+        placeholder={placeholder}
+        className={className}
+        {...props}
+      />
+      
+      {/* Mention suggestions dropdown */}
+      {showSuggestions && (
+        <div 
+          ref={suggestionsRef}
+          className="absolute z-50 w-full mt-2 bg-white border border-gray-200 rounded-xl shadow-lg max-h-60 overflow-y-auto"
+        >
+          {loading ? (
+            <div className="p-4 text-center">
+              <div className="flex items-center justify-center gap-2 text-gray-500">
+                <Search className="w-4 h-4 animate-pulse" />
+                <span>Buscando usuarios...</span>
+              </div>
+            </div>
+          ) : suggestions.length > 0 ? (
+            <div className="py-2">
+              <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wide border-b border-gray-100">
+                Mencionar usuarios
+              </div>
+              {suggestions.map((user, index) => (
+                <button
+                  key={user.id}
+                  onClick={() => handleMentionSelect(user)}
+                  className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center gap-3 transition-colors"
+                >
+                  <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
+                    <User className="w-5 h-5 text-gray-600" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium text-gray-900">@{user.username}</span>
+                      {user.verified && (
+                        <div className="w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center">
+                          <div className="w-2 h-2 bg-white rounded-full"></div>
+                        </div>
+                      )}
+                    </div>
+                    <div className="text-sm text-gray-500 truncate">{user.displayName}</div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          ) : mentionQuery.length > 0 ? (
+            <div className="p-4 text-center text-gray-500">
+              <User className="w-8 h-8 mx-auto mb-2 text-gray-300" />
+              <p>No se encontraron usuarios con "{mentionQuery}"</p>
+            </div>
+          ) : (
+            <div className="py-2">
+              <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wide border-b border-gray-100">
+                Usuarios sugeridos
+              </div>
+              {mockUsers.slice(0, 5).map((user) => (
+                <button
+                  key={user.id}
+                  onClick={() => handleMentionSelect(user)}
+                  className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center gap-3 transition-colors"
+                >
+                  <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
+                    <User className="w-5 h-5 text-gray-600" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium text-gray-900">@{user.username}</span>
+                      {user.verified && (
+                        <div className="w-4 h-4 bg-blue-500 rounded-full flex items-center justify-center">
+                          <div className="w-2 h-2 bg-white rounded-full"></div>
+                        </div>
+                      )}
+                    </div>
+                    <div className="text-sm text-gray-500 truncate">{user.displayName}</div>
+                  </div>
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+      
+      {/* Help text */}
+      <div className="mt-2 text-xs text-gray-500">
+        Escribe @ para mencionar usuarios
+      </div>
+    </div>
+  );
+};
+
+export default UserMentionInput;
