@@ -102,7 +102,7 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-user_problem_statement: MÚSICA NO SE ESCUCHA EN EL FEED: El usuario reporta que la música no se reproduce automáticamente en el feed TikTok a pesar de tener el sistema AudioManager y iTunes API implementados.
+user_problem_statement: MÚSICA AUTO-REPETICIÓN EN PUBLICACIONES: El usuario solicita que la música se auto-repita en las publicaciones del feed TikTok para mejorar la experiencia de usuario similar a TikTok real.
 
 **🎵 ACTUALIZACIÓN CRÍTICA: REPRODUCCIÓN REAL IMPLEMENTADA (2025-01-25)**
 
