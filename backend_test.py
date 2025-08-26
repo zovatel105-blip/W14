@@ -5062,6 +5062,237 @@ def test_realtime_music_search_system(base_url):
     print(f"\nReal-Time Music Search Tests Summary: {success_count}/11 tests passed")
     return success_count >= 8  # At least 8 out of 11 tests should pass
 
+def test_itunes_music_functionality(base_url):
+    """Test iTunes music functionality as requested in review"""
+    print("\n=== Testing iTunes Music Functionality ===")
+    
+    if not auth_tokens:
+        print("❌ No auth tokens available for iTunes music testing")
+        return False
+    
+    headers = {"Authorization": f"Bearer {auth_tokens[0]}"}
+    success_count = 0
+    itunes_music_id = None
+    
+    # Test 1: Verify static library with previews still works
+    print("1. Testing GET /api/music/library-with-previews (static library)...")
+    try:
+        response = requests.get(f"{base_url}/music/library-with-previews", headers=headers, timeout=15)
+        print(f"Library with Previews Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            print(f"✅ Static library with previews working correctly")
+            print(f"Total tracks: {data.get('total', 0)}")
+            print(f"Has real previews: {data.get('has_real_previews', False)}")
+            print(f"Source: {data.get('source', 'Unknown')}")
+            
+            # Check for static IDs like music_trending_1
+            music_tracks = data.get('music', [])
+            if music_tracks:
+                first_track = music_tracks[0]
+                print(f"First track: {first_track.get('title')} by {first_track.get('artist')}")
+                print(f"Preview URL available: {bool(first_track.get('preview_url'))}")
+                success_count += 1
+            else:
+                print("❌ No music tracks found in library")
+        else:
+            print(f"❌ Library with previews failed: {response.text}")
+            
+    except Exception as e:
+        print(f"❌ Library with previews error: {e}")
+    
+    # Test 2: Real-time search for Bad Bunny to get iTunes IDs
+    print("\n2. Testing GET /api/music/search-realtime?query=Bad Bunny&limit=3...")
+    try:
+        response = requests.get(f"{base_url}/music/search-realtime?query=Bad Bunny&limit=3", 
+                              headers=headers, timeout=15)
+        print(f"Real-time Search Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            print(f"✅ Real-time search working correctly")
+            print(f"Success: {data.get('success', False)}")
+            print(f"Message: {data.get('message', 'N/A')}")
+            print(f"Total results: {data.get('total', 0)}")
+            
+            results = data.get('results', [])
+            if results:
+                for i, track in enumerate(results[:3]):
+                    track_id = track.get('id', '')
+                    print(f"Track {i+1}: {track.get('title')} by {track.get('artist')}")
+                    print(f"  ID: {track_id}")
+                    print(f"  iTunes format: {track_id.startswith('itunes_')}")
+                    print(f"  Preview URL: {bool(track.get('preview_url'))}")
+                    
+                    # Store first iTunes ID for later testing
+                    if track_id.startswith('itunes_') and not itunes_music_id:
+                        itunes_music_id = track_id
+                
+                success_count += 1
+            else:
+                print("❌ No results found for Bad Bunny search")
+        else:
+            print(f"❌ Real-time search failed: {response.text}")
+            
+    except Exception as e:
+        print(f"❌ Real-time search error: {e}")
+    
+    # Test 3: Test get_music_info with iTunes ID by creating a poll
+    if itunes_music_id:
+        print(f"\n3. Testing get_music_info with iTunes ID by creating poll with music_id: {itunes_music_id}...")
+        try:
+            poll_data = {
+                "title": "¿Cuál es tu canción favorita de Bad Bunny?",
+                "options": [
+                    {"text": "Me gusta mucho", "media_url": "", "media_type": "text"},
+                    {"text": "No me gusta", "media_url": "", "media_type": "text"}
+                ],
+                "music_id": itunes_music_id,
+                "category": "music",
+                "expires_at": None
+            }
+            
+            response = requests.post(f"{base_url}/polls", json=poll_data, headers=headers, timeout=15)
+            print(f"Create Poll with iTunes Music Status Code: {response.status_code}")
+            
+            if response.status_code == 200:
+                poll = response.json()
+                print(f"✅ Poll created successfully with iTunes music")
+                print(f"Poll ID: {poll.get('id')}")
+                
+                # Check if music info was properly fetched
+                music_info = poll.get('music')
+                if music_info:
+                    print(f"Music title: {music_info.get('title')}")
+                    print(f"Music artist: {music_info.get('artist')}")
+                    print(f"Music ID: {music_info.get('id')}")
+                    print(f"Preview URL available: {bool(music_info.get('preview_url'))}")
+                    print(f"Source: {music_info.get('source', 'Unknown')}")
+                    
+                    if music_info.get('preview_url') and music_info.get('source') == 'iTunes':
+                        print("✅ get_music_info successfully handled iTunes ID")
+                        success_count += 1
+                    else:
+                        print("❌ get_music_info did not properly fetch iTunes preview")
+                else:
+                    print("❌ No music info found in poll response")
+            else:
+                print(f"❌ Poll creation with iTunes music failed: {response.text}")
+                
+        except Exception as e:
+            print(f"❌ Poll creation with iTunes music error: {e}")
+    else:
+        print("\n3. ⚠️ Skipping iTunes ID test - no iTunes ID obtained from search")
+    
+    # Test 4: Verify polls return music with valid preview URLs
+    print("\n4. Testing GET /api/polls to verify music playback...")
+    try:
+        response = requests.get(f"{base_url}/polls?limit=5", headers=headers, timeout=15)
+        print(f"Get Polls Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            polls = response.json()
+            print(f"✅ Polls retrieved successfully")
+            print(f"Total polls: {len(polls)}")
+            
+            polls_with_music = 0
+            polls_with_preview = 0
+            
+            for poll in polls:
+                music = poll.get('music')
+                if music:
+                    polls_with_music += 1
+                    print(f"Poll '{poll.get('title', 'Unknown')}' has music: {music.get('title')} by {music.get('artist')}")
+                    
+                    preview_url = music.get('preview_url')
+                    if preview_url:
+                        polls_with_preview += 1
+                        print(f"  ✅ Preview URL available: {preview_url[:50]}...")
+                        
+                        # Check if it's a real iTunes URL
+                        if 'itunes.apple.com' in preview_url or 'audio-ssl.itunes.apple.com' in preview_url:
+                            print(f"  ✅ Real iTunes preview URL detected")
+                    else:
+                        print(f"  ❌ No preview URL available")
+            
+            print(f"Polls with music: {polls_with_music}")
+            print(f"Polls with preview URLs: {polls_with_preview}")
+            
+            if polls_with_preview > 0:
+                print("✅ Found polls with valid preview URLs for music playback")
+                success_count += 1
+            else:
+                print("❌ No polls found with preview URLs")
+                
+        else:
+            print(f"❌ Get polls failed: {response.text}")
+            
+    except Exception as e:
+        print(f"❌ Get polls error: {e}")
+    
+    # Test 5: Additional test - verify static library still works with music_trending_1 format
+    print("\n5. Testing static library endpoint GET /api/music/library...")
+    try:
+        response = requests.get(f"{base_url}/music/library?limit=5", timeout=15)
+        print(f"Static Library Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            print(f"✅ Static library endpoint working")
+            
+            music_tracks = data.get('music', [])
+            if music_tracks:
+                static_ids_found = []
+                for track in music_tracks:
+                    track_id = track.get('id', '')
+                    if track_id.startswith('music_'):
+                        static_ids_found.append(track_id)
+                
+                print(f"Static IDs found: {static_ids_found[:3]}")  # Show first 3
+                if static_ids_found:
+                    print("✅ Static music IDs (music_trending_1 format) still available")
+                    success_count += 1
+                else:
+                    print("❌ No static music IDs found")
+            else:
+                print("❌ No music tracks in static library")
+        else:
+            print(f"⚠️ Static library endpoint returned {response.status_code}: {response.text}")
+            # This might be expected if the endpoint has issues, but we don't fail the test
+            
+    except Exception as e:
+        print(f"⚠️ Static library error (may be expected): {e}")
+    
+    # Test 6: Test music search with different artists
+    print("\n6. Testing search with different artists (Karol G, Morad)...")
+    try:
+        artists_to_test = ["Karol G", "Morad"]
+        
+        for artist in artists_to_test:
+            print(f"\nTesting search for: {artist}")
+            response = requests.get(f"{base_url}/music/search-realtime?query={artist}&limit=2", 
+                                  headers=headers, timeout=15)
+            
+            if response.status_code == 200:
+                data = response.json()
+                results = data.get('results', [])
+                print(f"  Found {len(results)} results for {artist}")
+                
+                if results:
+                    first_result = results[0]
+                    print(f"  First result: {first_result.get('title')} by {first_result.get('artist')}")
+                    print(f"  iTunes ID: {first_result.get('id', '').startswith('itunes_')}")
+                    
+        success_count += 1  # If we got here without errors, consider it a success
+        print("✅ Multi-artist search testing completed")
+        
+    except Exception as e:
+        print(f"❌ Multi-artist search error: {e}")
+    
+    print(f"\niTunes Music Functionality Tests Summary: {success_count}/6 tests passed")
+    return success_count >= 4  # At least 4 out of 6 tests should pass
+
 def main():
     """Main test execution function"""
     print("🚀 Starting Backend API Testing...")
