@@ -122,6 +122,13 @@ const TikTokPollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, onCr
         } catch (error) {
           console.error('Error en autoplay:', error);
         }
+      } else if (isActive && (!poll.music || !poll.music.preview_url)) {
+        // ARREGLO: Si el post está activo pero NO tiene música, detener cualquier música
+        if (isMusicPlaying) {
+          await audioManager.pause();
+          setIsMusicPlaying(false);
+          console.log('⏸️ Pausing music - current post has no music');
+        }
       } else if (!isActive && isMusicPlaying) {
         // Pausar cuando ya no está activo
         await audioManager.pause();
