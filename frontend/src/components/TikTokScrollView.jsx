@@ -976,7 +976,7 @@ const TikTokScrollView = ({ polls, onVote, onLike, onShare, onComment, onSave, o
           scrollSnapStop: 'always'
         }}
       >
-        {polls.map((poll, index) => (
+        {preloadedPolls.map((poll, index) => (
           <TikTokPollCard
             key={poll.id}
             poll={poll}
@@ -986,10 +986,12 @@ const TikTokScrollView = ({ polls, onVote, onLike, onShare, onComment, onSave, o
             onComment={onComment}
             onSave={onSave}
             onCreatePoll={onCreatePoll}
-            isActive={index === activeIndex}
+            isActive={index === memoizedActiveIndex}
             index={index}
             total={polls.length}
             showLogo={showLogo}
+            shouldPreload={poll.shouldPreload}
+            isVisible={poll.isVisible}
           />
         ))}
       </div>
