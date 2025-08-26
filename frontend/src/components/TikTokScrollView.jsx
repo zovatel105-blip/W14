@@ -754,7 +754,7 @@ const TikTokScrollView = ({ polls, onVote, onLike, onShare, onComment, onSave, o
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [activeIndex, polls.length, onExitTikTok]);
 
-  // Enhanced touch/swipe support with better gesture detection
+  // Ultra-optimized touch/swipe support with momentum and inertia
   useEffect(() => {
     const container = containerRef.current;
     if (!container) return;
@@ -763,19 +763,44 @@ const TikTokScrollView = ({ polls, onVote, onLike, onShare, onComment, onSave, o
     let startTime = 0;
     let startScrollTop = 0;
     let isDragging = false;
+    let momentum = 0;
+    let lastY = 0;
+    let lastTime = 0;
 
     const handleTouchStart = (e) => {
-      startY = e.touches[0].clientY;
+      // Get the first touch point
+      const touch = e.touches[0];
+      startY = touch.clientY;
+      lastY = touch.clientY;
       startTime = Date.now();
+      lastTime = startTime;
       startScrollTop = container.scrollTop;
       isDragging = true;
+      momentum = 0;
+      
+      // Stop any ongoing smooth scrolling
+      container.style.scrollBehavior = 'auto';
     };
 
     const handleTouchMove = (e) => {
       if (!isDragging) return;
       
-      // Prevent default scrolling behavior for better control
-      if (Math.abs(e.touches[0].clientY - startY) > 10) {
+      const touch = e.touches[0];
+      const currentY = touch.clientY;
+      const currentTime = Date.now();
+      const deltaY = lastY - currentY;
+      const deltaTime = currentTime - lastTime;
+      
+      // Calculate momentum for smooth inertia
+      if (deltaTime > 0) {
+        momentum = deltaY / deltaTime;
+      }
+      
+      lastY = currentY;
+      lastTime = currentTime;
+      
+      // Prevent default behavior for better control
+      if (Math.abs(touch.clientY - startY) > 15) {
         e.preventDefault();
       }
     };
@@ -784,36 +809,64 @@ const TikTokScrollView = ({ polls, onVote, onLike, onShare, onComment, onSave, o
       if (!isDragging) return;
       isDragging = false;
       
+      // Re-enable smooth scrolling
+      container.style.scrollBehavior = 'smooth';
+      
       const endY = e.changedTouches[0].clientY;
       const endTime = Date.now();
-      const deltaY = startY - endY;
-      const deltaTime = endTime - startTime;
+      const totalDeltaY = startY - endY;
+      const totalDeltaTime = endTime - startTime;
+      
+      // Enhanced swipe detection with momentum consideration
+      const averageVelocity = Math.abs(totalDeltaY) / totalDeltaTime;
+      const instantVelocity = Math.abs(momentum);
+      
+      // Multiple detection methods for better responsiveness
+      const isQuickSwipe = totalDeltaTime < 300 && averageVelocity > 0.4;
+      const isMomentumSwipe = instantVelocity > 1.5;
+      const isLongSwipe = Math.abs(totalDeltaY) > 80;
+      const isShortFlick = Math.abs(totalDeltaY) > 30 && averageVelocity > 0.8;
 
-      // Enhanced swipe detection with velocity consideration
-      const velocity = Math.abs(deltaY) / deltaTime;
-      const isQuickSwipe = deltaTime < 300 && velocity > 0.5;
-      const isLongSwipe = Math.abs(deltaY) > 100;
+      if (isQuickSwipe || isMomentumSwipe || isLongSwipe || isShortFlick) {
+        const targetIndex = totalDeltaY > 0 
+          ? Math.min(activeIndex + 1, polls.length - 1)  // Swipe up - next
+          : Math.max(activeIndex - 1, 0);               // Swipe down - previous
 
-      if (isQuickSwipe || isLongSwipe) {
-        if (deltaY > 0 && activeIndex < polls.length - 1) {
-          // Swipe up - next
+        if (targetIndex !== activeIndex) {
+          // Add slight momentum-based easing
+          const easingDuration = isMomentumSwipe ? 200 : 300;
+          
           container.scrollTo({
-            top: (activeIndex + 1) * container.clientHeight,
+            top: targetIndex * container.clientHeight,
             behavior: 'smooth'
           });
-        } else if (deltaY < 0 && activeIndex > 0) {
-          // Swipe down - previous
-          container.scrollTo({
-            top: (activeIndex - 1) * container.clientHeight,
-            behavior: 'smooth'
-          });
+          
+          // Immediately update active index for better responsiveness
+          setTimeout(() => {
+            setActiveIndex(targetIndex);
+          }, easingDuration / 2);
         }
+      } else {
+        // Snap to current position if no significant swipe detected
+        const currentPosition = container.scrollTop / container.clientHeight;
+        const snapIndex = Math.round(currentPosition);
+        
+        container.scrollTo({
+          top: snapIndex * container.clientHeight,
+          behavior: 'smooth'
+        });
       }
     };
 
-    // Enhanced event listeners with better options
-    container.addEventListener('touchstart', handleTouchStart, { passive: false });
-    container.addEventListener('touchmove', handleTouchMove, { passive: false });
+    // Optimize event listeners for better performance
+    const options = { 
+      passive: false, 
+      capture: false,
+      once: false
+    };
+
+    container.addEventListener('touchstart', handleTouchStart, options);
+    container.addEventListener('touchmove', handleTouchMove, options);
     container.addEventListener('touchend', handleTouchEnd, { passive: true });
 
     return () => {
