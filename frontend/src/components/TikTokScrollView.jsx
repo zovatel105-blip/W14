@@ -633,6 +633,18 @@ const TikTokScrollView = ({ polls, onVote, onLike, onShare, onComment, onSave, o
   const [activeIndex, setActiveIndex] = useState(0);
   const [isScrolling, setIsScrolling] = useState(false);
 
+  // Preload optimization - memoize expensive calculations
+  const preloadedPolls = useMemo(() => {
+    return polls.map((poll, index) => ({
+      ...poll,
+      isVisible: Math.abs(index - activeIndex) <= 2, // Only render nearby items
+      shouldPreload: Math.abs(index - activeIndex) <= 1 // Preload adjacent items
+    }));
+  }, [polls, activeIndex]);
+
+  // Performance optimization - prevent unnecessary re-renders
+  const memoizedActiveIndex = useMemo(() => activeIndex, [activeIndex]);
+
   // Optimized scroll handling with debounce and momentum detection
   const handleScroll = useCallback(() => {
     if (isScrolling) return;
