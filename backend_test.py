@@ -5333,6 +5333,9 @@ def main():
     # NEW: Test the real-time music search system
     test_results['realtime_music_search'] = test_realtime_music_search_system(base_url)
     
+    # NEW: iTunes Music Functionality Testing (as requested in review)
+    test_results['itunes_music_functionality'] = test_itunes_music_functionality(base_url)
+    
     # Print summary
     print("\n" + "=" * 60)
     print("🎯 TESTING SUMMARY")
