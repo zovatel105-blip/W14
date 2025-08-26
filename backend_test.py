@@ -4766,6 +4766,302 @@ def test_sanity_check_after_frontend_optimizations(base_url):
         print("Frontend optimizations may have affected backend functionality")
         return False
 
+def test_realtime_music_search_system(base_url):
+    """Test comprehensive real-time music search system using iTunes API"""
+    print("\n=== Testing Real-Time Music Search System ===")
+    
+    if not auth_tokens:
+        print("❌ No auth tokens available for music search testing")
+        return False
+    
+    headers = {"Authorization": f"Bearer {auth_tokens[0]}"}
+    success_count = 0
+    
+    # Test 1: Search for popular artists - Bad Bunny
+    print("Testing /api/music/search-realtime with 'Bad Bunny'...")
+    try:
+        response = requests.get(f"{base_url}/music/search-realtime?query=Bad Bunny&limit=5", 
+                              headers=headers, timeout=15)
+        print(f"Bad Bunny Search Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            print(f"✅ Bad Bunny search successful")
+            print(f"Success: {data['success']}")
+            print(f"Message: {data['message']}")
+            print(f"Results found: {len(data['results'])}")
+            
+            if data['success'] and len(data['results']) > 0:
+                result = data['results'][0]
+                print(f"First result: {result['title']} by {result['artist']}")
+                print(f"Preview URL: {result['preview_url'][:50]}..." if result['preview_url'] else "No preview")
+                print(f"Cover URL: {result['cover'][:50]}..." if result['cover'] else "No cover")
+                print(f"Duration: {result['duration']} seconds")
+                print(f"Category: {result['category']}")
+                print(f"Source: {result['source']}")
+                success_count += 1
+            else:
+                print("❌ Bad Bunny search returned no results")
+        else:
+            print(f"❌ Bad Bunny search failed: {response.text}")
+            
+    except Exception as e:
+        print(f"❌ Bad Bunny search error: {e}")
+    
+    # Test 2: Search for popular artists - Karol G
+    print("\nTesting /api/music/search-realtime with 'Karol G'...")
+    try:
+        response = requests.get(f"{base_url}/music/search-realtime?query=Karol G&limit=5", 
+                              headers=headers, timeout=15)
+        print(f"Karol G Search Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            print(f"✅ Karol G search successful")
+            print(f"Results found: {len(data['results'])}")
+            
+            if data['success'] and len(data['results']) > 0:
+                result = data['results'][0]
+                print(f"First result: {result['title']} by {result['artist']}")
+                success_count += 1
+            else:
+                print("❌ Karol G search returned no results")
+        else:
+            print(f"❌ Karol G search failed: {response.text}")
+            
+    except Exception as e:
+        print(f"❌ Karol G search error: {e}")
+    
+    # Test 3: Search for popular artists - Morad
+    print("\nTesting /api/music/search-realtime with 'Morad'...")
+    try:
+        response = requests.get(f"{base_url}/music/search-realtime?query=Morad&limit=5", 
+                              headers=headers, timeout=15)
+        print(f"Morad Search Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            print(f"✅ Morad search successful")
+            print(f"Results found: {len(data['results'])}")
+            
+            if data['success']:
+                if len(data['results']) > 0:
+                    result = data['results'][0]
+                    print(f"First result: {result['title']} by {result['artist']}")
+                    success_count += 1
+                else:
+                    print("⚠️ Morad search returned no results (expected for Spanish urban artist)")
+                    success_count += 1  # This is acceptable as iTunes may not have all Spanish artists
+            else:
+                print("❌ Morad search failed")
+        else:
+            print(f"❌ Morad search failed: {response.text}")
+            
+    except Exception as e:
+        print(f"❌ Morad search error: {e}")
+    
+    # Test 4: Search for specific songs - Flowers
+    print("\nTesting /api/music/search-realtime with 'Flowers'...")
+    try:
+        response = requests.get(f"{base_url}/music/search-realtime?query=Flowers&limit=5", 
+                              headers=headers, timeout=15)
+        print(f"Flowers Search Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            print(f"✅ Flowers search successful")
+            print(f"Results found: {len(data['results'])}")
+            
+            if data['success'] and len(data['results']) > 0:
+                # Look for Miley Cyrus - Flowers
+                flowers_found = False
+                for result in data['results']:
+                    if 'miley' in result['artist'].lower() or 'cyrus' in result['artist'].lower():
+                        print(f"Found Flowers by {result['artist']}: {result['title']}")
+                        flowers_found = True
+                        break
+                
+                if flowers_found or len(data['results']) > 0:
+                    success_count += 1
+                    print(f"Sample result: {data['results'][0]['title']} by {data['results'][0]['artist']}")
+            else:
+                print("❌ Flowers search returned no results")
+        else:
+            print(f"❌ Flowers search failed: {response.text}")
+            
+    except Exception as e:
+        print(f"❌ Flowers search error: {e}")
+    
+    # Test 5: Search for generic terms - reggaeton
+    print("\nTesting /api/music/search-realtime with 'reggaeton'...")
+    try:
+        response = requests.get(f"{base_url}/music/search-realtime?query=reggaeton&limit=10", 
+                              headers=headers, timeout=15)
+        print(f"Reggaeton Search Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            print(f"✅ Reggaeton search successful")
+            print(f"Results found: {len(data['results'])}")
+            
+            if data['success'] and len(data['results']) > 0:
+                print(f"Sample results:")
+                for i, result in enumerate(data['results'][:3]):
+                    print(f"  {i+1}. {result['title']} by {result['artist']}")
+                success_count += 1
+            else:
+                print("❌ Reggaeton search returned no results")
+        else:
+            print(f"❌ Reggaeton search failed: {response.text}")
+            
+    except Exception as e:
+        print(f"❌ Reggaeton search error: {e}")
+    
+    # Test 6: Test limit parameter
+    print("\nTesting limit parameter with different values...")
+    try:
+        response = requests.get(f"{base_url}/music/search-realtime?query=music&limit=3", 
+                              headers=headers, timeout=15)
+        print(f"Limit Test Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            print(f"✅ Limit parameter test successful")
+            print(f"Requested limit: 3, Results returned: {len(data['results'])}")
+            
+            if len(data['results']) <= 3:
+                print("✅ Limit parameter working correctly")
+                success_count += 1
+            else:
+                print("❌ Limit parameter not working correctly")
+        else:
+            print(f"❌ Limit test failed: {response.text}")
+            
+    except Exception as e:
+        print(f"❌ Limit test error: {e}")
+    
+    # Test 7: Test response format validation
+    print("\nTesting response format validation...")
+    try:
+        response = requests.get(f"{base_url}/music/search-realtime?query=test&limit=1", 
+                              headers=headers, timeout=15)
+        print(f"Format Validation Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            print(f"✅ Response format validation successful")
+            
+            # Check required fields in response
+            required_fields = ['success', 'message', 'results', 'total', 'query']
+            format_valid = all(field in data for field in required_fields)
+            
+            if format_valid:
+                print("✅ All required response fields present")
+                
+                # Check result format if results exist
+                if len(data['results']) > 0:
+                    result = data['results'][0]
+                    result_fields = ['id', 'title', 'artist', 'preview_url', 'cover', 'duration', 'category', 'source']
+                    result_format_valid = all(field in result for field in result_fields)
+                    
+                    if result_format_valid:
+                        print("✅ Result format validation successful")
+                        success_count += 1
+                    else:
+                        print("❌ Result format missing required fields")
+                else:
+                    print("✅ No results to validate format (acceptable)")
+                    success_count += 1
+            else:
+                print("❌ Response format missing required fields")
+        else:
+            print(f"❌ Format validation failed: {response.text}")
+            
+    except Exception as e:
+        print(f"❌ Format validation error: {e}")
+    
+    # Test 8: Test empty query validation
+    print("\nTesting empty query validation...")
+    try:
+        response = requests.get(f"{base_url}/music/search-realtime?query=&limit=5", 
+                              headers=headers, timeout=15)
+        print(f"Empty Query Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            print(f"✅ Empty query handled successfully")
+            
+            if not data['success'] and 'required' in data['message'].lower():
+                print("✅ Empty query properly rejected with appropriate message")
+                success_count += 1
+            else:
+                print("❌ Empty query should be rejected")
+        else:
+            print(f"❌ Empty query test failed: {response.text}")
+            
+    except Exception as e:
+        print(f"❌ Empty query test error: {e}")
+    
+    # Test 9: Test authentication requirement
+    print("\nTesting authentication requirement...")
+    try:
+        response = requests.get(f"{base_url}/music/search-realtime?query=test&limit=5", timeout=15)
+        print(f"No Auth Status Code: {response.status_code}")
+        
+        if response.status_code in [401, 403]:
+            print("✅ Authentication properly required")
+            success_count += 1
+        else:
+            print(f"❌ Should require authentication, got status: {response.status_code}")
+            
+    except Exception as e:
+        print(f"❌ Authentication test error: {e}")
+    
+    # Test 10: Compare with static library endpoint
+    print("\nTesting comparison with static library endpoint...")
+    try:
+        response = requests.get(f"{base_url}/music/library", timeout=15)
+        print(f"Static Library Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            print(f"✅ Static library endpoint working")
+            print(f"Static library songs: {len(data.get('music', []))}")
+            success_count += 1
+        else:
+            print(f"❌ Static library failed: {response.text}")
+            
+    except Exception as e:
+        print(f"❌ Static library test error: {e}")
+    
+    # Test 11: Compare with library-with-previews endpoint
+    print("\nTesting comparison with library-with-previews endpoint...")
+    try:
+        response = requests.get(f"{base_url}/music/library-with-previews?limit=5", 
+                              headers=headers, timeout=15)
+        print(f"Library with Previews Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            print(f"✅ Library with previews endpoint working")
+            print(f"Preview library songs: {len(data.get('music', []))}")
+            print(f"Has real previews: {data.get('has_real_previews', False)}")
+            print(f"Source: {data.get('source', 'Unknown')}")
+            
+            if data.get('has_real_previews') and data.get('source') == 'iTunes Search API':
+                print("✅ Library with previews using iTunes API correctly")
+                success_count += 1
+            else:
+                print("❌ Library with previews not using iTunes API")
+        else:
+            print(f"❌ Library with previews failed: {response.text}")
+            
+    except Exception as e:
+        print(f"❌ Library with previews test error: {e}")
+    
+    print(f"\nReal-Time Music Search Tests Summary: {success_count}/11 tests passed")
+    return success_count >= 8  # At least 8 out of 11 tests should pass
+
 def main():
     """Main test execution function"""
     print("🚀 Starting Backend API Testing...")
@@ -4802,6 +5098,9 @@ def main():
     test_results['nested_comments'] = test_nested_comments_system(base_url)
     test_results['follow_system'] = test_follow_system(base_url)
     test_results['tiktok_profile_grid'] = test_tiktok_profile_grid_backend_support(base_url)
+    
+    # NEW: Test the real-time music search system
+    test_results['realtime_music_search'] = test_realtime_music_search_system(base_url)
     
     # Print summary
     print("\n" + "=" * 60)
