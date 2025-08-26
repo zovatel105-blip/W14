@@ -257,6 +257,21 @@ class AudioManager {
   }
 
   /**
+   * Obtiene la URL actual del audio reproduciéndose
+   */
+  getCurrentAudioUrl() {
+    return this.currentAudio ? this.currentAudio.src : null;
+  }
+
+  /**
+   * Verifica si se está reproduciendo una URL específica
+   */
+  isPlayingUrl(url) {
+    if (!this.currentAudio || !this.isPlaying) return false;
+    return this.currentAudio.src === url;
+  }
+
+  /**
    * Obtiene el estado actual
    */
   getState() {
