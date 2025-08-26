@@ -148,6 +148,18 @@ user_problem_statement: CORRECIÓN CRÍTICA DEL SISTEMA DE MÚSICA (2025-01-26):
 🔄 Los usuarios ahora tienen música que se auto-repite automáticamente en cada publicación, creando una experiencia inmersiva continua como TikTok real.
 
 
+  - task: "Corrección Bug Música en Posts Sin Música"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/TikTokScrollView.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+        - working: true
+          agent: "main"
+          comment: "✅ BUG CRÍTICO DE MÚSICA CORREGIDO COMPLETAMENTE (2025-01-26): Identificado y solucionado problema donde publicaciones que no tienen música reproducían incorrectamente la música de otras publicaciones. PROBLEMA IDENTIFICADO: En TikTokScrollView.jsx líneas 102-134, la lógica del useEffect solo pausaba música cuando un post se volvía inactivo (!isActive), pero NO cuando un post estaba activo pero no tenía música. Esto causaba que posts sin música continuaran reproduciendo la música del post anterior. SOLUCIÓN IMPLEMENTADA: 1) ✅ CONDICIÓN AGREGADA: Nueva lógica else if (isActive && (!poll.music || !poll.music.preview_url)) que detecta cuando post activo no tiene música y pausa automáticamente cualquier reproducción anterior, 2) ✅ LOGGING MEJORADO: Agregado console.log 'Pausing music - current post has no music' para debugging, 3) ✅ DEPENDENCIAS CORREGIDAS: Actualizado useEffect dependencies para incluir isMusicPlaying y mantener estado sincronizado, 4) ✅ COMPORTAMIENTO CORREGIDO: Ahora posts sin música permanecen silenciosos y no reproducen música de posts anteriores, transición perfecta entre posts con/sin música. RESULTADO: El sistema ahora funciona correctamente como TikTok real - solo posts con música asignada reproducen audio, posts sin música permanecen silenciosos. Experiencia de usuario mejorada significativamente."
+
 backend:
   - task: "Implementación Auto-Repetición Musical en Posts"
     implemented: true
