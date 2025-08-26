@@ -339,11 +339,56 @@ async def search_itunes_track(artist: str, track: str):
 async def get_music_info(music_id: str):
     """
     Get music information by ID with automatic iTunes preview fetching
+    Supports both static library IDs and dynamic iTunes IDs (format: itunes_XXXXX)
     """
     if not music_id:
         return None
     
-    # Music library - Enhanced like TikTok with real artists and REAL PREVIEW URLS
+    # Check if this is an iTunes ID (format: itunes_XXXXX)
+    if music_id.startswith('itunes_'):
+        try:
+            # Extract iTunes track ID
+            itunes_track_id = music_id.replace('itunes_', '')
+            print(f"🎵 Fetching iTunes track info for ID: {itunes_track_id}")
+            
+            # Fetch track info directly from iTunes API using track ID
+            url = f"https://itunes.apple.com/lookup?id={itunes_track_id}"
+            
+            import aiohttp
+            async with aiohttp.ClientSession() as session:
+                async with session.get(url) as response:
+                    if response.status == 200:
+                        data = await response.json()
+                        results = data.get('results', [])
+                        if results:
+                            result = results[0]
+                            music_info = {
+                                'id': music_id,
+                                'title': result.get('trackName'),
+                                'artist': result.get('artistName'),
+                                'duration': 30,  # iTunes previews are 30 seconds
+                                'url': '',  # No local URL for iTunes tracks
+                                'preview_url': result.get('previewUrl'),
+                                'cover': result.get('artworkUrl100', '').replace('100x100bb.jpg', '400x400bb.jpg'),
+                                'category': result.get('primaryGenreName', 'Music'),
+                                'isOriginal': False,
+                                'isTrending': False,
+                                'uses': 0,  # Default for iTunes tracks
+                                'source': 'iTunes'
+                            }
+                            print(f"✅ Successfully fetched iTunes track: {music_info['title']} - {music_info['artist']}")
+                            return music_info
+                        else:
+                            print(f"❌ No results found for iTunes track ID: {itunes_track_id}")
+                            return None
+                    else:
+                        print(f"❌ iTunes API error: {response.status}")
+                        return None
+        except Exception as e:
+            print(f"❌ Error fetching iTunes track {music_id}: {str(e)}")
+            return None
+    
+    # If not an iTunes ID, check static music library
     music_library = {
         # TRENDING
         'music_trending_1': {
