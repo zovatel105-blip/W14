@@ -24,9 +24,10 @@ class AudioManager {
    */
   async play(audioUrl, options = {}) {
     try {
-      // Si hay audio reproduciéndose, hacer fade out primero
-      if (this.currentAudio && !this.currentAudio.paused) {
-        await this.fadeOut();
+      // SINCRONIZACIÓN COMPLETA: Detener completamente cualquier audio anterior
+      if (this.currentAudio) {
+        console.log('🔄 Stopping previous audio for complete sync');
+        await this.stop();
       }
 
       // Crear nuevo elemento de audio
