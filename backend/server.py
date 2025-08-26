@@ -18,6 +18,7 @@ import re
 import hashlib
 import json
 import aiohttp
+import httpx
 from user_agents import parse
 import aiofiles
 from PIL import Image
