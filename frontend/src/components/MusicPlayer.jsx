@@ -3,7 +3,7 @@ import { Play, Pause, Music, Loader2 } from 'lucide-react';
 import audioManager from '../services/AudioManager';
 import realMusicService from '../services/realMusicService';
 
-const MusicPlayer = ({ music, isVisible = true, onTogglePlay, className = '', autoPlay = false }) => {
+const MusicPlayer = ({ music, isVisible = true, onTogglePlay, className = '', autoPlay = false, loop = false }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [realPreviewUrl, setRealPreviewUrl] = useState(null);
