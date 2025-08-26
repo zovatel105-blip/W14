@@ -579,6 +579,85 @@ async def search_music_preview(
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error searching music: {str(e)}")
 
+@api_router.get("/music/search-realtime")
+async def search_music_realtime(
+    query: str,
+    limit: int = 20,
+    current_user: UserResponse = Depends(get_current_user)
+):
+    """Search for music in real time using iTunes API - supports any artist/song"""
+    try:
+        # Clean and prepare the search query
+        query = query.strip()
+        if not query:
+            return {
+                'success': False,
+                'message': 'Query is required',
+                'results': []
+            }
+        
+        # Use iTunes Search API with more flexible search
+        url = "https://itunes.apple.com/search"
+        params = {
+            'term': query,
+            'media': 'music',
+            'entity': 'song',
+            'limit': limit,
+            'country': 'US'  # Can be changed to support different countries
+        }
+        
+        async with httpx.AsyncClient() as client:
+            response = await client.get(url, params=params, timeout=10)
+            response.raise_for_status()
+            data = response.json()
+        
+        results = []
+        if 'results' in data:
+            for result in data['results']:
+                # Only include results with preview URLs
+                preview_url = result.get('previewUrl')
+                if preview_url:
+                    music_item = {
+                        'id': f"itunes_{result.get('trackId')}",
+                        'title': result.get('trackName', 'Unknown Title'),
+                        'artist': result.get('artistName', 'Unknown Artist'),
+                        'preview_url': preview_url,
+                        'cover': result.get('artworkUrl100', '').replace('100x100', '400x400'),  # Higher resolution
+                        'duration': 30,  # iTunes previews are typically 30 seconds
+                        'category': result.get('primaryGenreName', 'Music'),
+                        'isOriginal': False,
+                        'isTrending': False,
+                        'uses': 0,  # Real-time results don't have use counts
+                        'waveform': [0.7, 0.8, 0.6, 0.9, 0.5, 0.8, 0.7, 0.9, 0.6, 0.8] * 2,  # Default waveform
+                        'source': 'iTunes',
+                        'album': result.get('collectionName', ''),
+                        'release_date': result.get('releaseDate', ''),
+                        'itunes_url': result.get('trackViewUrl', '')
+                    }
+                    results.append(music_item)
+        
+        return {
+            'success': True,
+            'message': f'Found {len(results)} songs for "{query}"',
+            'results': results,
+            'total': len(results),
+            'query': query
+        }
+        
+    except httpx.TimeoutException:
+        return {
+            'success': False,
+            'message': 'Search timeout - please try again',
+            'results': []
+        }
+    except Exception as e:
+        print(f"Error in real-time music search: {e}")
+        return {
+            'success': False,
+            'message': f'Search error: {str(e)}',
+            'results': []
+        }
+
 @api_router.get("/music/library-with-previews")
 async def get_music_library_with_real_previews(
     limit: int = 20,
