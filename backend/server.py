@@ -3225,7 +3225,8 @@ async def upload_audio(
                 raise AudioProcessingError(processing_result['error'])
             
             # Mover archivo procesado a ubicación final
-            os.rename(processing_result['processed_path'], str(final_path))
+            import shutil
+            shutil.move(processing_result['processed_path'], str(final_path))
             
             # Obtener tamaño del archivo final
             file_size = os.path.getsize(final_path)
