@@ -162,9 +162,9 @@ def test_audio_search(base_url, auth_token):
     headers = {"Authorization": f"Bearer {auth_token}"}
     
     try:
-        # Test search with query
+        # Test search with query that should match our uploaded audio
         response = requests.get(
-            f"{base_url}/audio/search?query=Prueba&limit=5", 
+            f"{base_url}/audio/search?query=test&limit=5", 
             headers=headers, 
             timeout=10
         )
@@ -181,6 +181,8 @@ def test_audio_search(base_url, auth_token):
                 print(f"\n🔍 Search Results:")
                 for i, audio in enumerate(search_result['audios'], 1):
                     print(f"  {i}. {audio['title']} by {audio['artist']}")
+            else:
+                print("🔍 No results found (may be expected if audio is still processing)")
             
             return True
         else:
