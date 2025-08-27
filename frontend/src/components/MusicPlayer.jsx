@@ -188,7 +188,7 @@ const MusicPlayer = ({ music, isVisible = true, onTogglePlay, className = '', au
           <div 
             data-audio-player-control="true"
             onClick={handleTogglePlay}
-            className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10"
+            className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10 pointer-events-none group-hover:pointer-events-auto"
           >
             {isLoading ? (
               <Loader2 className="w-3 h-3 text-white animate-spin" />
