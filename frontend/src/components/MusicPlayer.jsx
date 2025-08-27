@@ -125,8 +125,16 @@ const MusicPlayer = ({ music, isVisible = true, onTogglePlay, className = '', au
   };
 
   const handleNavigateToAudio = (e) => {
+    console.log('🎵 MusicPlayer clicked! Event details:', {
+      target: e.target,
+      currentTarget: e.currentTarget,
+      music: music
+    });
+    
     // Prevent navigation if clicking on play/pause button
-    if (e.target.closest('[data-audio-player-control]')) {
+    const controlElement = e.target.closest('[data-audio-player-control]');
+    if (controlElement) {
+      console.log('🚫 Navigation prevented - clicked on control element:', controlElement);
       return;
     }
     
@@ -139,10 +147,10 @@ const MusicPlayer = ({ music, isVisible = true, onTogglePlay, className = '', au
         // For user uploaded audio, ensure we have the right format
         audioId = audioId.startsWith('user_audio_') ? audioId : `user_audio_${audioId}`;
       }
-      console.log('🎵 Final audio ID:', audioId);
+      console.log('🎵 Final audio ID for navigation:', audioId);
       navigate(`/audio/${audioId}`);
     } else {
-      console.log('❌ No music ID available');
+      console.log('❌ No music ID available - music object:', music);
     }
   };
 
