@@ -548,16 +548,79 @@ const MusicSelector = ({ onSelectMusic, selectedMusic, pollTitle = '' }) => {
 
       {/* Music list */}
       <div className="space-y-1 max-h-80 overflow-y-auto">
-        {isLoadingPopular && !searchQuery ? (
+        {/* Mi Música - Show upload interface */}
+        {activeCategory === 'Mi Música' && !searchQuery && (
+          <div className="space-y-2 mb-4">
+            {/* Upload button/form */}
+            <div className="border-2 border-dashed border-gray-200 rounded-xl p-4 hover:border-gray-300 transition-colors">
+              <div className="text-center">
+                <input
+                  type="file"
+                  id="audio-upload"
+                  accept="audio/mpeg,audio/mp4,audio/wav,audio/aac,audio/x-m4a"
+                  onChange={handleAudioUpload}
+                  className="hidden"
+                  disabled={isUploading}
+                />
+                <label
+                  htmlFor="audio-upload"
+                  className={`cursor-pointer flex flex-col items-center gap-2 ${
+                    isUploading ? 'opacity-50 cursor-not-allowed' : 'hover:text-purple-600'
+                  }`}
+                >
+                  {isUploading ? (
+                    <Loader2 className="w-8 h-8 text-gray-400 animate-spin" />
+                  ) : (
+                    <Upload className="w-8 h-8 text-gray-400" />
+                  )}
+                  <div>
+                    <p className="text-sm font-medium text-gray-700">
+                      {isUploading ? 'Subiendo audio...' : 'Subir tu música'}
+                    </p>
+                    <p className="text-xs text-gray-500">
+                      MP3, M4A, WAV, AAC • Máx. 10MB • Máx. 60seg
+                    </p>
+                  </div>
+                </label>
+              </div>
+            </div>
+            
+            {/* Instructions for My Music */}
+            <div className="bg-blue-50 rounded-lg p-3 border border-blue-100">
+              <div className="flex items-start gap-2">
+                <FileAudio className="w-4 h-4 text-blue-500 mt-0.5" />
+                <div>
+                  <p className="text-xs font-medium text-blue-700 mb-1">Tu biblioteca personal</p>
+                  <p className="text-xs text-blue-600">
+                    Sube tus propios audios y úsalos en tus publicaciones. Puedes configurar si son públicos o privados.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        
+        {isLoadingPopular && !searchQuery && activeCategory === 'Popular' ? (
           <div className="flex items-center justify-center py-8">
             <Loader2 className="w-6 h-6 text-gray-400 animate-spin mr-2" />
             <span className="text-gray-500">Cargando música popular...</span>
+          </div>
+        ) : isLoadingMyMusic && activeCategory === 'Mi Música' ? (
+          <div className="flex items-center justify-center py-8">
+            <Loader2 className="w-6 h-6 text-gray-400 animate-spin mr-2" />
+            <span className="text-gray-500">Cargando tu música...</span>
           </div>
         ) : searchError && searchQuery ? (
           <div className="text-center py-8 text-gray-400">
             <Music className="w-8 h-8 mx-auto mb-2 opacity-50" />
             <p className="text-sm">{searchError}</p>
             <p className="text-xs text-gray-300 mt-1">Intenta con otros términos de búsqueda</p>
+          </div>
+        ) : activeCategory === 'Mi Música' && filteredMusic.length === 0 && !isLoadingMyMusic ? (
+          <div className="text-center py-8 text-gray-400">
+            <FileAudio className="w-8 h-8 mx-auto mb-2 opacity-50" />
+            <p className="text-sm">No tienes música subida</p>
+            <p className="text-xs text-gray-300 mt-1">Sube tu primer audio usando el botón de arriba</p>
           </div>
         ) : filteredMusic.length > 0 ? (
           <>
@@ -573,28 +636,30 @@ const MusicSelector = ({ onSelectMusic, selectedMusic, pollTitle = '' }) => {
               />
             ))}
             
-            {/* Add original sound option at the end */}
-            <div className="border-t pt-2 mt-3">
-              <SimpleMusicCard
-                music={{
-                  id: 'original_sound',
-                  title: 'Sonido Original',
-                  artist: 'Sin música de fondo',
-                  duration: 0,
-                  cover: '/images/original-sound.png',
-                  category: 'Original',
-                  isOriginal: true,
-                  uses: 0,
-                  waveform: [0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3],
-                  source: 'App'
-                }}
-                isSelected={selectedMusic?.id === 'original_sound'}
-                isPlaying={false}
-                onSelect={handleSelectMusic}
-                onPlay={() => {}} // No play for original sound
-                showSource={searchQuery.trim().length > 0}
-              />
-            </div>
+            {/* Add original sound option at the end - only show for categories other than Mi Música */}
+            {activeCategory !== 'Mi Música' && (
+              <div className="border-t pt-2 mt-3">
+                <SimpleMusicCard
+                  music={{
+                    id: 'original_sound',
+                    title: 'Sonido Original',
+                    artist: 'Sin música de fondo',
+                    duration: 0,
+                    cover: '/images/original-sound.png',
+                    category: 'Original',
+                    isOriginal: true,
+                    uses: 0,
+                    waveform: [0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3, 0.3],
+                    source: 'App'
+                  }}
+                  isSelected={selectedMusic?.id === 'original_sound'}
+                  isPlaying={false}
+                  onSelect={handleSelectMusic}
+                  onPlay={() => {}} // No play for original sound
+                  showSource={searchQuery.trim().length > 0}
+                />
+              </div>
+            )}
           </>
         ) : (
           <div className="text-center py-8 text-gray-400">
