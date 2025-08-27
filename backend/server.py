@@ -3158,17 +3158,17 @@ async def upload_audio(
                 title=title.strip() or file.filename.split('.')[0],
                 artist=artist.strip() or current_user.display_name or current_user.username,
                 original_filename=file.filename,
-                filename=processing_result['filename'],
+                filename=final_path.name,
                 file_format='mp3',  # Siempre convertimos a MP3
-                file_size=processing_result['file_size'],
+                file_size=file_size,
                 duration=int(processing_result['duration']),
                 uploader_id=current_user.id,
-                file_path=processing_result['processed_path'],
+                file_path=str(final_path),
                 public_url=public_url,
                 waveform=processing_result['waveform'],
                 privacy=privacy,
-                bitrate=processing_result.get('bitrate'),
-                sample_rate=processing_result.get('sample_rate'),
+                bitrate=processing_result.get('bitrate', 128),
+                sample_rate=processing_result.get('sample_rate', 44100),
                 is_processed=True
             )
             
