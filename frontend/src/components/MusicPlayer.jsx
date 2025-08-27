@@ -242,19 +242,12 @@ const MusicPlayer = ({ music, isVisible = true, onTogglePlay, className = '', au
         
         {/* Animación de ondas cuando está reproduciéndose */}
         {isPlaying && (
-          <div className="absolute -inset-2 opacity-60">
+          <div className="absolute -inset-2 opacity-60 pointer-events-none">
             <div className="w-12 h-12 rounded-full border-2 border-white/30 animate-ping" />
           </div>
         )}
+      </div>
 
-        {/* Tooltip simplificado */}
-        <div className="absolute -top-16 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-50">
-          <div className="bg-black/90 text-white text-xs px-2 py-1 rounded-lg whitespace-nowrap border border-white/20 shadow-lg">
-            <div className="font-medium">{music.title}</div>
-            <div className="text-gray-300">{music.artist}</div>
-            <div className="text-purple-400 text-[10px] mt-1">👆 Click para info completa</div>
-          </div>
-        </div>
       </div>
     </div>
   );
