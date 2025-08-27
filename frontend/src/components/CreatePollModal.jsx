@@ -79,6 +79,13 @@ const CreatePollModal = ({ onCreatePoll, children, isOpen: externalIsOpen, onClo
   
   const { toast } = useToast();
 
+  // Initialize with pre-selected audio if provided
+  useEffect(() => {
+    if (preSelectedAudio) {
+      setSelectedMusic(preSelectedAudio);
+    }
+  }, [preSelectedAudio]);
+
   // Use external control if provided, otherwise use internal state
   const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
   const setIsOpen = externalOnClose ? (open) => {
