@@ -6396,7 +6396,7 @@ def main():
     
     # Print summary
     print("\n" + "=" * 60)
-    print("🎯 TESTING SUMMARY - AUDIO DETAIL PAGE FOCUS")
+    print("🎯 TESTING SUMMARY - POLLS MUSIC STRUCTURE FOCUS")
     print("=" * 60)
     
     passed_tests = sum(1 for result in test_results.values() if result)
@@ -6408,13 +6408,21 @@ def main():
     
     print(f"\nOverall Result: {passed_tests}/{total_tests} tests passed")
     
-    # Special focus on audio detail page result
+    # Special focus on polls music structure result
+    polls_music_passed = test_results.get('🎵_polls_music_structure', False)
+    if polls_music_passed:
+        print("\n🎉 ✅ POLLS MUSIC STRUCTURE TEST PASSED: Music data structure is correct")
+        print("✅ Music IDs, titles, artists, and preview URLs are properly configured")
+    else:
+        print("\n❌ ⚠️ POLLS MUSIC STRUCTURE TEST FAILED: Music navigation issues detected")
+        print("❌ This explains why clicking music players doesn't navigate to detail pages")
+    
+    # Also report on audio detail page
     audio_detail_passed = test_results.get('🎵_audio_detail_page', False)
     if audio_detail_passed:
-        print("\n🎉 ✅ AUDIO DETAIL PAGE TEST PASSED: New endpoint GET /api/audio/{audio_id}/posts is working correctly")
-        print("✅ System music, user audio, pagination, authentication, and existing endpoints all functional")
+        print("✅ Audio detail page endpoint is working correctly")
     else:
-        print("\n❌ ⚠️ AUDIO DETAIL PAGE TEST FAILED: New endpoint needs attention")
+        print("❌ Audio detail page endpoint needs attention")
     
     if passed_tests == total_tests:
         print("🎉 All tests passed! Backend is fully functional.")
