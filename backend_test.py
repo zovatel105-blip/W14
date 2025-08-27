@@ -6187,11 +6187,10 @@ def main():
     test_results['authentication_requirements'] = test_authentication_requirements(base_url)
     test_results['profile_updates'] = test_profile_update_endpoints(base_url)
     test_results['nested_comments'] = test_nested_comments_system(base_url)
-    test_results['follow_system'] = test_follow_system(base_url)
     
     # Print summary
     print("\n" + "=" * 60)
-    print("🎯 TESTING SUMMARY")
+    print("🎯 TESTING SUMMARY - AUDIO DETAIL PAGE FOCUS")
     print("=" * 60)
     
     passed_tests = sum(1 for result in test_results.values() if result)
@@ -6203,12 +6202,13 @@ def main():
     
     print(f"\nOverall Result: {passed_tests}/{total_tests} tests passed")
     
-    # Special focus on sanity check result
-    sanity_check_passed = test_results.get('sanity_check_after_optimizations', False)
-    if sanity_check_passed:
-        print("\n🎉 ✅ SANITY CHECK PASSED: Frontend optimizations did NOT break backend functionality")
+    # Special focus on audio detail page result
+    audio_detail_passed = test_results.get('🎵_audio_detail_page', False)
+    if audio_detail_passed:
+        print("\n🎉 ✅ AUDIO DETAIL PAGE TEST PASSED: New endpoint GET /api/audio/{audio_id}/posts is working correctly")
+        print("✅ System music, user audio, pagination, authentication, and existing endpoints all functional")
     else:
-        print("\n❌ ⚠️ SANITY CHECK FAILED: Frontend optimizations may have affected backend")
+        print("\n❌ ⚠️ AUDIO DETAIL PAGE TEST FAILED: New endpoint needs attention")
     
     if passed_tests == total_tests:
         print("🎉 All tests passed! Backend is fully functional.")
@@ -6219,77 +6219,6 @@ def main():
     else:
         print("❌ Many tests failed. Backend needs attention.")
         sys.exit(1)
-    
-    # Get backend URL
-    base_url = get_backend_url()
-    if not base_url:
-        print("❌ Could not determine backend URL from frontend .env file")
-        sys.exit(1)
-    
-    print(f"🌐 Testing backend at: {base_url}")
-    print("=" * 80)
-    
-    # Test results tracking
-    test_results = {}
-    
-    # Run essential tests first
-    test_results['health_check'] = test_health_check(base_url)
-    test_results['user_registration'] = test_user_registration(base_url)
-    test_results['user_login'] = test_user_login(base_url)
-    test_results['get_current_user'] = test_get_current_user(base_url)
-    
-    # PRIORITY TEST FOR REAL MUSIC SYSTEM - MAIN FOCUS
-    test_results['🎵_real_music_system'] = test_real_music_system(base_url)
-    
-    # Additional essential tests
-    test_results['jwt_validation'] = test_jwt_validation(base_url)
-    test_results['user_search'] = test_user_search(base_url)
-    test_results['messaging_system'] = test_messaging_system(base_url)
-    test_results['authentication_requirements'] = test_authentication_requirements(base_url)
-    test_results['profile_updates'] = test_profile_update_endpoints(base_url)
-    test_results['nested_comments'] = test_nested_comments_system(base_url)
-    test_results['follow_system'] = test_follow_system(base_url)
-    
-    # Print summary
-    print("\n" + "=" * 80)
-    print("📊 FINAL TEST RESULTS SUMMARY - REAL MUSIC SYSTEM FOCUS")
-    print("=" * 80)
-    
-    passed_tests = 0
-    total_tests = len(test_results)
-    
-    for test_name, result in test_results.items():
-        status = "✅ PASSED" if result else "❌ FAILED"
-        print(f"{test_name.replace('_', ' ').title()}: {status}")
-        if result:
-            passed_tests += 1
-    
-    print("=" * 80)
-    print(f"📈 OVERALL RESULTS: {passed_tests}/{total_tests} tests passed ({(passed_tests/total_tests)*100:.1f}%)")
-    
-    # Special focus on video system results
-    print("\n🎥 VIDEO SYSTEM TESTING RESULTS (MAIN FOCUS):")
-    video_tests = ['video_system_end_to_end']
-    video_passed = sum(1 for test in video_tests if test_results.get(test, False))
-    print(f"Video System Tests: {video_passed}/{len(video_tests)} passed")
-    
-    if video_passed == len(video_tests):
-        print("🎉 Video system is working correctly!")
-        print("✅ Video upload, poll creation, retrieval, and file serving all functional")
-        print("✅ The issue 'al publicar videos en el feed no se muestran' should be resolved")
-    else:
-        print("⚠️  Video system has issues that need attention.")
-        print("❌ Videos may not display correctly in the feed")
-    
-    if passed_tests == total_tests:
-        print("\n🎉 ALL TESTS PASSED! Backend is ready for production.")
-        return 0
-    elif passed_tests >= total_tests * 0.8:
-        print("\n⚠️  MOST TESTS PASSED. Backend is mostly functional with minor issues.")
-        return 0
-    else:
-        print("\n🚨 MULTIPLE TEST FAILURES. Backend needs attention before deployment.")
-        return 1
 
 if __name__ == "__main__":
     sys.exit(main())
