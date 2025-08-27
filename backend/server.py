@@ -2959,17 +2959,678 @@ async def get_poll_by_id(
         time_ago=calculate_time_ago(poll["created_at"])
     )
 
-# Add the API router to the main app
-app.include_router(api_router)
+# =============  USER AUDIO ENDPOINTS =============
 
-# CORS middleware
+# Import audio utilities
+from audio_utils import (
+    validate_audio_file, process_audio_file, generate_waveform,
+    get_unique_filename, cleanup_temp_files, AudioProcessingError
+)
+
+# Create audio upload directory
+AUDIO_UPLOAD_DIR = os.path.join(UPLOAD_DIR, "audio")
+os.makedirs(AUDIO_UPLOAD_DIR, exist_ok=True)
+
+@api_router.post("/audio/upload")
+async def upload_audio(
+    file: UploadFile = File(...),
+    title: str = "",
+    artist: str = "",
+    privacy: AudioPrivacy = AudioPrivacy.PRIVATE,
+    current_user: UserResponse = Depends(get_current_user)
+):
+    """
+    Subir archivo de audio personal
+    
+    Formatos soportados: MP3, M4A, WAV, AAC
+    Duración máxima: 60 segundos (se recorta automáticamente)
+    Tamaño máximo: 10MB
+    """
+    import tempfile
+    
+    try:
+        # Validar tipo de archivo
+        if not file.filename:
+            raise HTTPException(status_code=400, detail="Filename is required")
+        
+        # Guardar archivo temporal
+        temp_file = None
+        with tempfile.NamedTemporaryFile(delete=False, suffix=f"_{file.filename}") as tmp:
+            temp_file = tmp.name
+            content = await file.read()
+            tmp.write(content)
+        
+        try:
+            # Validar archivo de audio
+            validation_result = validate_audio_file(temp_file, file.filename)
+            logger.info(f"Audio validation result: {validation_result}")
+            
+            # Generar nombre único para el archivo
+            unique_filename = get_unique_filename(current_user.id, file.filename)
+            
+            # Procesar audio (recortar, optimizar, generar waveform)
+            processing_result = process_audio_file(
+                input_path=temp_file,
+                output_dir=AUDIO_UPLOAD_DIR,
+                target_filename=unique_filename,
+                max_duration=60  # 60 segundos máximo
+            )
+            logger.info(f"Audio processing result: {processing_result}")
+            
+            # Crear URL pública
+            public_url = f"/uploads/audio/{processing_result['filename']}"
+            
+            # Preparar datos para la base de datos
+            audio_data = UserAudio(
+                title=title.strip() or file.filename.split('.')[0],
+                artist=artist.strip() or current_user.display_name or current_user.username,
+                original_filename=file.filename,
+                filename=processing_result['filename'],
+                file_format='mp3',  # Siempre convertimos a MP3
+                file_size=processing_result['file_size'],
+                duration=int(processing_result['duration']),
+                uploader_id=current_user.id,
+                file_path=processing_result['processed_path'],
+                public_url=public_url,
+                waveform=processing_result['waveform'],
+                privacy=privacy,
+                bitrate=processing_result.get('bitrate'),
+                sample_rate=processing_result.get('sample_rate'),
+                is_processed=True
+            )
+            
+            # Guardar en base de datos
+            result = await db.user_audio.insert_one(audio_data.dict())
+            if not result.inserted_id:
+                raise HTTPException(status_code=500, detail="Failed to save audio to database")
+            
+            # Obtener información del usuario
+            uploader_response = UserResponse(
+                id=current_user.id,
+                username=current_user.username,
+                display_name=current_user.display_name,
+                avatar_url=current_user.avatar_url,
+                email=current_user.email
+            )
+            
+            # Preparar respuesta
+            audio_response = UserAudioResponse(
+                **audio_data.dict(),
+                uploader=uploader_response,
+                url=public_url,
+                preview_url=public_url,
+                uses=0
+            )
+            
+            logger.info(f"✅ Audio uploaded successfully: {audio_data.title} by {current_user.username}")
+            
+            return {
+                "success": True,
+                "message": "Audio uploaded and processed successfully",
+                "audio": audio_response.dict()
+            }
+            
+        finally:
+            # Limpiar archivo temporal
+            cleanup_temp_files(temp_file)
+            
+    except AudioProcessingError as e:
+        logger.error(f"Audio processing error: {str(e)}")
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error(f"Error uploading audio: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error uploading audio: {str(e)}")
+
+@api_router.get("/audio/my-library")
+async def get_my_audio_library(
+    limit: int = 20,
+    offset: int = 0,
+    search: Optional[str] = None,
+    current_user: UserResponse = Depends(get_current_user)
+):
+    """Obtener biblioteca de audio personal del usuario"""
+    try:
+        # Construir filtro de búsqueda
+        filter_query = {
+            "uploader_id": current_user.id,
+            "is_active": True
+        }
+        
+        if search:
+            search_regex = {"$regex": search.strip(), "$options": "i"}
+            filter_query["$or"] = [
+                {"title": search_regex},
+                {"artist": search_regex}
+            ]
+        
+        # Obtener total de audios
+        total = await db.user_audio.count_documents(filter_query)
+        
+        # Obtener audios con paginación
+        user_audios = await db.user_audio.find(filter_query) \
+            .sort("created_at", -1) \
+            .skip(offset) \
+            .limit(limit) \
+            .to_list(limit)
+        
+        # Preparar respuesta con información del usuario
+        audio_responses = []
+        for audio_data in user_audios:
+            uploader_response = UserResponse(
+                id=current_user.id,
+                username=current_user.username,
+                display_name=current_user.display_name,
+                avatar_url=current_user.avatar_url,
+                email=current_user.email
+            )
+            
+            audio_response = UserAudioResponse(
+                **audio_data,
+                uploader=uploader_response,
+                url=audio_data["public_url"],
+                preview_url=audio_data["public_url"],
+                uses=audio_data["uses_count"]
+            )
+            audio_responses.append(audio_response.dict())
+        
+        return {
+            "success": True,
+            "audios": audio_responses,
+            "total": total,
+            "limit": limit,
+            "offset": offset,
+            "has_more": offset + limit < total
+        }
+        
+    except Exception as e:
+        logger.error(f"Error getting user audio library: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error getting audio library: {str(e)}")
+
+@api_router.get("/audio/public-library")
+async def get_public_audio_library(
+    limit: int = 20,
+    offset: int = 0,
+    search: Optional[str] = None,
+    current_user: UserResponse = Depends(get_current_user)
+):
+    """Obtener biblioteca de audio público (audios que otros usuarios han marcado como públicos)"""
+    try:
+        # Construir filtro de búsqueda para audios públicos
+        filter_query = {
+            "privacy": AudioPrivacy.PUBLIC,
+            "is_active": True,
+            "is_processed": True
+        }
+        
+        if search:
+            search_regex = {"$regex": search.strip(), "$options": "i"}
+            filter_query["$or"] = [
+                {"title": search_regex},
+                {"artist": search_regex}
+            ]
+        
+        # Obtener total de audios públicos
+        total = await db.user_audio.count_documents(filter_query)
+        
+        # Obtener audios con paginación, ordenados por uses_count (más populares primero)
+        user_audios = await db.user_audio.find(filter_query) \
+            .sort("uses_count", -1) \
+            .skip(offset) \
+            .limit(limit) \
+            .to_list(limit)
+        
+        # Preparar respuesta con información de los usuarios
+        audio_responses = []
+        for audio_data in user_audios:
+            # Obtener información del usuario que subió el audio
+            uploader = await db.users.find_one({"id": audio_data["uploader_id"]})
+            if uploader:
+                uploader_response = UserResponse(**uploader)
+                
+                audio_response = UserAudioResponse(
+                    **audio_data,
+                    uploader=uploader_response,
+                    url=audio_data["public_url"],
+                    preview_url=audio_data["public_url"],
+                    uses=audio_data["uses_count"]
+                )
+                audio_responses.append(audio_response.dict())
+        
+        return {
+            "success": True,
+            "audios": audio_responses,
+            "total": total,
+            "limit": limit,
+            "offset": offset,
+            "has_more": offset + limit < total,
+            "message": f"Found {len(audio_responses)} public audio tracks"
+        }
+        
+    except Exception as e:
+        logger.error(f"Error getting public audio library: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error getting public audio library: {str(e)}")
+
+@api_router.put("/audio/{audio_id}")
+async def update_audio(
+    audio_id: str,
+    update_data: UserAudioUpdate,
+    current_user: UserResponse = Depends(get_current_user)
+):
+    """Actualizar información de un audio (solo el propietario)"""
+    try:
+        # Verificar que el audio existe y pertenece al usuario
+        audio_data = await db.user_audio.find_one({
+            "id": audio_id,
+            "uploader_id": current_user.id,
+            "is_active": True
+        })
+        
+        if not audio_data:
+            raise HTTPException(status_code=404, detail="Audio not found or access denied")
+        
+        # Preparar campos de actualización
+        update_fields = {"updated_at": datetime.utcnow()}
+        
+        if update_data.title is not None:
+            update_fields["title"] = update_data.title.strip()
+        if update_data.artist is not None:
+            update_fields["artist"] = update_data.artist.strip()
+        if update_data.privacy is not None:
+            update_fields["privacy"] = update_data.privacy
+        if update_data.cover_url is not None:
+            update_fields["cover_url"] = update_data.cover_url.strip()
+        
+        # Actualizar en base de datos
+        result = await db.user_audio.update_one(
+            {"id": audio_id},
+            {"$set": update_fields}
+        )
+        
+        if result.modified_count == 0:
+            raise HTTPException(status_code=500, detail="Failed to update audio")
+        
+        # Obtener audio actualizado
+        updated_audio = await db.user_audio.find_one({"id": audio_id})
+        uploader_response = UserResponse(
+            id=current_user.id,
+            username=current_user.username,
+            display_name=current_user.display_name,
+            avatar_url=current_user.avatar_url,
+            email=current_user.email
+        )
+        
+        audio_response = UserAudioResponse(
+            **updated_audio,
+            uploader=uploader_response,
+            url=updated_audio["public_url"],
+            preview_url=updated_audio["public_url"],
+            uses=updated_audio["uses_count"]
+        )
+        
+        return {
+            "success": True,
+            "message": "Audio updated successfully",
+            "audio": audio_response.dict()
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error updating audio: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error updating audio: {str(e)}")
+
+@api_router.delete("/audio/{audio_id}")
+async def delete_audio(
+    audio_id: str,
+    current_user: UserResponse = Depends(get_current_user)
+):
+    """Eliminar un audio (solo el propietario)"""
+    try:
+        # Verificar que el audio existe y pertenece al usuario
+        audio_data = await db.user_audio.find_one({
+            "id": audio_id,
+            "uploader_id": current_user.id,
+            "is_active": True
+        })
+        
+        if not audio_data:
+            raise HTTPException(status_code=404, detail="Audio not found or access denied")
+        
+        # Marcar como inactivo (soft delete)
+        result = await db.user_audio.update_one(
+            {"id": audio_id},
+            {
+                "$set": {
+                    "is_active": False,
+                    "updated_at": datetime.utcnow()
+                }
+            }
+        )
+        
+        if result.modified_count == 0:
+            raise HTTPException(status_code=500, detail="Failed to delete audio")
+        
+        # Opcional: Eliminar archivo físico
+        try:
+            if os.path.exists(audio_data["file_path"]):
+                os.remove(audio_data["file_path"])
+        except Exception as e:
+            logger.warning(f"Could not delete audio file {audio_data['file_path']}: {e}")
+        
+        return {
+            "success": True,
+            "message": "Audio deleted successfully"
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error deleting audio: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error deleting audio: {str(e)}")
+
+@api_router.post("/audio/{audio_id}/use")
+async def use_audio_in_post(
+    audio_id: str,
+    poll_id: Optional[str] = None,
+    current_user: UserResponse = Depends(get_current_user)
+):
+    """Marcar que un usuario ha usado un audio en un post"""
+    try:
+        # Verificar que el audio existe y está disponible
+        audio_data = await db.user_audio.find_one({
+            "id": audio_id,
+            "is_active": True,
+            "is_processed": True
+        })
+        
+        if not audio_data:
+            raise HTTPException(status_code=404, detail="Audio not found")
+        
+        # Verificar permisos: el audio debe ser público o del usuario actual
+        if audio_data["privacy"] == AudioPrivacy.PRIVATE and audio_data["uploader_id"] != current_user.id:
+            raise HTTPException(status_code=403, detail="Access denied to private audio")
+        
+        # Registrar el uso
+        audio_use = UserAudioUse(
+            audio_id=audio_id,
+            user_id=current_user.id,
+            poll_id=poll_id
+        )
+        
+        await db.user_audio_uses.insert_one(audio_use.dict())
+        
+        # Incrementar contador de usos
+        await db.user_audio.update_one(
+            {"id": audio_id},
+            {"$inc": {"uses_count": 1}}
+        )
+        
+        return {
+            "success": True,
+            "message": "Audio use recorded successfully",
+            "audio_id": audio_id,
+            "use_id": audio_use.id
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error recording audio use: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error recording audio use: {str(e)}")
+
+@api_router.get("/audio/{audio_id}")
+async def get_audio_details(
+    audio_id: str,
+    current_user: UserResponse = Depends(get_current_user)
+):
+    """Obtener detalles de un audio específico"""
+    try:
+        # Buscar el audio
+        audio_data = await db.user_audio.find_one({
+            "id": audio_id,
+            "is_active": True
+        })
+        
+        if not audio_data:
+            raise HTTPException(status_code=404, detail="Audio not found")
+        
+        # Verificar permisos de acceso
+        if audio_data["privacy"] == AudioPrivacy.PRIVATE and audio_data["uploader_id"] != current_user.id:
+            raise HTTPException(status_code=403, detail="Access denied to private audio")
+        
+        # Obtener información del uploader
+        uploader = await db.users.find_one({"id": audio_data["uploader_id"]})
+        if not uploader:
+            raise HTTPException(status_code=404, detail="Audio uploader not found")
+        
+        uploader_response = UserResponse(**uploader)
+        
+        # Preparar respuesta
+        audio_response = UserAudioResponse(
+            **audio_data,
+            uploader=uploader_response,
+            url=audio_data["public_url"],
+            preview_url=audio_data["public_url"],
+            uses=audio_data["uses_count"]
+        )
+        
+        return {
+            "success": True,
+            "audio": audio_response.dict()
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error getting audio details: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error getting audio details: {str(e)}")
+
+@api_router.get("/audio/search")
+async def search_user_audio(
+    query: str,
+    limit: int = 20,
+    include_private: bool = False,
+    current_user: UserResponse = Depends(get_current_user)
+):
+    """Buscar en audios de usuarios"""
+    try:
+        if not query.strip():
+            return {
+                "success": False,
+                "message": "Search query is required",
+                "audios": []
+            }
+        
+        # Construir filtro de búsqueda
+        search_regex = {"$regex": query.strip(), "$options": "i"}
+        filter_query = {
+            "is_active": True,
+            "is_processed": True,
+            "$or": [
+                {"title": search_regex},
+                {"artist": search_regex}
+            ]
+        }
+        
+        # Si no se incluyen privados, solo buscar públicos o del usuario actual
+        if not include_private:
+            filter_query["$and"] = [
+                {
+                    "$or": [
+                        {"privacy": AudioPrivacy.PUBLIC},
+                        {"uploader_id": current_user.id}
+                    ]
+                }
+            ]
+        else:
+            # Si se incluyen privados, solo los del usuario actual
+            filter_query["uploader_id"] = current_user.id
+        
+        # Buscar audios
+        user_audios = await db.user_audio.find(filter_query) \
+            .sort("uses_count", -1) \
+            .limit(limit) \
+            .to_list(limit)
+        
+        # Preparar respuesta
+        audio_responses = []
+        for audio_data in user_audios:
+            # Obtener información del uploader
+            uploader = await db.users.find_one({"id": audio_data["uploader_id"]})
+            if uploader:
+                uploader_response = UserResponse(**uploader)
+                
+                audio_response = UserAudioResponse(
+                    **audio_data,
+                    uploader=uploader_response,
+                    url=audio_data["public_url"],
+                    preview_url=audio_data["public_url"],
+                    uses=audio_data["uses_count"]
+                )
+                audio_responses.append(audio_response.dict())
+        
+        return {
+            "success": True,
+            "message": f"Found {len(audio_responses)} audio tracks for '{query}'",
+            "audios": audio_responses,
+            "query": query,
+            "total": len(audio_responses)
+        }
+        
+    except Exception as e:
+        logger.error(f"Error searching user audio: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error searching audio: {str(e)}")
+
+# =============  ENHANCED MUSIC LIBRARY WITH USER AUDIO =============
+
+@api_router.get("/music/combined-library")
+async def get_combined_music_library(
+    category: Optional[str] = None,
+    search: Optional[str] = None,
+    limit: int = 50,
+    offset: int = 0,
+    current_user: UserResponse = Depends(get_current_user)
+):
+    """
+    Obtener biblioteca de música combinada:
+    - Música estática del sistema
+    - Audios públicos de usuarios  
+    - Audios privados del usuario actual
+    """
+    try:
+        all_music = []
+        
+        # 1. Obtener música estática del sistema (usando endpoint existente)
+        system_music_response = await get_music_library(
+            category=category,
+            search=search,
+            limit=25,  # Limitar para hacer espacio a user audio
+            offset=0
+        )
+        system_music = system_music_response.get("music", [])
+        
+        # 2. Obtener audios de usuarios (públicos + privados del usuario)
+        user_audio_filter = {
+            "is_active": True,
+            "is_processed": True,
+            "$or": [
+                {"privacy": AudioPrivacy.PUBLIC},
+                {"uploader_id": current_user.id}
+            ]
+        }
+        
+        if search:
+            search_regex = {"$regex": search.strip(), "$options": "i"}
+            user_audio_filter["$and"] = [
+                user_audio_filter.get("$and", [{}])[0] if user_audio_filter.get("$and") else {},
+                {
+                    "$or": [
+                        {"title": search_regex},
+                        {"artist": search_regex}
+                    ]
+                }
+            ]
+        
+        user_audios = await db.user_audio.find(user_audio_filter) \
+            .sort("uses_count", -1) \
+            .limit(25) \
+            .to_list(25)
+        
+        # Convertir user audios al formato de música del sistema
+        for audio_data in user_audios:
+            uploader = await db.users.find_one({"id": audio_data["uploader_id"]})
+            if uploader:
+                # Formato compatible con el sistema de música existente
+                music_item = {
+                    'id': f"user_audio_{audio_data['id']}",  # Prefijo para identificar que es user audio
+                    'title': audio_data['title'],
+                    'artist': audio_data['artist'],
+                    'duration': audio_data['duration'],
+                    'url': audio_data['public_url'],
+                    'preview_url': audio_data['public_url'],
+                    'cover': audio_data.get('cover_url', '/images/default-audio-cover.png'),
+                    'category': 'User Audio',
+                    'isOriginal': True,  # Marca que es audio subido por usuarios
+                    'isTrending': audio_data['uses_count'] > 100,
+                    'uses': audio_data['uses_count'],
+                    'waveform': audio_data['waveform'],
+                    'source': 'User Upload',
+                    'uploader': {
+                        'id': uploader['id'],
+                        'username': uploader['username'],
+                        'display_name': uploader['display_name']
+                    },
+                    'privacy': audio_data['privacy'],
+                    'created_at': audio_data['created_at'].isoformat() if audio_data.get('created_at') else None
+                }
+                all_music.append(music_item)
+        
+        # 3. Combinar y ordenar toda la música
+        all_music.extend(system_music)
+        
+        # 4. Aplicar filtros adicionales si es necesario
+        if category and category != 'Todas':
+            if category == 'User Audio':
+                all_music = [m for m in all_music if m.get('source') == 'User Upload']
+            elif category == 'System':
+                all_music = [m for m in all_music if m.get('source') != 'User Upload']
+            else:
+                all_music = [m for m in all_music if m['category'] == category]
+        
+        # 5. Ordenar por popularidad (uses) y aplicar paginación
+        all_music.sort(key=lambda x: x.get('uses', 0), reverse=True)
+        
+        total = len(all_music)
+        paginated_music = all_music[offset:offset + limit]
+        
+        return {
+            'success': True,
+            'music': paginated_music,
+            'total': total,
+            'limit': limit,
+            'offset': offset,
+            'has_more': offset + limit < total,
+            'categories': {
+                'system_music': len([m for m in all_music if m.get('source') != 'User Upload']),
+                'user_audio': len([m for m in all_music if m.get('source') == 'User Upload']),
+                'total': total
+            }
+        }
+        
+    except Exception as e:
+        logger.error(f"Error getting combined music library: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error getting music library: {str(e)}")
+
+# Incluir el router en la aplicación
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["*"],  # En producción, especifica los dominios permitidos
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+app.include_router(api_router)
 
 if __name__ == "__main__":
     import uvicorn
