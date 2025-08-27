@@ -218,7 +218,7 @@ const MusicPlayer = ({ music, isVisible = true, onTogglePlay, className = '', au
         )}
 
         {/* Tooltip mejorado */}
-        <div className="absolute -top-16 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50">
+        <div className="absolute -top-20 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50">
           <div className="bg-black/90 text-white text-xs px-3 py-2 rounded-lg backdrop-blur-sm whitespace-nowrap border border-white/20 shadow-lg max-w-48 text-center">
             <div className="font-medium truncate">{music.title}</div>
             <div className="text-gray-300 truncate">{music.artist}</div>
@@ -228,6 +228,7 @@ const MusicPlayer = ({ music, isVisible = true, onTogglePlay, className = '', au
             {error && (
               <div className="text-red-400 text-[10px] mt-1">❌ {error}</div>
             )}
+            <div className="text-gray-400 text-[10px] mt-1">Click para ver detalles</div>
           </div>
         </div>
       </div>
