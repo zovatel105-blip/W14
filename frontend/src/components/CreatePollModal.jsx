@@ -380,7 +380,7 @@ const CreatePollModal = ({ onCreatePoll, children, isOpen: externalIsOpen, onClo
           {/* Opciones con Media - Mobile Optimized */}
           <div className="space-y-4 sm:space-y-8">
             <Label className="text-lg sm:text-xl font-bold text-gray-900">
-              Opciones para votar
+              Opciones para votar (texto opcional)
             </Label>
             {options.map((option, index) => (
               <div key={index} className="bg-gray-50 border-2 border-gray-200 rounded-2xl p-4 sm:p-8 space-y-4 sm:space-y-6 hover:bg-gray-100 transition-colors">
