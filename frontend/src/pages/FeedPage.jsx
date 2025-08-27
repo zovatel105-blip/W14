@@ -67,6 +67,7 @@ const FeedPage = () => {
   useEffect(() => {
     if (location.state?.createPoll) {
       setShowCreateModal(true);
+      setPreSelectedAudio(location.state.selectedAudio);
       // Clear the state to prevent reopening on refresh
       window.history.replaceState({}, document.title);
     }
