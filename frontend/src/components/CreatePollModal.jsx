@@ -209,16 +209,16 @@ const CreatePollModal = ({ onCreatePoll, children, isOpen: externalIsOpen, onClo
     setIsCreating(true);
 
     try {
-      // Prepare poll data for API
+      // Prepare poll data for API - allow empty text in options
       const allMentionedUsers = [];
-      const processedOptions = validOptions.map(opt => {
+      const processedOptions = options.map(opt => {
         // Collect mentioned users from this option
         if (opt.mentionedUsers) {
           allMentionedUsers.push(...opt.mentionedUsers.map(user => user.id));
         }
         
         return {
-          text: opt.text.trim(),
+          text: opt.text.trim(), // Keep original text, even if empty
           media_type: opt.media?.type || null,
           media_url: opt.media?.url || null,
           thumbnail_url: opt.media?.type === 'image' ? opt.media?.url : opt.media?.thumbnail_url || null,
