@@ -125,58 +125,36 @@ const MusicPlayer = ({ music, isVisible = true, onTogglePlay, className = '', au
   };
 
   const handleNavigateToAudio = (e) => {
-    console.log('🎵 MusicPlayer clicked! Event details:', {
-      target: e.target,
-      currentTarget: e.currentTarget,
-      music: music,
-      tagName: e.target.tagName,
-      className: e.target.className
+    // Solo prevenir navegación si específicamente se hace clic en el área de controles cuando está visible
+    const isHovering = e.currentTarget.matches(':hover');
+    const controlElement = e.target.closest('[data-audio-player-control]');
+    
+    console.log('🎵 MusicPlayer clicked!', {
+      isHovering,
+      controlElement: !!controlElement,
+      target: e.target.tagName,
+      music: music?.id
     });
     
-    // Prevent navigation if clicking on play/pause button or its children
-    const controlElement = e.target.closest('[data-audio-player-control]');
-    const isControlClick = controlElement || 
-                          e.target.hasAttribute('data-audio-player-control') ||
-                          e.target.closest('svg') ||
-                          (e.target.tagName === 'svg') ||
-                          (e.target.tagName === 'path');
-                          
-    if (isControlClick) {
-      console.log('🚫 Navigation prevented - clicked on control element:', {
-        controlElement,
-        target: e.target,
-        tagName: e.target.tagName
-      });
+    // Solo prevenir navegación si realmente se hizo clic en los controles mientras están visibles
+    if (controlElement && isHovering) {
+      console.log('🚫 Navigation prevented - clicked on visible control');
       return;
     }
     
-    console.log('🎵 Proceeding with navigation to audio:', music);
+    console.log('🎵 Navigating to audio:', music?.id);
     
     if (music?.id) {
-      // Handle both user audio and system music IDs
       let audioId = music.id;
       
-      // Log the original ID for debugging
-      console.log('🔍 Original music ID:', audioId, 'Source:', music.source, 'IsOriginal:', music.isOriginal);
-      
       if (music.isOriginal || music.source === 'User Upload') {
-        // For user uploaded audio, ensure we have the right format
         audioId = audioId.startsWith('user_audio_') ? audioId : `user_audio_${audioId}`;
-        console.log('🔄 Modified audioId for user upload:', audioId);
       }
       
-      const targetUrl = `/audio/${audioId}`;
-      console.log('🎵 Final navigation - Audio ID:', audioId, 'URL:', targetUrl);
-      
-      try {
-        navigate(targetUrl);
-        console.log('✅ Navigation successful to:', targetUrl);
-      } catch (error) {
-        console.error('❌ Navigation error:', error);
-      }
+      console.log('✅ Navigation - URL: /audio/' + audioId);
+      navigate(`/audio/${audioId}`);
     } else {
-      console.error('❌ No music ID available - music object:', music);
-      console.log('🔍 Music keys:', music ? Object.keys(music) : 'music is null/undefined');
+      console.error('❌ No music ID available');
     }
   };
 
