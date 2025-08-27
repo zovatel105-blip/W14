@@ -186,6 +186,13 @@ const MusicSelector = ({ onSelectMusic, selectedMusic, pollTitle = '' }) => {
     loadPopularMusic();
   }, []);
 
+  // Load My Music when category changes
+  useEffect(() => {
+    if (activeCategory === 'Mi Música') {
+      loadMyMusic();
+    }
+  }, [activeCategory]);
+
   // Load popular/trending music
   const loadPopularMusic = async () => {
     setIsLoadingPopular(true);
@@ -206,6 +213,41 @@ const MusicSelector = ({ onSelectMusic, selectedMusic, pollTitle = '' }) => {
       setPopularMusic(staticTrending);
     }
     setIsLoadingPopular(false);
+  };
+
+  // Load user's uploaded music
+  const loadMyMusic = async () => {
+    setIsLoadingMyMusic(true);
+    try {
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        toast({
+          title: "Autenticación requerida",
+          description: "Inicia sesión para ver tu música",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL || process.env.REACT_APP_BACKEND_URL}/api/audio/my-library`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        }
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        if (result.success) {
+          setMyMusic(result.audios || []);
+        }
+      } else {
+        console.error('Error loading my music:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error loading my music:', error);
+    } finally {
+      setIsLoadingMyMusic(false);
+    }
   };
 
   // Search music with debouncing
