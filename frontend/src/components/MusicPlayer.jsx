@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Play, Pause, Music, Loader2 } from 'lucide-react';
 import audioManager from '../services/AudioManager';
 import realMusicService from '../services/realMusicService';
