@@ -88,7 +88,7 @@ const AudioDetailPage = () => {
   const fetchPostsUsingAudio = async () => {
     try {
       setPostsLoading(true);
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('authToken');
       
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/audio/${audioId}/posts`, {
         headers: {
