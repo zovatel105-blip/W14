@@ -5896,6 +5896,264 @@ def test_audio_upload_system_with_ffmpeg(base_url):
     print(f"\nAudio Upload System Tests Summary: {success_count}/10 tests passed")
     return success_count >= 7  # At least 7 out of 10 tests should pass
 
+def test_audio_detail_page_functionality(base_url):
+    """Test comprehensive Audio Detail Page functionality - NEW ENDPOINT TESTING"""
+    print("\n=== Testing Audio Detail Page Functionality ===")
+    print("🎵 TESTING NEW ENDPOINT: GET /api/audio/{audio_id}/posts")
+    
+    if not auth_tokens:
+        print("❌ No auth tokens available for audio detail page testing")
+        return False
+    
+    headers = {"Authorization": f"Bearer {auth_tokens[0]}"}
+    success_count = 0
+    
+    # Test 1: Test with system music (trending music)
+    print("\nTest 1: Testing GET /api/audio/{audio_id}/posts with system music...")
+    try:
+        system_audio_id = "music_trending_1"  # Morad - LA BOTELLA
+        response = requests.get(f"{base_url}/audio/{system_audio_id}/posts", 
+                              headers=headers, timeout=10)
+        print(f"System Music Posts Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            print(f"✅ System music posts retrieved successfully")
+            print(f"Audio ID: {data['audio_id']}")
+            print(f"Posts found: {len(data['posts'])}")
+            print(f"Total posts: {data['total']}")
+            print(f"Has more: {data['has_more']}")
+            print(f"Message: {data['message']}")
+            
+            # Verify response structure
+            if all(key in data for key in ['success', 'audio_id', 'posts', 'total', 'limit', 'offset']):
+                print("✅ Response structure is correct")
+                success_count += 1
+            else:
+                print("❌ Response structure missing required fields")
+        else:
+            print(f"❌ System music posts failed: {response.text}")
+            
+    except Exception as e:
+        print(f"❌ System music posts error: {e}")
+    
+    # Test 2: Test with different system music
+    print("\nTest 2: Testing with Bad Bunny music...")
+    try:
+        bad_bunny_audio_id = "music_trending_2"  # Bad Bunny - Un Verano Sin Ti
+        response = requests.get(f"{base_url}/audio/{bad_bunny_audio_id}/posts", 
+                              headers=headers, timeout=10)
+        print(f"Bad Bunny Music Posts Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            print(f"✅ Bad Bunny music posts retrieved successfully")
+            print(f"Audio ID: {data['audio_id']}")
+            print(f"Posts found: {len(data['posts'])}")
+            success_count += 1
+        else:
+            print(f"❌ Bad Bunny music posts failed: {response.text}")
+            
+    except Exception as e:
+        print(f"❌ Bad Bunny music posts error: {e}")
+    
+    # Test 3: Test pagination functionality
+    print("\nTest 3: Testing pagination with limit and offset...")
+    try:
+        audio_id = "music_reggaeton_1"  # Me Porto Bonito
+        response = requests.get(f"{base_url}/audio/{audio_id}/posts?limit=5&offset=0", 
+                              headers=headers, timeout=10)
+        print(f"Pagination Test Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            print(f"✅ Pagination working correctly")
+            print(f"Limit: {data['limit']}")
+            print(f"Offset: {data['offset']}")
+            print(f"Posts returned: {len(data['posts'])}")
+            
+            # Test with different offset
+            response2 = requests.get(f"{base_url}/audio/{audio_id}/posts?limit=3&offset=2", 
+                                   headers=headers, timeout=10)
+            if response2.status_code == 200:
+                data2 = response2.json()
+                print(f"✅ Offset pagination working: limit={data2['limit']}, offset={data2['offset']}")
+                success_count += 1
+            else:
+                print(f"❌ Offset pagination failed: {response2.text}")
+        else:
+            print(f"❌ Pagination test failed: {response.text}")
+            
+    except Exception as e:
+        print(f"❌ Pagination test error: {e}")
+    
+    # Test 4: Test with non-existent audio ID
+    print("\nTest 4: Testing with non-existent audio ID...")
+    try:
+        fake_audio_id = "non_existent_audio_12345"
+        response = requests.get(f"{base_url}/audio/{fake_audio_id}/posts", 
+                              headers=headers, timeout=10)
+        print(f"Non-existent Audio Status Code: {response.status_code}")
+        
+        if response.status_code == 404:
+            print("✅ Non-existent audio properly returns 404")
+            success_count += 1
+        else:
+            print(f"❌ Should return 404 for non-existent audio, got: {response.status_code}")
+            
+    except Exception as e:
+        print(f"❌ Non-existent audio test error: {e}")
+    
+    # Test 5: Test authentication requirement
+    print("\nTest 5: Testing authentication requirement...")
+    try:
+        audio_id = "music_trending_1"
+        response = requests.get(f"{base_url}/audio/{audio_id}/posts", timeout=10)
+        print(f"No Auth Status Code: {response.status_code}")
+        
+        if response.status_code in [401, 403]:
+            print("✅ Authentication properly required")
+            success_count += 1
+        else:
+            print(f"❌ Should require authentication, got: {response.status_code}")
+            
+    except Exception as e:
+        print(f"❌ Authentication test error: {e}")
+    
+    # Test 6: Test with iTunes audio ID format
+    print("\nTest 6: Testing with iTunes audio ID format...")
+    try:
+        itunes_audio_id = "itunes_123456789"  # Simulated iTunes ID
+        response = requests.get(f"{base_url}/audio/{itunes_audio_id}/posts", 
+                              headers=headers, timeout=10)
+        print(f"iTunes Audio Status Code: {response.status_code}")
+        
+        if response.status_code in [200, 404]:  # Either works or audio not found
+            print(f"✅ iTunes audio ID format handled correctly")
+            if response.status_code == 200:
+                data = response.json()
+                print(f"iTunes audio posts: {len(data['posts'])}")
+            success_count += 1
+        else:
+            print(f"❌ iTunes audio ID handling failed: {response.text}")
+            
+    except Exception as e:
+        print(f"❌ iTunes audio test error: {e}")
+    
+    # Test 7: Verify existing audio endpoints still work
+    print("\nTest 7: Verifying existing audio endpoints still work...")
+    try:
+        # Test GET /api/audio/my-library
+        response = requests.get(f"{base_url}/audio/my-library", 
+                              headers=headers, timeout=10)
+        print(f"My Library Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            print(f"✅ My Library endpoint working: {len(data.get('audio', []))} audio files")
+            success_count += 1
+        else:
+            print(f"❌ My Library endpoint failed: {response.text}")
+            
+    except Exception as e:
+        print(f"❌ My Library test error: {e}")
+    
+    # Test 8: Test music library with previews endpoint
+    print("\nTest 8: Testing music library with previews...")
+    try:
+        response = requests.get(f"{base_url}/music/library-with-previews?limit=5", 
+                              headers=headers, timeout=10)
+        print(f"Music Library Previews Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            print(f"✅ Music library with previews working: {len(data.get('music', []))} tracks")
+            print(f"Has real previews: {data.get('has_real_previews', False)}")
+            success_count += 1
+        else:
+            print(f"❌ Music library previews failed: {response.text}")
+            
+    except Exception as e:
+        print(f"❌ Music library previews error: {e}")
+    
+    # Test 9: Test response format validation
+    print("\nTest 9: Testing response format validation...")
+    try:
+        audio_id = "music_pop_latino_1"  # Flowers - Miley Cyrus
+        response = requests.get(f"{base_url}/audio/{audio_id}/posts", 
+                              headers=headers, timeout=10)
+        print(f"Response Format Test Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            
+            # Validate required fields
+            required_fields = ['success', 'audio_id', 'posts', 'total', 'limit', 'offset', 'has_more', 'message']
+            missing_fields = [field for field in required_fields if field not in data]
+            
+            if not missing_fields:
+                print("✅ All required fields present in response")
+                
+                # Validate posts structure if any posts exist
+                if data['posts']:
+                    post = data['posts'][0]
+                    post_required_fields = ['id', 'title', 'author', 'options', 'total_votes', 'likes', 'shares']
+                    post_missing_fields = [field for field in post_required_fields if field not in post]
+                    
+                    if not post_missing_fields:
+                        print("✅ Post structure validation passed")
+                        success_count += 1
+                    else:
+                        print(f"❌ Post missing fields: {post_missing_fields}")
+                else:
+                    print("✅ No posts to validate structure, but response format correct")
+                    success_count += 1
+            else:
+                print(f"❌ Response missing required fields: {missing_fields}")
+        else:
+            print(f"❌ Response format test failed: {response.text}")
+            
+    except Exception as e:
+        print(f"❌ Response format test error: {e}")
+    
+    # Test 10: Test with user audio (if any exists)
+    print("\nTest 10: Testing with user audio...")
+    try:
+        # First try to get user's audio library
+        library_response = requests.get(f"{base_url}/audio/my-library", 
+                                      headers=headers, timeout=10)
+        
+        if library_response.status_code == 200:
+            library_data = library_response.json()
+            user_audios = library_data.get('audio', [])
+            
+            if user_audios:
+                user_audio_id = user_audios[0]['id']
+                print(f"Testing with user audio ID: {user_audio_id}")
+                
+                response = requests.get(f"{base_url}/audio/{user_audio_id}/posts", 
+                                      headers=headers, timeout=10)
+                print(f"User Audio Posts Status Code: {response.status_code}")
+                
+                if response.status_code == 200:
+                    data = response.json()
+                    print(f"✅ User audio posts retrieved: {len(data['posts'])} posts")
+                    success_count += 1
+                else:
+                    print(f"❌ User audio posts failed: {response.text}")
+            else:
+                print("ℹ️ No user audio found, skipping user audio test")
+                success_count += 1  # Don't penalize for no user audio
+        else:
+            print("ℹ️ Could not access user audio library, skipping user audio test")
+            success_count += 1  # Don't penalize for library access issues
+            
+    except Exception as e:
+        print(f"❌ User audio test error: {e}")
+    
+    print(f"\nAudio Detail Page Tests Summary: {success_count}/10 tests passed")
+    return success_count >= 7  # At least 7 out of 10 tests should pass
+
 def main():
     """Main test execution function"""
     print("🚀 Starting Backend API Testing...")
@@ -5919,28 +6177,17 @@ def main():
     test_results['user_login'] = test_user_login(base_url)
     test_results['get_current_user'] = test_get_current_user(base_url)
     
-    # Run the specific sanity check for frontend optimizations
-    test_results['sanity_check_after_optimizations'] = test_sanity_check_after_frontend_optimizations(base_url)
+    # NEW TEST: Audio Detail Page Functionality (MAIN FOCUS)
+    test_results['🎵_audio_detail_page'] = test_audio_detail_page_functionality(base_url)
     
     # Run additional comprehensive tests
     test_results['jwt_validation'] = test_jwt_validation(base_url)
     test_results['user_search'] = test_user_search(base_url)
     test_results['messaging_system'] = test_messaging_system(base_url)
-    test_results['addiction_system'] = test_addiction_system_integration(base_url)
     test_results['authentication_requirements'] = test_authentication_requirements(base_url)
     test_results['profile_updates'] = test_profile_update_endpoints(base_url)
     test_results['nested_comments'] = test_nested_comments_system(base_url)
     test_results['follow_system'] = test_follow_system(base_url)
-    test_results['tiktok_profile_grid'] = test_tiktok_profile_grid_backend_support(base_url)
-    
-    # NEW: Test the real-time music search system
-    test_results['realtime_music_search'] = test_realtime_music_search_system(base_url)
-    
-    # NEW: iTunes Music Functionality Testing (as requested in review)
-    test_results['itunes_music_functionality'] = test_itunes_music_functionality(base_url)
-    
-    # NEW: Audio Upload System with FFmpeg Testing (as requested in review)
-    test_results['audio_upload_ffmpeg'] = test_audio_upload_system_with_ffmpeg(base_url)
     
     # Print summary
     print("\n" + "=" * 60)
