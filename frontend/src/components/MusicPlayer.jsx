@@ -154,7 +154,7 @@ const MusicPlayer = ({ music, isVisible = true, onTogglePlay, className = '', au
     <div className={`flex-shrink-0 ${className}`}>
       {/* Reproductor compacto estilo TikTok con audio real */}
       <div 
-        onClick={handleTogglePlay}
+        onClick={handleNavigateToAudio}
         className="relative cursor-pointer group"
       >
         {/* Container con imagen de fondo */}
@@ -172,7 +172,11 @@ const MusicPlayer = ({ music, isVisible = true, onTogglePlay, className = '', au
           )}
           
           {/* Overlay de reproducción */}
-          <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+          <div 
+            data-audio-player-control="true"
+            onClick={handleTogglePlay}
+            className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+          >
             {isLoading ? (
               <Loader2 className="w-3 h-3 text-white animate-spin" />
             ) : isPlaying ? (
