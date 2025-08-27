@@ -6154,6 +6154,209 @@ def test_audio_detail_page_functionality(base_url):
     print(f"\nAudio Detail Page Tests Summary: {success_count}/10 tests passed")
     return success_count >= 7  # At least 7 out of 10 tests should pass
 
+def test_polls_music_structure(base_url):
+    """Test GET /api/polls endpoint specifically for music data structure"""
+    print("\n=== Testing Polls Music Data Structure ===")
+    
+    if not auth_tokens:
+        print("❌ No auth tokens available for polls music testing")
+        return False
+    
+    headers = {"Authorization": f"Bearer {auth_tokens[0]}"}
+    success_count = 0
+    
+    # Test 1: GET /api/polls with authentication
+    print("Testing GET /api/polls with authentication...")
+    try:
+        response = requests.get(f"{base_url}/polls", headers=headers, timeout=10)
+        print(f"GET /api/polls Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            polls = data.get('polls', []) if isinstance(data, dict) else data
+            print(f"✅ Polls endpoint accessible - found {len(polls)} polls")
+            success_count += 1
+            
+            # Test 2: Analyze music structure in each poll
+            print(f"\n🎵 ANALYZING MUSIC DATA STRUCTURE IN {len(polls)} POLLS:")
+            print("-" * 60)
+            
+            music_analysis = {
+                'polls_with_music': 0,
+                'polls_without_music': 0,
+                'default_music_ids': 0,
+                'real_music_ids': 0,
+                'music_structures': [],
+                'issues_found': []
+            }
+            
+            for i, poll in enumerate(polls):
+                poll_id = poll.get('id', f'poll_{i}')
+                poll_title = poll.get('title', 'Unknown Title')[:50]
+                
+                print(f"\nPoll {i+1}: {poll_title}")
+                print(f"Poll ID: {poll_id}")
+                
+                # Check if poll has music field
+                if 'music' in poll and poll['music'] is not None:
+                    music = poll['music']
+                    music_analysis['polls_with_music'] += 1
+                    
+                    print(f"✅ Has music field")
+                    
+                    # Analyze music structure
+                    music_structure = {
+                        'poll_id': poll_id,
+                        'poll_title': poll_title,
+                        'music_id': music.get('id', 'MISSING'),
+                        'music_title': music.get('title', 'MISSING'),
+                        'music_artist': music.get('artist', 'MISSING'),
+                        'preview_url': music.get('preview_url', 'MISSING'),
+                        'has_valid_preview': bool(music.get('preview_url') and music.get('preview_url') != 'MISSING'),
+                        'all_fields_present': all(field in music for field in ['id', 'title', 'artist'])
+                    }
+                    
+                    music_analysis['music_structures'].append(music_structure)
+                    
+                    # Check for specific issues
+                    music_id = music.get('id', '')
+                    if music_id == 'default' or music_id == '':
+                        music_analysis['default_music_ids'] += 1
+                        music_analysis['issues_found'].append(f"Poll '{poll_title}' has default/empty music ID: '{music_id}'")
+                        print(f"⚠️  ISSUE: Music ID is default/empty: '{music_id}'")
+                    else:
+                        music_analysis['real_music_ids'] += 1
+                        print(f"✅ Music ID: {music_id}")
+                    
+                    # Check required fields
+                    print(f"   Title: {music.get('title', 'MISSING')}")
+                    print(f"   Artist: {music.get('artist', 'MISSING')}")
+                    print(f"   Preview URL: {music.get('preview_url', 'MISSING')}")
+                    
+                    # Check if all required fields are present
+                    if music_structure['all_fields_present']:
+                        print(f"✅ All required fields present (id, title, artist)")
+                    else:
+                        missing_fields = [field for field in ['id', 'title', 'artist'] if field not in music]
+                        music_analysis['issues_found'].append(f"Poll '{poll_title}' missing music fields: {missing_fields}")
+                        print(f"❌ Missing fields: {missing_fields}")
+                    
+                    # Check preview URL validity
+                    if music_structure['has_valid_preview']:
+                        print(f"✅ Has valid preview URL")
+                    else:
+                        music_analysis['issues_found'].append(f"Poll '{poll_title}' has no valid preview URL")
+                        print(f"❌ No valid preview URL")
+                        
+                else:
+                    music_analysis['polls_without_music'] += 1
+                    print(f"❌ No music field or music is null")
+                    music_analysis['issues_found'].append(f"Poll '{poll_title}' has no music data")
+            
+            # Test 3: Generate comprehensive analysis report
+            print(f"\n🎵 MUSIC DATA ANALYSIS REPORT:")
+            print("=" * 60)
+            print(f"Total Polls Analyzed: {len(polls)}")
+            print(f"Polls with Music: {music_analysis['polls_with_music']}")
+            print(f"Polls without Music: {music_analysis['polls_without_music']}")
+            print(f"Polls with Default/Empty Music IDs: {music_analysis['default_music_ids']}")
+            print(f"Polls with Real Music IDs: {music_analysis['real_music_ids']}")
+            
+            # Test 4: Check for the suspected issue (default IDs preventing navigation)
+            print(f"\n🔍 NAVIGATION ISSUE ANALYSIS:")
+            print("-" * 40)
+            
+            if music_analysis['default_music_ids'] > 0:
+                print(f"⚠️  CRITICAL ISSUE CONFIRMED: {music_analysis['default_music_ids']} polls have default/empty music IDs")
+                print(f"   This would prevent navigation to music detail pages!")
+                print(f"   Users clicking on music players won't be able to navigate properly.")
+            else:
+                print(f"✅ No default music ID issues found")
+                success_count += 1
+            
+            # Test 5: Detailed field analysis
+            print(f"\n📊 DETAILED FIELD ANALYSIS:")
+            print("-" * 30)
+            
+            if music_analysis['music_structures']:
+                valid_structures = sum(1 for m in music_analysis['music_structures'] if m['all_fields_present'])
+                valid_previews = sum(1 for m in music_analysis['music_structures'] if m['has_valid_preview'])
+                
+                print(f"Polls with complete music structure: {valid_structures}/{len(music_analysis['music_structures'])}")
+                print(f"Polls with valid preview URLs: {valid_previews}/{len(music_analysis['music_structures'])}")
+                
+                if valid_structures == len(music_analysis['music_structures']):
+                    print(f"✅ All polls with music have complete structure")
+                    success_count += 1
+                else:
+                    print(f"❌ Some polls have incomplete music structure")
+                
+                if valid_previews == len(music_analysis['music_structures']):
+                    print(f"✅ All polls with music have valid preview URLs")
+                    success_count += 1
+                else:
+                    print(f"❌ Some polls lack valid preview URLs")
+            
+            # Test 6: Sample music data for debugging
+            print(f"\n🔍 SAMPLE MUSIC DATA (First 3 polls with music):")
+            print("-" * 50)
+            
+            sample_count = 0
+            for structure in music_analysis['music_structures'][:3]:
+                sample_count += 1
+                print(f"\nSample {sample_count}:")
+                print(f"  Poll: {structure['poll_title']}")
+                print(f"  Music ID: {structure['music_id']}")
+                print(f"  Title: {structure['music_title']}")
+                print(f"  Artist: {structure['music_artist']}")
+                print(f"  Preview URL: {structure['preview_url']}")
+                print(f"  Navigation Ready: {'✅' if structure['music_id'] not in ['default', '', 'MISSING'] else '❌'}")
+            
+            if sample_count > 0:
+                success_count += 1
+            
+            # Test 7: Issues summary
+            print(f"\n⚠️  ISSUES FOUND ({len(music_analysis['issues_found'])}):")
+            print("-" * 30)
+            
+            if music_analysis['issues_found']:
+                for issue in music_analysis['issues_found'][:10]:  # Show first 10 issues
+                    print(f"  • {issue}")
+                if len(music_analysis['issues_found']) > 10:
+                    print(f"  ... and {len(music_analysis['issues_found']) - 10} more issues")
+            else:
+                print(f"✅ No issues found!")
+                success_count += 1
+            
+            # Test 8: Recommendations
+            print(f"\n💡 RECOMMENDATIONS:")
+            print("-" * 20)
+            
+            if music_analysis['default_music_ids'] > 0:
+                print(f"1. 🔧 Fix {music_analysis['default_music_ids']} polls with default/empty music IDs")
+                print(f"2. 🎵 Ensure all music entries have valid IDs for navigation")
+                print(f"3. 🔍 Check music assignment logic in poll creation")
+            
+            if music_analysis['polls_without_music'] > 0:
+                print(f"4. 📝 Consider adding music to {music_analysis['polls_without_music']} polls without music")
+            
+            missing_previews = len([m for m in music_analysis['music_structures'] if not m['has_valid_preview']])
+            if missing_previews > 0:
+                print(f"5. 🎧 Fix {missing_previews} polls with missing/invalid preview URLs")
+            
+            if not music_analysis['issues_found']:
+                print(f"✅ Music system appears to be working correctly!")
+                success_count += 1
+            
+        else:
+            print(f"❌ Failed to get polls: {response.text}")
+            
+    except Exception as e:
+        print(f"❌ Polls music testing error: {e}")
+    
+    print(f"\nPolls Music Structure Tests Summary: {success_count}/8 tests passed")
+    return success_count >= 6  # At least 6 out of 8 tests should pass
+
 def main():
     """Main test execution function"""
     print("🚀 Starting Backend API Testing...")
