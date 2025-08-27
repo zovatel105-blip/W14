@@ -26,7 +26,7 @@ const AudioDetailPage = () => {
   const fetchAudioDetails = async () => {
     try {
       setLoading(true);
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem('authToken');
       
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/audio/${audioId}`, {
         headers: {
