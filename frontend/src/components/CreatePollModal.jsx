@@ -57,7 +57,7 @@ const MediaUploadPreview = ({ media, onRemove, isVideo = false }) => {
   );
 };
 
-const CreatePollModal = ({ onCreatePoll, children, isOpen: externalIsOpen, onClose: externalOnClose }) => {
+const CreatePollModal = ({ onCreatePoll, children, isOpen: externalIsOpen, onClose: externalOnClose, preSelectedAudio = null }) => {
   const [internalIsOpen, setInternalIsOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [options, setOptions] = useState([
