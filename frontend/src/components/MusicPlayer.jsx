@@ -236,21 +236,12 @@ const MusicPlayer = ({ music, isVisible = true, onTogglePlay, className = '', au
           </div>
         )}
 
-        {/* Tooltip mejorado */}
-        <div className="absolute -top-20 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none z-50">
-          <div className="bg-black/90 text-white text-xs px-3 py-2 rounded-lg backdrop-blur-sm whitespace-nowrap border border-white/20 shadow-lg max-w-48 text-center">
-            <div className="font-medium truncate">{music.title}</div>
-            <div className="text-gray-300 truncate">{music.artist}</div>
-            {music.id && (
-              <div className="text-yellow-400 text-[10px] mt-1">ID: {music.id}</div>
-            )}
-            {realPreviewUrl && (
-              <div className="text-blue-400 text-[10px] mt-1">🎵 Audio Real</div>
-            )}
-            {error && (
-              <div className="text-red-400 text-[10px] mt-1">❌ {error}</div>
-            )}
-            <div className="text-purple-400 text-[10px] mt-1 font-medium">👆 Click para ver info</div>
+        {/* Tooltip simplificado */}
+        <div className="absolute -top-16 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-50">
+          <div className="bg-black/90 text-white text-xs px-2 py-1 rounded-lg whitespace-nowrap border border-white/20 shadow-lg">
+            <div className="font-medium">{music.title}</div>
+            <div className="text-gray-300">{music.artist}</div>
+            <div className="text-purple-400 text-[10px] mt-1">👆 Click para info completa</div>
           </div>
         </div>
       </div>
