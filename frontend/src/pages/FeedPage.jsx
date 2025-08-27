@@ -602,7 +602,11 @@ const FeedPage = () => {
       {/* Create Poll Modal */}
       <CreatePollModal
         isOpen={showCreateModal}
-        onClose={() => setShowCreateModal(false)}
+        onClose={() => {
+          setShowCreateModal(false);
+          setPreSelectedAudio(null); // Clear pre-selected audio when closing
+        }}
+        preSelectedAudio={preSelectedAudio}
         onPollCreated={(newPoll) => {
           // Add the new poll to the beginning of the list
           const transformedPoll = pollService.transformPollData(newPoll);
