@@ -128,29 +128,55 @@ const MusicPlayer = ({ music, isVisible = true, onTogglePlay, className = '', au
     console.log('🎵 MusicPlayer clicked! Event details:', {
       target: e.target,
       currentTarget: e.currentTarget,
-      music: music
+      music: music,
+      tagName: e.target.tagName,
+      className: e.target.className
     });
     
-    // Prevent navigation if clicking on play/pause button
+    // Prevent navigation if clicking on play/pause button or its children
     const controlElement = e.target.closest('[data-audio-player-control]');
-    if (controlElement) {
-      console.log('🚫 Navigation prevented - clicked on control element:', controlElement);
+    const isControlClick = controlElement || 
+                          e.target.hasAttribute('data-audio-player-control') ||
+                          e.target.closest('svg') ||
+                          (e.target.tagName === 'svg') ||
+                          (e.target.tagName === 'path');
+                          
+    if (isControlClick) {
+      console.log('🚫 Navigation prevented - clicked on control element:', {
+        controlElement,
+        target: e.target,
+        tagName: e.target.tagName
+      });
       return;
     }
     
-    console.log('🎵 Navigating to audio:', music);
+    console.log('🎵 Proceeding with navigation to audio:', music);
     
     if (music?.id) {
       // Handle both user audio and system music IDs
       let audioId = music.id;
+      
+      // Log the original ID for debugging
+      console.log('🔍 Original music ID:', audioId, 'Source:', music.source, 'IsOriginal:', music.isOriginal);
+      
       if (music.isOriginal || music.source === 'User Upload') {
         // For user uploaded audio, ensure we have the right format
         audioId = audioId.startsWith('user_audio_') ? audioId : `user_audio_${audioId}`;
+        console.log('🔄 Modified audioId for user upload:', audioId);
       }
-      console.log('🎵 Final audio ID for navigation:', audioId);
-      navigate(`/audio/${audioId}`);
+      
+      const targetUrl = `/audio/${audioId}`;
+      console.log('🎵 Final navigation - Audio ID:', audioId, 'URL:', targetUrl);
+      
+      try {
+        navigate(targetUrl);
+        console.log('✅ Navigation successful to:', targetUrl);
+      } catch (error) {
+        console.error('❌ Navigation error:', error);
+      }
     } else {
-      console.log('❌ No music ID available - music object:', music);
+      console.error('❌ No music ID available - music object:', music);
+      console.log('🔍 Music keys:', music ? Object.keys(music) : 'music is null/undefined');
     }
   };
 
