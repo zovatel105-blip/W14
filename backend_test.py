@@ -6380,7 +6380,10 @@ def main():
     test_results['user_login'] = test_user_login(base_url)
     test_results['get_current_user'] = test_get_current_user(base_url)
     
-    # NEW TEST: Audio Detail Page Functionality (MAIN FOCUS)
+    # 🎵 PRIORITY TEST: Polls Music Structure Analysis (MAIN FOCUS)
+    test_results['🎵_polls_music_structure'] = test_polls_music_structure(base_url)
+    
+    # NEW TEST: Audio Detail Page Functionality
     test_results['🎵_audio_detail_page'] = test_audio_detail_page_functionality(base_url)
     
     # Run additional comprehensive tests
