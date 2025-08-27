@@ -195,38 +195,47 @@ def test_audio_serving(base_url, audio_data):
     """Test GET /api/uploads/audio/{filename} - Audio file serving"""
     print("\n🎵 Testing GET /api/uploads/audio/{filename}...")
     
-    if not audio_data or 'filename' not in audio_data:
-        print("❌ No audio data or filename available for serving test")
+    if not audio_data or 'public_url' not in audio_data:
+        print("❌ No audio data or public_url available for serving test")
         return False
     
-    filename = audio_data['filename']
-    print(f"📁 Testing serving of file: {filename}")
+    # Extract filename from public_url
+    public_url = audio_data['public_url']
+    print(f"📁 Public URL: {public_url}")
     
-    try:
-        # Test serving the audio file
-        serve_response = requests.get(f"{base_url}/uploads/audio/{filename}", timeout=10)
-        print(f"Audio Serving Status Code: {serve_response.status_code}")
+    # Extract filename from the URL path
+    if '/uploads/audio/' in public_url:
+        filename = public_url.split('/uploads/audio/')[-1]
+        print(f"📁 Testing serving of file: {filename}")
         
-        if serve_response.status_code == 200:
-            content_type = serve_response.headers.get('content-type', '')
-            content_length = len(serve_response.content)
-            print(f"✅ Audio file served successfully!")
-            print(f"Content-Type: {content_type}")
-            print(f"Content-Length: {content_length} bytes")
+        try:
+            # Test serving the audio file
+            serve_response = requests.get(f"{base_url}/uploads/audio/{filename}", timeout=10)
+            print(f"Audio Serving Status Code: {serve_response.status_code}")
             
-            # Verify it's actually audio content
-            if 'audio' in content_type or content_length > 1000:
-                print(f"✅ Content appears to be valid audio")
-                return True
+            if serve_response.status_code == 200:
+                content_type = serve_response.headers.get('content-type', '')
+                content_length = len(serve_response.content)
+                print(f"✅ Audio file served successfully!")
+                print(f"Content-Type: {content_type}")
+                print(f"Content-Length: {content_length} bytes")
+                
+                # Verify it's actually audio content
+                if 'audio' in content_type or content_length > 1000:
+                    print(f"✅ Content appears to be valid audio")
+                    return True
+                else:
+                    print(f"⚠️ Content might not be valid audio")
+                    return False
             else:
-                print(f"⚠️ Content might not be valid audio")
+                print(f"❌ Audio serving failed: {serve_response.status_code}")
                 return False
-        else:
-            print(f"❌ Audio serving failed: {serve_response.status_code}")
+                
+        except Exception as e:
+            print(f"❌ Audio serving test error: {e}")
             return False
-            
-    except Exception as e:
-        print(f"❌ Audio serving test error: {e}")
+    else:
+        print(f"❌ Invalid public_url format: {public_url}")
         return False
 
 def test_ffmpeg_processing():
