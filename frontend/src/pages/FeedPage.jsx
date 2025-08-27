@@ -24,6 +24,7 @@ const FeedPage = () => {
   const [selectedPollTitle, setSelectedPollTitle] = useState('');
   const [selectedPollAuthor, setSelectedPollAuthor] = useState('');
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [preSelectedAudio, setPreSelectedAudio] = useState(null);
   const { toast } = useToast();
   const { trackAction } = useAddiction();
   const { enterTikTokMode, exitTikTokMode, isTikTokMode } = useTikTok();
