@@ -179,14 +179,24 @@ const AudioDetailPage = () => {
   const handleShare = async () => {
     try {
       const url = window.location.href;
-      if (navigator.share) {
+      const shareText = `🎵 Escucha "${audio.title}" de ${audio.artist}`;
+      
+      if (navigator.share && navigator.canShare) {
         await navigator.share({
           title: `${audio.title} - ${audio.artist}`,
-          text: `Escucha "${audio.title}" de ${audio.artist}`,
+          text: shareText,
           url: url
         });
+        
+        toast({
+          title: "Compartido exitosamente",
+          description: "El audio ha sido compartido"
+        });
       } else {
-        await navigator.clipboard.writeText(url);
+        // Fallback to clipboard
+        const textToCopy = `${shareText}\n${url}`;
+        await navigator.clipboard.writeText(textToCopy);
+        
         toast({
           title: "Enlace copiado",
           description: "El enlace del audio se copió al portapapeles"
@@ -194,6 +204,22 @@ const AudioDetailPage = () => {
       }
     } catch (error) {
       console.error('Error sharing:', error);
+      
+      // Final fallback - just copy URL
+      try {
+        await navigator.clipboard.writeText(window.location.href);
+        toast({
+          title: "Enlace copiado",
+          description: "El enlace se copió al portapapeles"
+        });
+      } catch (clipboardError) {
+        console.error('Clipboard error:', clipboardError);
+        toast({
+          title: "Error",
+          description: "No se pudo compartir el audio",
+          variant: "destructive"
+        });
+      }
     }
   };
 
