@@ -17,7 +17,9 @@ const AudioDetailPage = () => {
   const { audioId } = useParams();
   const navigate = useNavigate();
   const { toast } = useToast();
-  const waveformRef = useRef(null);
+  const { t, formatNumber, formatDuration, formatDate } = useTranslation();
+  const layout = useResponsiveLayout();
+  const classes = useDynamicClasses(layout);
   
   const [audio, setAudio] = useState(null);
   const [posts, setPosts] = useState([]);
@@ -26,7 +28,6 @@ const AudioDetailPage = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [error, setError] = useState(null);
   const [isLiked, setIsLiked] = useState(false);
-  const [waveformData, setWaveformData] = useState([]);
   const [playbackPosition, setPlaybackPosition] = useState(0);
   const [originalUser, setOriginalUser] = useState(null);
   
@@ -35,9 +36,6 @@ const AudioDetailPage = () => {
   const [loadingMorePosts, setLoadingMorePosts] = useState(false);
   const [currentOffset, setCurrentOffset] = useState(0);
   const [totalPosts, setTotalPosts] = useState(0);
-  
-  // Debug state (temporal)
-  const [debugInfo, setDebugInfo] = useState(null);
 
   // Generate mock waveform data
   useEffect(() => {
