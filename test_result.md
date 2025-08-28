@@ -63,6 +63,8 @@
 ##     -message: "✅ SISTEMA MI MÚSICA BACKEND COMPLETAMENTE OPERACIONAL (2025-01-27): Testing exhaustivo confirma que el backend está 100% implementado y funcionando. POST /api/audio/upload, GET /api/audio/my-library, GET /api/uploads/audio/{filename} todos operacionales. FFmpeg procesando correctamente. Problema es de frontend, no backend."
 ##     -agent: "main"
 ##     -message: "🎵 NAVEGACIÓN DE REPRODUCTOR DE MÚSICA CORREGIDA COMPLETAMENTE (2025-01-27): Usuario reportó que al hacer clic en reproductor inferior derecho del feed no abría página de info. SOLUCIONADO: Mejorada función handleNavigateToAudio con detección robusta de clics, eliminados conflictos de pointer-events, agregado logging detallado y tooltips informativos. Página AudioDetailPage optimizada con mejor manejo de IDs de sistema/usuario y funciones mejoradas de compartir. La funcionalidad de navegación desde reproductor a página de información está ahora completamente operativa."
+##     -agent: "main"
+##     -message: "🎵 CORREGIDO ERROR CRÍTICO AUDIODETAILPAGE CON MÚSICA ITUNES (2025-01-27): Usuario reportó error 'no se pudieron cargar los detalles del audio' al hacer clic en reproductores de música iTunes. PROBLEMA IDENTIFICADO: Endpoint GET /api/audio/{audio_id} solo buscaba en user_audio collection, no manejaba música del sistema iTunes (music_trending_*, itunes_*). SOLUCIÓN IMPLEMENTADA: Modificado endpoint para manejar ambos tipos - primero busca en user_audio, si no encuentra busca en sistema música usando get_music_info(), convierte respuesta a formato compatible con frontend, mantiene diferenciación entre música usuario vs sistema. Ahora funciona correctamente para todos los tipos de música."
 
 # Protocol Guidelines for Main agent
 #
