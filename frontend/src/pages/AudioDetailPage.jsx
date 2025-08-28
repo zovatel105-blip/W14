@@ -939,26 +939,26 @@ const AudioDetailPage = () => {
                   >
                     {/* Celda cuadrada (~33% del ancho disponible) */}
                     <div className="aspect-square w-full h-full bg-gray-200">
-                      {mediaUrl ? (
-                        mediaType === 'video' ? (
-                          /* Video thumbnail */
+                      {displayUrl ? (
+                        displayType === 'video' ? (
+                          /* Video preview (sin thumbnail disponible) */
                           <video 
-                            src={mediaUrl}
+                            src={displayUrl}
                             className="w-full h-full object-cover"
                             muted
                             preload="metadata"
                             onError={(e) => {
-                              console.error(`❌ Error cargando video ${mediaUrl}:`, e);
+                              console.error(`❌ Error cargando video ${displayUrl}:`, e);
                             }}
                           />
                         ) : (
-                          /* Imagen thumbnail */
+                          /* Imagen thumbnail (incluyendo thumbnails de video) */
                           <img 
-                            src={mediaUrl} 
+                            src={displayUrl} 
                             alt={post.title || 'Post image'}
                             className="w-full h-full object-cover"
                             onError={(e) => {
-                              console.error(`❌ Error cargando imagen ${mediaUrl}:`, e);
+                              console.error(`❌ Error cargando imagen ${displayUrl}:`, e);
                               e.target.style.display = 'none';
                             }}
                           />
