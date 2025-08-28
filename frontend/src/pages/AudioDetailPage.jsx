@@ -44,16 +44,25 @@ const AudioDetailPage = () => {
     fetchPostsUsingAudio();
   }, [audioId]);
 
-  // Check favorites after audio is loaded
+  // Check favorites and set original user after audio is loaded
   useEffect(() => {
     if (audio) {
       checkIfFavorited();
-      // Si no se ha determinado el usuario original y no hay posts, usar fallback basado en el audio
-      if (!originalUser && posts.length === 0) {
-        handleNoPostsFound();
+      
+      // Si no se ha determinado el usuario original después de cargar posts, usar artista como fallback
+      if (!originalUser) {
+        if (audio.is_system_music || audio.source === 'iTunes') {
+          setOriginalUser(`${audio.artist} (artista original)`);
+          console.log('🎵 Usando artista como usuario original:', audio.artist);
+        } else if (audio.created_by) {
+          setOriginalUser(audio.created_by);
+          console.log('🎵 Usando creador del audio:', audio.created_by);
+        } else {
+          setOriginalUser('Artista original');
+        }
       }
     }
-  }, [audio, posts, originalUser]);
+  }, [audio, originalUser]);
 
   const checkIfFavorited = async () => {
     try {
