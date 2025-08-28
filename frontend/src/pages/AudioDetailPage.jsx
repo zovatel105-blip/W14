@@ -590,6 +590,9 @@ const AudioDetailPage = () => {
   };
 
   const handleUseThisSound = () => {
+    console.log('🔥 BOTÓN USE SOUND PRESIONADO');
+    console.log('🔥 Audio disponible:', !!audio);
+    
     // Validar que tenemos el audio
     if (!audio) {
       console.error('❌ No hay audio disponible para usar');
@@ -614,6 +617,10 @@ const AudioDetailPage = () => {
     };
     
     console.log('🎵 Navegando para crear contenido con audio:', audioForCreation);
+    console.log('🔥 Datos de navigate:', { 
+      path: '/feed', 
+      state: { createPoll: true, selectedAudio: audioForCreation } 
+    });
     
     try {
       navigate('/feed', { 
@@ -624,8 +631,8 @@ const AudioDetailPage = () => {
       });
       
       toast({
-        title: t('toast.audioSelected'),
-        description: t('toast.audioSelectedDesc', { title: audio.title, artist: audio.artist })
+        title: t('toast.audioSelected') || "Audio seleccionado",
+        description: t('toast.audioSelectedDesc', { title: audio.title, artist: audio.artist }) || `${audio.title} - ${audio.artist} seleccionado`
       });
     } catch (error) {
       console.error('❌ Error navegando al feed:', error);
