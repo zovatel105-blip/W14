@@ -360,15 +360,6 @@ const AudioDetailPage = () => {
     } catch (error) {
       console.error('❌ ERROR EN FETCH:', error);
       
-      setDebugInfo({
-        lastFetch: new Date().toLocaleTimeString(),
-        postsCount: 0,
-        total: 0,
-        hasMore: false,
-        loading: false,
-        error: error.message
-      });
-      
       if (offset === 0) {
         setPosts([]);
         setTotalPosts(0);
