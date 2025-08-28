@@ -160,6 +160,24 @@ const AudioDetailPage = () => {
     console.log('🔍 === FIN DETERMINACIÓN ===');
   };
 
+  const loadMorePosts = async () => {
+    if (!hasMorePosts || loadingMorePosts) return;
+    
+    console.log(`📚 Cargando más posts desde offset: ${currentOffset}`);
+    await fetchPostsUsingAudio(currentOffset, true);
+  };
+
+  // Infinite scroll handler
+  const handleScroll = (e) => {
+    const { scrollTop, scrollHeight, clientHeight } = e.target;
+    const scrolledToBottom = scrollTop + clientHeight >= scrollHeight - 100; // 100px before bottom
+    
+    if (scrolledToBottom && hasMorePosts && !loadingMorePosts && !postsLoading) {
+      console.log('📚 Usuario llegó al final, cargando más posts...');
+      loadMorePosts();
+    }
+  };
+
   const checkIfFavorited = async () => {
     try {
       const token = localStorage.getItem('authToken');
