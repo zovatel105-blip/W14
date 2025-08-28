@@ -620,28 +620,28 @@ const AudioDetailPage = () => {
 
   if (error || !audio) {
     return (
-      <div className="min-h-screen bg-white flex flex-col">
+      <div className={classes.container}>
         {/* Contenedor del header con degradado difuminado */}
         <div className="relative">
           {/* Fondo degradado que se extiende desde header hacia abajo */}
-          <div className="absolute inset-0 bg-gradient-to-b from-green-100 via-green-50 to-transparent h-[17.5vh]"></div>
+          <div className={`${classes.gradientBg} h-[17.5vh]`}></div>
           
           {/* Encabezado con degradado verde/beige */}
-          <div className="relative h-[10vh] flex items-center justify-between px-4 z-10">
+          <div className={classes.header}>
             <Button 
               variant="ghost" 
               size="sm" 
               onClick={() => navigate(-1)}
               className="text-gray-900 hover:bg-white/50 p-3"
             >
-              <ArrowLeft className="w-7 h-7 stroke-2" />
+              <ArrowLeft className={`${layout.iconSize} stroke-2`} />
             </Button>
             <Button 
               variant="ghost" 
               size="sm" 
               className="text-gray-900 hover:bg-white/50 p-3"
             >
-              <Share2 className="w-7 h-7 stroke-2" />
+              <Share2 className={`${layout.iconSize} stroke-2`} />
             </Button>
           </div>
         </div>
@@ -649,8 +649,8 @@ const AudioDetailPage = () => {
         <div className="flex-1 flex items-center justify-center px-4">
           <div className="text-center py-12 bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 max-w-md">
             <Music className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <p className="text-gray-700 text-lg font-medium mb-2">Este audio no existe o ha sido eliminado</p>
-            <p className="text-gray-500 text-sm mb-4">ID de audio: {audioId}</p>
+            <p className="text-gray-700 text-lg font-medium mb-2">{t('audioDetail.notFound')}</p>
+            <p className="text-gray-500 text-sm mb-4">{t('audioDetail.audioId', { id: audioId })}</p>
             {error && (
               <p className="text-red-600 text-sm mb-4 bg-red-50 px-4 py-2 rounded-lg inline-block">
                 {error}
@@ -658,10 +658,10 @@ const AudioDetailPage = () => {
             )}
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button onClick={() => navigate('/feed')} className="bg-green-600 hover:bg-green-700">
-                Volver al feed
+                {t('audioDetail.backToFeed')}
               </Button>
               <Button variant="outline" onClick={() => navigate(-1)} className="border-gray-300 hover:bg-gray-50">
-                Página anterior
+                {t('audioDetail.previousPage')}
               </Button>
             </div>
           </div>
