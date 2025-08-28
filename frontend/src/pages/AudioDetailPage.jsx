@@ -167,11 +167,12 @@ const AudioDetailGrid = ({ polls, onPollClick }) => {
 
             {/* Play Button (on hover) - AudioDetailPage green theme */}
             <div className="absolute inset-0 flex items-center justify-center">
-              <div
-                className="w-12 h-12 rounded-full bg-green-600/20 backdrop-blur-sm border border-green-500/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:scale-110 duration-200"
+              <motion.div
+                className="w-12 h-12 rounded-full bg-green-600/20 backdrop-blur-sm border border-green-500/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                whileHover={{ scale: 1.1 }}
               >
                 <Play className="w-6 h-6 text-green-700 ml-1" />
-              </div>
+              </motion.div>
             </div>
 
             {/* Vote Count with Vote icon - Bottom left corner - AudioDetailPage colors */}
