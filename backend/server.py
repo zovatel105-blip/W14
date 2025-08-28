@@ -3904,65 +3904,82 @@ async def get_posts_using_audio(
                     created_at=author.get("created_at", datetime.utcnow().isoformat())
                 )
         
-        # Construir respuesta de polls
+        # Construir respuesta de polls con mejor logging
         poll_responses = []
-        for poll_data in polls:
-            # Procesar opciones
-            options = []
-            if poll_data.get("options"):
-                for option in poll_data["options"]:
-                    # Obtener información del usuario de la opción
-                    option_user = authors_dict.get(option.get("user_id"))
-                    
-                    # Obtener thumbnail si es necesario
-                    media_url = option.get("media_url")
-                    thumbnail_url = option.get("thumbnail_url")
-                    
-                    if media_url and not thumbnail_url and option.get("media_type") == "video":
-                        thumbnail_url = get_thumbnail_for_media_url(media_url)
-                    
-                    option_dict = {
-                        "id": option.get("id", str(uuid.uuid4())),
-                        "text": option.get("text", ""),
-                        "votes": option.get("votes", 0),
-                        "user": option_user.dict() if option_user else None,
-                        "mentioned_users": option.get("mentioned_users", []),
-                        "media": {
-                            "type": option.get("media_type"),
-                            "url": media_url,
-                            "thumbnail": thumbnail_url or media_url
-                        } if media_url else None
-                    }
-                    options.append(option_dict)
-            
-            # Get music info if available
-            music_info = await get_music_info(poll_data.get("music_id")) if poll_data.get("music_id") else None
-            
-            poll_response = PollResponse(
-                id=poll_data["id"],
-                title=poll_data["title"],
-                author=authors_dict.get(poll_data["author_id"]),
-                description=poll_data.get("description"),
-                options=options,
-                total_votes=poll_data["total_votes"],
-                likes=poll_data["likes"],
-                shares=poll_data["shares"],
-                comments_count=poll_data["comments_count"],
-                music=music_info,
-                user_vote=None,  # Se puede mejorar para incluir el voto del usuario actual
-                user_liked=False,  # Se puede mejorar para incluir si le dio like
-                created_at=poll_data["created_at"],
-                mentioned_users=poll_data.get("mentioned_users", []),
-                tags=poll_data.get("tags", []),
-                category=poll_data.get("category"),
-                is_featured=poll_data.get("is_featured", False)
-            )
-            poll_responses.append(poll_response.dict())
+        logger.info(f"🏗️ Construyendo respuesta para {len(polls)} posts")
         
-        # Contar total de posts que usan este audio
-        total_polls = await db.polls.count_documents(polls_filter)
-        total_uses = len(audio_uses)
-        total = max(total_polls, total_uses)
+        for i, poll_data in enumerate(polls):
+            try:
+                logger.info(f"📝 Procesando post {i+1}: {poll_data.get('id', 'unknown')}")
+                
+                # Obtener autor del post
+                author = authors_dict.get(poll_data.get("author_id"))
+                if not author:
+                    logger.warning(f"⚠️ Autor no encontrado para post {poll_data.get('id')}, author_id: {poll_data.get('author_id')}")
+                
+                # Procesar opciones
+                options = []
+                if poll_data.get("options"):
+                    for option in poll_data["options"]:
+                        # Obtener información del usuario de la opción
+                        option_user = authors_dict.get(option.get("user_id"))
+                        
+                        # Obtener thumbnail si es necesario
+                        media_url = option.get("media_url")
+                        thumbnail_url = option.get("thumbnail_url")
+                        
+                        if media_url and not thumbnail_url and option.get("media_type") == "video":
+                            thumbnail_url = get_thumbnail_for_media_url(media_url)
+                        
+                        option_dict = {
+                            "id": option.get("id", str(uuid.uuid4())),
+                            "text": option.get("text", ""),
+                            "votes": option.get("votes", 0),
+                            "user": option_user.dict() if option_user else None,
+                            "mentioned_users": option.get("mentioned_users", []),
+                            "media": {
+                                "type": option.get("media_type"),
+                                "url": media_url,
+                                "thumbnail": thumbnail_url or media_url
+                            } if media_url else None
+                        }
+                        options.append(option_dict)
+                
+                # Get music info if available
+                music_info = None
+                if poll_data.get("music_id"):
+                    try:
+                        music_info = await get_music_info(poll_data.get("music_id"))
+                    except Exception as music_error:
+                        logger.error(f"❌ Error obteniendo info de música para {poll_data.get('music_id')}: {str(music_error)}")
+                
+                poll_response = PollResponse(
+                    id=poll_data["id"],
+                    title=poll_data["title"],
+                    author=author,
+                    description=poll_data.get("description"),
+                    options=options,
+                    total_votes=poll_data.get("total_votes", 0),
+                    likes=poll_data.get("likes", 0),
+                    shares=poll_data.get("shares", 0),
+                    comments_count=poll_data.get("comments_count", 0),
+                    music=music_info,
+                    user_vote=None,  # Se puede mejorar para incluir el voto del usuario actual
+                    user_liked=False,  # Se puede mejorar para incluir si le dado like
+                    created_at=poll_data.get("created_at", datetime.utcnow().isoformat()),
+                    mentioned_users=poll_data.get("mentioned_users", []),
+                    tags=poll_data.get("tags", []),
+                    category=poll_data.get("category"),
+                    is_featured=poll_data.get("is_featured", False)
+                )
+                poll_responses.append(poll_response.dict())
+                logger.info(f"✅ Post {i+1} procesado exitosamente")
+                
+            except Exception as poll_error:
+                logger.error(f"❌ Error procesando post {i+1}: {str(poll_error)}")
+                continue
+        
+        logger.info(f"🎉 Respuesta construida: {len(poll_responses)} posts de {total} total")
         
         return {
             "success": True,
