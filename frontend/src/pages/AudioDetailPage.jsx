@@ -798,29 +798,32 @@ const AudioDetailPage = () => {
         </div>
       </div>
 
-      {/* Botones de acción (altura ~10% de pantalla) */}
-      <div className="h-[10vh] flex items-center justify-center px-4">
+      {/* Botones de acción */}
+      <div className={classes.actionButtons}>
         <div className="flex w-full gap-[10%]">
           {/* Botón Add to music app - 45% del ancho */}
           <Button 
             onClick={handleAddToItunes}
-            className="w-[45%] h-12 bg-gray-100 hover:bg-gray-200 text-gray-700 border-0 rounded-lg flex items-center justify-center gap-2 font-medium"
+            className={`${classes.actionButton} bg-gray-100 hover:bg-gray-200 text-gray-700`}
           >
-            <Apple className="w-4 h-4" />
-            {audio?.source === 'iTunes' || audio?.is_system_music ? 'Open in Apple Music' : 'No disponible'}
+            <Apple className={layout.iconSize} />
+            {audio?.source === 'iTunes' || audio?.is_system_music ? 
+              t('buttons.openAppleMusic') : 
+              t('buttons.notAvailable')
+            }
           </Button>
           
           {/* Botón Add to Favorites - 45% del ancho */}
           <Button 
             onClick={handleLike}
-            className={`w-[45%] h-12 border-0 rounded-lg flex items-center justify-center gap-2 font-medium transition-colors ${
+            className={`${classes.actionButton} transition-colors ${
               isLiked 
                 ? 'bg-red-500 hover:bg-red-600 text-white' 
                 : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
             }`}
           >
-            <Heart className={`w-4 h-4 ${isLiked ? 'fill-current' : ''}`} />
-            {isLiked ? 'En Favoritos' : 'Add to Favorites'}
+            <Heart className={`${layout.iconSize} ${isLiked ? 'fill-current' : ''}`} />
+            {isLiked ? t('buttons.inFavorites') : t('buttons.addToFavorites')}
           </Button>
         </div>
       </div>
