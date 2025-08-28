@@ -329,19 +329,28 @@ const AudioDetailPage = () => {
 
   if (error || !audio) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">
-        <div className="max-w-4xl mx-auto px-4 py-8">
-          <div className="flex items-center mb-6">
+      <div className="min-h-screen bg-white">
+        {/* Header con degradado verde */}
+        <div className="bg-gradient-to-b from-green-100 to-green-50 border-b border-green-200">
+          <div className="flex items-center justify-between px-4 py-3">
             <Button 
               variant="ghost" 
               size="sm" 
               onClick={() => navigate(-1)}
-              className="mr-4 hover:bg-white/50"
+              className="text-gray-900 hover:bg-white/50 p-2"
             >
-              <ArrowLeft className="w-5 h-5" />
+              <ArrowLeft className="w-6 h-6" />
             </Button>
-            <h1 className="text-2xl font-bold text-gray-900">Audio no encontrado</h1>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="text-gray-900 hover:bg-white/50 p-2"
+            >
+              <Share2 className="w-6 h-6" />
+            </Button>
           </div>
+        </div>
+        <div className="px-4 py-8">
           <div className="text-center py-12 bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20">
             <Music className="w-16 h-16 text-gray-400 mx-auto mb-4" />
             <p className="text-gray-700 text-lg font-medium mb-2">Este audio no existe o ha sido eliminado</p>
@@ -352,7 +361,7 @@ const AudioDetailPage = () => {
               </p>
             )}
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Button onClick={() => navigate('/feed')} className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
+              <Button onClick={() => navigate('/feed')} className="bg-green-600 hover:bg-green-700">
                 Volver al feed
               </Button>
               <Button variant="outline" onClick={() => navigate(-1)} className="border-gray-300 hover:bg-gray-50">
