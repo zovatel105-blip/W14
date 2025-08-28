@@ -37,6 +37,10 @@ const AudioDetailPage = () => {
   const [loadingMorePosts, setLoadingMorePosts] = useState(false);
   const [currentOffset, setCurrentOffset] = useState(0);
   const [totalPosts, setTotalPosts] = useState(0);
+  
+  // Poll modal states
+  const [showPollModal, setShowPollModal] = useState(false);
+  const [selectedPoll, setSelectedPoll] = useState(null);
 
   // Remove old hardcoded waveform generation
   // Generate mock waveform data - REMOVED (now using real AudioWaveform component)
