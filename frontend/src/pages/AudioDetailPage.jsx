@@ -133,6 +133,15 @@ const AudioDetailPage = () => {
       if (response.ok) {
         const data = await response.json();
         setPosts(data.posts || []);
+        
+        // Encontrar el usuario original (el más antiguo que usó este audio)
+        if (data.posts && data.posts.length > 0) {
+          const sortedByDate = [...data.posts].sort((a, b) => 
+            new Date(a.created_at) - new Date(b.created_at)
+          );
+          const firstPost = sortedByDate[0];
+          setOriginalUser(firstPost.user?.display_name || firstPost.user?.username || 'Usuario original');
+        }
       } else {
         console.error('Error fetching posts:', response.status);
       }
