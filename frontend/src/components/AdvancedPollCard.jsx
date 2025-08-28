@@ -449,14 +449,14 @@ const AdvancedPollCard = ({
               }}
             >
               <Avatar className="ring-3 ring-white/70 w-12 h-12 flex-shrink-0 shadow-lg cursor-pointer">
-                <AvatarImage src={poll.author.avatar || "https://github.com/shadcn.png"} />
+                <AvatarImage src={poll.author?.avatar_url || "https://github.com/shadcn.png"} />
                 <AvatarFallback className="bg-gradient-to-br from-purple-500 to-pink-500 text-white font-bold">
-                  {((poll.author || 'U') + '').charAt(0).toUpperCase()}
+                  {(poll.author?.display_name || poll.author?.username || 'U').charAt(0).toUpperCase()}
                 </AvatarFallback>
               </Avatar>
             </button>
             <div className="min-w-0 flex-1">
-              <h3 className="font-bold text-white text-base truncate">{poll.author}</h3>
+              <h3 className="font-bold text-white text-base truncate">{poll.author?.display_name || poll.author?.username || 'Usuario'}</h3>
               <p className="text-sm text-white/80 truncate">{poll.timeAgo}</p>
             </div>
             <motion.button
