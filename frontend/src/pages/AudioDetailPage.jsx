@@ -364,10 +364,35 @@ const AudioDetailPage = () => {
   };
 
   const handleAddToItunes = () => {
-    toast({
-      title: "Añadir a iTunes",
-      description: "Función próximamente disponible"
-    });
+    if (audio?.source === 'iTunes' || audio?.is_system_music) {
+      // Try to open in Apple Music/iTunes if available
+      const searchQuery = `${audio.artist} ${audio.title}`.replace(/\s+/g, '+');
+      const appleMusicUrl = `https://music.apple.com/search?term=${searchQuery}`;
+      
+      if (navigator.userAgent.includes('iPhone') || navigator.userAgent.includes('iPad')) {
+        // Try Apple Music app on iOS
+        window.location.href = `music://music.apple.com/search?term=${searchQuery}`;
+        
+        // Fallback to web version after a delay
+        setTimeout(() => {
+          window.open(appleMusicUrl, '_blank');
+        }, 1000);
+      } else {
+        // Open Apple Music web on other devices
+        window.open(appleMusicUrl, '_blank');
+      }
+      
+      toast({
+        title: "Abriendo Apple Music",
+        description: `Buscando "${audio.title}" de ${audio.artist}`
+      });
+    } else {
+      toast({
+        title: "Audio personalizado",
+        description: "Esta es música subida por usuarios, no disponible en tiendas de música",
+        variant: "destructive"
+      });
+    }
   };
 
   const handleSave = () => {
