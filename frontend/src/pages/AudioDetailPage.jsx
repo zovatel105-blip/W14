@@ -828,31 +828,23 @@ const AudioDetailPage = () => {
         </div>
       </div>
 
-      {/* Cuadrícula 3x3 con scroll infinito (altura ~45% de pantalla) */}
-      <div className="h-[45vh] px-1">
+      {/* Cuadrícula 3x3 con scroll infinito */}
+      <div className={classes.grid}>
         {postsLoading ? (
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
               <div className="w-8 h-8 border-2 border-gray-300 border-t-green-600 rounded-full animate-spin mx-auto mb-4"></div>
-              <p className="text-gray-500 text-sm">Cargando contenido...</p>
+              <p className={`${classes.infoText} text-gray-500`}>{t('audioDetail.loadingContent')}</p>
             </div>
           </div>
         ) : posts && posts.length > 0 ? (
           /* Contenedor con scroll para permitir más de 9 publicaciones */
           <div 
-            className="h-full overflow-y-auto overscroll-behavior-y-contain"
+            className="h-full overflow-y-auto overscroll-behavior-y-contain px-1"
             onScroll={handleScroll}
           >
-            {/* Debug logging */}
-            {console.log('📊 RENDERIZANDO GRID:', {
-              postsLength: posts.length,
-              firstPost: posts[0],
-              postsLoading,
-              totalPosts
-            })}
-            
             {/* Grid 3x3 expandible verticalmente */}
-            <div className="grid grid-cols-3 gap-0.5 auto-rows-fr">
+            <div className={`grid grid-cols-${layout.gridCols} ${layout.gridGap} auto-rows-fr`}>
               {posts.map((post, index) => {
                 console.log(`📝 Renderizando post ${index + 1}:`, post);
                 
@@ -918,8 +910,8 @@ const AudioDetailPage = () => {
                       ) : (
                         /* Placeholder con información del post */
                         <div className="w-full h-full bg-gray-300 flex flex-col items-center justify-center p-2">
-                          <MessageCircle className="w-8 h-8 text-gray-500 mb-2" />
-                          <span className="text-xs text-gray-600 text-center font-medium">
+                          <MessageCircle className={`${layout.iconSize} text-gray-500 mb-2`} />
+                          <span className={`${classes.infoText} text-gray-600 text-center font-medium`}>
                             {post.title?.substring(0, 20) || 'Sin título'}
                           </span>
                         </div>
@@ -929,7 +921,7 @@ const AudioDetailPage = () => {
                       {isOriginal && (
                         <div className="absolute top-1 left-1">
                           <span className="bg-blue-600 text-white text-xs px-1.5 py-0.5 rounded font-medium leading-tight">
-                            Original
+                            {t('audioDetail.originalPost')}
                           </span>
                         </div>
                       )}
@@ -946,15 +938,18 @@ const AudioDetailPage = () => {
             {loadingMorePosts && (
               <div className="flex items-center justify-center py-4">
                 <div className="w-6 h-6 border-2 border-gray-300 border-t-green-600 rounded-full animate-spin mr-2"></div>
-                <span className="text-sm text-gray-500">Cargando más contenido...</span>
+                <span className={`${classes.infoText} text-gray-500`}>{t('audioDetail.loadingMore')}</span>
               </div>
             )}
             
             {/* Mensaje cuando no hay más posts */}
             {!hasMorePosts && posts.length >= 12 && (
               <div className="flex items-center justify-center py-4">
-                <span className="text-sm text-gray-400">
-                  {totalPosts > posts.length ? `Mostrando ${posts.length} de ${totalPosts}` : 'No hay más contenido'}
+                <span className={`${classes.infoText} text-gray-400`}>
+                  {totalPosts > posts.length ? 
+                    t('audioDetail.showing', { current: posts.length, total: totalPosts }) : 
+                    t('audioDetail.noMoreContent')
+                  }
                 </span>
               </div>
             )}
@@ -964,11 +959,11 @@ const AudioDetailPage = () => {
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
               <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <MessageCircle className="w-8 h-8 text-gray-400" />
+                <MessageCircle className={`${layout.iconSize} text-gray-400`} />
               </div>
-              <h4 className="text-lg font-medium text-gray-900 mb-2">No hay contenido aún</h4>
-              <p className="text-gray-500 text-sm max-w-sm mx-auto">
-                Sé el primero en usar este audio en tu contenido
+              <h4 className="text-lg font-medium text-gray-900 mb-2">{t('audioDetail.noContent')}</h4>
+              <p className={`${classes.infoText} text-gray-500 max-w-sm mx-auto`}>
+                {t('audioDetail.beFirst')}
               </p>
             </div>
           </div>
