@@ -489,8 +489,8 @@ const AudioDetailPage = () => {
               )}
             </div>
             
-            {/* Nombre del artista en mayúsculas */}
-            <span className="text-lg font-bold text-gray-900 uppercase tracking-wide">
+            {/* Nombre del artista en mayúsculas - más pequeño */}
+            <span className="text-base font-bold text-gray-900 uppercase tracking-wide">
               {(audio?.artist || 'Artista desconocido').toUpperCase()}
             </span>
             
