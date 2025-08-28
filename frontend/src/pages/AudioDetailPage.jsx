@@ -343,23 +343,29 @@ const AudioDetailPage = () => {
   if (error || !audio) {
     return (
       <div className="min-h-screen bg-white flex flex-col">
-        {/* Encabezado con degradado verde/beige */}
-        <div className="h-[10vh] bg-gradient-to-r from-green-100 via-green-50 to-yellow-50 flex items-center justify-between px-4">
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            onClick={() => navigate(-1)}
-            className="text-gray-900 hover:bg-white/50 p-3"
-          >
-            <ArrowLeft className="w-7 h-7 stroke-2" />
-          </Button>
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            className="text-gray-900 hover:bg-white/50 p-3"
-          >
-            <Share2 className="w-7 h-7 stroke-2" />
-          </Button>
+        {/* Contenedor del header con degradado difuminado */}
+        <div className="relative">
+          {/* Fondo degradado que se extiende desde header hacia abajo */}
+          <div className="absolute inset-0 bg-gradient-to-b from-green-100 via-green-50 to-transparent h-[17.5vh]"></div>
+          
+          {/* Encabezado con degradado verde/beige */}
+          <div className="relative h-[10vh] flex items-center justify-between px-4 z-10">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={() => navigate(-1)}
+              className="text-gray-900 hover:bg-white/50 p-3"
+            >
+              <ArrowLeft className="w-7 h-7 stroke-2" />
+            </Button>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="text-gray-900 hover:bg-white/50 p-3"
+            >
+              <Share2 className="w-7 h-7 stroke-2" />
+            </Button>
+          </div>
         </div>
         
         <div className="flex-1 flex items-center justify-center px-4">
