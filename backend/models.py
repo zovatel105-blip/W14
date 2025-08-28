@@ -452,5 +452,32 @@ class UserAudioUse(BaseModel):
     poll_id: Optional[str] = None  # ID del poll donde se usó (si aplica)
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
+# =============  AUDIO FAVORITES MODELS =============
+
+class AudioFavorite(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str  # Usuario que marcó como favorito
+    audio_id: str  # ID del audio favorito
+    audio_type: str = "system"  # "system" para música del sistema, "user" para audio de usuario
+    audio_title: Optional[str] = None  # Cached title for display
+    audio_artist: Optional[str] = None  # Cached artist for display  
+    audio_cover_url: Optional[str] = None  # Cached cover for display
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+
+class AudioFavoriteCreate(BaseModel):
+    audio_id: str
+    audio_type: str = "system"  # "system" o "user"
+
+class AudioFavoriteResponse(BaseModel):
+    id: str
+    audio_id: str
+    audio_type: str
+    audio_title: Optional[str] = None
+    audio_artist: Optional[str] = None
+    audio_cover_url: Optional[str] = None
+    created_at: datetime
+    # Información completa del audio cuando esté disponible
+    audio_details: Optional[Dict[str, Any]] = None
+
 # Necesario para resolver referencia circular
 CommentResponse.model_rebuild()
