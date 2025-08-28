@@ -3867,10 +3867,42 @@ async def get_posts_using_audio(
                 "message": "No posts found using this audio"
             }
         
-        # Obtener información de autores
-        author_ids = list(set(poll["author_id"] for poll in polls))
-        authors = await db.users.find({"id": {"$in": author_ids}}).to_list(len(author_ids))
-        authors_dict = {author["id"]: UserResponse(**author) for author in authors}
+        # Obtener información de autores con mejor manejo de errores
+        author_ids = []
+        for poll in polls:
+            if poll.get("author_id"):
+                author_ids.append(poll["author_id"])
+        
+        author_ids = list(set(author_ids))  # Eliminar duplicados
+        logger.info(f"👤 Buscando información de {len(author_ids)} autores")
+        
+        authors = []
+        if author_ids:
+            try:
+                authors = await db.users.find({"id": {"$in": author_ids}}).to_list(len(author_ids))
+                logger.info(f"✅ Información de autores obtenida: {len(authors)}")
+            except Exception as e:
+                logger.error(f"❌ Error obteniendo autores: {str(e)}")
+                authors = []
+        
+        authors_dict = {}
+        for author in authors:
+            try:
+                authors_dict[author["id"]] = UserResponse(**author)
+            except Exception as e:
+                logger.error(f"❌ Error procesando autor {author.get('id', 'unknown')}: {str(e)}")
+                # Crear un usuario básico como fallback
+                authors_dict[author["id"]] = UserResponse(
+                    id=author.get("id", "unknown"),
+                    username=author.get("username", "usuario_desconocido"),
+                    email=author.get("email", ""),
+                    display_name=author.get("display_name", author.get("username", "Usuario Desconocido")),
+                    avatar_url=author.get("avatar_url"),
+                    bio=author.get("bio", ""),
+                    is_public=author.get("is_public", True),
+                    allow_messages=author.get("allow_messages", True),
+                    created_at=author.get("created_at", datetime.utcnow().isoformat())
+                )
         
         # Construir respuesta de polls
         poll_responses = []
