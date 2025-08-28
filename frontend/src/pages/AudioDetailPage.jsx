@@ -602,6 +602,16 @@ const AudioDetailPage = () => {
     // TODO: Implement share functionality
   };
 
+  const handlePollComment = (pollId) => {
+    console.log('💬 Comment on poll:', pollId);
+    // TODO: Implement comment functionality
+  };
+
+  const handlePollSave = (pollId) => {
+    console.log('💾 Save poll:', pollId);
+    // TODO: Implement save functionality
+  };
+
   // Utility functions now handled by i18n system
 
   if (loading) {
