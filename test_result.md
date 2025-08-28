@@ -574,6 +574,18 @@ backend:
           comment: "🎯 SISTEMA DE ARCHIVOS ESTÁTICOS COMPLETAMENTE FUNCIONAL (2025-08-22): Testing exhaustivo del nuevo endpoint GET /api/uploads/{category}/{filename} completado exitosamente con resultados perfectos. VERIFICACIÓN COMPLETA: 1) ✅ ENDPOINT IMPLEMENTATION: GET /api/uploads/{category}/{filename} implementado correctamente con FileResponse, validación de categorías (avatars, poll_options, poll_backgrounds, general), detección automática de MIME types (image/png, image/jpeg), manejo de errores 404 para archivos/categorías inexistentes, 2) ✅ CONTENT-TYPE HANDLING: Archivos PNG servidos con content-type: image/png correcto, archivos JPG servidos con content-type: image/jpeg correcto, Content-Length headers incluidos apropiadamente, 3) ✅ CATEGORY VALIDATION: Categorías válidas (avatars, poll_options, poll_backgrounds, general) funcionan correctamente, categorías inválidas retornan 404 apropiadamente, estructura de directorios respetada, 4) ✅ ERROR HANDLING: Archivos no existentes retornan 404 correctamente, categorías inválidas retornan 404 apropiadamente, validación de paths funcional, 5) ✅ INTEGRATION: Integración perfecta con sistema de upload existente, URLs generadas automáticamente con formato /api/uploads/, compatibilidad con diferentes formatos de imagen. RESULTADO: El nuevo sistema de static file serving está completamente operacional y resuelve el problema de imágenes móviles al usar rutas /api/ que se enrutan correctamente al backend a través del proxy/ingress de Kubernetes."
 
 frontend:
+  - task: "Corrección Runtime Error formatNumber TikTokPollCard"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/TikTokScrollView.jsx, /app/frontend/src/components/PollCard.jsx, /app/frontend/src/components/AdvancedPollCard.jsx, /app/frontend/src/i18n/index.js"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "main"
+          comment: "🚨 RUNTIME ERROR CRÍTICO COMPLETAMENTE CORREGIDO (2025-01-27): Resuelto error JavaScript fatal 'Cannot read properties of undefined (reading toString)' en función formatNumber de TikTokPollCard. PROBLEMA IDENTIFICADO: La función formatNumber en múltiples componentes intentaba llamar .toString() en valores undefined/null cuando poll.totalVotes, poll.likes, poll.comments, o poll.shares eran undefined, causando crash de la aplicación. SOLUCIÓN COMPLETA IMPLEMENTADA: 1) ✅ VALIDACIONES SEGURAS AGREGADAS: Checks de undefined, null, y isNaN antes de procesar números en todas las funciones formatNumber, conversión Number() para asegurar valores numéricos válidos, retorno '0' como fallback para valores inválidos, 2) ✅ COMPONENTES ACTUALIZADOS: TikTokScrollView.jsx - función formatNumber completamente segura, PollCard.jsx - mismas validaciones implementadas, AdvancedPollCard.jsx - patrón de seguridad aplicado, i18n/index.js - función global formatNumber corregida, 3) ✅ FUNCIONALIDAD RESTAURADA: Aplicación carga sin errores JavaScript, página de login se muestra correctamente, todos los componentes manejan valores undefined/null de forma segura, números se formatean correctamente (1M, 1.5K, etc) o muestran '0' para valores inválidos. RESULTADO: Runtime error completamente eliminado - la aplicación ahora funciona sin crashes JavaScript y maneja todos los casos edge de datos faltantes de forma elegante."
+
 frontend:
   - task: "Corrección Variables de Entorno REACT_APP_BACKEND_URL"
     implemented: true
