@@ -44,25 +44,70 @@ const AudioDetailPage = () => {
     fetchPostsUsingAudio();
   }, [audioId]);
 
-  // Check favorites and set original user after audio is loaded
+  // Check favorites and determine original user after audio is loaded
   useEffect(() => {
     if (audio) {
       checkIfFavorited();
       
-      // Si no se ha determinado el usuario original después de cargar posts, usar artista como fallback
-      if (!originalUser) {
-        if (audio.is_system_music || audio.source === 'iTunes') {
-          setOriginalUser(`${audio.artist} (artista original)`);
-          console.log('🎵 Usando artista como usuario original:', audio.artist);
-        } else if (audio.created_by) {
-          setOriginalUser(audio.created_by);
-          console.log('🎵 Usando creador del audio:', audio.created_by);
-        } else {
-          setOriginalUser('Artista original');
-        }
-      }
+      // Determinar usuario original de forma más simple y clara
+      determineOriginalUser();
     }
-  }, [audio, originalUser]);
+  }, [audio, posts]); // Depende de audio Y posts
+
+  const determineOriginalUser = () => {
+    console.log('🔍 Determinando usuario original del audio:', audio?.title);
+    
+    // Caso 1: Si hay posts que usan este audio, encontrar el más antiguo
+    if (posts && posts.length > 0) {
+      console.log(`📊 Encontrados ${posts.length} posts usando este audio`);
+      
+      const sortedByDate = [...posts].sort((a, b) => 
+        new Date(a.created_at) - new Date(b.created_at)
+      );
+      const originalPost = sortedByDate[0];
+      
+      console.log('📅 Post más antiguo:', originalPost?.created_at, 'por usuario:', originalPost?.user);
+      
+      // Prioridad: display_name > username > created_by > fallback
+      let originalUserName = 'Usuario desconocido';
+      
+      if (originalPost?.user) {
+        originalUserName = originalPost.user.display_name || 
+                          originalPost.user.username || 
+                          'Usuario desconocido';
+      } else if (originalPost?.created_by) {
+        originalUserName = originalPost.created_by;
+      } else if (originalPost?.author) {
+        originalUserName = originalPost.author.display_name || 
+                          originalPost.author.username || 
+                          'Usuario desconocido';
+      }
+      
+      setOriginalUser(originalUserName);
+      console.log('✅ Usuario original determinado desde posts:', originalUserName);
+      return;
+    }
+    
+    // Caso 2: Para música del sistema sin posts, usar artista
+    if (audio?.is_system_music || audio?.source === 'iTunes' || audio?.source === 'iTunes API') {
+      const artistName = `${audio.artist} (artista original)`;
+      setOriginalUser(artistName);
+      console.log('✅ Usuario original determinado (música del sistema):', artistName);
+      return;
+    }
+    
+    // Caso 3: Para audio de usuario sin posts, usar quien lo subió
+    if (audio?.created_by) {
+      setOriginalUser(audio.created_by);
+      console.log('✅ Usuario original determinado (creador del audio):', audio.created_by);
+      return;
+    }
+    
+    // Caso 4: Último fallback
+    const fallbackUser = 'Primera persona en usar este sonido';
+    setOriginalUser(fallbackUser);
+    console.log('⚠️ Usuario original determinado (fallback):', fallbackUser);
+  };
 
   const checkIfFavorited = async () => {
     try {
