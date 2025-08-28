@@ -3934,7 +3934,7 @@ async def get_posts_using_audio(
                         thumbnail_url = option.get("thumbnail_url")
                         
                         if media_url and not thumbnail_url and option.get("media_type") == "video":
-                            thumbnail_url = get_thumbnail_for_media_url(media_url)
+                            thumbnail_url = await get_thumbnail_for_media_url(media_url)
                         
                         option_dict = {
                             "id": option.get("id", str(uuid.uuid4())),
