@@ -42,6 +42,7 @@ const AudioDetailPage = () => {
   useEffect(() => {
     fetchAudioDetails();
     fetchPostsUsingAudio();
+    checkIfFavorited();
   }, [audioId]);
 
   const fetchAudioDetails = async () => {
