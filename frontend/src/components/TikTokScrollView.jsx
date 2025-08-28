@@ -222,13 +222,19 @@ const TikTokPollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, onCr
   };
 
   const formatNumber = (num) => {
-    if (num >= 1000000) {
-      return `${(num / 1000000).toFixed(1)}M`;
+    // Handle undefined, null, or non-numeric values
+    if (num === undefined || num === null || isNaN(num)) {
+      return '0';
     }
-    if (num >= 1000) {
-      return `${(num / 1000).toFixed(1)}K`;
+    
+    const numValue = Number(num);
+    if (numValue >= 1000000) {
+      return `${(numValue / 1000000).toFixed(1)}M`;
     }
-    return num.toString();
+    if (numValue >= 1000) {
+      return `${(numValue / 1000).toFixed(1)}K`;
+    }
+    return numValue.toString();
   };
 
   const getPercentage = (votes) => {
