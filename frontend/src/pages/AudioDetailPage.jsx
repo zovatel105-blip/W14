@@ -37,17 +37,8 @@ const AudioDetailPage = () => {
   const [currentOffset, setCurrentOffset] = useState(0);
   const [totalPosts, setTotalPosts] = useState(0);
 
-  // Generate mock waveform data
-  useEffect(() => {
-    const generateWaveform = () => {
-      const data = [];
-      for (let i = 0; i < 50; i++) {
-        data.push(Math.random() * 100 + 20);
-      }
-      setWaveformData(data);
-    };
-    generateWaveform();
-  }, [audio]);
+  // Remove old hardcoded waveform generation
+  // Generate mock waveform data - REMOVED (now using real AudioWaveform component)
 
   useEffect(() => {
     fetchAudioDetails();
