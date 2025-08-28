@@ -286,7 +286,7 @@ class PollCreate(BaseModel):
 class PollResponse(BaseModel):
     id: str
     title: str
-    author: UserResponse  # Información del autor
+    author: Optional[UserResponse] = None  # Hacer opcional para manejar casos sin autor
     description: Optional[str] = None
     options: List[dict]  # Incluirá información del usuario de cada opción
     total_votes: int
