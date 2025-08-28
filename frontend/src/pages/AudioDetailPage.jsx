@@ -425,8 +425,8 @@ const AudioDetailPage = () => {
 
         {/* Sección del audio (altura ~15% de pantalla) - sin línea separadora */}
         <div className="relative h-[15vh] flex items-center px-4 py-2 z-10">
-        {/* Miniatura cuadrada del álbum: lado izquierdo, ~12% del ancho */}
-        <div className="w-[12vw] h-[12vw] max-w-20 max-h-20 min-w-16 min-h-16 flex-shrink-0 relative">
+        {/* Miniatura cuadrada del álbum: lado izquierdo, un poco más grande */}
+        <div className="w-[14vw] h-[14vw] max-w-24 max-h-24 min-w-18 min-h-18 flex-shrink-0 relative">
           <div className="w-full h-full rounded-xl overflow-hidden bg-gray-100 border border-gray-200">
             {audio?.cover_url ? (
               <img 
