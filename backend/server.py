@@ -3986,6 +3986,8 @@ async def get_posts_using_audio(
                 
             except Exception as poll_error:
                 logger.error(f"❌ Error procesando post {i+1}: {str(poll_error)}")
+                logger.error(f"❌ Traceback completo:", exc_info=True)
+                logger.error(f"❌ Poll data que causó error: {poll_data}")
                 continue
         
         logger.info(f"🎉 Respuesta construida: {len(poll_responses)} posts de {total} total")
