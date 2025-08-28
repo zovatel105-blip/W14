@@ -618,6 +618,11 @@ const AudioDetailPage = () => {
     // TODO: Implement save functionality
   };
 
+  const handleExitTikTok = () => {
+    console.log('🚪 Exiting TikTok view');
+    setShowTikTokView(false);
+  };
+
   // Utility functions now handled by i18n system
 
   if (loading) {
