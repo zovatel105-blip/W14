@@ -265,9 +265,9 @@ const TikTokPollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, onCr
                 className="relative transition-transform duration-200 hover:scale-110"
               >
                 <Avatar className="ring-3 ring-yellow-400 shadow-lg shadow-yellow-400/50 w-12 h-12 relative">
-                  <AvatarImage src={poll.authorUser?.avatar || "https://github.com/shadcn.png"} />
+                  <AvatarImage src={poll.author?.avatar_url || poll.authorUser?.avatar || "https://github.com/shadcn.png"} />
                   <AvatarFallback className="bg-gradient-to-br from-yellow-500 to-orange-600 text-white font-bold">
-                    {((poll.author || 'U') + '').charAt(0).toUpperCase()}
+                    {(poll.author?.display_name || poll.author?.username || poll.authorUser?.displayName || 'U').charAt(0).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
               </button>
