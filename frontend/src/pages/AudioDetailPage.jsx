@@ -650,8 +650,8 @@ const AudioDetailPage = () => {
             onClick={handleAddToItunes}
             className="w-[45%] h-12 bg-gray-100 hover:bg-gray-200 text-gray-700 border-0 rounded-lg flex items-center justify-center gap-2 font-medium"
           >
-            <Plus className="w-4 h-4" />
-            Add to music app
+            <Apple className="w-4 h-4" />
+            {audio?.source === 'iTunes' || audio?.is_system_music ? 'Open in Apple Music' : 'No disponible'}
           </Button>
           
           {/* Botón Add to Favorites - 45% del ancho */}
