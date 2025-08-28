@@ -251,10 +251,17 @@ const AudioDetailPage = () => {
     });
   };
 
-  const handleDownload = () => {
+  const handleAddToItunes = () => {
     toast({
-      title: "Función próximamente",
-      description: "La descarga estará disponible pronto"
+      title: "Añadir a iTunes",
+      description: "Función próximamente disponible"
+    });
+  };
+
+  const handleSave = () => {
+    toast({
+      title: "Guardado",
+      description: "Audio guardado en tus favoritos"
     });
   };
 
