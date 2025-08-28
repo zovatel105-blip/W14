@@ -578,28 +578,28 @@ const AudioDetailPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white flex flex-col">
+      <div className={classes.container}>
         {/* Contenedor del header con degradado difuminado */}
         <div className="relative">
           {/* Fondo degradado que se extiende desde header hacia abajo */}
-          <div className="absolute inset-0 bg-gradient-to-b from-green-100 via-green-50 to-transparent h-[17.5vh]"></div>
+          <div className={`${classes.gradientBg} h-[17.5vh]`}></div>
           
           {/* Encabezado con degradado verde/beige */}
-          <div className="relative h-[10vh] flex items-center justify-between px-4 z-10">
+          <div className={classes.header}>
             <Button 
               variant="ghost" 
               size="sm" 
               onClick={() => navigate(-1)}
               className="text-gray-900 hover:bg-white/50 p-3"
             >
-              <ArrowLeft className="w-7 h-7 stroke-2" />
+              <ArrowLeft className={`${layout.iconSize} stroke-2`} />
             </Button>
             <Button 
               variant="ghost" 
               size="sm" 
               className="text-gray-900 hover:bg-white/50 p-3"
             >
-              <Share2 className="w-7 h-7 stroke-2" />
+              <Share2 className={`${layout.iconSize} stroke-2`} />
             </Button>
           </div>
         </div>
@@ -610,8 +610,8 @@ const AudioDetailPage = () => {
               <div className="w-16 h-16 border-4 border-green-200 border-t-green-600 rounded-full animate-spin"></div>
               <Music className="w-6 h-6 text-green-600 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
             </div>
-            <p className="text-gray-600 text-lg font-medium">Cargando información del audio...</p>
-            <p className="text-gray-500 text-sm mt-2">Audio ID: {audioId}</p>
+            <p className="text-gray-600 text-lg font-medium">{t('audioDetail.loading')}</p>
+            <p className="text-gray-500 text-sm mt-2">{t('audioDetail.audioId', { id: audioId })}</p>
           </div>
         </div>
       </div>
