@@ -346,308 +346,214 @@ const AudioDetailPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-white">
       
-      {/* Header móvil tipo TikTok */}
-      <div className="sticky top-0 z-50 bg-black/90 backdrop-blur-sm border-b border-gray-800">
+      {/* Header minimalista */}
+      <div className="sticky top-0 z-50 bg-white border-b border-gray-200">
         <div className="flex items-center justify-between px-4 py-3">
           <Button 
             variant="ghost" 
             size="sm" 
             onClick={() => navigate(-1)}
-            className="text-white hover:bg-white/10 p-2"
+            className="text-gray-900 hover:bg-gray-100 p-2"
           >
             <ArrowLeft className="w-6 h-6" />
           </Button>
-          <h1 className="text-lg font-semibold">Audio original</h1>
-          <Button 
-            variant="ghost"
-            onClick={handleLike}
-            className="text-white hover:bg-white/10 p-2"
-          >
-            <Heart className={`w-6 h-6 ${isLiked ? 'fill-red-500 text-red-500' : ''}`} />
-          </Button>
+          <h1 className="text-lg font-medium text-gray-900">Audio</h1>
+          <div className="w-10"></div> {/* Espaciador */}
         </div>
       </div>
 
-      {/* Hero Section Móvil */}
       <div className="px-4 py-6">
         
-        {/* Información del Creador/Artista estilo TikTok */}
-        <div className="flex items-center mb-6">
-          <div className="relative">
-            <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-white/20">
-              {audio?.cover_url ? (
-                <img 
-                  src={audio.cover_url} 
-                  alt={audio.artist}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="w-full h-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
-                  <Music className="w-6 h-6 text-white" />
-                </div>
-              )}
-            </div>
-            {audio?.is_system_music && (
-              <div className="absolute -bottom-1 -right-1 bg-blue-500 rounded-full p-1">
-                <Radio className="w-3 h-3 text-white" />
-              </div>
-            )}
-          </div>
+        {/* Parte Superior - Información del Audio */}
+        <div className="mb-8">
           
-          <div className="ml-3 flex-1">
-            <div className="flex items-center gap-2">
-              <h2 className="text-lg font-bold text-white">
-                {audio?.artist || 'Artista'}
-              </h2>
-              {audio?.is_system_music && (
-                <div className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">
-                  <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                  </svg>
-                </div>
-              )}
-            </div>
-            <p className="text-gray-400 text-sm">
-              {audio?.source || 'Audio original'}
-            </p>
-          </div>
-        </div>
-
-        {/* Botón Principal "Usar audio" estilo TikTok */}
-        <Button 
-          onClick={handleUseThisSound}
-          className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-4 rounded-lg text-base mb-6 transition-all duration-200"
-        >
-          Usar audio
-        </Button>
-
-        {/* Cover Art Grande y Player */}
-        <div className="relative mx-auto mb-6" style={{width: '280px', height: '280px'}}>
-          <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl group">
+          {/* Fila principal con miniatura y detalles */}
+          <div className="flex items-start gap-4 mb-6">
             
-            {/* Efecto vinyl giratorio cuando reproduce */}
-            {isPlaying && (
-              <div className="absolute inset-0 z-0">
-                <div className="w-full h-full bg-gradient-to-br from-pink-500 via-red-500 to-orange-500 rounded-full animate-spin opacity-20"></div>
-                <div className="absolute inset-4 bg-black rounded-full opacity-80"></div>
-                <div className="absolute inset-8 bg-gray-900 rounded-full"></div>
-                <div className="absolute top-1/2 left-1/2 w-3 h-3 bg-gray-700 rounded-full transform -translate-x-1/2 -translate-y-1/2"></div>
-              </div>
-            )}
-            
-            {audio?.cover_url ? (
-              <img 
-                src={audio.cover_url} 
-                alt={audio.title}
-                className={`relative z-10 w-full h-full object-cover transition-transform duration-300 ${isPlaying ? 'animate-pulse' : 'group-hover:scale-105'}`}
-              />
-            ) : (
-              <div className="relative z-10 w-full h-full bg-gradient-to-br from-gray-800 via-gray-700 to-gray-600 flex items-center justify-center group-hover:from-gray-700 group-hover:to-gray-500 transition-colors">
-                <Music className="w-20 h-20 text-white" />
-              </div>
-            )}
-            
-            {/* Botón de Play Central */}
-            <button
-              onClick={handlePlayPause}
-              className="absolute inset-0 z-20 bg-black/40 backdrop-blur-sm flex items-center justify-center opacity-0 hover:opacity-100 transition-all duration-300 group-hover:bg-black/30"
-            >
-              <div className="bg-white/95 backdrop-blur-sm rounded-full p-4 transform hover:scale-110 transition-transform shadow-2xl">
-                {isPlaying ? (
-                  <Pause className="w-8 h-8 text-gray-900" />
+            {/* Miniatura circular del audio a la izquierda */}
+            <div className="relative flex-shrink-0">
+              <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-100 border border-gray-200">
+                {audio?.cover_url ? (
+                  <img 
+                    src={audio.cover_url} 
+                    alt={audio.title}
+                    className="w-full h-full object-cover"
+                  />
                 ) : (
-                  <Play className="w-8 h-8 text-gray-900 ml-1" />
+                  <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                    <Music className="w-6 h-6 text-gray-400" />
+                  </div>
                 )}
               </div>
-            </button>
+              
+              {/* Botón de play superpuesto */}
+              <button
+                onClick={handlePlayPause}
+                className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity"
+              >
+                {isPlaying ? (
+                  <Pause className="w-4 h-4 text-white" />
+                ) : (
+                  <Play className="w-4 h-4 text-white ml-0.5" />
+                )}
+              </button>
+            </div>
 
-            {/* Indicador de reproducción */}
-            {isPlaying && (
-              <div className="absolute top-4 right-4 z-30">
-                <div className="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-medium flex items-center gap-2">
-                  <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-                  Reproduciendo
+            {/* Información del audio */}
+            <div className="flex-1 min-w-0">
+              {/* Título de la canción en negrita */}
+              <h2 className="text-lg font-bold text-gray-900 mb-1 truncate">
+                {audio?.title || 'Título no disponible'}
+              </h2>
+              
+              {/* Nombre del artista debajo */}
+              <p className="text-sm text-gray-600 mb-2 truncate">
+                {audio?.artist || 'Artista desconocido'}
+              </p>
+              
+              {/* Indicador de tiempo + cantidad de reels */}
+              <div className="flex items-center gap-4 text-xs text-gray-500 mb-3">
+                <div className="flex items-center gap-1">
+                  <Clock className="w-3 h-3" />
+                  <span>{formatDuration(audio?.duration || 0)}</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <Users className="w-3 h-3" />
+                  <span>{formatNumber(audio?.uses_count || 0)} reels</span>
                 </div>
               </div>
-            )}
+              
+              {/* Fila de botones pequeños */}
+              <div className="flex items-center gap-3">
+                {/* Botón pequeño iTunes "Añadir" */}
+                <Button 
+                  onClick={handleAddToItunes}
+                  size="sm"
+                  variant="outline"
+                  className="h-7 px-3 text-xs border-gray-300 text-gray-700 hover:bg-gray-50 flex items-center gap-1"
+                >
+                  <Apple className="w-3 h-3" />
+                  Añadir
+                </Button>
+                
+                {/* Icono guardar (marcador) */}
+                <button 
+                  onClick={handleSave}
+                  className="p-1.5 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  <Bookmark className="w-4 h-4" />
+                </button>
+                
+                {/* Icono compartir (avión papel) */}
+                <button 
+                  onClick={handleShare}
+                  className="p-1.5 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
+                >
+                  <Send className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
           </div>
+
+          {/* Botón principal verde centrado "Usar audio" */}
+          <Button 
+            onClick={handleUseThisSound}
+            className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-3 rounded-xl text-base transition-colors"
+          >
+            Usar audio
+          </Button>
         </div>
 
-        {/* Información del Audio */}
-        <div className="text-center mb-6">
-          <h3 className="text-xl font-bold text-white mb-2">
-            {audio?.title}
+        {/* Parte Inferior - Rejilla de videos */}
+        <div>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            Videos ({posts.length})
           </h3>
-          <p className="text-gray-400 text-sm mb-4">
-            Audio original · {audio?.artist}
-          </p>
           
-          {/* Stats compactos */}
-          <div className="flex items-center justify-center gap-6 text-sm text-gray-400 mb-4">
-            <div className="flex items-center gap-1">
-              <Clock className="w-4 h-4" />
-              <span>{formatDuration(audio?.duration || 0)}</span>
+          {postsLoading ? (
+            <div className="text-center py-12">
+              <div className="w-8 h-8 border-2 border-gray-300 border-t-green-600 rounded-full animate-spin mx-auto mb-4"></div>
+              <p className="text-gray-500 text-sm">Cargando videos...</p>
             </div>
-            <div className="flex items-center gap-1">
-              <Users className="w-4 h-4" />
-              <span>{formatNumber(audio?.uses_count || 0)} usos</span>
+          ) : posts.length > 0 ? (
+            /* Rejilla de videos (3 columnas) con miniaturas rectangulares */
+            <div className="grid grid-cols-3 gap-2">
+              {posts.map((post, index) => (
+                <div key={post.id} className="relative group cursor-pointer">
+                  
+                  {/* Miniatura rectangular */}
+                  <div className="aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
+                    {post.media_url ? (
+                      post.media_url.includes('.mp4') || post.media_url.includes('.mov') ? (
+                        /* Video thumbnail */
+                        <video 
+                          src={post.media_url}
+                          className="w-full h-full object-cover"
+                          muted
+                          preload="metadata"
+                        />
+                      ) : (
+                        /* Imagen thumbnail */
+                        <img 
+                          src={post.media_url} 
+                          alt={post.title}
+                          className="w-full h-full object-cover"
+                        />
+                      )
+                    ) : (
+                      /* Placeholder */
+                      <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                        <div className="text-center">
+                          <MessageCircle className="w-6 h-6 text-gray-400 mx-auto mb-1" />
+                          <p className="text-xs text-gray-500 px-2 leading-tight">
+                            {post.title || 'Video'}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* Overlay con número de votos en esquina inferior izquierda */}
+                    <div className="absolute bottom-2 left-2">
+                      <div className="bg-black/70 backdrop-blur-sm text-white px-2 py-1 rounded-md flex items-center gap-1">
+                        <BarChart3 className="w-3 h-3" />
+                        <span className="text-xs font-medium">
+                          {formatNumber(
+                            (post.options || []).reduce((total, option) => total + (option.votes || 0), 0) || 
+                            Math.floor(Math.random() * 1000) + 50
+                          )}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    {/* Overlay hover */}
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-200"></div>
+                  </div>
+                </div>
+              ))}
             </div>
-            <div className="flex items-center gap-1">
-              <Eye className="w-4 h-4" />
-              <span>{formatNumber((audio?.uses_count || 0) * 4.7)} vistas</span>
+          ) : (
+            /* Estado vacío */
+            <div className="text-center py-16">
+              <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <MessageCircle className="w-8 h-8 text-gray-400" />
+              </div>
+              <h4 className="text-lg font-medium text-gray-900 mb-2">No hay videos aún</h4>
+              <p className="text-gray-500 text-sm mb-6 max-w-sm mx-auto">
+                Sé el primero en usar este audio en tu video
+              </p>
+              <Button 
+                onClick={handleUseThisSound}
+                className="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg font-medium"
+              >
+                Crear video
+              </Button>
             </div>
-          </div>
-
-          {/* Tags estilo TikTok */}
-          <div className="flex flex-wrap justify-center gap-2 mb-6">
-            {audio?.category && (
-              <span className="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-xs font-medium">
-                #{audio.category}
-              </span>
-            )}
-            {audio?.genre && (
-              <span className="px-3 py-1 bg-gray-800 text-gray-300 rounded-full text-xs font-medium">
-                #{audio.genre}
-              </span>
-            )}
-            <span className="px-3 py-1 bg-red-500/20 text-red-400 rounded-full text-xs font-medium flex items-center gap-1">
-              <TrendingUp className="w-3 h-3" />
-              Trending
-            </span>
-          </div>
-        </div>
-
-        {/* Waveform Visual (más compacto para móvil) */}
-        <div className="bg-gray-900/50 backdrop-blur-sm rounded-xl p-4 mb-6">
-          <div className="flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2">
-              <AudioWaveform className="w-4 h-4 text-red-400" />
-              <span className="text-white text-sm font-medium">Waveform</span>
-            </div>
-            <span className="text-xs text-gray-400">{formatDuration(audio?.duration || 0)}</span>
-          </div>
-          <div className="flex items-end gap-1 h-16" ref={waveformRef}>
-            {waveformData.map((height, index) => (
-              <div
-                key={index}
-                className={`bg-gradient-to-t from-red-500 to-pink-400 rounded-full transition-all duration-300 ${
-                  isPlaying && index < playbackPosition ? 'opacity-100' : 'opacity-40'
-                }`}
-                style={{
-                  height: `${height}%`,
-                  width: '3px',
-                  animation: isPlaying ? `waveform 1s ease-in-out infinite ${index * 0.1}s` : 'none'
-                }}
-              />
-            ))}
-          </div>
-        </div>
-
-        {/* Botones de Acción */}
-        <div className="grid grid-cols-3 gap-3 mb-8">
-          <Button 
-            variant="outline" 
-            onClick={handlePlayPause}
-            className="border-gray-600 bg-gray-800/50 hover:bg-gray-700 text-white rounded-xl py-3"
-          >
-            {isPlaying ? (
-              <Pause className="w-5 h-5" />
-            ) : (
-              <Play className="w-5 h-5" />
-            )}
-          </Button>
-          
-          <Button 
-            variant="outline" 
-            onClick={handleShare}
-            className="border-gray-600 bg-gray-800/50 hover:bg-gray-700 text-white rounded-xl py-3"
-          >
-            <Share2 className="w-5 h-5" />
-          </Button>
-          
-          <Button 
-            variant="outline"
-            onClick={handleDownload}
-            className="border-gray-600 bg-gray-800/50 hover:bg-gray-700 text-white rounded-xl py-3"
-          >
-            <Download className="w-5 h-5" />
-          </Button>
+          )}
         </div>
 
       </div>
-
-      {/* Sección de Posts que usan este audio */}
-      <div className="border-t border-gray-800 pt-6">
-        <div className="px-4 mb-4">
-          <h4 className="text-lg font-semibold text-white flex items-center gap-2">
-            Videos con este audio
-            <span className="bg-gray-800 text-gray-300 px-2 py-1 rounded-full text-sm">
-              {posts.length}
-            </span>
-          </h4>
-        </div>
-        
-        {postsLoading ? (
-          <div className="text-center py-12 px-4">
-            <div className="relative w-12 h-12 mx-auto mb-4">
-              <div className="w-12 h-12 border-4 border-gray-700 border-t-red-500 rounded-full animate-spin"></div>
-              <Music className="w-5 h-5 text-red-500 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
-            </div>
-            <p className="text-gray-400">Cargando videos...</p>
-          </div>
-        ) : posts.length > 0 ? (
-          <div className="space-y-4 px-4">
-            {posts.map((post) => (
-              <div key={post.id} className="bg-gray-900/30 rounded-xl p-4 border border-gray-800">
-                <PollCard 
-                  poll={post}
-                  onVote={(optionId) => {
-                    console.log('Vote for option:', optionId);
-                  }}
-                  onLike={(pollId) => {
-                    console.log('Like poll:', pollId);
-                  }}
-                  onShare={(pollId) => {
-                    console.log('Share poll:', pollId);
-                  }}
-                  onComment={(pollId) => {
-                    console.log('Comment on poll:', pollId);
-                  }}
-                />
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-16 px-4">
-            <div className="relative mb-6">
-              <div className="w-16 h-16 bg-gray-800 rounded-full flex items-center justify-center mx-auto border-2 border-gray-700">
-                <MessageCircle className="w-8 h-8 text-gray-500" />
-              </div>
-            </div>
-            <h5 className="text-white text-lg font-semibold mb-2">¡Sé el primero!</h5>
-            <p className="text-gray-400 mb-6 text-sm max-w-sm mx-auto">
-              Aún no hay videos con este audio. ¿Por qué no crear el primero?
-            </p>
-            <Button 
-              onClick={handleUseThisSound}
-              className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors"
-            >
-              <Plus className="w-4 h-4 mr-2" />
-              Crear video
-            </Button>
-          </div>
-        )}
-      </div>
-
-      {/* CSS personalizado para animaciones */}
-      <style jsx>{`
-        @keyframes waveform {
-          0%, 100% { transform: scaleY(1); }
-          50% { transform: scaleY(1.5); }
-        }
-      `}</style>
     </div>
   );
 };
