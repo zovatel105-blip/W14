@@ -383,31 +383,36 @@ const AudioDetailPage = () => {
   return (
     <div className="min-h-screen bg-white flex flex-col">
       
-      {/* Encabezado superior (altura ~10% de pantalla) */}
-      <div className="h-[10vh] bg-gradient-to-r from-green-100 via-green-50 to-yellow-50 flex items-center justify-between px-4">
-        {/* Flecha izquierda (←) esquina superior izquierda */}
-        <Button 
-          variant="ghost" 
-          size="sm" 
-          onClick={() => navigate(-1)}
-          className="text-gray-900 hover:bg-white/50 p-3"
-        >
-          <ArrowLeft className="w-7 h-7 stroke-2" />
-        </Button>
+      {/* Contenedor del header y sección audio con degradado difuminado */}
+      <div className="relative">
+        {/* Fondo degradado que se extiende desde header hasta mitad del audio */}
+        <div className="absolute inset-0 bg-gradient-to-b from-green-100 via-green-50 to-transparent h-[17.5vh]"></div>
         
-        {/* Flecha derecha (→) esquina superior derecha */}
-        <Button 
-          variant="ghost" 
-          size="sm" 
-          onClick={handleShare}
-          className="text-gray-900 hover:bg-white/50 p-3"
-        >
-          <Share2 className="w-7 h-7 stroke-2" />
-        </Button>
-      </div>
+        {/* Encabezado superior (altura ~10% de pantalla) */}
+        <div className="relative h-[10vh] flex items-center justify-between px-4 z-10">
+          {/* Flecha izquierda (←) esquina superior izquierda */}
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={() => navigate(-1)}
+            className="text-gray-900 hover:bg-white/50 p-3"
+          >
+            <ArrowLeft className="w-7 h-7 stroke-2" />
+          </Button>
+          
+          {/* Flecha derecha (→) esquina superior derecha */}
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={handleShare}
+            className="text-gray-900 hover:bg-white/50 p-3"
+          >
+            <Share2 className="w-7 h-7 stroke-2" />
+          </Button>
+        </div>
 
-      {/* Sección del audio (altura ~15% de pantalla) - sin línea separadora */}
-      <div className="h-[15vh] flex items-center px-4 py-2">
+        {/* Sección del audio (altura ~15% de pantalla) - sin línea separadora */}
+        <div className="relative h-[15vh] flex items-center px-4 py-2 z-10">
         {/* Miniatura cuadrada del álbum: lado izquierdo, ~12% del ancho */}
         <div className="w-[12vw] h-[12vw] max-w-20 max-h-20 min-w-16 min-h-16 flex-shrink-0 relative">
           <div className="w-full h-full rounded-xl overflow-hidden bg-gray-100 border border-gray-200">
