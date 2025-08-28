@@ -42,8 +42,14 @@ const AudioDetailPage = () => {
   useEffect(() => {
     fetchAudioDetails();
     fetchPostsUsingAudio();
-    checkIfFavorited();
   }, [audioId]);
+
+  // Check favorites after audio is loaded
+  useEffect(() => {
+    if (audio) {
+      checkIfFavorited();
+    }
+  }, [audio]);
 
   const checkIfFavorited = async () => {
     try {
