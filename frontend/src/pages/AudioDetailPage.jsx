@@ -555,7 +555,7 @@ const AudioDetailPage = () => {
                           <div className="text-center">
                             <MessageCircle className="w-6 h-6 text-gray-400 mx-auto mb-1" />
                             <p className="text-xs text-gray-500 px-2 leading-tight">
-                              {post.title || 'Video'}
+                              {post.title || 'Contenido'}
                             </p>
                           </div>
                         </div>
