@@ -337,22 +337,22 @@ const AudioDetailPage = () => {
   if (error || !audio) {
     return (
       <div className="min-h-screen bg-white flex flex-col">
-        {/* Encabezado con degradado verde */}
-        <div className="h-[10vh] bg-gradient-to-r from-green-100 via-green-50 to-yellow-50 flex items-center justify-between px-4">
+        {/* Encabezado con degradado rosa */}
+        <div className="h-[10vh] bg-gradient-to-r from-pink-100 via-pink-50 to-yellow-50 flex items-center justify-between px-4">
           <Button 
             variant="ghost" 
             size="sm" 
             onClick={() => navigate(-1)}
             className="text-gray-900 hover:bg-white/50 p-3"
           >
-            <ArrowLeft className="w-6 h-6" />
+            <ArrowLeft className="w-7 h-7 stroke-2" />
           </Button>
           <Button 
             variant="ghost" 
             size="sm" 
             className="text-gray-900 hover:bg-white/50 p-3"
           >
-            <Share2 className="w-6 h-6" />
+            <Share2 className="w-7 h-7 stroke-2" />
           </Button>
         </div>
         
