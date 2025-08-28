@@ -3972,7 +3972,11 @@ async def get_posts_using_audio(
                     category=poll_data.get("category"),
                     is_featured=poll_data.get("is_featured", False)
                 )
-                poll_responses.append(poll_response.dict())
+                
+                # Convertir a dict y agregar campo user para retrocompatibilidad
+                poll_dict = poll_response.dict()
+                poll_dict["user"] = author.dict() if author else None  # Agregar campo user igual a author
+                poll_responses.append(poll_dict)
                 logger.info(f"✅ Post {i+1} procesado exitosamente")
                 
             except Exception as poll_error:
