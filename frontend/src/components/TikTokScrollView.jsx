@@ -288,8 +288,8 @@ const TikTokPollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, onCr
                     e.stopPropagation();
                     // Crear objeto de usuario con username correcto
                     const userToFollow = poll.authorUser || { 
-                      username: poll.author.toLowerCase().replace(/\s+/g, '_'),
-                      displayName: poll.author,
+                      username: (poll.author?.username || poll.author?.display_name || 'unknown').toLowerCase().replace(/\s+/g, '_'),
+                      displayName: poll.author?.display_name || poll.author?.username || 'Usuario',
                       id: authorUserId 
                     };
                     console.log('📝 userToFollow object:', userToFollow);
