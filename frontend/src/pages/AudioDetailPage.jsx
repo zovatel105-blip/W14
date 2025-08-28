@@ -139,14 +139,29 @@ const AudioDetailPage = () => {
           const sortedByDate = [...data.posts].sort((a, b) => 
             new Date(a.created_at) - new Date(b.created_at)
           );
-          const firstPost = sortedByDate[0];
-          setOriginalUser(firstPost.user?.display_name || firstPost.user?.username || 'Usuario original');
+          const originalPost = sortedByDate[0];
+          
+          // Priorizar display_name, luego username, luego un fallback
+          const originalUserName = originalPost.user?.display_name || 
+                                  originalPost.user?.username || 
+                                  originalPost.created_by ||
+                                  'Usuario desconocido';
+          
+          setOriginalUser(originalUserName);
+          console.log('🎵 Usuario original del audio encontrado:', originalUserName, 'del post más antiguo:', originalPost.created_at);
+        } else {
+          // Si no hay posts, intentar obtener info del audio mismo
+          setOriginalUser(audio?.created_by || 'Usuario desconocido');
+          console.log('🎵 No hay posts, usando info del audio para usuario original');
         }
       } else {
         console.error('Error fetching posts:', response.status);
+        // Fallback si no se pueden obtener posts
+        setOriginalUser(audio?.created_by || 'Usuario desconocido');
       }
     } catch (error) {
       console.error('Error fetching posts using audio:', error);
+      setOriginalUser(audio?.created_by || 'Usuario desconocido');
     } finally {
       setPostsLoading(false);
     }
