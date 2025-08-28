@@ -285,54 +285,76 @@ const AudioDetailPage = () => {
       
       const token = localStorage.getItem('authToken');
       
-      console.log(`🔍 Buscando posts que usan el audio: ${audioId}, offset: ${offset}`);
+      console.log(`🔍 INICIANDO FETCH POSTS:`, {
+        audioId,
+        offset,
+        append,
+        token: token ? 'EXISTS' : 'MISSING'
+      });
       
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/audio/${audioId}/posts?limit=12&offset=${offset}`, {
+      const url = `${process.env.REACT_APP_BACKEND_URL}/api/audio/${audioId}/posts?limit=12&offset=${offset}`;
+      console.log(`📡 Llamando URL:`, url);
+      
+      const response = await fetch(url, {
         headers: {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         }
       });
 
+      console.log(`📡 Response status:`, response.status, response.statusText);
+
       if (response.ok) {
         const data = await response.json();
-        console.log('✅ Respuesta completa de posts recibida:', JSON.stringify(data, null, 2));
+        console.log('✅ RESPUESTA COMPLETA RECIBIDA:', {
+          success: data.success,
+          audio_id: data.audio_id,
+          postsCount: data.posts?.length || 0,
+          total: data.total,
+          has_more: data.has_more,
+          limit: data.limit,
+          offset: data.offset,
+          message: data.message
+        });
         
         const postsData = data.posts || [];
         const total = data.total || 0;
         const hasMore = data.has_more || false;
         
+        console.log('📊 POSTS RECIBIDOS:', postsData.map(p => ({
+          id: p.id,
+          title: p.title,
+          author: p.author?.username || 'N/A',
+          options_count: p.options?.length || 0,
+          created_at: p.created_at,
+          media_url: p.media_url || 'NO_MEDIA'
+        })));
+        
         if (append) {
-          setPosts(prevPosts => [...prevPosts, ...postsData]);
-          console.log(`📊 Posts agregados (${postsData.length}), total ahora: ${posts.length + postsData.length}`);
+          setPosts(prevPosts => {
+            const newPosts = [...prevPosts, ...postsData];
+            console.log(`📊 POSTS AGREGADOS - Antes: ${prevPosts.length}, Agregados: ${postsData.length}, Total: ${newPosts.length}`);
+            return newPosts;
+          });
         } else {
           setPosts(postsData);
-          console.log(`📊 Posts iniciales cargados: ${postsData.length}`);
+          console.log(`📊 POSTS INICIALES ESTABLECIDOS: ${postsData.length}`);
         }
         
         setTotalPosts(total);
         setHasMorePosts(hasMore);
         setCurrentOffset(offset + postsData.length);
         
-        console.log(`📊 Estado actualizado - Total: ${total}, HasMore: ${hasMore}, NewOffset: ${offset + postsData.length}`);
-        
-        // Log detallado de cada post
-        postsData.forEach((post, index) => {
-          console.log(`📝 Post ${offset + index + 1}:`, {
-            id: post.id,
-            title: post.title,
-            created_at: post.created_at,
-            author: post.author,
-            user: post.user,
-            hasAuthor: !!post.author,
-            hasUser: !!post.user
-          });
+        console.log(`📊 ESTADO ACTUALIZADO:`, {
+          totalPosts: total,
+          hasMorePosts: hasMore,
+          newOffset: offset + postsData.length
         });
         
       } else {
-        console.error('❌ Error fetching posts:', response.status, response.statusText);
+        console.error('❌ ERROR EN RESPONSE:', response.status, response.statusText);
         const errorData = await response.text();
-        console.error('Error details:', errorData);
+        console.error('❌ Error details:', errorData);
         
         if (offset === 0) {
           setPosts([]);
@@ -341,7 +363,7 @@ const AudioDetailPage = () => {
         }
       }
     } catch (error) {
-      console.error('❌ Error fetching posts using audio:', error);
+      console.error('❌ ERROR EN FETCH:', error);
       if (offset === 0) {
         setPosts([]);
         setTotalPosts(0);
@@ -350,8 +372,10 @@ const AudioDetailPage = () => {
     } finally {
       if (offset === 0) {
         setPostsLoading(false);
+        console.log('🏁 POSTS LOADING TERMINADO');
       } else {
         setLoadingMorePosts(false);
+        console.log('🏁 LOADING MORE POSTS TERMINADO');
       }
     }
   };
