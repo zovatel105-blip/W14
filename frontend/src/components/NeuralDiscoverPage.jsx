@@ -619,15 +619,15 @@ const MasonryPollCard = ({ poll, index, onVote, onLike, onShare, onComment }) =>
           <div className="flex items-center gap-2">
             <Avatar 
               className="w-8 h-8 ring-2 ring-white/30 cursor-pointer"
-              onClick={() => navigate(`/profile/${poll.author}`)}
+              onClick={() => navigate(`/profile/${poll.author?.username || poll.author?.id}`)}
             >
-              <AvatarImage src="https://github.com/shadcn.png" />
+              <AvatarImage src={poll.author?.avatar_url || "https://github.com/shadcn.png"} />
               <AvatarFallback className="bg-gradient-to-br from-purple-500 to-pink-600 text-white font-bold text-xs">
-                {((poll.author || 'U') + '').charAt(0).toUpperCase()}
+                {(poll.author?.display_name || poll.author?.username || 'U').charAt(0).toUpperCase()}
               </AvatarFallback>
             </Avatar>
             <div>
-              <p className="text-white font-semibold text-sm">{poll.author}</p>
+              <p className="text-white font-semibold text-sm">{poll.author?.display_name || poll.author?.username || 'Usuario'}</p>
               <p className="text-white/60 text-xs">{poll.timeAgo}</p>
             </div>
           </div>
