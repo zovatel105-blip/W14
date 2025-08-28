@@ -558,7 +558,7 @@ const AudioDetailPage = () => {
         </div>
 
         {/* Barra inferior con botones principales */}
-        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-3 safe-area-pb">
+        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-3 pb-safe">
           <div className="max-w-md mx-auto">
             <div className="grid grid-cols-2 gap-3">
               {/* Botón Add to Story */}
