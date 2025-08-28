@@ -982,6 +982,15 @@ const AudioDetailPage = () => {
                         </div>
                       )}
                       
+                      {/* Indicador de video: icono de play en el centro */}
+                      {mediaType === 'video' && thumbnailUrl && (
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="bg-black/50 rounded-full p-2">
+                            <Play className="w-6 h-6 text-white fill-white" />
+                          </div>
+                        </div>
+                      )}
+                      
                       {/* Overlay hover */}
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-200"></div>
                     </div>
