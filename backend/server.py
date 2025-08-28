@@ -3911,11 +3911,16 @@ async def get_posts_using_audio(
         for i, poll_data in enumerate(polls):
             try:
                 logger.info(f"📝 Procesando post {i+1}: {poll_data.get('id', 'unknown')}")
+                logger.info(f"📝 Author_id del post: {poll_data.get('author_id')}")
                 
                 # Obtener autor del post
                 author = authors_dict.get(poll_data.get("author_id"))
                 if not author:
                     logger.warning(f"⚠️ Autor no encontrado para post {poll_data.get('id')}, author_id: {poll_data.get('author_id')}")
+                    logger.warning(f"⚠️ Authors disponibles: {list(authors_dict.keys())}")
+                    # Continuar el procesamiento sin autor
+                else:
+                    logger.info(f"✅ Autor encontrado: {author.username if hasattr(author, 'username') else 'N/A'}")
                 
                 # Procesar opciones
                 options = []
