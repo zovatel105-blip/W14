@@ -48,8 +48,12 @@ const AudioDetailPage = () => {
   useEffect(() => {
     if (audio) {
       checkIfFavorited();
+      // Si no se ha determinado el usuario original y no hay posts, usar fallback basado en el audio
+      if (!originalUser && posts.length === 0) {
+        handleNoPostsFound();
+      }
     }
-  }, [audio]);
+  }, [audio, posts, originalUser]);
 
   const checkIfFavorited = async () => {
     try {
