@@ -4025,6 +4025,183 @@ async def get_combined_music_library(
         logger.error(f"Error getting combined music library: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error getting music library: {str(e)}")
 
+# =============  AUDIO FAVORITES ENDPOINTS =============
+
+@api_router.post("/audio/favorites", response_model=AudioFavoriteResponse)
+async def add_audio_to_favorites(
+    favorite_data: AudioFavoriteCreate,
+    current_user: UserResponse = Depends(get_current_user)
+):
+    """Add audio to user's favorites"""
+    try:
+        # Check if already favorited
+        existing_favorite = await db.audio_favorites.find_one({
+            "user_id": current_user.id,
+            "audio_id": favorite_data.audio_id,
+            "audio_type": favorite_data.audio_type
+        })
+        
+        if existing_favorite:
+            raise HTTPException(status_code=400, detail="Audio already in favorites")
+        
+        # Get audio details for caching
+        audio_title = None
+        audio_artist = None
+        audio_cover_url = None
+        
+        if favorite_data.audio_type == "system":
+            # Get system music info
+            music_info = await get_music_info(favorite_data.audio_id)
+            if music_info:
+                audio_title = music_info.get('title')
+                audio_artist = music_info.get('artist')
+                audio_cover_url = music_info.get('cover')
+        elif favorite_data.audio_type == "user":
+            # Get user audio info
+            user_audio = await db.user_audio.find_one({"id": favorite_data.audio_id})
+            if user_audio:
+                audio_title = user_audio.get('title')
+                audio_artist = user_audio.get('artist')
+                audio_cover_url = user_audio.get('cover_url')
+        
+        # Create favorite
+        favorite = AudioFavorite(
+            user_id=current_user.id,
+            audio_id=favorite_data.audio_id,
+            audio_type=favorite_data.audio_type,
+            audio_title=audio_title,
+            audio_artist=audio_artist,
+            audio_cover_url=audio_cover_url
+        )
+        
+        await db.audio_favorites.insert_one(favorite.dict())
+        
+        return AudioFavoriteResponse(
+            id=favorite.id,
+            audio_id=favorite.audio_id,
+            audio_type=favorite.audio_type,
+            audio_title=audio_title,
+            audio_artist=audio_artist,
+            audio_cover_url=audio_cover_url,
+            created_at=favorite.created_at
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error adding audio to favorites: {str(e)}")
+        raise HTTPException(status_code=500, detail="Error adding to favorites")
+
+@api_router.delete("/audio/favorites/{audio_id}")
+async def remove_audio_from_favorites(
+    audio_id: str,
+    audio_type: str = "system",
+    current_user: UserResponse = Depends(get_current_user)
+):
+    """Remove audio from user's favorites"""
+    try:
+        result = await db.audio_favorites.delete_one({
+            "user_id": current_user.id,
+            "audio_id": audio_id,
+            "audio_type": audio_type
+        })
+        
+        if result.deleted_count == 0:
+            raise HTTPException(status_code=404, detail="Audio not found in favorites")
+        
+        return {"message": "Audio removed from favorites successfully"}
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error removing audio from favorites: {str(e)}")
+        raise HTTPException(status_code=500, detail="Error removing from favorites")
+
+@api_router.get("/audio/favorites")
+async def get_user_favorites(
+    limit: int = 20,
+    offset: int = 0,
+    current_user: UserResponse = Depends(get_current_user)
+):
+    """Get user's favorite audio"""
+    try:
+        # Get favorites from database
+        favorites = await db.audio_favorites.find({
+            "user_id": current_user.id
+        }).sort("created_at", -1).skip(offset).limit(limit).to_list(limit)
+        
+        # Get total count
+        total = await db.audio_favorites.count_documents({"user_id": current_user.id})
+        
+        # Enrich favorites with current audio details
+        enriched_favorites = []
+        for fav in favorites:
+            favorite_response = AudioFavoriteResponse(
+                id=fav["id"],
+                audio_id=fav["audio_id"],
+                audio_type=fav["audio_type"],
+                audio_title=fav.get("audio_title"),
+                audio_artist=fav.get("audio_artist"),
+                audio_cover_url=fav.get("audio_cover_url"),
+                created_at=fav["created_at"]
+            )
+            
+            # Try to get current audio details
+            if fav["audio_type"] == "system":
+                music_info = await get_music_info(fav["audio_id"])
+                if music_info:
+                    favorite_response.audio_details = music_info
+            elif fav["audio_type"] == "user":
+                user_audio = await db.user_audio.find_one({"id": fav["audio_id"]})
+                if user_audio:
+                    favorite_response.audio_details = {
+                        "id": user_audio["id"],
+                        "title": user_audio["title"],
+                        "artist": user_audio["artist"],
+                        "duration": user_audio["duration"],
+                        "public_url": user_audio["public_url"],
+                        "cover": user_audio.get("cover_url"),
+                        "source": "User Upload"
+                    }
+            
+            enriched_favorites.append(favorite_response)
+        
+        return {
+            "success": True,
+            "favorites": enriched_favorites,
+            "total": total,
+            "limit": limit,
+            "offset": offset,
+            "has_more": offset + limit < total
+        }
+        
+    except Exception as e:
+        logger.error(f"Error getting user favorites: {str(e)}")
+        raise HTTPException(status_code=500, detail="Error getting favorites")
+
+@api_router.get("/audio/favorites/{audio_id}/check")
+async def check_audio_in_favorites(
+    audio_id: str,
+    audio_type: str = "system",
+    current_user: UserResponse = Depends(get_current_user)
+):
+    """Check if audio is in user's favorites"""
+    try:
+        favorite = await db.audio_favorites.find_one({
+            "user_id": current_user.id,
+            "audio_id": audio_id,
+            "audio_type": audio_type
+        })
+        
+        return {
+            "is_favorite": favorite is not None,
+            "favorite_id": favorite["id"] if favorite else None
+        }
+        
+    except Exception as e:
+        logger.error(f"Error checking audio in favorites: {str(e)}")
+        raise HTTPException(status_code=500, detail="Error checking favorites")
+
 # Incluir el router en la aplicación
 app.add_middleware(
     CORSMiddleware,
