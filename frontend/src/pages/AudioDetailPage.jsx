@@ -518,7 +518,7 @@ const AudioDetailPage = () => {
               <p className="text-gray-500 text-sm">Cargando videos...</p>
             </div>
           ) : posts.length > 0 ? (
-            /* Rejilla de videos (3 columnas) con miniaturas verticales */
+            /* Rejilla de imágenes/videos (3 columnas) con miniaturas verticales */
             <div className="grid grid-cols-3 gap-2 mb-6">
               {posts.map((post, index) => {
                 // Determinar si este es el post original (el más antiguo)
