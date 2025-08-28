@@ -300,37 +300,34 @@ const AudioDetailPage = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white">
-        {/* Header con degradado verde */}
-        <div className="bg-gradient-to-b from-green-100 to-green-50 border-b border-green-200">
-          <div className="flex items-center justify-between px-4 py-3">
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={() => navigate(-1)}
-              className="text-gray-900 hover:bg-white/50 p-2"
-            >
-              <ArrowLeft className="w-6 h-6" />
-            </Button>
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className="text-gray-900 hover:bg-white/50 p-2"
-            >
-              <Share2 className="w-6 h-6" />
-            </Button>
-          </div>
+      <div className="min-h-screen bg-white flex flex-col">
+        {/* Encabezado con degradado verde */}
+        <div className="h-[10vh] bg-gradient-to-r from-green-100 via-green-50 to-yellow-50 flex items-center justify-between px-4">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={() => navigate(-1)}
+            className="text-gray-900 hover:bg-white/50 p-3"
+          >
+            <ArrowLeft className="w-6 h-6" />
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="text-gray-900 hover:bg-white/50 p-3"
+          >
+            <Share2 className="w-6 h-6" />
+          </Button>
         </div>
-        <div className="px-4 py-8">
-          <div className="flex items-center justify-center h-64">
-            <div className="text-center">
-              <div className="relative w-16 h-16 mx-auto mb-4">
-                <div className="w-16 h-16 border-4 border-green-200 border-t-green-600 rounded-full animate-spin"></div>
-                <Music className="w-6 h-6 text-green-600 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
-              </div>
-              <p className="text-gray-600 text-lg font-medium">Cargando información del audio...</p>
-              <p className="text-gray-500 text-sm mt-2">Audio ID: {audioId}</p>
+        
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <div className="relative w-16 h-16 mx-auto mb-4">
+              <div className="w-16 h-16 border-4 border-green-200 border-t-green-600 rounded-full animate-spin"></div>
+              <Music className="w-6 h-6 text-green-600 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
             </div>
+            <p className="text-gray-600 text-lg font-medium">Cargando información del audio...</p>
+            <p className="text-gray-500 text-sm mt-2">Audio ID: {audioId}</p>
           </div>
         </div>
       </div>
