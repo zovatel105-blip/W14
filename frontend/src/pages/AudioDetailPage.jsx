@@ -149,7 +149,7 @@ const AudioDetailPage = () => {
       console.log('🎵 ⚠️ FALLBACK - creador del audio:', audio.created_by);
     } else {
       // Último fallback
-      setOriginalUser('Sé el primero en usar este sonido');
+      setOriginalUser(t('audioDetail.firstToUse'));
       console.log('🎵 ⚠️ FALLBACK final');
     }
     console.log('🔍 === FIN DETERMINACIÓN ===');
