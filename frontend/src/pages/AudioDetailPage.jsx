@@ -476,7 +476,7 @@ const AudioDetailPage = () => {
       </div>
 
       {/* Barra de información del sonido (altura ~8% de pantalla) */}
-      <div className="h-[8vh] flex items-center px-4 border-t border-gray-100">
+      <div className="h-[8vh] flex items-center px-4">
         {/* Ícono play: extremo izquierdo, tamaño pequeño */}
         <div className="flex items-center gap-2 flex-shrink-0">
           <Play className="w-4 h-4 text-gray-600" />
