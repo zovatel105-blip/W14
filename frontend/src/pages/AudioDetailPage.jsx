@@ -448,7 +448,7 @@ const AudioDetailPage = () => {
                 <p className="text-base text-gray-600 truncate">
                   {audio?.artist || 'Artista desconocido'}
                 </p>
-                {audio?.artist && (
+                {audio?.artist && audio?.artist.includes(',') && (
                   <span className="text-gray-500 text-sm">+&nbsp;{">"}</span>
                 )}
               </div>
@@ -459,9 +459,9 @@ const AudioDetailPage = () => {
                 <span>{formatDuration(audio?.duration || 0)}</span>
               </div>
               
-              {/* Original sound by */}
+              {/* Original sound by - el usuario que subió originalmente el audio */}
               <p className="text-sm text-gray-600 mb-2">
-                Original sound by: {audio?.artist || 'Artista desconocido'}
+                Original sound by: {audio?.original_user || audio?.created_by || 'Usuario original'}
               </p>
               
               {/* Cantidad de publicaciones */}
