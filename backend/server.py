@@ -37,7 +37,9 @@ from models import (
     Poll, PollCreate, PollResponse, PollOption, Vote, VoteCreate, PollLike, Music,
     UploadType, FileType, UploadedFile, UploadResponse,
     # User Audio Models
-    UserAudio, UserAudioCreate, UserAudioUpdate, UserAudioResponse, UserAudioUse, AudioPrivacy
+    UserAudio, UserAudioCreate, UserAudioUpdate, UserAudioResponse, UserAudioUse, AudioPrivacy,
+    # Audio Favorites Models
+    AudioFavorite, AudioFavoriteCreate, AudioFavoriteResponse
 )
 from auth import (
     verify_password, get_password_hash, create_access_token, 
