@@ -14,6 +14,7 @@ import PollCard from '../components/PollCard';
 import PollModal from '../components/PollModal';
 import AudioWaveform from '../components/AudioWaveform';
 import TikTokScrollView from '../components/TikTokScrollView';
+import TikTokProfileGrid from '../components/TikTokProfileGrid';
 
 const AudioDetailPage = () => {
   const { audioId } = useParams();
