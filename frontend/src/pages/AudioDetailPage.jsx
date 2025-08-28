@@ -600,8 +600,6 @@ const AudioDetailPage = () => {
     console.log('📤 Share poll:', pollId);
     // TODO: Implement share functionality
   };
-    // TODO: Implement share functionality
-  };
 
   // Utility functions now handled by i18n system
 
