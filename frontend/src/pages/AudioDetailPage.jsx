@@ -406,7 +406,7 @@ const AudioDetailPage = () => {
         </Button>
       </div>
 
-      {/* Sección del audio (altura ~15% de pantalla) */}
+      {/* Sección del audio (altura ~15% de pantalla) - sin línea separadora */}
       <div className="h-[15vh] flex items-center px-4 py-2">
         {/* Miniatura cuadrada del álbum: lado izquierdo, ~12% del ancho */}
         <div className="w-[12vw] h-[12vw] max-w-20 max-h-20 min-w-16 min-h-16 flex-shrink-0 relative">
