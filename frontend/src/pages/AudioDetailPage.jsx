@@ -586,33 +586,16 @@ const AudioDetailPage = () => {
           )}
         </div>
 
-        {/* Barra inferior con botones principales */}
+        {/* Barra inferior con botón principal */}
         <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-3 pb-safe">
           <div className="max-w-md mx-auto">
-            <div className="grid grid-cols-2 gap-3">
-              {/* Botón Add to Story */}
-              <Button 
-                variant="outline"
-                className="bg-white border-gray-300 text-gray-700 hover:bg-gray-50 flex items-center justify-center gap-2 py-3"
-                onClick={() => {
-                  toast({
-                    title: "Add to Story",
-                    description: "Función próximamente disponible"
-                  });
-                }}
-              >
-                <Music className="w-4 h-4" />
-                Add to Story
-              </Button>
-              
-              {/* Botón Use sound (verde fuerte) */}
-              <Button 
-                onClick={handleUseThisSound}
-                className="bg-green-600 hover:bg-green-700 text-white font-medium py-3 transition-colors flex items-center justify-center gap-2"
-              >
-                Use sound
-              </Button>
-            </div>
+            {/* Solo botón Use sound (verde fuerte) */}
+            <Button 
+              onClick={handleUseThisSound}
+              className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-3 transition-colors flex items-center justify-center gap-2"
+            >
+              Use sound
+            </Button>
           </div>
         </div>
 
