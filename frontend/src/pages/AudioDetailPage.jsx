@@ -501,8 +501,8 @@ const AudioDetailPage = () => {
               </svg>
             </div>
             
-            {/* "+3 >" - siempre mostrar como en la imagen */}
-            <span className="text-lg font-bold text-gray-600 ml-1">+3&nbsp;{">"}</span>
+            {/* "+3 >" - siempre mostrar como en la imagen - más pequeño */}
+            <span className="text-base font-bold text-gray-600 ml-1">+3&nbsp;{">"}</span>
           </div>
         </div>
         </div>
