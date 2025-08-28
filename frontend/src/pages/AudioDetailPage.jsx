@@ -180,20 +180,39 @@ const AudioDetailPage = () => {
           setOriginalUser(originalUserName);
           console.log('🎵 Usuario original del audio encontrado:', originalUserName, 'del post más antiguo:', originalPost.created_at);
         } else {
-          // Si no hay posts, intentar obtener info del audio mismo
-          setOriginalUser(audio?.created_by || 'Usuario desconocido');
-          console.log('🎵 No hay posts, usando info del audio para usuario original');
+          // Si no hay posts usando este audio, obtener info del audio mismo o usar artista
+          handleNoPostsFound();
         }
       } else {
         console.error('Error fetching posts:', response.status);
-        // Fallback si no se pueden obtener posts
-        setOriginalUser(audio?.created_by || 'Usuario desconocido');
+        handleNoPostsFound();
       }
     } catch (error) {
       console.error('Error fetching posts using audio:', error);
-      setOriginalUser(audio?.created_by || 'Usuario desconocido');
+      handleNoPostsFound();
     } finally {
       setPostsLoading(false);
+    }
+  };
+
+  const handleNoPostsFound = () => {
+    // Si no hay posts, usar información del audio o artista como fallback
+    if (audio) {
+      if (audio.is_system_music || audio.source === 'iTunes') {
+        // Para música del sistema, usar el artista como "original sound"
+        setOriginalUser(`${audio.artist} (artista original)`);
+        console.log('🎵 No hay posts, usando artista del sistema de música:', audio.artist);
+      } else if (audio.created_by) {
+        // Para audio de usuario, usar quien lo subió
+        setOriginalUser(audio.created_by);
+        console.log('🎵 No hay posts, usando creador del audio:', audio.created_by);
+      } else {
+        // Último fallback
+        setOriginalUser('Primera persona en usar este sonido');
+        console.log('🎵 No se pudo determinar usuario original');
+      }
+    } else {
+      setOriginalUser('Usuario original');
     }
   };
 
