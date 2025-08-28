@@ -722,7 +722,9 @@ const AudioDetailPage = () => {
           </div>
         ) : posts.length > 0 ? (
           /* Grid 3x3 con celdas cuadradas uniformes y separación mínima (~2px) */
-          <div className="grid grid-cols-3 gap-0.5 h-full">
+          <>
+            {console.log('📊 Renderizando grid con', posts.length, 'posts:', posts.map(p => ({id: p.id, title: p.title, user: p.user || p.author})))}
+            <div className="grid grid-cols-3 gap-0.5 h-full">
             {posts.slice(0, 9).map((post, index) => {
               // Determinar si este es el post original (el más antiguo)
               const sortedByDate = [...posts].sort((a, b) => 
