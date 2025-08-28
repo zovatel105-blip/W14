@@ -590,6 +590,17 @@ const AudioDetailPage = () => {
   };
 
   const handleUseThisSound = () => {
+    // Validar que tenemos el audio
+    if (!audio) {
+      console.error('❌ No hay audio disponible para usar');
+      toast({
+        title: "Error",
+        description: "No se pudo cargar la información del audio",
+        variant: "destructive"
+      });
+      return;
+    }
+
     // Navigate to create poll with this audio pre-selected
     const audioForCreation = {
       id: audio.id,
@@ -604,17 +615,26 @@ const AudioDetailPage = () => {
     
     console.log('🎵 Navegando para crear contenido con audio:', audioForCreation);
     
-    navigate('/feed', { 
-      state: { 
-        createPoll: true, 
-        selectedAudio: audioForCreation
-      }
-    });
-    
-    toast({
-      title: t('toast.audioSelected'),
-      description: t('toast.audioSelectedDesc', { title: audio.title, artist: audio.artist })
-    });
+    try {
+      navigate('/feed', { 
+        state: { 
+          createPoll: true, 
+          selectedAudio: audioForCreation
+        }
+      });
+      
+      toast({
+        title: t('toast.audioSelected'),
+        description: t('toast.audioSelectedDesc', { title: audio.title, artist: audio.artist })
+      });
+    } catch (error) {
+      console.error('❌ Error navegando al feed:', error);
+      toast({
+        title: "Error de navegación",
+        description: "No se pudo navegar al feed para crear contenido",
+        variant: "destructive"
+      });
+    }
   };
 
   const handleShare = async () => {
