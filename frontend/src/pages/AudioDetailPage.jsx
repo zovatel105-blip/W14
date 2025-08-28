@@ -384,7 +384,7 @@ const AudioDetailPage = () => {
     <div className="min-h-screen bg-white flex flex-col">
       
       {/* Encabezado superior (altura ~10% de pantalla) */}
-      <div className="h-[10vh] bg-gradient-to-r from-pink-100 via-pink-50 to-yellow-50 flex items-center justify-between px-4">
+      <div className="h-[10vh] bg-gradient-to-r from-green-100 via-green-50 to-yellow-50 flex items-center justify-between px-4">
         {/* Flecha izquierda (←) esquina superior izquierda */}
         <Button 
           variant="ghost" 
