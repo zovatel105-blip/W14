@@ -481,119 +481,153 @@ const AudioDetailPage = () => {
         )}
       </div>
 
-        {/* Sección de miniaturas (rejilla 3 columnas) */}
-        <div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">
-            Imágenes/Videos ({posts.length})
-          </h3>
+      {/* Barra de información del sonido (altura ~8% de pantalla) */}
+      <div className="h-[8vh] flex items-center px-4 border-t border-gray-100">
+        {/* Ícono play: extremo izquierdo, tamaño pequeño */}
+        <div className="flex items-center gap-2 flex-shrink-0">
+          <Play className="w-4 h-4 text-gray-600" />
+          <span className="text-sm text-gray-700 font-medium">
+            {formatDuration(audio?.duration || 0)}
+          </span>
+        </div>
+        
+        {/* "Original sound by: (usuario)" centro-izquierda */}
+        <div className="flex-1 ml-6">
+          <p className="text-sm text-gray-500">
+            Original sound by: <span className="font-medium text-gray-700">{originalUser || audio?.created_by || audio?.artist || 'Usuario original'}</span>
+          </p>
+        </div>
+        
+        {/* Número de personas que utilizaron ese sonido: extremo derecho */}
+        <div className="flex-shrink-0 ml-4">
+          <span className="text-sm text-gray-400">
+            {formatNumber(audio?.uses_count || 0)} usuarios
+          </span>
+        </div>
+      </div>
+
+      {/* Botones de acción (altura ~10% de pantalla) */}
+      <div className="h-[10vh] flex items-center justify-center px-4">
+        <div className="flex w-full gap-[10%]">
+          {/* Botón Add to music app - 45% del ancho */}
+          <Button 
+            onClick={handleAddToItunes}
+            className="w-[45%] h-12 bg-gray-100 hover:bg-gray-200 text-gray-700 border-0 rounded-lg flex items-center justify-center gap-2 font-medium"
+          >
+            <Plus className="w-4 h-4" />
+            Add to music app
+          </Button>
           
-          {postsLoading ? (
-            <div className="text-center py-12">
+          {/* Botón Add to Favorites - 45% del ancho */}
+          <Button 
+            onClick={handleSave}
+            className="w-[45%] h-12 bg-gray-100 hover:bg-gray-200 text-gray-700 border-0 rounded-lg flex items-center justify-center gap-2 font-medium"
+          >
+            <Bookmark className="w-4 h-4" />
+            Add to Favorites
+          </Button>
+        </div>
+      </div>
+
+      {/* Cuadrícula 3x3 (altura ~45% de pantalla) */}
+      <div className="h-[45vh] px-1">
+        {postsLoading ? (
+          <div className="flex items-center justify-center h-full">
+            <div className="text-center">
               <div className="w-8 h-8 border-2 border-gray-300 border-t-green-600 rounded-full animate-spin mx-auto mb-4"></div>
-              <p className="text-gray-500 text-sm">Cargando videos...</p>
+              <p className="text-gray-500 text-sm">Cargando contenido...</p>
             </div>
-          ) : posts.length > 0 ? (
-            /* Rejilla de imágenes/videos (3 columnas) con miniaturas verticales */
-            <div className="grid grid-cols-3 gap-2 mb-6">
-              {posts.map((post, index) => {
-                // Determinar si este es el post original (el más antiguo)
-                const sortedByDate = [...posts].sort((a, b) => 
-                  new Date(a.created_at) - new Date(b.created_at)
-                );
-                const isOriginal = sortedByDate.length > 0 && post.id === sortedByDate[0].id;
-                
-                return (
-                  <div key={post.id} className="relative group cursor-pointer">
-                    
-                    {/* Miniatura vertical */}
-                    <div className="aspect-[3/4] bg-gray-100 rounded-lg overflow-hidden border border-gray-200">
-                      {post.media_url ? (
-                        post.media_url.includes('.mp4') || post.media_url.includes('.mov') ? (
-                          /* Video thumbnail */
-                          <video 
-                            src={post.media_url}
-                            className="w-full h-full object-cover"
-                            muted
-                            preload="metadata"
-                          />
-                        ) : (
-                          /* Imagen thumbnail */
-                          <img 
-                            src={post.media_url} 
-                            alt={post.title}
-                            className="w-full h-full object-cover"
-                          />
-                        )
+          </div>
+        ) : posts.length > 0 ? (
+          /* Grid 3x3 con celdas cuadradas uniformes y separación mínima (~2px) */
+          <div className="grid grid-cols-3 gap-0.5 h-full">
+            {posts.slice(0, 9).map((post, index) => {
+              // Determinar si este es el post original (el más antiguo)
+              const sortedByDate = [...posts].sort((a, b) => 
+                new Date(a.created_at) - new Date(b.created_at)
+              );
+              const isOriginal = sortedByDate.length > 0 && post.id === sortedByDate[0].id;
+              
+              return (
+                <div key={post.id} className="relative group cursor-pointer bg-gray-100">
+                  {/* Celda cuadrada (~33% del ancho disponible) */}
+                  <div className="aspect-square w-full h-full bg-gray-200">
+                    {post.media_url ? (
+                      post.media_url.includes('.mp4') || post.media_url.includes('.mov') ? (
+                        /* Video thumbnail */
+                        <video 
+                          src={post.media_url}
+                          className="w-full h-full object-cover"
+                          muted
+                          preload="metadata"
+                        />
                       ) : (
-                        /* Placeholder */
-                        <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                          <div className="text-center">
-                            <MessageCircle className="w-6 h-6 text-gray-400 mx-auto mb-1" />
-                            <p className="text-xs text-gray-500 px-2 leading-tight">
-                              {post.title || 'Contenido'}
-                            </p>
-                          </div>
-                        </div>
-                      )}
-                      
-                      {/* Etiqueta "Original" en esquina superior izquierda (solo para el primer video cronológico) */}
-                      {isOriginal && (
-                        <div className="absolute top-2 left-2">
-                          <span className="bg-blue-600 text-white text-xs px-2 py-1 rounded font-medium">
-                            Original
-                          </span>
-                        </div>
-                      )}
-                      
-                      {/* Overlay con número de votos en esquina inferior derecha */}
-                      <div className="absolute bottom-2 right-2">
-                        <div className="bg-black/70 backdrop-blur-sm text-white px-2 py-1 rounded-md flex items-center gap-1">
-                          <BarChart3 className="w-3 h-3" />
-                          <span className="text-xs font-medium">
-                            {formatNumber(
-                              (post.options || []).reduce((total, option) => total + (option.votes || 0), 0) || 
-                              Math.floor(Math.random() * 1000) + 50
-                            )}
-                          </span>
-                        </div>
+                        /* Imagen thumbnail */
+                        <img 
+                          src={post.media_url} 
+                          alt={post.title}
+                          className="w-full h-full object-cover"
+                        />
+                      )
+                    ) : (
+                      /* Placeholder */
+                      <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                        <MessageCircle className="w-6 h-6 text-gray-400" />
                       </div>
-                      
-                      {/* Overlay hover */}
-                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-200"></div>
-                    </div>
+                    )}
+                    
+                    {/* Etiqueta "Original" azul: esquina superior izquierda, ~20% del ancho de celda */}
+                    {isOriginal && (
+                      <div className="absolute top-1 left-1">
+                        <span className="bg-blue-600 text-white text-xs px-1.5 py-0.5 rounded font-medium leading-tight">
+                          Original
+                        </span>
+                      </div>
+                    )}
+                    
+                    {/* Overlay hover */}
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-200"></div>
                   </div>
-                );
-              })}
-            </div>
-          ) : (
-            /* Estado vacío */
-            <div className="text-center py-16 mb-6">
+                </div>
+              );
+            })}
+            
+            {/* Llenar celdas vacías si hay menos de 9 posts */}
+            {Array.from({ length: Math.max(0, 9 - posts.length) }).map((_, index) => (
+              <div key={`empty-${index}`} className="aspect-square bg-gray-50 flex items-center justify-center">
+                <div className="text-gray-300">
+                  <Plus className="w-8 h-8" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          /* Estado vacío */
+          <div className="flex items-center justify-center h-full">
+            <div className="text-center">
               <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <MessageCircle className="w-8 h-8 text-gray-400" />
               </div>
               <h4 className="text-lg font-medium text-gray-900 mb-2">No hay contenido aún</h4>
-              <p className="text-gray-500 text-sm mb-6 max-w-sm mx-auto">
+              <p className="text-gray-500 text-sm max-w-sm mx-auto">
                 Sé el primero en usar este audio en tu contenido
               </p>
             </div>
-          )}
-        </div>
-
-        {/* Barra inferior con botón principal */}
-        <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-4 py-3 pb-safe">
-          <div className="max-w-md mx-auto">
-            {/* Solo botón Use sound (verde fuerte) */}
-            <Button 
-              onClick={handleUseThisSound}
-              className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-3 transition-colors flex items-center justify-center gap-2"
-            >
-              Use sound
-            </Button>
           </div>
-        </div>
+        )}
+      </div>
 
-        {/* Espaciador para la barra inferior fija */}
-        <div className="h-20"></div>
+      {/* Botones inferiores (altura ~12% de pantalla) */}
+      <div className="h-[12vh] flex items-center justify-center px-4">
+        {/* Botón central "Use sound": ~40% del ancho, fondo verde, esquinas muy redondeadas */}
+        <Button 
+          onClick={handleUseThisSound}
+          className="w-[40%] h-14 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-2xl text-lg transition-colors"
+        >
+          Use sound
+        </Button>
+      </div>
+    </div>
 
       </div>
     </div>
