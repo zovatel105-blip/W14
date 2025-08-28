@@ -903,8 +903,9 @@ const AudioDetailPage = () => {
                 );
                 const isOriginal = sortedByDate.length > 0 && post.id === sortedByDate[0].id;
                 
-                // Obtener la URL del media de forma más robusta
+                // Obtener la URL del media y thumbnail de forma más robusta
                 let mediaUrl = null;
+                let thumbnailUrl = null;
                 let mediaType = 'image';
                 
                 if (post.options && post.options.length > 0) {
@@ -914,15 +915,21 @@ const AudioDetailPage = () => {
                   );
                   if (optionWithMedia) {
                     mediaUrl = optionWithMedia.media?.url || optionWithMedia.media_url;
+                    thumbnailUrl = optionWithMedia.media?.thumbnail_url || optionWithMedia.thumbnail_url;
                     mediaType = optionWithMedia.media?.type || 'image';
                   }
                 } else if (post.media_url) {
                   // Usar media_url directo del post
                   mediaUrl = post.media_url;
+                  thumbnailUrl = post.thumbnail_url;
                   mediaType = post.media_url.includes('.mp4') || post.media_url.includes('.mov') ? 'video' : 'image';
                 }
                 
-                console.log(`📸 Media para post ${post.id}:`, { mediaUrl, mediaType });
+                // Para videos, usar thumbnail si está disponible
+                const displayUrl = (mediaType === 'video' && thumbnailUrl) ? thumbnailUrl : mediaUrl;
+                const displayType = (mediaType === 'video' && thumbnailUrl) ? 'image' : mediaType;
+                
+                console.log(`📸 Media para post ${post.id}:`, { mediaUrl, thumbnailUrl, mediaType, displayUrl, displayType });
                 
                 return (
                   <div 
