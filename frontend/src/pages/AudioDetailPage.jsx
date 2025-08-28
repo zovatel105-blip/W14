@@ -395,8 +395,8 @@ const AudioDetailPage = () => {
     } catch (error) {
       console.error('Error playing audio:', error);
       toast({
-        title: "Error",
-        description: "No se pudo reproducir el audio",
+        title: t('toast.error'),
+        description: t('toast.errorPlaying'),
         variant: "destructive"
       });
     }
