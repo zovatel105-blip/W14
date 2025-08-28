@@ -378,9 +378,9 @@ const AudioDetailPage = () => {
           {/* Fila principal con miniatura y detalles */}
           <div className="flex items-start gap-4 mb-6">
             
-            {/* Miniatura circular del audio a la izquierda */}
+            {/* Miniatura cuadrada del audio a la izquierda */}
             <div className="relative flex-shrink-0">
-              <div className="w-16 h-16 rounded-full overflow-hidden bg-gray-100 border border-gray-200">
+              <div className="w-20 h-20 rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
                 {audio?.cover_url ? (
                   <img 
                     src={audio.cover_url} 
@@ -389,7 +389,7 @@ const AudioDetailPage = () => {
                   />
                 ) : (
                   <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                    <Music className="w-6 h-6 text-gray-400" />
+                    <Music className="w-8 h-8 text-gray-400" />
                   </div>
                 )}
               </div>
@@ -397,12 +397,12 @@ const AudioDetailPage = () => {
               {/* Botón de play superpuesto */}
               <button
                 onClick={handlePlayPause}
-                className="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity"
+                className="absolute inset-0 bg-black/40 rounded-lg flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity"
               >
                 {isPlaying ? (
-                  <Pause className="w-4 h-4 text-white" />
+                  <Pause className="w-6 h-6 text-white" />
                 ) : (
-                  <Play className="w-4 h-4 text-white ml-0.5" />
+                  <Play className="w-6 h-6 text-white ml-0.5" />
                 )}
               </button>
             </div>
@@ -410,66 +410,61 @@ const AudioDetailPage = () => {
             {/* Información del audio */}
             <div className="flex-1 min-w-0">
               {/* Título de la canción en negrita */}
-              <h2 className="text-lg font-bold text-gray-900 mb-1 truncate">
+              <h2 className="text-xl font-bold text-gray-900 mb-1 truncate">
                 {audio?.title || 'Título no disponible'}
               </h2>
               
-              {/* Nombre del artista debajo */}
-              <p className="text-sm text-gray-600 mb-2 truncate">
-                {audio?.artist || 'Artista desconocido'}
-              </p>
-              
-              {/* Indicador de tiempo + cantidad de reels */}
-              <div className="flex items-center gap-4 text-xs text-gray-500 mb-3">
-                <div className="flex items-center gap-1">
-                  <Clock className="w-3 h-3" />
-                  <span>{formatDuration(audio?.duration || 0)}</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <Users className="w-3 h-3" />
-                  <span>{formatNumber(audio?.uses_count || 0)} reels</span>
-                </div>
+              {/* Nombre del artista debajo con indicador de más artistas */}
+              <div className="flex items-center gap-2 mb-2">
+                <p className="text-base text-gray-600 truncate">
+                  {audio?.artist || 'Artista desconocido'}
+                </p>
+                {audio?.artist && (
+                  <span className="text-gray-500 text-sm">+ ></span>
+                )}
               </div>
               
-              {/* Fila de botones pequeños */}
-              <div className="flex items-center gap-3">
-                {/* Botón pequeño iTunes "Añadir" */}
-                <Button 
-                  onClick={handleAddToItunes}
-                  size="sm"
-                  variant="outline"
-                  className="h-7 px-3 text-xs border-gray-300 text-gray-700 hover:bg-gray-50 flex items-center gap-1"
-                >
-                  <Apple className="w-3 h-3" />
-                  Añadir
-                </Button>
-                
-                {/* Icono guardar (marcador) */}
-                <button 
-                  onClick={handleSave}
-                  className="p-1.5 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-                >
-                  <Bookmark className="w-4 h-4" />
-                </button>
-                
-                {/* Icono compartir (avión papel) */}
-                <button 
-                  onClick={handleShare}
-                  className="p-1.5 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-lg transition-colors"
-                >
-                  <Send className="w-4 h-4" />
-                </button>
+              {/* Duración del audio */}
+              <div className="flex items-center gap-1 text-sm text-gray-500 mb-2">
+                <Clock className="w-4 h-4" />
+                <span>{formatDuration(audio?.duration || 0)}</span>
+              </div>
+              
+              {/* Original sound by */}
+              <p className="text-sm text-gray-600 mb-2">
+                Original sound by: {audio?.artist || 'Artista desconocido'}
+              </p>
+              
+              {/* Cantidad de publicaciones */}
+              <div className="flex items-center gap-1 text-sm text-gray-600 mb-4">
+                <Users className="w-4 h-4" />
+                <span>{formatNumber(audio?.uses_count || 0)} publicaciones</span>
               </div>
             </div>
           </div>
 
-          {/* Botón principal verde centrado "Usar audio" */}
-          <Button 
-            onClick={handleUseThisSound}
-            className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-3 rounded-xl text-base transition-colors"
-          >
-            Usar audio
-          </Button>
+          {/* Botones de acción (fila de 2) */}
+          <div className="grid grid-cols-2 gap-3 mb-6">
+            {/* Botón Add to music app */}
+            <Button 
+              onClick={handleAddToItunes}
+              variant="outline"
+              className="bg-white border-gray-300 text-gray-700 hover:bg-gray-50 flex items-center justify-center gap-2 py-3"
+            >
+              <Plus className="w-4 h-4" />
+              Add to music app
+            </Button>
+            
+            {/* Botón Add to Favorites */}
+            <Button 
+              onClick={handleSave}
+              variant="outline"
+              className="bg-white border-gray-300 text-gray-700 hover:bg-gray-50 flex items-center justify-center gap-2 py-3"
+            >
+              <Bookmark className="w-4 h-4" />
+              Add to Favorites
+            </Button>
+          </div>
         </div>
 
         {/* Parte Inferior - Rejilla de videos */}
