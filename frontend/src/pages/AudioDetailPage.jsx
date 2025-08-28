@@ -3,12 +3,15 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { 
   ArrowLeft, Play, Pause, Music, Users, Clock, Calendar, Volume2, Share2, Heart, 
   MessageCircle, MoreVertical, Plus, TrendingUp, Download, Repeat, Shuffle,
-  BarChart3, AudioWaveform, Star, Eye, Headphones, Radio, Disc3, Send, Apple
+  BarChart3, Star, Eye, Headphones, Radio, Disc3, Send, Apple
 } from 'lucide-react';
 import { useToast } from '../hooks/use-toast';
+import { useTranslation } from '../hooks/useTranslation';
+import { useResponsiveLayout, useDynamicClasses } from '../hooks/useResponsiveLayout';
 import audioManager from '../services/AudioManager';
 import { Button } from '../components/ui/button';
 import PollCard from '../components/PollCard';
+import AudioWaveform from '../components/AudioWaveform';
 
 const AudioDetailPage = () => {
   const { audioId } = useParams();
