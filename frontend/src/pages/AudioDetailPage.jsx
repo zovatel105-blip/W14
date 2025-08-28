@@ -495,8 +495,8 @@ const AudioDetailPage = () => {
         if (response.ok) {
           setIsLiked(false);
           toast({
-            title: "Quitado de favoritos",
-            description: `"${audio.title}" eliminado de tus favoritos`
+            title: t('toast.removedFromFavorites'),
+            description: t('toast.removedFromFavoritesDesc', { title: audio.title })
           });
         } else {
           throw new Error('Error removing from favorites');
@@ -518,15 +518,15 @@ const AudioDetailPage = () => {
         if (response.ok) {
           setIsLiked(true);
           toast({
-            title: "Agregado a favoritos",
-            description: `"${audio.title}" agregado a tus favoritos`
+            title: t('toast.addedToFavorites'),
+            description: t('toast.addedToFavoritesDesc', { title: audio.title })
           });
         } else if (response.status === 400) {
           // Already in favorites
           setIsLiked(true);
           toast({
-            title: "Ya en favoritos",
-            description: `"${audio.title}" ya está en tus favoritos`
+            title: t('toast.alreadyInFavorites'),
+            description: t('toast.alreadyInFavoritesDesc', { title: audio.title })
           });
         } else {
           throw new Error('Error adding to favorites');
