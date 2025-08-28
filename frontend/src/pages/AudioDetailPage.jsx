@@ -425,8 +425,8 @@ const AudioDetailPage = () => {
     });
     
     toast({
-      title: "Audio seleccionado",
-      description: `"${audio.title}" de ${audio.artist} ha sido seleccionado para tu nueva publicación`
+      title: t('toast.audioSelected'),
+      description: t('toast.audioSelectedDesc', { title: audio.title, artist: audio.artist })
     });
   };
 
