@@ -443,8 +443,8 @@ const AudioDetailPage = () => {
         });
         
         toast({
-          title: "Compartido exitosamente",
-          description: "El audio ha sido compartido"
+          title: t('toast.sharedSuccess'),
+          description: t('toast.sharedDesc')
         });
       } else {
         // Fallback to clipboard
@@ -452,8 +452,8 @@ const AudioDetailPage = () => {
         await navigator.clipboard.writeText(textToCopy);
         
         toast({
-          title: "Enlace copiado",
-          description: "El enlace del audio se copió al portapapeles"
+          title: t('toast.linkCopied'),
+          description: t('toast.linkCopiedDesc')
         });
       }
     } catch (error) {
@@ -463,14 +463,14 @@ const AudioDetailPage = () => {
       try {
         await navigator.clipboard.writeText(window.location.href);
         toast({
-          title: "Enlace copiado",
-          description: "El enlace se copió al portapapeles"
+          title: t('toast.linkCopied'),
+          description: t('toast.linkCopiedDesc')
         });
       } catch (clipboardError) {
         console.error('Clipboard error:', clipboardError);
         toast({
-          title: "Error",
-          description: "No se pudo compartir el audio",
+          title: t('toast.error'),
+          description: t('toast.errorSharing'),
           variant: "destructive"
         });
       }
