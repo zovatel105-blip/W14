@@ -336,29 +336,28 @@ const AudioDetailPage = () => {
 
   if (error || !audio) {
     return (
-      <div className="min-h-screen bg-white">
-        {/* Header con degradado verde */}
-        <div className="bg-gradient-to-b from-green-100 to-green-50 border-b border-green-200">
-          <div className="flex items-center justify-between px-4 py-3">
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={() => navigate(-1)}
-              className="text-gray-900 hover:bg-white/50 p-2"
-            >
-              <ArrowLeft className="w-6 h-6" />
-            </Button>
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className="text-gray-900 hover:bg-white/50 p-2"
-            >
-              <Share2 className="w-6 h-6" />
-            </Button>
-          </div>
+      <div className="min-h-screen bg-white flex flex-col">
+        {/* Encabezado con degradado verde */}
+        <div className="h-[10vh] bg-gradient-to-r from-green-100 via-green-50 to-yellow-50 flex items-center justify-between px-4">
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            onClick={() => navigate(-1)}
+            className="text-gray-900 hover:bg-white/50 p-3"
+          >
+            <ArrowLeft className="w-6 h-6" />
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="text-gray-900 hover:bg-white/50 p-3"
+          >
+            <Share2 className="w-6 h-6" />
+          </Button>
         </div>
-        <div className="px-4 py-8">
-          <div className="text-center py-12 bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20">
+        
+        <div className="flex-1 flex items-center justify-center px-4">
+          <div className="text-center py-12 bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 max-w-md">
             <Music className="w-16 h-16 text-gray-400 mx-auto mb-4" />
             <p className="text-gray-700 text-lg font-medium mb-2">Este audio no existe o ha sido eliminado</p>
             <p className="text-gray-500 text-sm mb-4">ID de audio: {audioId}</p>
