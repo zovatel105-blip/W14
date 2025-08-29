@@ -799,9 +799,91 @@ const AudioDetailPage = () => {
     }
   };
 
-  const handlePollShare = (pollId) => {
+  const handlePollShare = async (pollId) => {
     console.log('📤 Share poll:', pollId);
-    // TODO: Implement share functionality
+    
+    try {
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        toast({
+          title: "Inicia sesión",
+          description: "Necesitas iniciar sesión para compartir",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Find the poll to share
+      const poll = posts.find(p => p.id === pollId);
+      if (!poll) return;
+
+      // Increment share count on backend
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/polls/${pollId}/share`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (!response.ok) {
+        throw new Error('Error sharing poll');
+      }
+
+      const result = await response.json();
+      
+      // Update local state
+      setPosts(prev => prev.map(p => {
+        if (p.id === pollId) {
+          return {
+            ...p,
+            shares: result.shares
+          };
+        }
+        return p;
+      }));
+      
+      // Try to use Web Share API first (better for mobile)
+      if (navigator.share) {
+        try {
+          await navigator.share({
+            title: poll.title || 'Vota en esta encuesta',
+            text: 'Mira esta increíble votación',
+            url: `${window.location.origin}/poll/${pollId}`,
+          });
+          toast({
+            title: "¡Compartido exitosamente!",
+            description: "La votación ha sido compartida",
+          });
+          return;
+        } catch (err) {
+          // If user cancels sharing, don't show error
+          if (err.name !== 'AbortError') {
+            console.log('Error sharing:', err);
+            // If Web Share API fails, copy to clipboard
+            await navigator.clipboard.writeText(`${window.location.origin}/poll/${pollId}`);
+            toast({
+              title: "Link copiado",
+              description: "El enlace de la votación se ha copiado al portapapeles",
+            });
+          }
+        }
+      } else {
+        // If Web Share API is not available, copy to clipboard
+        await navigator.clipboard.writeText(`${window.location.origin}/poll/${pollId}`);
+        toast({
+          title: "Link copiado",
+          description: "El enlace de la votación se ha copiado al portapapeles",
+        });
+      }
+    } catch (error) {
+      console.error('Error sharing poll:', error);
+      toast({
+        title: "Error al compartir",
+        description: error.message || "No se pudo compartir la votación. Intenta de nuevo.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handlePollComment = (pollId) => {
