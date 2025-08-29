@@ -7,7 +7,7 @@ import { useAuth } from '../contexts/AuthContext';
 
 const ResponsiveLayout = ({ children, onCreatePoll }) => {
   const location = useLocation();
-  const { isTikTokMode } = useTikTok();
+  const { isTikTokMode, hideRightNavigation } = useTikTok();
   const { isAuthenticated } = useAuth();
   
   // Check if we're on a page that should use the TikTok-style layout
