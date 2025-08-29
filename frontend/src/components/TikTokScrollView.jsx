@@ -496,7 +496,7 @@ const TikTokPollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, onCr
                   
                   {/* Title - Centered */}
                   <div className="flex-1 flex justify-center">
-                    <div className="text-white font-bold text-lg leading-tight text-center px-2">
+                    <div className="text-white font-bold text-lg leading-tight text-center px-2 drop-shadow-lg" style={{textShadow: '2px 2px 4px rgba(0,0,0,0.8)'}}>
                       {option.text}
                     </div>
                   </div>
