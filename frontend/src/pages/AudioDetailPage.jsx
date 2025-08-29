@@ -630,9 +630,90 @@ const AudioDetailPage = () => {
     setShowTikTokView(true);
   };
 
-  const handlePollVote = (pollId, optionId) => {
+  const handlePollVote = async (pollId, optionId) => {
     console.log('🗳️ Vote:', pollId, optionId);
-    // TODO: Implement voting functionality
+    
+    try {
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        toast({
+          title: "Inicia sesión",
+          description: "Necesitas iniciar sesión para votar",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Optimistic update
+      setPosts(prev => prev.map(poll => {
+        if (poll.id === pollId) {
+          // Don't allow multiple votes
+          if (poll.userVote) return poll;
+          
+          return {
+            ...poll,
+            userVote: optionId,
+            options: poll.options.map(opt => ({
+              ...opt,
+              votes: opt.id === optionId ? opt.votes + 1 : opt.votes
+            })),
+            totalVotes: poll.totalVotes + 1
+          };
+        }
+        return poll;
+      }));
+
+      // Send vote to backend
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/polls/${pollId}/vote`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ option_id: optionId })
+      });
+
+      if (!response.ok) {
+        throw new Error('Error voting on poll');
+      }
+
+      const result = await response.json();
+      
+      toast({
+        title: "¡Voto registrado!",
+        description: "Tu voto ha sido contabilizado exitosamente",
+      });
+      
+      // Update with server response
+      setPosts(prev => prev.map(poll => 
+        poll.id === pollId ? { ...poll, ...result.poll } : poll
+      ));
+      
+    } catch (error) {
+      console.error('Error voting:', error);
+      
+      // Revert optimistic update
+      setPosts(prev => prev.map(poll => {
+        if (poll.id === pollId && poll.userVote === optionId) {
+          return {
+            ...poll,
+            userVote: null,
+            options: poll.options.map(opt => ({
+              ...opt,
+              votes: opt.id === optionId ? opt.votes - 1 : opt.votes
+            })),
+            totalVotes: poll.totalVotes - 1
+          };
+        }
+        return poll;
+      }));
+      
+      toast({
+        title: "Error al votar",
+        description: error.message || "No se pudo registrar tu voto. Intenta de nuevo.",
+        variant: "destructive",
+      });
+    }
   };
 
   const handlePollLike = (pollId) => {
