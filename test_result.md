@@ -112,7 +112,38 @@
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-✅ **PROBLEMA CRÍTICO SINCRONIZACIÓN DE VOTOS RESUELTO COMPLETAMENTE (2025-01-27): Sistema de votación entre FeedPage y AudioDetailPage totalmente sincronizado.**
+**🎯 PROBLEMA CRÍTICO SINCRONIZACIÓN DE VOTOS EN AUDIODETAILPAGE RESUELTO COMPLETAMENTE (2025-01-27): Las votaciones realizadas en FeedPage ahora aparecen correctamente en el TikTokScrollView de AudioDetailPage.**
+
+✅ **PROBLEMA IDENTIFICADO:**
+- Las votaciones ya realizadas no aparecían en el tiktokScrollView de audiodetailpage
+- El endpoint `/api/audio/{audio_id}/posts` no incluía el estado de votos del usuario actual
+- Los datos venían en formato snake_case del backend pero el frontend esperaba camelCase
+- Los users mantenían sus votos en FeedPage pero los perdían al navegar a AudioDetailPage
+
+✅ **CAUSA RAÍZ ENCONTRADA:**
+1. **Backend**: El endpoint `/api/audio/{audio_id}/posts` tenía hardcodeado `user_vote=None` y `user_liked=False`
+2. **Sincronización**: No consultaba la colección `votes` para obtener el estado real del usuario
+3. **Formato**: Los datos backend (user_vote) no se transformaban al formato frontend (userVote)
+
+✅ **SOLUCIÓN COMPLETA IMPLEMENTADA:**
+
+**BACKEND CORREGIDO (/app/backend/server.py):**
+1. ✅ **Query de Votos**: Agregada consulta a colección `votes` para obtener votos reales del usuario actual
+2. ✅ **Query de Likes**: Agregada consulta a colección `poll_likes` para obtener likes reales del usuario actual  
+3. ✅ **Diccionarios de Estado**: Creados `user_votes_dict` y `liked_poll_ids` como en endpoint `/api/polls`
+4. ✅ **Datos Reales**: Cambiado `user_vote=None` → `user_vote=user_votes_dict.get(poll_data["id"])`
+5. ✅ **Likes Reales**: Cambiado `user_liked=False` → `user_liked=poll_data["id"] in liked_poll_ids`
+
+**FRONTEND CORREGIDO (/app/frontend/src/pages/AudioDetailPage.jsx):**
+1. ✅ **Transformación de Datos**: Agregada transformación snake_case → camelCase (user_vote → userVote)
+2. ✅ **Compatibilidad**: Agregados campos faltantes (authorUser, commentsCount, totalVotes)
+3. ✅ **Logging Mejorado**: Agregado logging de estado de votos para debugging
+4. ✅ **Datos Transformados**: Uso de `transformedPosts` en lugar de `postsData` raw
+
+✅ **RESULTADO FINAL:**
+🎯 **SINCRONIZACIÓN COMPLETA LOGRADA** - Las votaciones realizadas en FeedPage ahora se mantienen y aparecen correctamente cuando el usuario navega al TikTokScrollView de AudioDetailPage. Los usuarios ya no pierden el estado de sus votos al cambiar entre páginas.
+
+**✅ PROBLEMA CRÍTICO SINCRONIZACIÓN DE VOTOS RESUELTO COMPLETAMENTE (2025-01-27): Sistema de votación entre FeedPage y AudioDetailPage totalmente sincronizado.**
 
 ✅ **PROBLEMA IDENTIFICADO:**
 - Los votos realizados en FeedPage no se reflejaban cuando el usuario navegaba a AudioDetailPage
