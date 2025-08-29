@@ -709,17 +709,16 @@ const AudioDetailPage = () => {
   const handlePollLike = async (pollId) => {
     console.log('❤️ Like poll:', pollId);
     
-    try {
-      const token = localStorage.getItem('authToken');
-      if (!token) {
-        toast({
-          title: "Inicia sesión",
-          description: "Necesitas iniciar sesión para dar like",
-          variant: "destructive",
-        });
-        return;
-      }
+    if (!localStorage.getItem('authToken')) {
+      toast({
+        title: "Inicia sesión",
+        description: "Necesitas iniciar sesión para dar like",
+        variant: "destructive",
+      });
+      return;
+    }
 
+    try {
       // Optimistic update
       let wasLiked = false;
       setPosts(prev => prev.map(poll => {
@@ -734,20 +733,8 @@ const AudioDetailPage = () => {
         return poll;
       }));
 
-      // Send like to backend
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/polls/${pollId}/like`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      });
-
-      if (!response.ok) {
-        throw new Error('Error liking poll');
-      }
-
-      const result = await response.json();
+      // Send like to backend using pollService
+      const result = await pollService.toggleLike(pollId);
       
       // Update with actual server response
       setPosts(prev => prev.map(poll => {
