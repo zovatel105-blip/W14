@@ -440,12 +440,9 @@ const TikTokPollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, onCr
                 <div className="absolute inset-0 ring-2 ring-green-400 ring-inset"></div>
               )}
 
-              {/* Combined Profile + Title Layout - Solo aparece si hay contenido */}
+              {/* Combined Profile + Title Layout - Posición fija para todas las tarjetas */}
               {(option.text || (option.mentioned_users && option.mentioned_users.length > 0)) && (
-                <div className={cn(
-                  "absolute left-4 right-4 z-20",
-                  optionIndex < 2 ? "top-6" : "bottom-6"
-                )}>
+                <div className="absolute left-4 right-4 bottom-6 z-20">
                   <div className={cn(
                     "flex items-center px-4 py-4 rounded-2xl backdrop-blur-md shadow-2xl border border-white/30",
                     "bg-transparent"
