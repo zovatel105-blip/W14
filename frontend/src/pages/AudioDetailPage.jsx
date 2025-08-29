@@ -11,6 +11,7 @@ import { useTranslation } from '../hooks/useTranslation';
 import { useResponsiveLayout, useDynamicClasses } from '../hooks/useResponsiveLayout';
 import { useTikTok } from '../contexts/TikTokContext';
 import audioManager from '../services/AudioManager';
+import pollService from '../services/pollService';
 import { Button } from '../components/ui/button';
 import PollCard from '../components/PollCard';
 import PollModal from '../components/PollModal';
