@@ -923,8 +923,8 @@ const AudioDetailPage = () => {
             className="h-full overflow-y-auto overscroll-behavior-y-contain px-1"
             onScroll={handleScroll}
           >
-            {/* Usar AudioDetailGrid personalizado con colores del AudioDetailPage */}
-            <AudioDetailGrid 
+            {/* Usar TikTokProfileGrid para mantener diseño consistente con ProfilePage */}
+            <TikTokProfileGrid 
               polls={posts} 
               onPollClick={handlePollClick}
             />
