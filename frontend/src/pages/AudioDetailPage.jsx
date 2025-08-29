@@ -634,17 +634,16 @@ const AudioDetailPage = () => {
   const handlePollVote = async (pollId, optionId) => {
     console.log('🗳️ Vote:', pollId, optionId);
     
-    try {
-      const token = localStorage.getItem('authToken');
-      if (!token) {
-        toast({
-          title: "Inicia sesión",
-          description: "Necesitas iniciar sesión para votar",
-          variant: "destructive",
-        });
-        return;
-      }
+    if (!localStorage.getItem('authToken')) {
+      toast({
+        title: "Inicia sesión",
+        description: "Necesitas iniciar sesión para votar",
+        variant: "destructive",
+      });
+      return;
+    }
 
+    try {
       // Optimistic update
       setPosts(prev => prev.map(poll => {
         if (poll.id === pollId) {
@@ -664,31 +663,21 @@ const AudioDetailPage = () => {
         return poll;
       }));
 
-      // Send vote to backend
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/polls/${pollId}/vote`, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ option_id: optionId })
-      });
-
-      if (!response.ok) {
-        throw new Error('Error voting on poll');
-      }
-
-      const result = await response.json();
+      // Send vote to backend using pollService
+      await pollService.voteOnPoll(pollId, optionId);
       
       toast({
         title: "¡Voto registrado!",
         description: "Tu voto ha sido contabilizado exitosamente",
       });
       
-      // Update with server response
-      setPosts(prev => prev.map(poll => 
-        poll.id === pollId ? { ...poll, ...result.poll } : poll
-      ));
+      // Refresh poll data to get accurate counts
+      const updatedPoll = await pollService.refreshPoll(pollId);
+      if (updatedPoll) {
+        setPosts(prev => prev.map(poll => 
+          poll.id === pollId ? updatedPoll : poll
+        ));
+      }
       
     } catch (error) {
       console.error('Error voting:', error);
