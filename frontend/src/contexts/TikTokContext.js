@@ -12,6 +12,7 @@ export const useTikTok = () => {
 
 export const TikTokProvider = ({ children }) => {
   const [isTikTokMode, setIsTikTokMode] = useState(false);
+  const [hideRightNavigation, setHideRightNavigation] = useState(false);
 
   const enterTikTokMode = () => {
     setIsTikTokMode(true);
@@ -21,6 +22,7 @@ export const TikTokProvider = ({ children }) => {
 
   const exitTikTokMode = () => {
     setIsTikTokMode(false);
+    setHideRightNavigation(false); // Restaurar navegación cuando se sale de TikTok
     // Restore body scroll
     document.body.style.overflow = 'auto';
   };
@@ -31,6 +33,14 @@ export const TikTokProvider = ({ children }) => {
     } else {
       enterTikTokMode();
     }
+  };
+
+  const hideRightNavigationBar = () => {
+    setHideRightNavigation(true);
+  };
+
+  const showRightNavigationBar = () => {
+    setHideRightNavigation(false);
   };
 
   return (
