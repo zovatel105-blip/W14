@@ -657,6 +657,10 @@ const AudioDetailPage = () => {
 
   const handleExitTikTok = () => {
     console.log('🚪 Exiting TikTok view');
+    
+    // Restaurar la navegación lateral derecha cuando se cierra
+    showRightNavigationBar();
+    
     setShowTikTokView(false);
   };
 
