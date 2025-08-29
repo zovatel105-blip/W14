@@ -682,6 +682,18 @@ const TikTokScrollView = ({
   const [activeIndex, setActiveIndex] = useState(initialIndex);
   const [isScrolling, setIsScrolling] = useState(false);
 
+  // Scroll to initial index when component mounts (for AudioDetailPage)
+  useEffect(() => {
+    if (initialIndex > 0 && containerRef.current) {
+      setTimeout(() => {
+        containerRef.current.scrollTo({
+          top: initialIndex * containerRef.current.clientHeight,
+          behavior: 'auto'
+        });
+      }, 100);
+    }
+  }, [initialIndex]);
+
   // Preload optimization - memoize expensive calculations
   const preloadedPolls = useMemo(() => {
     return polls.map((poll, index) => ({
