@@ -679,7 +679,7 @@ const TikTokScrollView = ({
   onUseSound = null
 }) => {
   const containerRef = useRef(null);
-  const [activeIndex, setActiveIndex] = useState(0);
+  const [activeIndex, setActiveIndex] = useState(initialIndex);
   const [isScrolling, setIsScrolling] = useState(false);
 
   // Preload optimization - memoize expensive calculations
