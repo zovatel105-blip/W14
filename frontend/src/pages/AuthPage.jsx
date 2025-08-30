@@ -304,7 +304,7 @@ const LoginPage = ({ onSwitchToRegister }) => {
           </form>
 
           {/* Enhanced Switch to Register */}
-          <div className="text-center mt-8 animate-fadeIn">
+          <div className="text-center mt-8">
             <p className="text-gray-600">
               ¿No tienes cuenta?{' '}
               <button
