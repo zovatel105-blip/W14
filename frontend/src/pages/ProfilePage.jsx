@@ -668,18 +668,20 @@ const ProfilePage = () => {
         <div className="bg-white rounded-xl p-6 shadow-sm">
           <div className="flex items-center gap-6">
             {/* Avatar con borde degradado */}
-            <div className="relative">
+            <div className="relative w-28 h-28">
               <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full p-1">
                 {isOwnProfile ? (
-                  <AvatarUpload
-                    currentAvatar={displayUser.avatar}
-                    onAvatarUpdate={(result, avatarUrl) => {
-                      setViewedUser(prev => ({ ...prev, avatar: avatarUrl }));
-                    }}
-                    className="w-24 h-24 bg-white rounded-full"
-                  />
+                  <div className="w-full h-full bg-white rounded-full overflow-hidden">
+                    <AvatarUpload
+                      currentAvatar={displayUser.avatar}
+                      onAvatarUpdate={(result, avatarUrl) => {
+                        setViewedUser(prev => ({ ...prev, avatar: avatarUrl }));
+                      }}
+                      className="w-full h-full"
+                    />
+                  </div>
                 ) : (
-                  <Avatar className="w-24 h-24 bg-white">
+                  <Avatar className="w-full h-full bg-white">
                     <AvatarImage src={displayUser.avatar} alt={displayUser.username} />
                     <AvatarFallback className="bg-gradient-to-br from-purple-500 to-pink-500 text-white text-2xl font-bold">
                       {(displayUser.displayName || displayUser.username || 'U').charAt(0).toUpperCase()}
