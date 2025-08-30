@@ -784,24 +784,28 @@ const ProfilePage = () => {
           </Button>
         </div>
 
-        {/* TABLA Y PUBLICACIONES (existente) */}
+        {/* TABS OPTIMIZADAS MÓVIL */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-4 bg-white rounded-xl shadow-sm">
-            <TabsTrigger value="polls" className="flex items-center gap-2">
+          <TabsList className="grid w-full grid-cols-4 bg-white rounded-xl shadow-sm h-auto p-1">
+            <TabsTrigger value="polls" className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 p-2 sm:p-3 text-xs sm:text-sm">
               <Grid3X3 className="w-4 h-4" />
-              Publicaciones
+              <span className="hidden sm:inline">Publicaciones</span>
+              <span className="sm:hidden">Posts</span>
             </TabsTrigger>
-            <TabsTrigger value="liked" className="flex items-center gap-2">
+            <TabsTrigger value="liked" className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 p-2 sm:p-3 text-xs sm:text-sm">
               <Heart className="w-4 h-4" />
-              Me gusta
+              <span className="hidden sm:inline">Me gusta</span>
+              <span className="sm:hidden">Likes</span>
             </TabsTrigger>
-            <TabsTrigger value="mentions" className="flex items-center gap-2">
+            <TabsTrigger value="mentions" className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 p-2 sm:p-3 text-xs sm:text-sm">
               <AtSign className="w-4 h-4" />
-              Menciones
+              <span className="hidden sm:inline">Menciones</span>
+              <span className="sm:hidden">@</span>
             </TabsTrigger>
-            <TabsTrigger value="saved" className="flex items-center gap-2">
+            <TabsTrigger value="saved" className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 p-2 sm:p-3 text-xs sm:text-sm">
               <Bookmark className="w-4 h-4" />
-              Guardados
+              <span className="hidden sm:inline">Guardados</span>
+              <span className="sm:hidden">Saved</span>
             </TabsTrigger>
           </TabsList>
 
