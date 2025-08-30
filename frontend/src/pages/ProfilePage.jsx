@@ -669,25 +669,27 @@ const ProfilePage = () => {
           <div className="flex items-center gap-6">
             {/* Avatar con borde degradado */}
             <div className="relative">
-              {isOwnProfile ? (
-                <AvatarUpload
-                  currentAvatar={displayUser.avatar}
-                  onAvatarUpdate={(result, avatarUrl) => {
-                    setViewedUser(prev => ({ ...prev, avatar: avatarUrl }));
-                  }}
-                  className="w-24 h-24 ring-4 ring-gradient-to-r from-purple-500 to-pink-500 ring-offset-4"
-                />
-              ) : (
-                <Avatar className="w-24 h-24 ring-4 ring-gradient-to-r from-purple-500 to-pink-500 ring-offset-4">
-                  <AvatarImage src={displayUser.avatar} alt={displayUser.username} />
-                  <AvatarFallback className="bg-gradient-to-br from-purple-500 to-pink-500 text-white text-2xl font-bold">
-                    {(displayUser.displayName || displayUser.username || 'U').charAt(0).toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
-              )}
+              <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full p-1">
+                {isOwnProfile ? (
+                  <AvatarUpload
+                    currentAvatar={displayUser.avatar}
+                    onAvatarUpdate={(result, avatarUrl) => {
+                      setViewedUser(prev => ({ ...prev, avatar: avatarUrl }));
+                    }}
+                    className="w-24 h-24 bg-white rounded-full"
+                  />
+                ) : (
+                  <Avatar className="w-24 h-24 bg-white">
+                    <AvatarImage src={displayUser.avatar} alt={displayUser.username} />
+                    <AvatarFallback className="bg-gradient-to-br from-purple-500 to-pink-500 text-white text-2xl font-bold">
+                      {(displayUser.displayName || displayUser.username || 'U').charAt(0).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                )}
+              </div>
               
               {/* Botón de acción "+" superpuesto */}
-              <button className="absolute -bottom-1 -right-1 w-8 h-8 bg-blue-500 hover:bg-blue-600 rounded-full flex items-center justify-center shadow-lg transition-colors">
+              <button className="absolute -bottom-1 -right-1 w-8 h-8 bg-blue-500 hover:bg-blue-600 rounded-full flex items-center justify-center shadow-lg transition-colors z-10">
                 <Plus className="w-4 h-4 text-white" />
               </button>
             </div>
