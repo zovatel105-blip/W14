@@ -664,11 +664,11 @@ const ProfilePage = () => {
       {/* CONTENIDO PRINCIPAL */}
       <div className="max-w-4xl mx-auto px-4 py-6 space-y-6">
         
-        {/* AVATAR + MÉTRICAS */}
-        <div className="bg-white rounded-xl p-6 shadow-sm">
-          <div className="flex items-center gap-6">
+        {/* AVATAR + MÉTRICAS OPTIMIZADO MÓVIL */}
+        <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm">
+          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
             {/* Avatar con borde degradado */}
-            <div className="relative w-28 h-28">
+            <div className="relative w-20 h-20 sm:w-28 sm:h-28 flex-shrink-0">
               <div className="absolute inset-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full p-1">
                 {isOwnProfile ? (
                   <div className="w-full h-full bg-white rounded-full overflow-hidden">
@@ -683,7 +683,7 @@ const ProfilePage = () => {
                 ) : (
                   <Avatar className="w-full h-full bg-white">
                     <AvatarImage src={displayUser.avatar} alt={displayUser.username} />
-                    <AvatarFallback className="bg-gradient-to-br from-purple-500 to-pink-500 text-white text-2xl font-bold">
+                    <AvatarFallback className="bg-gradient-to-br from-purple-500 to-pink-500 text-white text-lg sm:text-2xl font-bold">
                       {(displayUser.displayName || displayUser.username || 'U').charAt(0).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
@@ -691,40 +691,42 @@ const ProfilePage = () => {
               </div>
               
               {/* Botón de acción "+" superpuesto */}
-              <button className="absolute -bottom-1 -right-1 w-8 h-8 bg-blue-500 hover:bg-blue-600 rounded-full flex items-center justify-center shadow-lg transition-colors z-10">
-                <Plus className="w-4 h-4 text-white" />
+              <button className="absolute -bottom-0.5 -right-0.5 w-6 h-6 sm:w-8 sm:h-8 bg-blue-500 hover:bg-blue-600 rounded-full flex items-center justify-center shadow-lg transition-colors z-10">
+                <Plus className="w-3 h-3 sm:w-4 sm:h-4 text-white" />
               </button>
             </div>
             
-            {/* Métricas */}
-            <div className="flex-1 grid grid-cols-2 gap-4">
-              {/* Izquierda: votos y seguidores */}
-              <div className="space-y-3">
-                <div className="text-center">
-                  <p className="text-2xl font-bold text-gray-900">{displayUser.totalVotes || 0}</p>
-                  <p className="text-sm text-gray-600 font-bold">Votos</p>
+            {/* Métricas - Layout responsive */}
+            <div className="flex-1 w-full">
+              <div className="grid grid-cols-4 gap-2 sm:gap-4 text-center sm:text-left">
+                {/* Votos */}
+                <div>
+                  <p className="text-lg sm:text-2xl font-bold text-gray-900">{displayUser.totalVotes || 0}</p>
+                  <p className="text-xs sm:text-sm text-gray-600 font-bold">Votos</p>
                 </div>
+                
+                {/* Seguidores */}
                 <div 
-                  className="text-center cursor-pointer hover:bg-gray-50 rounded p-2 transition-colors"
+                  className="cursor-pointer hover:bg-gray-50 rounded p-1 sm:p-2 transition-colors"
                   onClick={() => setShowFollowersModal(true)}
                 >
-                  <p className="text-2xl font-bold text-gray-900">{followersCount}</p>
-                  <p className="text-sm text-gray-600 font-bold">Seguidores</p>
+                  <p className="text-lg sm:text-2xl font-bold text-gray-900">{followersCount}</p>
+                  <p className="text-xs sm:text-sm text-gray-600 font-bold">Seguidores</p>
                 </div>
-              </div>
-              
-              {/* Derecha: me gusta y seguidos */}
-              <div className="space-y-3">
-                <div className="text-center">
-                  <p className="text-2xl font-bold text-gray-900">{displayUser.totalLikes || 0}</p>
-                  <p className="text-sm text-gray-600 font-bold">Me gusta</p>
+                
+                {/* Me gusta */}
+                <div>
+                  <p className="text-lg sm:text-2xl font-bold text-gray-900">{displayUser.totalLikes || 0}</p>
+                  <p className="text-xs sm:text-sm text-gray-600 font-bold">Me gusta</p>
                 </div>
+                
+                {/* Seguidos */}
                 <div 
-                  className="text-center cursor-pointer hover:bg-gray-50 rounded p-2 transition-colors"
+                  className="cursor-pointer hover:bg-gray-50 rounded p-1 sm:p-2 transition-colors"
                   onClick={() => setShowFollowingModal(true)}
                 >
-                  <p className="text-2xl font-bold text-gray-900">{followingCount}</p>
-                  <p className="text-sm text-gray-600 font-bold">Seguidos</p>
+                  <p className="text-lg sm:text-2xl font-bold text-gray-900">{followingCount}</p>
+                  <p className="text-xs sm:text-sm text-gray-600 font-bold">Seguidos</p>
                 </div>
               </div>
             </div>
