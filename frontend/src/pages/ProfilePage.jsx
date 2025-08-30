@@ -635,166 +635,164 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 pb-20">
-      {/* Header */}
-      <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-lg border-b border-gray-200/50 shadow-sm">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-3">
-              {!isOwnProfile && (
-                <Button variant="ghost" size="sm" onClick={handleBack} className="hover:bg-gray-100">
-                  <ArrowLeft className="w-5 h-5" />
-                </Button>
-              )}
-              <h1 className="text-xl font-bold text-gray-900">
-                {isOwnProfile ? 'Mi Perfil' : `@${displayUser.username}`}
-              </h1>
-            </div>
-            {isOwnProfile && (
-              <Button variant="ghost" size="sm" className="hover:bg-gray-100" onClick={handleSettingsClick}>
-                <Settings className="w-5 h-5" />
+    <div className="min-h-screen bg-gray-50">
+      {/* NUEVO ENCABEZADO SUPERIOR */}
+      <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
+        <div className="max-w-4xl mx-auto px-4 py-3">
+          <div className="flex items-center justify-between">
+            {/* Menú hamburguesa (izquierda) */}
+            <Button variant="ghost" size="sm" className="hover:bg-gray-100">
+              <Menu className="w-6 h-6" />
+            </Button>
+            
+            {/* Nombre de usuario + switch de cuentas (centro) */}
+            <div className="flex items-center gap-2">
+              <h1 className="text-lg font-semibold text-gray-900">@{displayUser.username}</h1>
+              <Button variant="ghost" size="sm" className="hover:bg-gray-100">
+                <ChevronDown className="w-4 h-4" />
               </Button>
-            )}
+            </div>
+            
+            {/* Ícono de configuración (derecha) */}
+            <Button variant="ghost" size="sm" className="hover:bg-gray-100" onClick={handleSettingsClick}>
+              <Settings className="w-6 h-6" />
+            </Button>
           </div>
         </div>
       </header>
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        {/* Profile Header */}
-        <Card className="mb-6 overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600 text-white">
-          <CardContent className="p-6">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
-              <div className="relative">
-                {isOwnProfile ? (
-                  <AvatarUpload
-                    currentAvatar={displayUser.avatar}
-                    onAvatarUpdate={(result, avatarUrl) => {
-                      // Update the displayed user's avatar
-                      setViewedUser(prev => ({ ...prev, avatar: avatarUrl }));
-                      
-                      toast({
-                        title: "Avatar actualizado",
-                        description: "Tu foto de perfil se actualizó correctamente",
-                      });
-                    }}
-                    size="xl"
-                    showUploadButton={false}
-                    className="ring-4 ring-white/20"
-                  />
-                ) : (
-                  <Avatar className="w-32 h-32 ring-4 ring-white/20">
-                    <AvatarImage src={displayUser.avatar} alt={displayUser.displayName} />
-                    <AvatarFallback className="bg-white/20 text-white text-2xl font-bold">
-                      {((displayUser?.displayName || displayUser?.username || 'U') + '').charAt(0).toUpperCase()}
-                    </AvatarFallback>
-                  </Avatar>
-                )}
-                {displayUser.verified && (
-                  <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 rounded-full flex items-center justify-center ring-4 ring-white">
-                    <Trophy className="w-4 h-4 text-white" />
-                  </div>
-                )}
-              </div>
-
-              <div className="flex-1 space-y-2">
-                <div className="flex items-center gap-2">
-                  <h2 className="text-2xl font-bold">{displayUser.displayName}</h2>
-                  <Badge variant="secondary" className="bg-white/20 text-white hover:bg-white/30">
-                    @{displayUser.username}
-                  </Badge>
-                  {/* Removed level badge */}
+      {/* CONTENIDO PRINCIPAL */}
+      <div className="max-w-4xl mx-auto px-4 py-6 space-y-6">
+        
+        {/* AVATAR + MÉTRICAS */}
+        <div className="bg-white rounded-xl p-6 shadow-sm">
+          <div className="flex items-center gap-6">
+            {/* Avatar con borde degradado */}
+            <div className="relative">
+              {isOwnProfile ? (
+                <AvatarUpload
+                  currentAvatar={displayUser.avatar}
+                  onAvatarUpdate={(result, avatarUrl) => {
+                    setViewedUser(prev => ({ ...prev, avatar: avatarUrl }));
+                  }}
+                  className="w-24 h-24 ring-4 ring-gradient-to-r from-purple-500 to-pink-500 ring-offset-4"
+                />
+              ) : (
+                <Avatar className="w-24 h-24 ring-4 ring-gradient-to-r from-purple-500 to-pink-500 ring-offset-4">
+                  <AvatarImage src={displayUser.avatar} alt={displayUser.username} />
+                  <AvatarFallback className="bg-gradient-to-br from-purple-500 to-pink-500 text-white text-2xl font-bold">
+                    {(displayUser.displayName || displayUser.username || 'U').charAt(0).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+              )}
+              
+              {/* Botón de acción "+" superpuesto */}
+              <button className="absolute -bottom-1 -right-1 w-8 h-8 bg-blue-500 hover:bg-blue-600 rounded-full flex items-center justify-center shadow-lg transition-colors">
+                <Plus className="w-4 h-4 text-white" />
+              </button>
+            </div>
+            
+            {/* Métricas */}
+            <div className="flex-1 grid grid-cols-2 gap-4">
+              {/* Izquierda: votos y seguidores */}
+              <div className="space-y-3">
+                <div className="text-center">
+                  <p className="text-2xl font-bold text-gray-900">{displayUser.totalVotes || 0}</p>
+                  <p className="text-sm text-gray-600 font-bold">Votos</p>
                 </div>
-                
-                <p className="text-white/90 max-w-md">{displayUser.bio}</p>
-                
-
+                <div 
+                  className="text-center cursor-pointer hover:bg-gray-50 rounded p-2 transition-colors"
+                  onClick={() => setShowFollowersModal(true)}
+                >
+                  <p className="text-2xl font-bold text-gray-900">{followersCount}</p>
+                  <p className="text-sm text-gray-600 font-bold">Seguidores</p>
+                </div>
               </div>
-
-              <div className="flex gap-2">
-                {isOwnProfile ? (
-                  <>
-                    <Button 
-                      variant="outline" 
-                      className="bg-white/10 border-white/20 text-white hover:bg-white/20"
-                      onClick={() => setEditProfileModalOpen(true)}
-                    >
-                      <Settings className="w-4 h-4 mr-2" />
-                      Editar
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      className="bg-blue-500/20 border-blue-500/30 text-white hover:bg-blue-500/30"
-                      onClick={handleShareProfile}
-                    >
-                      <Share2 className="w-4 h-4 mr-2" />
-                      Compartir
-                    </Button>
-                  </>
-                ) : (
-                  <>
-                    <Button className="bg-blue-500 hover:bg-blue-600 text-white">
-                      <Users className="w-4 h-4 mr-2" />
-                      Seguir
-                    </Button>
-                    <Button variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20">
-                      <Heart className="w-4 h-4 mr-2" />
-                      Me gusta
-                    </Button>
-                  </>
-                )}
+              
+              {/* Derecha: me gusta y seguidos */}
+              <div className="space-y-3">
+                <div className="text-center">
+                  <p className="text-2xl font-bold text-gray-900">{displayUser.totalLikes || 0}</p>
+                  <p className="text-sm text-gray-600 font-bold">Me gusta</p>
+                </div>
+                <div 
+                  className="text-center cursor-pointer hover:bg-gray-50 rounded p-2 transition-colors"
+                  onClick={() => setShowFollowingModal(true)}
+                >
+                  <p className="text-2xl font-bold text-gray-900">{followingCount}</p>
+                  <p className="text-sm text-gray-600 font-bold">Seguidos</p>
+                </div>
               </div>
             </div>
-          </CardContent>
-        </Card>
-
-        {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-          <StatCard
-            icon={Users}
-            label="Seguidores"
-            value={followStatsLoading ? "..." : displayUser.followers.toLocaleString()}
-            color="blue"
-            clickable={!followStatsLoading}
-            onClick={handleFollowersClick}
-          />
-          <StatCard
-            icon={Vote}
-            label="Votos"
-            value={displayUser.totalVotes.toLocaleString()}
-            color="green"
-          />
-          <StatCard
-            icon={Heart}
-            label="Me gusta"
-            value={displayUser.totalLikes || 0}
-            color="pink"
-          />
-          <StatCard
-            icon={Users}
-            label="Siguiendo"
-            value={followStatsLoading ? "..." : displayUser.following}
-            color="purple"
-            clickable={!followStatsLoading}
-            onClick={handleFollowingClick}
-          />
+          </div>
         </div>
 
-        {/* Progress Bar - Removed gamification stats */}
+        {/* NOMBRE + ROL */}
+        <div className="bg-white rounded-xl p-4 shadow-sm">
+          <div className="flex items-center gap-3">
+            <h2 className="text-xl font-bold text-gray-900">
+              {displayUser.displayName || displayUser.username}
+            </h2>
+            <div className="w-px h-6 bg-gray-300"></div>
+            <p className="text-lg font-bold text-gray-700">
+              {isOwnProfile ? "Creador de contenido" : "Usuario activo"}
+            </p>
+            {displayUser.verified && (
+              <Check className="w-5 h-5 text-blue-500" />
+            )}
+          </div>
+        </div>
 
-        {/* Content Tabs */}
-        <Tabs defaultValue="polls" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="polls" className="flex items-center justify-center">
-              <Grid3X3 className="w-5 h-5" />
+        {/* BIOGRAFÍA */}
+        <div className="bg-white rounded-xl p-4 shadow-sm">
+          <p className="text-gray-600 leading-relaxed">
+            {displayUser.bio || "🎯 Creando votaciones épicas | 📊 Fan de las estadísticas | 🚀 Siempre innovando"}
+          </p>
+          <p className="text-blue-600 mt-2">@{displayUser.username}</p>
+        </div>
+
+        {/* BOTONES DE ACCIÓN */}
+        <div className="flex gap-3">
+          <Button 
+            variant="outline" 
+            className="flex-1 rounded-full py-3 font-semibold bg-gray-100 hover:bg-gray-200 border-gray-300"
+            onClick={() => setEditProfileModalOpen(true)}
+          >
+            Edit profile
+          </Button>
+          <Button 
+            variant="outline" 
+            className="flex-1 rounded-full py-3 font-semibold bg-gray-100 hover:bg-gray-200 border-gray-300"
+            onClick={() => navigate('/statistics')}
+          >
+            Statistics
+          </Button>
+          <Button 
+            className="flex-1 rounded-full py-3 font-semibold bg-blue-600 hover:bg-blue-700"
+            onClick={() => navigate('/contact')}
+          >
+            Contact
+          </Button>
+        </div>
+
+        {/* TABLA Y PUBLICACIONES (existente) */}
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-4 bg-white rounded-xl shadow-sm">
+            <TabsTrigger value="polls" className="flex items-center gap-2">
+              <Grid3X3 className="w-4 h-4" />
+              Publicaciones
             </TabsTrigger>
-            <TabsTrigger value="liked" className="flex items-center justify-center">
-              <Heart className="w-5 h-5" />
+            <TabsTrigger value="liked" className="flex items-center gap-2">
+              <Heart className="w-4 h-4" />
+              Me gusta
             </TabsTrigger>
-            <TabsTrigger value="mentions" className="flex items-center justify-center">
-              <AtSign className="w-5 h-5" />
+            <TabsTrigger value="mentions" className="flex items-center gap-2">
+              <AtSign className="w-4 h-4" />
+              Menciones
             </TabsTrigger>
-            <TabsTrigger value="saved" className="flex items-center justify-center">
-              <Bookmark className="w-5 h-5" />
+            <TabsTrigger value="saved" className="flex items-center gap-2">
+              <Bookmark className="w-4 h-4" />
+              Guardados
             </TabsTrigger>
           </TabsList>
 
