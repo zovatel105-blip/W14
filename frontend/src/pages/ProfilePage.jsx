@@ -636,26 +636,26 @@ const ProfilePage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* NUEVO ENCABEZADO SUPERIOR */}
+      {/* ENCABEZADO SUPERIOR OPTIMIZADO MÓVIL */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
-        <div className="max-w-4xl mx-auto px-4 py-3">
+        <div className="max-w-4xl mx-auto px-3 sm:px-4 py-2 sm:py-3">
           <div className="flex items-center justify-between">
             {/* Menú hamburguesa (izquierda) */}
-            <Button variant="ghost" size="sm" className="hover:bg-gray-100">
-              <Menu className="w-6 h-6" />
+            <Button variant="ghost" size="sm" className="hover:bg-gray-100 p-2">
+              <Menu className="w-5 h-5 sm:w-6 sm:h-6" />
             </Button>
             
             {/* Nombre de usuario + switch de cuentas (centro) */}
-            <div className="flex items-center gap-2">
-              <h1 className="text-lg font-semibold text-gray-900">@{displayUser.username}</h1>
-              <Button variant="ghost" size="sm" className="hover:bg-gray-100">
-                <ChevronDown className="w-4 h-4" />
+            <div className="flex items-center gap-1 sm:gap-2 max-w-[200px] sm:max-w-none">
+              <h1 className="text-base sm:text-lg font-semibold text-gray-900 truncate">@{displayUser.username}</h1>
+              <Button variant="ghost" size="sm" className="hover:bg-gray-100 p-1 sm:p-2">
+                <ChevronDown className="w-3 h-3 sm:w-4 sm:h-4" />
               </Button>
             </div>
             
             {/* Ícono de configuración (derecha) */}
-            <Button variant="ghost" size="sm" className="hover:bg-gray-100" onClick={handleSettingsClick}>
-              <Settings className="w-6 h-6" />
+            <Button variant="ghost" size="sm" className="hover:bg-gray-100 p-2" onClick={handleSettingsClick}>
+              <Settings className="w-5 h-5 sm:w-6 sm:h-6" />
             </Button>
           </div>
         </div>
