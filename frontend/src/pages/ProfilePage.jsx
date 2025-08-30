@@ -752,12 +752,12 @@ const ProfilePage = () => {
           </div>
         </div>
 
-        {/* BIOGRAFÍA */}
-        <div className="bg-white rounded-xl p-4 shadow-sm">
-          <p className="text-gray-600 leading-relaxed">
+        {/* BIOGRAFÍA OPTIMIZADA MÓVIL */}
+        <div className="bg-white rounded-xl p-3 sm:p-4 shadow-sm">
+          <p className="text-sm sm:text-base text-gray-600 leading-relaxed mb-2">
             {displayUser.bio || "🎯 Creando votaciones épicas | 📊 Fan de las estadísticas | 🚀 Siempre innovando"}
           </p>
-          <p className="text-blue-600 mt-2">@{displayUser.username}</p>
+          <p className="text-sm sm:text-base text-blue-600 font-medium">@{displayUser.username}</p>
         </div>
 
         {/* BOTONES DE ACCIÓN */}
