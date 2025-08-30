@@ -661,8 +661,8 @@ const ProfilePage = () => {
         </div>
       </header>
 
-      {/* CONTENIDO PRINCIPAL */}
-      <div className="max-w-4xl mx-auto px-4 py-6 space-y-6">
+      {/* CONTENIDO PRINCIPAL OPTIMIZADO MÓVIL */}
+      <div className="max-w-4xl mx-auto px-3 sm:px-4 py-4 sm:py-6 space-y-4 sm:space-y-6">
         
         {/* AVATAR + MÉTRICAS OPTIMIZADO MÓVIL */}
         <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm">
