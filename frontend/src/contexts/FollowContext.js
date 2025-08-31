@@ -160,10 +160,22 @@ export const FollowProvider = ({ children }) => {
 
   const getUserFollowers = async (userId) => {
     try {
+      console.log('🌐 API CALL: getUserFollowers');
+      console.log('  Endpoint:', `/api/users/${userId}/followers`);
+      console.log('  User ID:', userId);
+      
       const response = await apiRequest(`/api/users/${userId}/followers`);
+      
+      console.log('📡 API RESPONSE: getUserFollowers');
+      console.log('  Status: Success');
+      console.log('  Response:', response);
+      console.log('  Followers count:', response.followers ? response.followers.length : 'undefined');
+      
       return response;
     } catch (error) {
-      console.error('Error getting user followers:', error);
+      console.error('❌ API ERROR: getUserFollowers:', error);
+      console.error('  User ID:', userId);
+      console.error('  Error details:', error.message);
       return { followers: [], total: 0 };
     }
   };
