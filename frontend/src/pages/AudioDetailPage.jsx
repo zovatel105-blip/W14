@@ -880,8 +880,17 @@ const AudioDetailPage = () => {
     // TODO: Implement save functionality
   };
 
-  const handleExitTikTok = () => {
-    console.log('🚪 Exiting TikTok view');
+  const handleExitTikTok = async () => {
+    console.log('🚪 Exiting TikTok view - Stopping audio');
+    
+    // DETENER AUDIO antes de salir
+    try {
+      const audioManager = (await import('../services/AudioManager')).default;
+      await audioManager.stop();
+      console.log('✅ Audio stopped successfully on exit');
+    } catch (error) {
+      console.error('❌ Error stopping audio on exit:', error);
+    }
     
     // Restaurar la navegación lateral derecha cuando se cierra
     showRightNavigationBar();
