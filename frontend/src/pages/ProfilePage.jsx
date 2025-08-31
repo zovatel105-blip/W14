@@ -662,11 +662,11 @@ const ProfilePage = () => {
       </header>
 
       {/* CONTENIDO PRINCIPAL OPTIMIZADO MÓVIL */}
-      <div className="max-w-4xl mx-auto px-3 sm:px-4 py-4 sm:py-6 space-y-4 sm:space-y-6">
+      <div className="max-w-4xl mx-auto px-4 sm:px-4 py-4 sm:py-6 space-y-4 sm:space-y-6">
         
         {/* AVATAR + MÉTRICAS (EN EL CENTRO) - DISEÑO ESPECÍFICO */}
-        <div className="bg-white rounded-xl p-4 sm:p-6 shadow-sm">
-          <div className="flex items-center justify-between gap-3 sm:gap-6">
+        <div className="bg-white rounded-xl p-5 sm:p-6 shadow-sm">
+          <div className="flex items-center justify-between gap-4 sm:gap-6">
             
             {/* LADO IZQUIERDO: Votos y Seguidores */}
             <div className="flex flex-col gap-3 sm:gap-4 flex-1">
