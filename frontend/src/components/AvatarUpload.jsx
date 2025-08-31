@@ -179,7 +179,7 @@ const AvatarUpload = ({
           <img
             src={displayImage}
             alt="Avatar"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover object-center"
           />
         ) : (
           <div className="w-full h-full bg-gradient-to-br from-gray-300 to-gray-400 flex items-center justify-center">
