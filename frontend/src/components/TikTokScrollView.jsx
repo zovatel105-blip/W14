@@ -1090,9 +1090,11 @@ const TikTokScrollView = ({
           
           {/* Botón Use Sound */}
           <Button
-            onClick={() => {
-              onUseSound();
-              onExitTikTok(); // Cerrar la vista después de usar el sonido
+            onClick={async () => {
+              onUseSound?.();
+              console.log('🎵 USE SOUND BUTTON CLICKED - Stopping audio before exit');
+              await audioManager.stop();
+              onExitTikTok?.(); // Cerrar la vista después de usar el sonido
             }}
             className="bg-green-600 hover:bg-green-700 text-white backdrop-blur-md border-none px-4 py-2.5 h-10 rounded-full transition-all duration-200 hover:scale-105 shadow-xl flex items-center gap-2"
           >
