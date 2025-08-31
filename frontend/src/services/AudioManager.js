@@ -112,19 +112,43 @@ class AudioManager {
   }
 
   /**
-   * Detiene completamente el audio
+   * Detiene completamente el audio - MEJORADO para sincronización
    */
   async stop() {
+    console.log('🛑 AudioManager: Stopping audio');
+    
     if (this.currentAudio) {
-      this.clearFadeInterval();
-      
-      if (!this.currentAudio.paused) {
-        this.currentAudio.pause();
+      try {
+        // Limpiar cualquier fade activo
+        this.clearFadeInterval();
+        
+        // Cancelar cualquier promise de reproducción pendiente
+        if (this.playPromise) {
+          await this.playPromise.catch(() => {}); // Ignore errors from cancelled playback
+        }
+        
+        // Pausar si está reproduciéndose
+        if (!this.currentAudio.paused) {
+          this.currentAudio.pause();
+        }
+        
+        // Resetear tiempo y limpiar referencia
+        this.currentAudio.currentTime = 0;
+        this.currentAudio.src = ''; // Limpiar fuente para liberar memoria
+        this.currentAudio = null;
+        this.isPlaying = false;
+        this.playPromise = null;
+        
+        console.log('✅ AudioManager: Audio stopped successfully');
+      } catch (error) {
+        console.error('❌ AudioManager: Error stopping audio:', error);
+        // Asegurar cleanup incluso si hay error
+        this.currentAudio = null;
+        this.isPlaying = false;
+        this.playPromise = null;
       }
-      
-      this.currentAudio.currentTime = 0;
-      this.currentAudio = null;
-      this.isPlaying = false;
+    } else {
+      console.log('ℹ️ AudioManager: No audio to stop');
     }
   }
 
