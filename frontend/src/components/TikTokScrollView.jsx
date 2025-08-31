@@ -1077,7 +1077,11 @@ const TikTokScrollView = ({
              }}>
           {/* Botón cerrar */}
           <Button
-            onClick={onExitTikTok}
+            onClick={async () => {
+              console.log('🚪 EXIT BUTTON CLICKED - Stopping audio');
+              await audioManager.stop();
+              onExitTikTok?.();
+            }}
             className="bg-black/40 text-white hover:bg-black/60 backdrop-blur-md border-none p-2.5 h-10 w-10 rounded-full transition-all duration-200 hover:scale-110 shadow-xl"
             size="sm"
           >
