@@ -664,7 +664,7 @@ const ProfilePage = () => {
       {/* CONTENIDO PRINCIPAL OPTIMIZADO MÓVIL */}
       <div className="max-w-4xl mx-auto px-4 sm:px-4 py-4 sm:py-6 space-y-4 sm:space-y-6">
         
-        {/* AVATAR + MÉTRICAS (EN EL CENTRO) - DISEÑO MUY COMPACTO CON NÚMEROS ARRIBA */}
+        {/* AVATAR + MÉTRICAS (EN EL CENTRO) - DISEÑO MUY COMPACTO CON NÚMEROS CENTRADOS */}
         <div className="bg-white rounded-xl p-3 sm:p-3.5 shadow-sm">
           <div className="flex items-center justify-between gap-2 sm:gap-3">
             
@@ -675,7 +675,7 @@ const ProfilePage = () => {
                 <div className="w-7 h-7 sm:w-8 sm:h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
                   <Vote className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600" />
                 </div>
-                <div className="flex flex-col items-start min-w-0">
+                <div className="flex flex-col items-center min-w-0">
                   <p className="text-sm sm:text-sm font-bold text-gray-900 leading-tight">{displayUser.totalVotes || 0}</p>
                   <p className="text-xs sm:text-xs text-gray-600 font-medium leading-tight">Votos</p>
                 </div>
@@ -689,7 +689,7 @@ const ProfilePage = () => {
                 <div className="w-7 h-7 sm:w-8 sm:h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
                   <Users className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-600" />
                 </div>
-                <div className="flex flex-col items-start min-w-0">
+                <div className="flex flex-col items-center min-w-0">
                   <p className="text-sm sm:text-sm font-bold text-gray-900 leading-tight">{followersCount}</p>
                   <p className="text-xs sm:text-xs text-gray-600 font-medium leading-tight">Seguidores</p>
                 </div>
@@ -736,7 +736,7 @@ const ProfilePage = () => {
             <div className="flex flex-col gap-2.5 sm:gap-3 flex-1 min-w-0">
               {/* Me gusta con ícono */}
               <div className="flex items-center gap-1.5 justify-end">
-                <div className="flex flex-col items-end min-w-0 order-2">
+                <div className="flex flex-col items-center min-w-0 order-2">
                   <p className="text-sm sm:text-sm font-bold text-gray-900 leading-tight">{displayUser.totalLikes || 0}</p>
                   <p className="text-xs sm:text-xs text-gray-600 font-medium leading-tight">Me gusta</p>
                 </div>
@@ -750,7 +750,7 @@ const ProfilePage = () => {
                 className="flex items-center gap-1.5 justify-end cursor-pointer hover:bg-gray-50 rounded-lg p-1 transition-colors active:scale-95 -m-1"
                 onClick={() => setShowFollowingModal(true)}
               >
-                <div className="flex flex-col items-end min-w-0 order-2">
+                <div className="flex flex-col items-center min-w-0 order-2">
                   <p className="text-sm sm:text-sm font-bold text-gray-900 leading-tight">{followingCount}</p>
                   <p className="text-xs sm:text-xs text-gray-600 font-medium leading-tight">Seguidos</p>
                 </div>
