@@ -664,40 +664,40 @@ const ProfilePage = () => {
       {/* CONTENIDO PRINCIPAL OPTIMIZADO MÓVIL */}
       <div className="max-w-4xl mx-auto px-4 sm:px-4 py-4 sm:py-6 space-y-4 sm:space-y-6">
         
-        {/* AVATAR + MÉTRICAS (EN EL CENTRO) - DISEÑO MUY COMPACTO CON NÚMEROS CENTRADOS */}
-        <div className="bg-white rounded-xl p-3 sm:p-3.5 shadow-sm">
-          <div className="flex items-center justify-between gap-2 sm:gap-3">
+        {/* AVATAR + MÉTRICAS (EN EL CENTRO) - DISEÑO PERFECTAMENTE ALINEADO */}
+        <div className="bg-white rounded-xl p-4 sm:p-5 shadow-sm">
+          <div className="flex items-center justify-between gap-4 sm:gap-6">
             
             {/* LADO IZQUIERDO: Votos y Seguidores */}
-            <div className="flex flex-col gap-2.5 sm:gap-3 flex-1 min-w-0">
-              {/* Votos con ícono */}
-              <div className="flex items-center gap-1.5">
-                <div className="w-7 h-7 sm:w-8 sm:h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Vote className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-600" />
+            <div className="flex flex-col gap-4 sm:gap-5 flex-1 min-w-0">
+              {/* Votos con ícono - perfectamente alineado */}
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 sm:w-9 sm:h-9 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Vote className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-blue-600" />
                 </div>
-                <div className="flex flex-col items-center min-w-0">
-                  <p className="text-sm sm:text-sm font-bold text-gray-900 leading-tight">{displayUser.totalVotes || 0}</p>
-                  <p className="text-xs sm:text-xs text-gray-600 font-medium leading-tight">Votos</p>
+                <div className="flex flex-col justify-center min-w-0">
+                  <p className="text-sm sm:text-base font-bold text-gray-900 leading-none">{displayUser.totalVotes || 0}</p>
+                  <p className="text-xs sm:text-sm text-gray-600 font-medium leading-none mt-0.5">Votos</p>
                 </div>
               </div>
               
-              {/* Seguidores con ícono */}
+              {/* Seguidores con ícono - perfectamente alineado */}
               <div 
-                className="flex items-center gap-1.5 cursor-pointer hover:bg-gray-50 rounded-lg p-1 transition-colors active:scale-95 -m-1"
+                className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 rounded-lg p-1.5 transition-colors active:scale-95 -m-1.5"
                 onClick={() => setShowFollowersModal(true)}
               >
-                <div className="w-7 h-7 sm:w-8 sm:h-8 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Users className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-green-600" />
+                <div className="w-8 h-8 sm:w-9 sm:h-9 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Users className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-green-600" />
                 </div>
-                <div className="flex flex-col items-center min-w-0">
-                  <p className="text-sm sm:text-sm font-bold text-gray-900 leading-tight">{followersCount}</p>
-                  <p className="text-xs sm:text-xs text-gray-600 font-medium leading-tight">Seguidores</p>
+                <div className="flex flex-col justify-center min-w-0">
+                  <p className="text-sm sm:text-base font-bold text-gray-900 leading-none">{followersCount}</p>
+                  <p className="text-xs sm:text-sm text-gray-600 font-medium leading-none mt-0.5">Seguidores</p>
                 </div>
               </div>
             </div>
 
-            {/* AVATAR EN EL CENTRO - IMAGEN DE PERFIL MUY PEQUEÑA */}
-            <div className="relative w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20 flex-shrink-0 mx-1 sm:mx-1.5">
+            {/* AVATAR EN EL CENTRO - PERFECTAMENTE CENTRADO */}
+            <div className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 flex-shrink-0">
               <div className="absolute inset-0 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 rounded-full p-0.5">
                 {isOwnProfile ? (
                   <div className="w-full h-full bg-white rounded-full overflow-hidden relative">
@@ -718,7 +718,7 @@ const ProfilePage = () => {
                         alt={displayUser.username}
                         className="w-full h-full object-cover object-center"
                       />
-                      <AvatarFallback className="bg-gradient-to-br from-purple-500 to-pink-500 text-white text-base sm:text-lg md:text-xl font-bold w-full h-full flex items-center justify-center">
+                      <AvatarFallback className="bg-gradient-to-br from-purple-500 to-pink-500 text-white text-lg sm:text-xl md:text-2xl font-bold w-full h-full flex items-center justify-center">
                         {(displayUser.displayName || displayUser.username || 'U').charAt(0).toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
@@ -726,40 +726,39 @@ const ProfilePage = () => {
                 )}
               </div>
               
-              {/* Botón de acción "+" muy pequeño */}
-              <button className="absolute -bottom-0.5 -right-0.5 w-6 h-6 sm:w-6 sm:h-6 md:w-7 md:h-7 bg-blue-500 hover:bg-blue-600 rounded-full flex items-center justify-center shadow-lg transition-all duration-200 active:scale-90 z-10">
-                <Plus className="w-3 h-3 sm:w-3.5 sm:h-3.5 md:w-3.5 md:h-3.5 text-white" />
+              {/* Botón de acción "+" perfectamente posicionado */}
+              <button className="absolute -bottom-1 -right-1 w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 bg-blue-500 hover:bg-blue-600 rounded-full flex items-center justify-center shadow-lg transition-all duration-200 active:scale-90 z-10">
+                <Plus className="w-4 h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5 text-white" />
               </button>
             </div>
 
-            {/* LADO DERECHO: Me gusta y Seguidos */}
-            <div className="flex flex-col gap-2.5 sm:gap-3 flex-1 min-w-0">
-              {/* Me gusta con ícono */}
-              <div className="flex items-center gap-1.5 justify-end">
-                <div className="flex flex-col items-center min-w-0 order-2">
-                  <p className="text-sm sm:text-sm font-bold text-gray-900 leading-tight">{displayUser.totalLikes || 0}</p>
-                  <p className="text-xs sm:text-xs text-gray-600 font-medium leading-tight">Me gusta</p>
+            {/* LADO DERECHO: Me gusta y Seguidos - perfectamente alineado */}
+            <div className="flex flex-col gap-4 sm:gap-5 flex-1 min-w-0">
+              {/* Me gusta con ícono - alineación derecha perfecta */}
+              <div className="flex items-center gap-2 justify-end">
+                <div className="flex flex-col justify-center min-w-0 text-right">
+                  <p className="text-sm sm:text-base font-bold text-gray-900 leading-none">{displayUser.totalLikes || 0}</p>
+                  <p className="text-xs sm:text-sm text-gray-600 font-medium leading-none mt-0.5">Me gusta</p>
                 </div>
-                <div className="w-7 h-7 sm:w-8 sm:h-8 bg-red-100 rounded-full flex items-center justify-center order-1 flex-shrink-0">
-                  <Heart className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-red-600" />
+                <div className="w-8 h-8 sm:w-9 sm:h-9 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
+                  <Heart className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-red-600" />
                 </div>
               </div>
               
-              {/* Seguidos con ícono */}
+              {/* Seguidos con ícono - alineación derecha perfecta */}
               <div 
-                className="flex items-center gap-1.5 justify-end cursor-pointer hover:bg-gray-50 rounded-lg p-1 transition-colors active:scale-95 -m-1"
+                className="flex items-center gap-2 justify-end cursor-pointer hover:bg-gray-50 rounded-lg p-1.5 transition-colors active:scale-95 -m-1.5"
                 onClick={() => setShowFollowingModal(true)}
               >
-                <div className="flex flex-col items-center min-w-0 order-2">
-                  <p className="text-sm sm:text-sm font-bold text-gray-900 leading-tight">{followingCount}</p>
-                  <p className="text-xs sm:text-xs text-gray-600 font-medium leading-tight">Seguidos</p>
+                <div className="flex flex-col justify-center min-w-0 text-right">
+                  <p className="text-sm sm:text-base font-bold text-gray-900 leading-none">{followingCount}</p>
+                  <p className="text-xs sm:text-sm text-gray-600 font-medium leading-none mt-0.5">Seguidos</p>
                 </div>
-                <div className="w-7 h-7 sm:w-8 sm:h-8 bg-purple-100 rounded-full flex items-center justify-center order-1 flex-shrink-0">
-                  <UserPlus className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-purple-600" />
+                <div className="w-8 h-8 sm:w-9 sm:h-9 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
+                  <UserPlus className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-purple-600" />
                 </div>
               </div>
             </div>
-
           </div>
         </div>
 
