@@ -791,7 +791,7 @@ const ProfilePage = () => {
             </div>
 
             {/* LADO DERECHO: Me gusta y Seguidos - perfectamente alineado */}
-            <div className="flex flex-col gap-4 sm:gap-5 flex-1 min-w-0">
+            <div className="flex flex-col gap-3 sm:gap-4 flex-1 min-w-0">
               {/* Me gusta con ícono - alineación derecha perfecta */}
               <div className="flex items-center gap-2 justify-end">
                 <div className="flex flex-col justify-center min-w-0 text-right">
