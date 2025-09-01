@@ -1137,8 +1137,13 @@ const AudioDetailPage = () => {
     <div className={classes.container}>
       {/* Contenedor del header y sección audio con degradado difuminado */}
       <div className="relative">
-        {/* Fondo degradado que se extiende desde header hasta mitad del audio */}
-        <div className={`${classes.gradientBg} h-[17.5vh]`}></div>
+        {/* Fondo degradado dinámico que se extiende desde header hasta mitad del audio */}
+        <div 
+          className="absolute inset-0 h-[17.5vh]"
+          style={{
+            background: `linear-gradient(to bottom, ${gradientColors.primary}20, ${gradientColors.primary}10, transparent)`
+          }}
+        ></div>
         
         {/* Encabezado superior */}
         <div className={classes.header}>
