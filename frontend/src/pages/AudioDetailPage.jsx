@@ -1365,39 +1365,101 @@ const AudioDetailPage = () => {
           </button>
         </div>
       </div>
+
+      {/* Posts Grid Section con diseño mejorado */}
+      <div className="flex-1 bg-white">
+        <div className="px-6 py-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold text-gray-900">
+              Posts using this sound
+            </h2>
+            {posts && posts.length > 0 && (
+              <span className="text-sm text-gray-500">
+                {formatNumber(posts.length)} posts
+              </span>
+            )}
+          </div>
           
-          {/* Botón Add to Favorite */}
-          <button 
-            onClick={handleLike}
-            className="flex-1 flex items-center justify-center gap-3 py-4 px-4 bg-gray-100 hover:bg-gray-200 rounded-2xl transition-colors"
-          >
-            <Heart className={`w-6 h-6 ${isLiked ? 'fill-current text-red-500' : 'text-black'}`} />
-            <span className="text-black font-medium text-base">
-              Add to Favorite
-            </span>
-          </button>
+          {postsLoading ? (
+            <div className="flex items-center justify-center py-16">
+              <div className="text-center">
+                <div className="w-12 h-12 border-3 border-gray-200 border-t-blue-600 rounded-full animate-spin mx-auto mb-4"></div>
+                <p className="text-gray-600 font-medium">Loading posts...</p>
+              </div>
+            </div>
+          ) : posts && posts.length > 0 ? (
+            <div className="grid grid-cols-3 gap-1 sm:gap-2">
+              {posts.map((post, index) => (
+                <div 
+                  key={post.id}
+                  onClick={() => handlePollClick(post)}
+                  className="aspect-square bg-gray-100 rounded-lg overflow-hidden cursor-pointer group hover:scale-[1.02] transition-all duration-300 shadow-sm hover:shadow-lg"
+                >
+                  {post.options && post.options.length > 0 && post.options[0].media_url ? (
+                    <div className="relative w-full h-full">
+                      {post.options[0].media_url.includes('.mp4') ? (
+                        <video 
+                          src={post.options[0].media_url}
+                          className="w-full h-full object-cover"
+                          muted
+                          playsInline
+                        />
+                      ) : (
+                        <img 
+                          src={post.options[0].media_url}
+                          alt={post.title}
+                          className="w-full h-full object-cover"
+                        />
+                      )}
+                      
+                      {/* Play overlay */}
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <Play className="w-8 h-8 text-white" />
+                      </div>
+                      
+                      {/* Stats overlay */}
+                      <div className="absolute bottom-2 left-2 right-2">
+                        <div className="flex items-center justify-between text-white text-xs">
+                          <span className="bg-black/50 px-2 py-1 rounded-full backdrop-blur-sm">
+                            {formatNumber(post.totalVotes || 0)} votes
+                          </span>
+                          {post.music && (
+                            <Music className="w-4 h-4" />
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
+                      <div className="text-center text-gray-500">
+                        <MessageCircle className="w-8 h-8 mx-auto mb-2" />
+                        <p className="text-xs font-medium">{post.title}</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-16">
+              <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <Music className="w-10 h-10 text-gray-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">No posts yet</h3>
+              <p className="text-gray-500 mb-6 max-w-sm mx-auto">
+                Be the first to create content with this sound!
+              </p>
+              <button 
+                onClick={handleUseThisSound}
+                className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full font-medium transition-colors"
+              >
+                <Plus className="w-5 h-5" />
+                Create now
+              </button>
+            </div>
+          )}
         </div>
       </div>
-
-      {/* Cuadrícula de posts - Ancho completo sin márgenes */}
-      <div className={`${layout.gridHeight}`}>
-        {postsLoading ? (
-          <div className="flex items-center justify-center h-full px-4">
-            <div className="text-center">
-              <div className="w-8 h-8 border-2 border-gray-300 border-t-green-600 rounded-full animate-spin mx-auto mb-4"></div>
-              <p className={`${classes.infoText} text-gray-500`}>{t('audioDetail.loadingContent')}</p>
-            </div>
-          </div>
-        ) : posts && posts.length > 0 ? (
-          <div className="px-1">
-            <TikTokProfileGrid
-              polls={posts}
-              onPollClick={handlePollClick}
-            />
-          </div>
-        ) : (
-          /* Estado vacío */
-          <div className="flex items-center justify-center h-full px-4">
             <div className="text-center">
               <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <MessageCircle className={`${layout.iconSize} text-gray-400`} />
