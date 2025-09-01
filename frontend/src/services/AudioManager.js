@@ -148,6 +148,8 @@ class AudioManager {
         this.currentAudio = null;
         this.isPlaying = false;
         this.playPromise = null;
+        this.currentPostId = null;
+        this.currentAudioUrl = null;
         
         console.log('✅ AudioManager: Audio stopped successfully');
       } catch (error) {
@@ -156,6 +158,8 @@ class AudioManager {
         this.currentAudio = null;
         this.isPlaying = false;
         this.playPromise = null;
+        this.currentPostId = null;
+        this.currentAudioUrl = null;
       }
     } else {
       console.log('ℹ️ AudioManager: No audio to stop');
