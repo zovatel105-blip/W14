@@ -1307,8 +1307,8 @@ const AudioDetailPage = () => {
           </div>
         ) : posts && posts.length > 0 ? (
           <TikTokProfileGrid
-            posts={posts}
-            onPostClick={handlePollClick}
+            polls={posts}
+            onPollClick={handlePollClick}
             loading={loadingMorePosts}
             hasMore={hasMorePosts}
             onLoadMore={() => {
