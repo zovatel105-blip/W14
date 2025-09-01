@@ -70,7 +70,6 @@ const ProfilePage = () => {
   const [selectedPollId, setSelectedPollId] = useState(null);
   const [selectedPollTitle, setSelectedPollTitle] = useState('');
   const [selectedPollAuthor, setSelectedPollAuthor] = useState('');
-  const [showTikTokView, setShowTikTokView] = useState(false);
   const [tikTokPolls, setTikTokPolls] = useState([]);
   const [initialPollIndex, setInitialPollIndex] = useState(0);
   const [followersCount, setFollowersCount] = useState(0);
