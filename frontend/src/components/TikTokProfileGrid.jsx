@@ -145,7 +145,7 @@ const TikTokProfileGrid = ({ polls, onPollClick }) => {
   };
 
   return (
-    <div className="grid grid-cols-3 gap-px">
+    <div className="grid grid-cols-3 gap-0.5">
       {polls.map((poll, index) => {
         const optionImages = getOptionImages(poll);
         const voteCount = getVoteCount(poll);
