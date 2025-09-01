@@ -1134,7 +1134,7 @@ const AudioDetailPage = () => {
   }
 
   return (
-    <div className={classes.container}>
+    <div className="min-h-screen bg-white flex flex-col">
       {/* Contenedor del header y sección audio con degradado difuminado */}
       <div className="relative">
         {/* Fondo degradado dinámico que se extiende desde header hasta mitad del audio */}
