@@ -999,10 +999,12 @@ const ProfilePage = () => {
                     Limpiar todo
                   </Button>
                 </div>
-                <TikTokProfileGrid 
-                  polls={savedPolls} 
-                  onPollClick={handlePollClick}
-                />
+                <div className="-mx-4 px-1 sm:px-2">
+                  <TikTokProfileGrid 
+                    polls={savedPolls} 
+                    onPollClick={handlePollClick}
+                  />
+                </div>
               </div>
             )}
           </TabsContent>
