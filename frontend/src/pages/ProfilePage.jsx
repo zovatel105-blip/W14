@@ -687,7 +687,28 @@ const ProfilePage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <>
+      {/* TikTok mode rendering - same as FeedPage */}
+      {isTikTokMode && (
+        <>
+          <TikTokScrollView
+            polls={tikTokPolls}
+            onVote={handleVote}
+            onLike={handleLike}
+            onShare={handleShare}
+            onComment={handleComment}
+            onSave={handleSave}
+            onCreatePoll={handleCreatePoll}
+            initialIndex={initialPollIndex}
+            onExitTikTok={exitTikTokMode}
+            showLogo={false}
+          />
+        </>
+      )}
+
+      {/* Normal profile view - only show when NOT in TikTok mode */}
+      {!isTikTokMode && (
+        <div className="min-h-screen bg-gray-50">
       {/* ENCABEZADO SUPERIOR OPTIMIZADO MÓVIL - ANCHO COMPLETO */}
       <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
         <div className="px-2 py-3">
