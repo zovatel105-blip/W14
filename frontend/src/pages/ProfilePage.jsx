@@ -1245,24 +1245,6 @@ const ProfilePage = () => {
         content={shareModal.content}
       />
 
-      {/* TikTok View Modal */}
-      {showTikTokView && (
-        <div className="fixed inset-0 bg-black z-50">
-          <TikTokScrollView
-            polls={tikTokPolls}
-            onVote={handleVote}
-            onLike={handleLike}
-            onShare={handleShare}
-            onComment={handleComment}
-            onSave={handleSave}
-            onCreatePoll={handleCreatePoll}
-            initialIndex={initialPollIndex}
-            onExitTikTok={() => setShowTikTokView(false)}
-            showLogo={false}
-          />
-        </div>
-      )}
-
       {/* Edit Profile Modal */}
       <EditProfileModal
         isOpen={editProfileModalOpen}
