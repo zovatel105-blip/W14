@@ -1233,6 +1233,7 @@ const ProfilePage = () => {
             onShare={handleShare}
             onComment={handleComment}
             onSave={handleSave}
+            onCreatePoll={handleCreatePoll}
             initialIndex={initialPollIndex}
             onExitTikTok={() => setShowTikTokView(false)}
             showLogo={false}
