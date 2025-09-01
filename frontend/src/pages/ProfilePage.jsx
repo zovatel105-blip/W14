@@ -1281,7 +1281,9 @@ const ProfilePage = () => {
 
       {/* Share Modal */}
       <ShareModal {...shareModal} onClose={closeShareModal} />
-    </div>
+        </div>
+      )}
+    </>
   );
 };
 
