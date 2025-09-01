@@ -1309,14 +1309,6 @@ const AudioDetailPage = () => {
           <TikTokProfileGrid
             polls={posts}
             onPollClick={handlePollClick}
-            loading={loadingMorePosts}
-            hasMore={hasMorePosts}
-            onLoadMore={() => {
-              if (!loadingMorePosts && hasMorePosts) {
-                loadMorePosts();
-              }
-            }}
-            onScroll={handleScroll}
           />
         ) : (
           /* Estado vacío */
