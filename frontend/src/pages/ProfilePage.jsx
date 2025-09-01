@@ -821,7 +821,7 @@ const ProfilePage = () => {
         </div>
 
         {/* NOMBRE + ROL EXPANDIDO */}
-        <div className="bg-white rounded-lg p-3 sm:p-4 shadow-sm mx-0">
+        <div className="bg-white rounded-none sm:rounded-lg p-2 sm:p-4 shadow-sm mx-0">
           <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
             {/* Nombre principal */}
             <div className="flex items-center gap-2">
