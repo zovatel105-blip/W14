@@ -691,6 +691,35 @@ const AudioDetailPage = () => {
     }
   };
 
+  const handleCreatePoll = async (pollData) => {
+    try {
+      // Create poll on backend using pollService
+      const newPoll = await pollService.createPoll(pollData);
+      console.log('✅ Nueva publicación creada:', newPoll);
+      
+      // Close modal
+      setShowCreateModal(false);
+      setPreSelectedAudio(null);
+      
+      // Show success message
+      toast({
+        title: "¡Publicación creada!",
+        description: `Tu contenido con "${audio.title}" ha sido publicado exitosamente`,
+      });
+      
+      // Refresh posts to show new publication
+      await fetchPostsUsingAudio(0, false);
+      
+    } catch (error) {
+      console.error('Error creating poll:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo crear la publicación. Inténtalo de nuevo.",
+        variant: "destructive"
+      });
+    }
+  };
+
   const handleLike = async () => {
     try {
       const token = localStorage.getItem('authToken');
