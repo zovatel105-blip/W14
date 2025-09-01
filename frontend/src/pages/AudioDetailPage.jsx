@@ -1267,10 +1267,11 @@ const AudioDetailPage = () => {
 
       {/* Botón inferior */}
       <div className={classes.bottomButton}>
-        {/* Botón central "Use sound" */}
+        {/* Botón central "Use sound" con color dinámico */}
         <Button 
           onClick={handleUseThisSound}
-          className={classes.mainButton}
+          className="w-full py-4 rounded-full font-semibold text-white text-lg transition-colors hover:opacity-90"
+          style={{ backgroundColor: dominantColor }}
         >
           {t('buttons.useSound')}
         </Button>
