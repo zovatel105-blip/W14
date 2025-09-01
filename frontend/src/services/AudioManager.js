@@ -26,6 +26,8 @@ class AudioManager {
    */
   async play(audioUrl, options = {}) {
     try {
+      const { postId = null } = options;
+      
       // SINCRONIZACIÓN COMPLETA: Detener completamente cualquier audio anterior
       if (this.currentAudio) {
         console.log('🔄 Stopping previous audio for complete sync');
@@ -74,6 +76,8 @@ class AudioManager {
       // Load audio source
       audio.src = audioUrl;
       this.currentAudio = audio;
+      this.currentPostId = postId;
+      this.currentAudioUrl = audioUrl;
 
       // Start playback with fade in
       this.playPromise = audio.play();
@@ -81,6 +85,8 @@ class AudioManager {
       
       this.isPlaying = true;
       await this.fadeIn();
+
+      console.log(`✅ Audio playing for post: ${postId}, URL: ${audioUrl}`);
 
       // Solo auto-pausar después de 30 segundos si NO está en loop
       // En modo loop, la música debe continuar reproduciéndose indefinidamente
@@ -98,6 +104,8 @@ class AudioManager {
     } catch (error) {
       console.error('Error playing audio:', error);
       this.isPlaying = false;
+      this.currentPostId = null;
+      this.currentAudioUrl = null;
       return false;
     }
   }
