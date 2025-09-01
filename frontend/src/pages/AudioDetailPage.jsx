@@ -620,7 +620,7 @@ const AudioDetailPage = () => {
       return;
     }
 
-    // Navigate to create poll with this audio pre-selected
+    // Preparar el audio para el modal de creación
     const audioForCreation = {
       id: audio.id,
       title: audio.title,
@@ -632,32 +632,16 @@ const AudioDetailPage = () => {
       is_system_music: audio.is_system_music
     };
     
-    console.log('🎵 Navegando para crear contenido con audio:', audioForCreation);
-    console.log('🔥 Datos de navigate:', { 
-      path: '/feed', 
-      state: { createPoll: true, selectedAudio: audioForCreation } 
-    });
+    console.log('🎵 Abriendo modal de creación con audio preseleccionado:', audioForCreation);
     
-    try {
-      navigate('/feed', { 
-        state: { 
-          createPoll: true, 
-          selectedAudio: audioForCreation
-        }
-      });
-      
-      toast({
-        title: t('toast.audioSelected') || "Audio seleccionado",
-        description: t('toast.audioSelectedDesc', { title: audio.title, artist: audio.artist }) || `${audio.title} - ${audio.artist} seleccionado`
-      });
-    } catch (error) {
-      console.error('❌ Error navegando al feed:', error);
-      toast({
-        title: "Error de navegación",
-        description: "No se pudo navegar al feed para crear contenido",
-        variant: "destructive"
-      });
-    }
+    // Abrir modal directamente con audio preseleccionado
+    setPreSelectedAudio(audioForCreation);
+    setShowCreateModal(true);
+    
+    toast({
+      title: t('toast.audioSelected') || "Audio seleccionado",
+      description: t('toast.audioSelectedDesc', { title: audio.title, artist: audio.artist }) || `${audio.title} - ${audio.artist} seleccionado para crear contenido`
+    });
   };
 
   const handleShare = async () => {
