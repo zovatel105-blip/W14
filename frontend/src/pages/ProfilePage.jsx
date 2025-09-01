@@ -85,9 +85,10 @@ const ProfilePage = () => {
   const { toast } = useToast();
   const { user: authUser, refreshUser } = useAuth();
   const { getUserFollowers, getUserFollowing, followUser, unfollowUser, isFollowing, getFollowStatus } = useFollow();
+  const { shareModal, shareProfile, closeShareModal } = useShare();
+  const { enterTikTokMode, exitTikTokMode, isTikTokMode } = useTikTok();
   const { userId } = useParams();
   const navigate = useNavigate();
-  const { shareModal, shareProfile, closeShareModal } = useShare();
 
   // Load user's polls
   useEffect(() => {
