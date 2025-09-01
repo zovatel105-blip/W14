@@ -1168,8 +1168,8 @@ const AudioDetailPage = () => {
           </Button>
         </div>
 
-        {/* Sección del audio */}
-        <div className={classes.audioSection}>
+        {/* Sección del audio - Ancho completo */}
+        <div className={`relative ${layout.audioSectionHeight} flex items-center py-2 z-10 px-2`}>
           {/* Miniatura cuadrada del álbum: lado izquierdo */}
           <div className={classes.cover}>
             <div className="w-full h-full rounded-xl overflow-hidden bg-gray-100 border border-gray-200">
