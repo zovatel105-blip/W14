@@ -56,6 +56,10 @@ const AudioDetailPage = () => {
   const [showPollModal, setShowPollModal] = useState(false);
   const [selectedPoll, setSelectedPoll] = useState(null);
   
+  // Create poll modal states
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [preSelectedAudio, setPreSelectedAudio] = useState(null);
+  
   // TikTok view states
   const [showTikTokView, setShowTikTokView] = useState(false);
   const [selectedPostIndex, setSelectedPostIndex] = useState(0);
