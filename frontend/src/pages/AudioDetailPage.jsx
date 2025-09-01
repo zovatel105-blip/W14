@@ -814,9 +814,20 @@ const AudioDetailPage = () => {
 
   // Poll modal handlers
   const handlePollClick = (post) => {
-    console.log('🎬 Opening post in TikTok view:', post);
+    console.log('🎬 AUDIODETAILPAGE DEBUG - Post clicked:', post);
+    console.log('🎬 AUDIODETAILPAGE DEBUG - Current posts array length:', posts?.length);
+    
     // Encontrar el índice del post seleccionado
     const index = posts.findIndex(p => p.id === post.id);
+    console.log('🎬 AUDIODETAILPAGE DEBUG - Post index found:', index);
+    
+    // Verificar que los datos tienen la estructura correcta
+    const validPosts = posts.filter(p => p && p.id && p.authorUser);
+    if (validPosts.length !== posts.length) {
+      console.warn('⚠️ AUDIODETAILPAGE WARNING - Some posts have invalid structure, filtering...');
+      console.log('⚠️ Valid posts:', validPosts.length, 'Total posts:', posts.length);
+    }
+    
     setSelectedPostIndex(index >= 0 ? index : 0);
     
     // Ocultar la navegación lateral derecha cuando se abre desde AudioDetailPage
