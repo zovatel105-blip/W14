@@ -1235,8 +1235,8 @@ const AudioDetailPage = () => {
         </div>
       </div>
 
-      {/* Barra de información del sonido */}
-      <div className={classes.infoBar}>
+      {/* Barra de información del sonido - Ancho completo */}
+      <div className={`${layout.infoBarHeight} flex items-center px-2`}>
         {/* Ícono play: extremo izquierdo, tamaño pequeño */}
         <div className="flex items-center gap-2 flex-shrink-0">
           <Play className={`${layout.iconSize} text-gray-600`} />
