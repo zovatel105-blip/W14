@@ -956,10 +956,12 @@ const ProfilePage = () => {
                     {mentionedPolls.length} menciones encontradas
                   </h3>
                 </div>
-                <TikTokProfileGrid 
-                  polls={mentionedPolls} 
-                  onPollClick={handlePollClick}
-                />
+                <div className="-mx-4 px-1 sm:px-2">
+                  <TikTokProfileGrid 
+                    polls={mentionedPolls} 
+                    onPollClick={handlePollClick}
+                  />
+                </div>
               </div>
             )}
           </TabsContent>
