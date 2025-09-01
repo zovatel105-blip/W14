@@ -1186,37 +1186,6 @@ const AudioDetailPage = () => {
           </Button>
         </div>
 
-      {/* Contenedor principal mejorado según referencia */}
-      <div className="relative bg-white">
-        {/* Fondo con gradiente sutil */}
-        <div 
-          className="absolute inset-0 h-[25vh]"
-          style={{
-            background: `linear-gradient(to bottom, ${gradientColors.primary}15, ${gradientColors.primary}08, transparent)`
-          }}
-        ></div>
-        
-        {/* Header con navegación */}
-        <div className="relative h-14 flex items-center justify-between z-10 px-4">
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            onClick={() => navigate(-1)}
-            className="text-gray-900 hover:bg-white/50 p-2"
-          >
-            <ArrowLeft className="w-6 h-6 stroke-2" />
-          </Button>
-          
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            onClick={handleShare}
-            className="text-gray-900 hover:bg-white/50 p-2"
-          >
-            <Share2 className="w-6 h-6 stroke-2" />
-          </Button>
-        </div>
-
         {/* Sección principal del audio - como en la referencia */}
         <div className="relative px-6 pb-6 z-10">
           {/* Portada grande centrada */}
