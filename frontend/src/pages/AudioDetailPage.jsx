@@ -1253,64 +1253,78 @@ const AudioDetailPage = () => {
         </div>
       </div>
 
-      {/* Barra de información del sonido - Ancho completo */}
-      <div className={`${layout.infoBarHeight} flex items-center px-2`}>
-        {/* Ícono play: extremo izquierdo, tamaño pequeño */}
-        <div className="flex items-center gap-2 flex-shrink-0">
-          <Play className={`${layout.iconSize} text-gray-600`} />
-          <span className={`${classes.infoText} text-gray-700 font-medium`}>
-            {formatDuration(audio?.duration || 0)}
-          </span>
-        </div>
-        
-        {/* "Original sound by: (usuario)" centro-izquierda */}
-        <div className="flex-1 ml-6">
-          <p className={classes.infoText}>
-            <span className="text-gray-500">{t('audioDetail.originalSoundBy')} </span>
-            <span className="font-medium text-gray-700">
-              {postsLoading ? t('audioDetail.searchingFirst') : (originalUser || t('audioDetail.determining'))}
+      {/* Barra de información del sonido - Rediseñada */}
+      <div className="bg-gray-50 border-y border-gray-100 py-3 px-4">
+        <div className="flex items-center justify-between">
+          {/* Lado izquierdo: Play button + duración + Original sound by */}
+          <div className="flex items-center gap-3">
+            {/* Play button circular */}
+            <button
+              onClick={handlePlayPause}
+              className="w-8 h-8 bg-black rounded-full flex items-center justify-center hover:bg-gray-800 transition-colors"
+            >
+              {isPlaying ? (
+                <Pause className="w-4 h-4 text-white" />
+              ) : (
+                <Play className="w-4 h-4 text-white ml-0.5" />
+              )}
+            </button>
+            
+            {/* Duración */}
+            <span className="text-black font-semibold text-sm">
+              {formatDuration(audio?.duration || 0)}
             </span>
-          </p>
-        </div>
-        
-        {/* Número de personas que utilizaron ese sonido: extremo derecho */}
-        <div className="flex-shrink-0 ml-4">
-          <span className={`${classes.infoText} text-gray-400`}>
+            
+            {/* Original sound by */}
+            <div className="flex items-center gap-1">
+              <span className="text-gray-600 text-sm">Original sound by:</span>
+              <span className="text-black font-medium text-sm">
+                {postsLoading ? 'Buscando...' : (originalUser || 'Determinando...')}
+              </span>
+            </div>
+          </div>
+          
+          {/* Lado derecho: Contador de usuarios */}
+          <div className="text-gray-500 text-sm">
             {totalPosts > 0 ? 
-              t('audioDetail.users', { count: formatNumber(totalPosts) }) : 
-              t('audioDetail.users', { count: formatNumber(audio?.uses_count || 0) })
+              `${formatNumber(totalPosts)} usuarios` : 
+              `${formatNumber(audio?.uses_count || 0)} usuarios`
             }
-          </span>
+          </div>
         </div>
       </div>
 
-      {/* Botones de acción - Ancho completo */}
-      <div className={`${layout.actionButtonsHeight} flex items-center justify-center px-2`}>
-        <div className="flex w-full gap-[10%]">
-          {/* Botón Add to music app - 45% del ancho */}
-          <Button 
+      {/* Botones de acción rediseñados */}
+      <div className="bg-white py-4 px-4 border-b border-gray-100">
+        <div className="flex gap-3">
+          {/* Botón Open in Apple Music */}
+          <button 
             onClick={handleAddToItunes}
-            className={`${classes.actionButton} bg-gray-100 hover:bg-gray-200 text-gray-700`}
+            className="flex-1 flex items-center justify-center gap-2 py-3 px-4 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
           >
-            <Apple className={layout.iconSize} />
-            {audio?.source === 'iTunes' || audio?.is_system_music ? 
-              t('buttons.openAppleMusic') : 
-              t('buttons.notAvailable')
-            }
-          </Button>
+            <Apple className="w-5 h-5 text-gray-700" />
+            <span className="text-gray-900 font-medium text-sm">
+              {audio?.source === 'iTunes' || audio?.is_system_music ? 
+                'Open in Apple Music' : 
+                'No disponible'
+              }
+            </span>
+          </button>
           
-          {/* Botón Add to Favorites - 45% del ancho */}
-          <Button 
+          {/* Botón Add to Favorite */}
+          <button 
             onClick={handleLike}
-            className={`${classes.actionButton} transition-colors ${
+            className={`flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-lg transition-all ${
               isLiked 
-                ? 'bg-red-500 hover:bg-red-600 text-white' 
+                ? 'bg-red-50 hover:bg-red-100 text-red-600' 
                 : 'bg-gray-100 hover:bg-gray-200 text-gray-700'
             }`}
           >
-            <Heart className={`${layout.iconSize} ${isLiked ? 'fill-current' : ''}`} />
-            {isLiked ? t('buttons.inFavorites') : t('buttons.addToFavorites')}
-          </Button>
+            <Heart className={`w-5 h-5 ${isLiked ? 'fill-current text-red-500' : 'text-gray-700'}`} />
+            <span className="font-medium text-sm">
+              {isLiked ? 'Added to Favorites' : 'Add to Favorites'}
+            </span>
+          </button>
         </div>
       </div>
 
