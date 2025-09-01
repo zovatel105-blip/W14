@@ -145,7 +145,7 @@ const TikTokProfileGrid = ({ polls, onPollClick }) => {
   };
 
   return (
-    <div className="grid grid-cols-3 gap-0.5 sm:gap-1 w-full px-1">
+    <div className="tiktok-profile-grid">
       {polls.map((poll, index) => {
         const optionImages = getOptionImages(poll);
         const voteCount = getVoteCount(poll);
@@ -153,13 +153,7 @@ const TikTokProfileGrid = ({ polls, onPollClick }) => {
         return (
           <motion.div
             key={poll.id}
-            className="relative bg-black overflow-hidden cursor-pointer group w-full"
-            style={{ 
-              aspectRatio: '129.46/229.66',
-              minHeight: '180px',
-              maxWidth: '129.46px',
-              maxHeight: '229.66px'
-            }}
+            className="tiktok-profile-grid-item group"
             onClick={() => onPollClick && onPollClick(poll)}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
