@@ -1328,8 +1328,8 @@ const AudioDetailPage = () => {
         )}
       </div>
 
-      {/* Botón inferior */}
-      <div className={classes.bottomButton}>
+      {/* Botón inferior - Ancho completo */}
+      <div className={`${layout.bottomButtonHeight} flex items-center justify-center px-2`}>
         {/* Botón central "Use sound" con color dinámico */}
         <button 
           onClick={handleUseThisSound}
