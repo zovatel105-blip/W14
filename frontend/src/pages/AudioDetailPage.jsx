@@ -993,39 +993,96 @@ const AudioDetailPage = () => {
 
   // Utility functions now handled by i18n system
 
+  // Custom grid component for posts with vote counters
+  const PostGrid = ({ posts, onPostClick, loading: postsLoading }) => {
+    if (postsLoading) {
+      return (
+        <div className="flex items-center justify-center h-64">
+          <div className="text-center">
+            <div className="w-8 h-8 border-2 border-gray-300 border-t-gray-600 rounded-full animate-spin mx-auto mb-2"></div>
+            <p className="text-gray-500 text-sm">{t('audioDetail.loadingContent')}</p>
+          </div>
+        </div>
+      );
+    }
+
+    if (!posts || posts.length === 0) {
+      return (
+        <div className="flex items-center justify-center h-64">
+          <div className="text-center">
+            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <MessageCircle className="w-6 h-6 text-gray-400" />
+            </div>
+            <h4 className="text-lg font-medium text-gray-900 mb-2">{t('audioDetail.noContent')}</h4>
+            <p className="text-gray-500 text-sm max-w-sm mx-auto">
+              {t('audioDetail.beFirst')}
+            </p>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="grid grid-cols-3 gap-1">
+        {posts.map((post) => (
+          <div
+            key={post.id}
+            className="relative aspect-square bg-gray-100 rounded-sm overflow-hidden cursor-pointer hover:opacity-90 transition-opacity"
+            onClick={() => onPostClick(post)}
+          >
+            {/* Post thumbnail */}
+            {post.media_url ? (
+              post.media_url.includes('.mp4') || post.media_url.includes('video') ? (
+                <video
+                  src={post.media_url}
+                  className="w-full h-full object-cover"
+                  muted
+                  playsInline
+                />
+              ) : (
+                <img
+                  src={post.media_url}
+                  alt={post.title}
+                  className="w-full h-full object-cover"
+                />
+              )
+            ) : (
+              <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                <Music className="w-6 h-6 text-gray-400" />
+              </div>
+            )}
+            
+            {/* Vote counter overlay */}
+            <div className="absolute bottom-1 left-1 bg-black/60 rounded-full px-2 py-1 flex items-center gap-1">
+              <TrendingUp className="w-3 h-3 text-white" />
+              <span className="text-white text-xs font-medium">
+                {formatNumber(post.totalVotes || 0)}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   if (loading) {
     return (
-      <div className={classes.container}>
-        {/* Contenedor del header con degradado difuminado */}
-        <div className="relative">
-          {/* Fondo degradado que se extiende desde header hacia abajo */}
-          <div className={`${classes.gradientBg} h-[17.5vh]`}></div>
-          
-          {/* Encabezado con degradado verde/beige */}
-          <div className={classes.header}>
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={() => navigate(-1)}
-              className="text-gray-900 hover:bg-white/50 p-3"
-            >
-              <ArrowLeft className={`${layout.iconSize} stroke-2`} />
-            </Button>
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              className="text-gray-900 hover:bg-white/50 p-3"
-            >
-              <Share2 className={`${layout.iconSize} stroke-2`} />
-            </Button>
-          </div>
+      <div className="min-h-screen bg-white">
+        {/* Header */}
+        <div className="h-14 bg-white border-b border-gray-100 flex items-center justify-between px-4">
+          <button onClick={() => navigate(-1)} className="p-2">
+            <ArrowLeft className="w-6 h-6 text-black" />
+          </button>
+          <button className="p-2">
+            <MoreVertical className="w-6 h-6 text-black" />
+          </button>
         </div>
         
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
             <div className="relative w-16 h-16 mx-auto mb-4">
-              <div className="w-16 h-16 border-4 border-green-200 border-t-green-600 rounded-full animate-spin"></div>
-              <Music className="w-6 h-6 text-green-600 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+              <div className="w-16 h-16 border-4 border-gray-200 border-t-gray-600 rounded-full animate-spin"></div>
+              <Music className="w-6 h-6 text-gray-600 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
             </div>
             <p className="text-gray-600 text-lg font-medium">{t('audioDetail.loading')}</p>
             <p className="text-gray-500 text-sm mt-2">{t('audioDetail.audioId', { id: audioId })}</p>
