@@ -1214,7 +1214,7 @@ const ProfilePage = () => {
             onShare={handleShare}
             onComment={handleComment}
             initialIndex={initialPollIndex}
-            onClose={() => setShowTikTokView(false)}
+            onExitTikTok={() => setShowTikTokView(false)}
             showLogo={false}
           />
         </div>
