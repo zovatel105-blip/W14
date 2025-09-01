@@ -643,22 +643,27 @@ const ProfilePage = () => {
     const pollIndex = currentPolls.findIndex(p => p.id === poll.id);
     
     // DEBUG: Log data structure
+    console.log('🔍 PROFILE DEBUG - Active tab:', activeTab);
     console.log('🔍 PROFILE DEBUG - Poll clicked:', poll);
-    console.log('🔍 PROFILE DEBUG - Current polls array:', currentPolls);
-    console.log('🔍 PROFILE DEBUG - Poll structure:', {
-      hasAuthor: !!poll.author,
-      hasAuthorUser: !!poll.authorUser,
-      hasOptions: !!poll.options,
-      optionsLength: poll.options?.length,
-      hasMusic: !!poll.music,
-      musicStructure: poll.music,
-      hasTotalVotes: !!poll.totalVotes,
-      totalVotes: poll.totalVotes
-    });
+    console.log('🔍 PROFILE DEBUG - Current polls array length:', currentPolls?.length);
+    console.log('🔍 PROFILE DEBUG - Poll index found:', pollIndex);
+    console.log('🔍 PROFILE DEBUG - First poll structure:', currentPolls?.[0]);
     
-    setTikTokPolls(currentPolls);
+    // Verificar que los datos tienen la estructura correcta
+    const validPolls = currentPolls.filter(p => p && p.id && p.authorUser);
+    if (validPolls.length !== currentPolls.length) {
+      console.warn('⚠️ PROFILE WARNING - Some polls have invalid structure, filtering...');
+    }
+    
+    setTikTokPolls(validPolls);
     setInitialPollIndex(pollIndex >= 0 ? pollIndex : 0);
     setShowTikTokView(true);
+  };
+
+  const handleCreatePoll = () => {
+    // Simple handler - just close TikTok view if needed
+    // Could be extended to show create poll modal
+    setShowTikTokView(false);
   };
 
   const handleComment = (pollId) => {
