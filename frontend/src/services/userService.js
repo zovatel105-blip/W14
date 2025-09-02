@@ -33,13 +33,13 @@ class UserService {
       let response;
       if (isId) {
         // Use ID-based endpoint
-        response = await fetch(config.API.USERS.PROFILE(userIdOrUsername), {
+        response = await fetch(config.API_ENDPOINTS.USERS.PROFILE(userIdOrUsername), {
           method: 'GET',
           headers: this.getAuthHeaders(),
         });
       } else {
         // Use username-based endpoint
-        response = await fetch(config.API.USERS.PROFILE_BY_USERNAME(userIdOrUsername), {
+        response = await fetch(config.API_ENDPOINTS.USERS.PROFILE_BY_USERNAME(userIdOrUsername), {
           method: 'GET',
           headers: this.getAuthHeaders(),
         });
