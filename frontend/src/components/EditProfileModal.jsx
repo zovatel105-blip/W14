@@ -73,7 +73,7 @@ const EditProfileModal = ({ isOpen, onClose, onProfileUpdate }) => {
         variant: "default"
       });
       
-      // Notify parent component of the update
+      // Notify parent component of the update with the actual updated data
       if (onProfileUpdate) {
         onProfileUpdate(updatedUser);
       }
