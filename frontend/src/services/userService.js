@@ -23,17 +23,31 @@ class UserService {
     return response.json();
   }
 
-  // Get user profile by user ID or username
-  async getUserProfile(userId) {
+  // Get user profile by user ID or username (auto-detects format)
+  async getUserProfile(userIdOrUsername) {
     try {
-      const response = await fetch(config.API.USERS.PROFILE(userId), {
-        method: 'GET',
-        headers: this.getAuthHeaders(),
-      });
+      // Auto-detect if it's a UUID/ID or username
+      // UUIDs are typically 36 characters with hyphens, usernames are typically shorter alphanumeric
+      const isId = userIdOrUsername.includes('-') && userIdOrUsername.length > 20;
+      
+      let response;
+      if (isId) {
+        // Use ID-based endpoint
+        response = await fetch(config.API.USERS.PROFILE(userIdOrUsername), {
+          method: 'GET',
+          headers: this.getAuthHeaders(),
+        });
+      } else {
+        // Use username-based endpoint
+        response = await fetch(config.API.USERS.PROFILE_BY_USERNAME(userIdOrUsername), {
+          method: 'GET',
+          headers: this.getAuthHeaders(),
+        });
+      }
 
       return await this.handleResponse(response);
     } catch (error) {
-      console.error(`Error fetching user profile for ${userId}:`, error);
+      console.error(`Error fetching user profile for ${userIdOrUsername}:`, error);
       throw error;
     }
   }
