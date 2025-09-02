@@ -1342,7 +1342,7 @@ const AudioDetailPage = () => {
           <button 
             onClick={handleLike}
             className={`p-3 rounded-full transition-all duration-300 ${
-              isFavorite 
+              isLiked 
                 ? 'bg-red-100 text-red-600 hover:bg-red-200' 
                 : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
             }`}
