@@ -81,11 +81,21 @@ const EditProfileModal = ({ isOpen, onClose, onProfileUpdate }) => {
       onClose();
     } catch (error) {
       console.error('Error updating profile:', error);
-      toast({
-        title: "Error de conexión",
-        description: "No se pudo conectar con el servidor",
-        variant: "destructive"
-      });
+      
+      // Check if it's an API error with a detail message
+      if (error.message && error.message.includes('API request failed')) {
+        toast({
+          title: "Error al actualizar",
+          description: "Error del servidor. Por favor, intenta de nuevo.",
+          variant: "destructive"
+        });
+      } else {
+        toast({
+          title: "Error de conexión",
+          description: error.message || "No se pudo conectar con el servidor",
+          variant: "destructive"
+        });
+      }
     } finally {
       setLoading(false);
     }
