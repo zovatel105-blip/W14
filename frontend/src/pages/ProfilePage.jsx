@@ -676,9 +676,15 @@ const ProfilePage = () => {
     }
   };
 
-  const handleProfileUpdate = async () => {
-    // Refresh user data after profile update
-    await refreshUser();
+  const handleProfileUpdate = async (updatedUserData) => {
+    // Update user data directly with the response from the API
+    if (updatedUserData) {
+      // Update the AuthContext user state directly
+      await refreshUser();
+    } else {
+      // Fallback to refresh if no data provided
+      await refreshUser();
+    }
   };
 
   const handleSettingsClick = () => {
