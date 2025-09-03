@@ -232,7 +232,8 @@ export const FollowProvider = ({ children }) => {
     getUserFollowing,
     getUserByUsername,
     followingUsers,
-    followStateVersion // Agregar la versión al contexto
+    followStateVersion, // Agregar la versión al contexto
+    refreshTrigger // Agregar refresh trigger adicional
   };
 
   return (
