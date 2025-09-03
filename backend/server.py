@@ -1737,6 +1737,33 @@ async def search_users(q: str = "", current_user: UserResponse = Depends(get_cur
 
 # =============  FOLLOW ENDPOINTS =============
 
+# Helper function to update follow counts
+async def update_follow_counts(user_id: str):
+    """Update followers and following counts for a user"""
+    try:
+        # Count followers
+        followers_count = await db.follows.count_documents({"following_id": user_id})
+        
+        # Count following
+        following_count = await db.follows.count_documents({"follower_id": user_id})
+        
+        # Update user profile with new counts
+        await db.user_profiles.update_one(
+            {"id": user_id},
+            {
+                "$set": {
+                    "followers_count": followers_count,
+                    "following_count": following_count
+                }
+            },
+            upsert=True  # Create profile if doesn't exist
+        )
+        
+        print(f"✅ Updated follow counts for user {user_id}: {followers_count} followers, {following_count} following")
+        
+    except Exception as e:
+        print(f"❌ Error updating follow counts for user {user_id}: {e}")
+
 @api_router.post("/users/{user_id}/follow")
 async def follow_user(user_id: str, current_user: UserResponse = Depends(get_current_user)):
     """Follow a user"""
