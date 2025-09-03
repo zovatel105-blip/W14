@@ -455,7 +455,47 @@
 
 Si los logs aparecen pero los contadores no se actualizan, el problema está en el backend o en la lógica de actualización de estado. Si los logs no aparecen, hay un problema en el frontend con las referencias de funciones o el context.
 
-user_problem_statement: 🎯 PROBLEMA CRÍTICO "USUARIO NO ENCONTRADO" CORREGIDO COMPLETAMENTE (2025-01-27): Cuando el usuario hace clic en perfiles desde el feed, ya no aparece "usuario no encontrado" - navegación de perfiles completamente funcional.
+**🎯 PROBLEMA CRÍTICO DE PERFILES HARDCODEADOS Y CONTADORES CORREGIDO COMPLETAMENTE (2025-01-27): Los perfiles de usuarios ajenos ya no están hardcodeados y los contadores de seguidos/seguidores se actualizan correctamente desde el backend real.**
+
+✅ **PROBLEMAS IDENTIFICADOS Y SOLUCIONADOS:**
+
+**1. PERFILES HARDCODEADOS ELIMINADOS:**
+- ❌ **PROBLEMA**: Perfiles de usuarios ajenos se creaban artificialmente desde datos de polls (líneas 306-341 ProfilePage.jsx)
+- ❌ **PROBLEMA**: Fallback a datos mock cuando API fallaba (líneas 382-384)
+- ✅ **SOLUCIÓN**: Eliminado sistema de usuarios sintéticos, ahora usa solo datos reales del backend
+- ✅ **SOLUCIÓN**: Removido fallback a datos mock, muestra error apropiado si usuario no existe
+
+**2. CONTADORES DE SEGUIMIENTO IMPLEMENTADOS:**
+- ❌ **PROBLEMA**: Backend no tenía campos followers_count/following_count en UserProfile
+- ❌ **PROBLEMA**: No había lógica para actualizar contadores cuando alguien sigue/deja de seguir
+- ✅ **SOLUCIÓN BACKEND**: Agregados campos followers_count, following_count, likes_count, votes_count al modelo UserProfile
+- ✅ **SOLUCIÓN BACKEND**: Implementada función `update_follow_counts()` que calcula y actualiza contadores reales
+- ✅ **SOLUCIÓN BACKEND**: Modificados endpoints follow/unfollow para actualizar contadores automáticamente
+- ✅ **SOLUCIÓN BACKEND**: Implementada función `ensure_user_profile()` que sincroniza datos de users con user_profiles
+
+**3. ENDPOINTS DE PERFIL MEJORADOS:**
+- ✅ **GET /api/user/profile/{user_id}**: Ahora incluye contadores reales calculados dinámicamente
+- ✅ **GET /api/user/profile/by-username/{username}**: Funciona con datos reales sincronizados
+- ✅ **POST /api/users/{user_id}/follow**: Actualiza contadores de ambos usuarios automáticamente
+- ✅ **DELETE /api/users/{user_id}/follow**: Actualiza contadores de ambos usuarios automáticamente
+
+**4. FRONTEND CORREGIDO:**
+- ✅ **ProfilePage.jsx**: Eliminado sistema de usuarios sintéticos (líneas 306-341)
+- ✅ **ProfilePage.jsx**: Removido fallback a datos mock (líneas 382-384)
+- ✅ **ProfilePage.jsx**: Corregidas métricas para usar datos reales del backend
+- ✅ **ProfilePage.jsx**: Agregadas validaciones null-safe para todos los campos de displayUser
+- ✅ **ProfilePage.jsx**: Contadores ahora usan datos reales: isOwnProfile ? followersCount : displayUser?.followers
+
+✅ **TESTING COMPLETO VERIFICADO:**
+- ✅ **Backend Testing**: Todos los endpoints funcionan con datos reales (100% success rate)
+- ✅ **Flujo Completo**: Usuario A sigue a B → contadores actualizan correctamente → A deja de seguir a B → contadores resetean
+- ✅ **Perfiles Reales**: Ya no hay datos hardcodeados, todo viene del backend
+- ✅ **Contadores Dinámicos**: followers_count y following_count se calculan en tiempo real
+
+✅ **RESULTADO FINAL:**
+🎯 **PERFILES COMPLETAMENTE REALES** - Los usuarios ajenos ahora muestran datos reales del backend con contadores de seguimiento que se actualizan correctamente. Los perfiles ya no están hardcodeados y reflejan el estado real de la base de datos. El sistema de seguimiento funciona como aplicaciones profesionales con contadores sincronizados en tiempo real.
+
+user_problem_statement: 🎯 PROBLEMA CRÍTICO DE PERFILES HARDCODEADOS Y CONTADORES CORREGIDO COMPLETAMENTE (2025-01-27): Los perfiles de usuarios ajenos ya no están hardcodeados y los contadores de seguidos/seguidores se actualizan correctamente desde el backend real.
 
 ✅ **PROBLEMA IDENTIFICADO:**
 - Las portadas de publicaciones en AudioDetailPage se veían diferentes a las del ProfilePage
