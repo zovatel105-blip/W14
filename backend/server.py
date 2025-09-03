@@ -1691,6 +1691,56 @@ async def get_my_profile(current_user: UserResponse = Depends(get_current_user))
     profile = UserProfile(**profile_data)
     return profile
 
+# Helper function to ensure user profile exists and is up to date
+async def ensure_user_profile(user_id: str):
+    """Ensure user profile exists and is synchronized with user data"""
+    try:
+        # Get user data from users collection
+        user_data = await db.users.find_one({"id": user_id})
+        if not user_data:
+            return None
+            
+        # Check if profile exists
+        profile_data = await db.user_profiles.find_one({"id": user_id})
+        
+        # Count followers and following
+        followers_count = await db.follows.count_documents({"following_id": user_id})
+        following_count = await db.follows.count_documents({"follower_id": user_id})
+        
+        # Count total votes and polls (you can extend this later)
+        total_polls = await db.polls.count_documents({"author_id": user_id})
+        
+        # Prepare profile data
+        profile_update = {
+            "id": user_id,
+            "username": user_data.get("username"),
+            "display_name": user_data.get("display_name"),
+            "avatar_url": user_data.get("avatar_url"),
+            "bio": user_data.get("bio"),
+            "is_verified": user_data.get("is_verified", False),
+            "followers_count": followers_count,
+            "following_count": following_count,
+            "total_polls_created": total_polls,
+            "total_votes": 0,  # Can be calculated later from votes collection
+            "likes_count": 0,  # Can be calculated later
+            "votes_count": 0,  # Can be calculated later
+            "last_activity": datetime.utcnow(),
+            "created_at": profile_data.get("created_at", datetime.utcnow()) if profile_data else datetime.utcnow()
+        }
+        
+        # Update or insert profile
+        await db.user_profiles.update_one(
+            {"id": user_id},
+            {"$set": profile_update},
+            upsert=True
+        )
+        
+        return profile_update
+        
+    except Exception as e:
+        print(f"❌ Error ensuring user profile for {user_id}: {e}")
+        return None
+
 @api_router.get("/user/profile/{user_id}")
 async def get_user_profile(user_id: str):
     """Get user profile by ID (public endpoint)"""
