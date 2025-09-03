@@ -136,6 +136,11 @@ const ProfilePage = () => {
   // Load follow statistics
   useEffect(() => {
     const loadFollowStats = async () => {
+      console.log('🔄 LOADING FOLLOW STATS:');
+      console.log('  User ID:', userId || authUser?.id);
+      console.log('  Follow State Version:', followStateVersion);
+      console.log('  Triggered by global follow state change');
+      
       if (!authUser?.id && !userId) return;
       
       setFollowStatsLoading(true);
@@ -151,9 +156,11 @@ const ProfilePage = () => {
         setFollowersCount(followersData.total || 0);
         setFollowingCount(followingData.total || 0);
         
-        console.log(`User ${targetUserId} - Followers: ${followersData.total}, Following: ${followingData.total}`);
+        console.log('✅ FOLLOW STATS UPDATED:');
+        console.log(`  User ${targetUserId} - Followers: ${followersData.total}, Following: ${followingData.total}`);
+        console.log('  Follow State Version:', followStateVersion);
       } catch (error) {
-        console.error('Error loading follow stats:', error);
+        console.error('❌ ERROR loading follow stats:', error);
         // Don't show toast for follow stats errors to avoid spam
         setFollowersCount(0);
         setFollowingCount(0);
