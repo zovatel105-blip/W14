@@ -1812,6 +1812,10 @@ async def unfollow_user(user_id: str, current_user: UserResponse = Depends(get_c
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Follow relationship not found")
     
+    # Update follow counts for both users
+    await update_follow_counts(user_id)  # Update unfollowed user's follower count
+    await update_follow_counts(current_user.id)  # Update current user's following count
+    
     return {"message": "Successfully unfollowed user"}
 
 @api_router.get("/users/{user_id}/follow-status")
