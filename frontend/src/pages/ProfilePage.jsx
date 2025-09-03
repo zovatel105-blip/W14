@@ -487,23 +487,7 @@ const ProfilePage = () => {
     totalPolls: userPolls.length,
     verified: authUser?.is_verified || false,
     hasStory: Math.random() > 0.5, // Simulación temporal - luego conectar con backend real
-  } : viewedUser || {
-    id: 'default_user',
-    username: 'usuario',
-    displayName: 'Usuario',
-    email: 'usuario@example.com',
-    bio: 'Perfil de usuario',
-    avatar: null,
-    followers: followersCount,
-    following: followingCount,
-    totalVotes: 0,
-    totalLikes: 0, 
-    totalShares: 0,
-    pollsCreated: 0,
-    totalPolls: 0,
-    verified: false,
-    hasStory: Math.random() > 0.5, // Simulación temporal - luego conectar con backend real
-  };
+  } : viewedUser; // Use real viewed user data, no fallback to mock data
 
   // Add null safety check to prevent charAt errors
   if (!displayUser || (!displayUser.displayName && !displayUser.username)) {
