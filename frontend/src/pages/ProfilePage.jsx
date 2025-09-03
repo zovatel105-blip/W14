@@ -780,12 +780,12 @@ const ProfilePage = () => {
             {/* AVATAR EN EL CENTRO - PERFECTAMENTE CENTRADO */}
             <div className="relative w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 flex-shrink-0">
               {/* Borde degradado solo si hay historia */}
-              {displayUser.hasStory ? (
+              {displayUser?.hasStory ? (
                 <div className="absolute inset-0 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 rounded-full p-0.5">
                   <div className="w-full h-full bg-white rounded-full overflow-hidden relative">
                     {isOwnProfile ? (
                       <AvatarUpload
-                        currentAvatar={displayUser.avatar}
+                        currentAvatar={displayUser?.avatar}
                         onAvatarUpdate={(result, avatarUrl) => {
                           setViewedUser(prev => ({ ...prev, avatar: avatarUrl }));
                         }}
@@ -795,12 +795,12 @@ const ProfilePage = () => {
                     ) : (
                       <Avatar className="w-full h-full">
                         <AvatarImage 
-                          src={displayUser.avatar} 
-                          alt={displayUser.username}
+                          src={displayUser?.avatar} 
+                          alt={displayUser?.username || 'Usuario'}
                           className="w-full h-full object-cover object-center"
                         />
                         <AvatarFallback className="bg-gradient-to-br from-purple-500 to-pink-500 text-white text-lg sm:text-xl md:text-2xl font-bold w-full h-full flex items-center justify-center">
-                          {(displayUser.displayName || displayUser.username || 'U').charAt(0).toUpperCase()}
+                          {(displayUser?.displayName || displayUser?.username || 'U').charAt(0).toUpperCase()}
                         </AvatarFallback>
                       </Avatar>
                     )}
@@ -811,7 +811,7 @@ const ProfilePage = () => {
                 <div className="w-full h-full bg-white rounded-full overflow-hidden relative border-2 border-gray-200">
                   {isOwnProfile ? (
                     <AvatarUpload
-                      currentAvatar={displayUser.avatar}
+                      currentAvatar={displayUser?.avatar}
                       onAvatarUpdate={(result, avatarUrl) => {
                         setViewedUser(prev => ({ ...prev, avatar: avatarUrl }));
                       }}
@@ -821,12 +821,12 @@ const ProfilePage = () => {
                   ) : (
                     <Avatar className="w-full h-full">
                       <AvatarImage 
-                        src={displayUser.avatar} 
-                        alt={displayUser.username}
+                        src={displayUser?.avatar} 
+                        alt={displayUser?.username || 'Usuario'}
                         className="w-full h-full object-cover object-center"
                       />
                       <AvatarFallback className="bg-gradient-to-br from-purple-500 to-pink-500 text-white text-lg sm:text-xl md:text-2xl font-bold w-full h-full flex items-center justify-center">
-                        {(displayUser.displayName || displayUser.username || 'U').charAt(0).toUpperCase()}
+                        {(displayUser?.displayName || displayUser?.username || 'U').charAt(0).toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
                   )}
