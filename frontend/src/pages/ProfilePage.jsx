@@ -353,7 +353,6 @@ const ProfilePage = () => {
       setLoading(false);
     }
   }, [userId, navigate, toast]);
-  }, [userId, navigate, toast]);
 
   // Initialize saved polls (mock data)
   useEffect(() => {
