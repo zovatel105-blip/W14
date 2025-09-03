@@ -13,8 +13,16 @@ class NotificationType(str, Enum):
 class UserProfile(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     username: str
+    display_name: Optional[str] = None
+    avatar_url: Optional[str] = None
+    bio: Optional[str] = None
+    is_verified: bool = False
     total_votes: int = 0
     total_polls_created: int = 0
+    followers_count: int = 0
+    following_count: int = 0
+    likes_count: int = 0
+    votes_count: int = 0
     last_activity: datetime = Field(default_factory=datetime.utcnow)
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
