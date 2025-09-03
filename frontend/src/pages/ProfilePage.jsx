@@ -846,7 +846,7 @@ const ProfilePage = () => {
               {/* Me gusta con ícono - alineación derecha perfecta */}
               <div className="flex items-center gap-2 justify-end">
                 <div className="flex flex-col justify-center min-w-0 text-right">
-                  <p className="text-sm sm:text-base font-bold text-gray-900 leading-none">{displayUser.totalLikes || 0}</p>
+                  <p className="text-sm sm:text-base font-bold text-gray-900 leading-none">{isOwnProfile ? (displayUser?.totalLikes || 0) : (displayUser?.likes || 0)}</p>
                   <p className="text-xs sm:text-sm text-gray-600 font-medium leading-none mt-0.5">Me gusta</p>
                 </div>
                 <div className="w-8 h-8 sm:w-9 sm:h-9 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
@@ -860,7 +860,7 @@ const ProfilePage = () => {
                 onClick={handleFollowingClick}
               >
                 <div className="flex flex-col justify-center min-w-0 text-right">
-                  <p className="text-sm sm:text-base font-bold text-gray-900 leading-none">{followingCount}</p>
+                  <p className="text-sm sm:text-base font-bold text-gray-900 leading-none">{isOwnProfile ? followingCount : (displayUser?.following || 0)}</p>
                   <p className="text-xs sm:text-sm text-gray-600 font-medium leading-none mt-0.5">Seguidos</p>
                 </div>
                 <div className="w-8 h-8 sm:w-9 sm:h-9 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
