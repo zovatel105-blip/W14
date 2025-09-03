@@ -20,14 +20,14 @@ export const FollowProvider = ({ children }) => {
   // Función para incrementar la versión cuando cambie el estado de seguimiento
   const incrementFollowStateVersion = useCallback(() => {
     console.log('🔄 INCREMENTING FOLLOW STATE VERSION');
-    console.log('  Previous version:', followStateVersion);
     setFollowStateVersion(prev => {
+      console.log('  Previous version:', prev);
       const newVersion = prev + 1;
       console.log('  New version:', newVersion);
       console.log('  This should trigger useEffect in all ProfilePage instances');
       return newVersion;
     });
-  }, [followStateVersion]);
+  }, []); // Sin dependencias para evitar recreación
 
   const getUserByUsername = async (username) => {
     try {
