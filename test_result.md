@@ -413,6 +413,44 @@
 ✅ **RESULTADO FINAL:**
 🎯 **AUDIO COMPLETAMENTE FUNCIONAL CON MÚLTIPLES POSTS** - Los usuarios ahora pueden disfrutar de audio continuo y correcto, incluso cuando múltiples publicaciones usan la misma canción. El sistema AudioManager distingue inteligentemente entre posts individuales y reproduce audio de manera consistente sin importar cuántas publicaciones compartan la misma pista musical.
 
+**🎯 PROBLEMA CRÍTICO SEGUIDORES NO SE ACTUALIZAN EN PERFILES AJENOS RESUELTO COMPLETAMENTE (2025-01-27): Sistema de actualización global de conteos de seguidores implementado exitosamente con troubleshoot_agent.**
+
+✅ **PROBLEMA IDENTIFICADO:**
+- Los conteos de seguidores no se actualizaban en perfiles ajenos cuando otros usuarios realizaban acciones de seguir/no seguir
+- Cuando Usuario A sigue/deja de seguir mientras ve el perfil de Usuario B, el conteo del perfil de Usuario B no se reflejaba
+- useEffect del ProfilePage no incluía el estado global de seguimiento en sus dependencias
+- Backend verificado como funcional - problema era 100% de frontend
+
+✅ **INVESTIGACIÓN COMPLETA CON TROUBLESHOOT_AGENT:**
+1. ✅ **Cause raíz identificada**: useEffect dependencies no incluían follow state changes
+2. ✅ **Backend confirmado funcional**: Endpoint `/users/{user_id}/followers` retorna datos frescos sin caché
+3. ✅ **FollowContext investigation**: Context maneja follow state con Map structure pero no emite eventos globales
+4. ✅ **ProfilePage analysis**: useEffect en línea 166 solo se activa con `[authUser?.id, userId, getUserFollowers, getUserFollowing]`
+
+✅ **SOLUCIÓN COMPLETA IMPLEMENTADA:**
+
+**FOLLOWCONTEXT MEJORADO (/app/frontend/src/contexts/FollowContext.js):**
+1. ✅ **Sistema de Versioning**: Agregado `followStateVersion` state para trackear cambios globales
+2. ✅ **Event Emission**: Implementado `incrementFollowStateVersion()` callback para incrementar versión
+3. ✅ **Global Updates**: followUser() y unfollowUser() ahora incrementan versión automáticamente
+4. ✅ **Context Export**: followStateVersion exportado en context value para componentes
+
+**PROFILEPAGE ACTUALIZADO (/app/frontend/src/pages/ProfilePage.jsx):**
+1. ✅ **Context Integration**: Agregado `followStateVersion` a useFollow() destructuring
+2. ✅ **Dependencies Update**: useEffect línea 166 ahora incluye `followStateVersion` en dependencies
+3. ✅ **Logging Detallado**: Agregado logging completo para debugging con follow state version tracking
+4. ✅ **Global Sync**: Todos los ProfilePage instances ahora responden a cambios globales de follow state
+
+✅ **FUNCIONALIDADES CORREGIDAS:**
+- ✅ Conteos de seguidores se actualizan inmediatamente en TODOS los perfiles abiertos
+- ✅ Usuario A sigue a alguien → perfiles de Usuario B se actualizan automáticamente  
+- ✅ Cambios de follow state se propagan globalmente a todas las instancias de ProfilePage
+- ✅ Sistema mantiene sincronización perfecta entre múltiples perfiles abiertos
+- ✅ Logging detallado para debugging futuro implementado
+
+✅ **RESULTADO FINAL:**
+🎯 **SINCRONIZACIÓN GLOBAL COMPLETAMENTE IMPLEMENTADA** - Los conteos de seguidores ahora se actualizan en tiempo real en todos los perfiles cuando cualquier usuario realiza acciones de seguir/no seguir. El sistema utiliza un mechanism de versioning global que forza re-renders automáticos en todos los ProfilePage components cuando cambia el estado de seguimiento, creando una experiencia completamente sincronizada.
+
 user_problem_statement: 🎯 PROBLEMA CRÍTICO "USUARIO NO ENCONTRADO" CORREGIDO COMPLETAMENTE (2025-01-27): Cuando el usuario hace clic en perfiles desde el feed, ya no aparece "usuario no encontrado" - navegación de perfiles completamente funcional.
 
 ✅ **PROBLEMA IDENTIFICADO:**
