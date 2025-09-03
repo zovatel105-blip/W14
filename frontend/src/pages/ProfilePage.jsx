@@ -877,9 +877,9 @@ const ProfilePage = () => {
             {/* Nombre principal */}
             <div className="flex items-center gap-2">
               <h2 className="text-base sm:text-xl font-bold text-gray-900 truncate flex-shrink-0">
-                {displayUser.displayName || displayUser.username}
+                {displayUser?.displayName || displayUser?.username || 'Usuario'}
               </h2>
-              {displayUser.verified && (
+              {displayUser?.verified && (
                 <Check className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500 flex-shrink-0" />
               )}
             </div>
