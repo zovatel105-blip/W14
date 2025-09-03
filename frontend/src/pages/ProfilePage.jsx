@@ -977,19 +977,30 @@ const ProfilePage = () => {
               <Button 
                 variant="outline" 
                 className="w-full rounded-full py-3 sm:py-3 text-sm sm:text-base font-semibold bg-blue-600 hover:bg-blue-700 text-white min-h-[48px] active:scale-95 transition-transform"
-                onClick={() => {
+                onClick={async () => {
                   const targetUserId = viewedUser?.id || userId;
-                  if (isFollowing(targetUserId)) {
-                    unfollowUser(targetUserId);
+                  try {
+                    if (isFollowing(targetUserId)) {
+                      await unfollowUser(targetUserId);
+                      setFollowersCount(prev => Math.max(0, prev - 1)); // Actualizar contador
+                      toast({
+                        title: "Dejaste de seguir",
+                        description: `Ya no sigues a @${viewedUser?.username || userId}`,
+                      });
+                    } else {
+                      await followUser(targetUserId);
+                      setFollowersCount(prev => prev + 1); // Actualizar contador
+                      toast({
+                        title: "Siguiendo",
+                        description: `Ahora sigues a @${viewedUser?.username || userId}`,
+                      });
+                    }
+                  } catch (error) {
+                    console.error('Error toggling follow status:', error);
                     toast({
-                      title: "Dejaste de seguir",
-                      description: `Ya no sigues a @${viewedUser?.username || userId}`,
-                    });
-                  } else {
-                    followUser(targetUserId);
-                    toast({
-                      title: "Siguiendo",
-                      description: `Ahora sigues a @${viewedUser?.username || userId}`,
+                      title: "Error",
+                      description: "No se pudo actualizar el estado de seguimiento",
+                      variant: "destructive",
                     });
                   }
                 }}
