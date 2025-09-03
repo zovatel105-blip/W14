@@ -303,53 +303,6 @@ const ProfilePage = () => {
     await loadFollowingList();
   };
 
-  // Create a comprehensive user database from actual polls
-  const allUsers = [
-    // Add current authenticated user
-    ...(authUser ? [{
-      id: authUser.id,
-      username: authUser.username,
-      displayName: authUser.display_name,
-      avatar: authUser.avatar_url,
-      verified: authUser.is_verified || false,
-      followers: followersCount || 0, // Use real data for current user
-      bio: authUser.bio || ''
-    }] : []),
-    // Add users from polls
-    ...polls.flatMap(poll => [
-      // Poll author
-      ...(poll.authorUser ? [{
-        id: poll.authorUser.username,
-        username: poll.authorUser.username,
-        displayName: poll.authorUser.displayName,
-        avatar: poll.authorUser.avatar,
-        verified: poll.authorUser.verified || false,
-        followers: poll.authorUser.followers || 0,
-        bio: 'Bio from poll data'
-      }] : []),
-      // Option users
-      ...poll.options.map(option => ({
-        id: option.user.username,
-        username: option.user.username,
-        displayName: option.user.displayName,
-        avatar: option.user.avatar,
-        verified: option.user.verified || false,
-        followers: option.user.followers || 0,
-        bio: 'Bio from option data'
-      }))
-    ])
-  ];
-
-  // Remove duplicates by username
-  const uniqueUsers = allUsers.filter((user, index, self) => 
-    index === self.findIndex((u) => u.username === user.username)
-  );
-
-  // Function to get user by ID/username
-  const getUserById = (id) => {
-    return uniqueUsers.find(user => user.username === id || user.id === id);
-  };
-
   // Load user data when userId changes
   useEffect(() => {
     if (userId) {
@@ -371,25 +324,24 @@ const ProfilePage = () => {
             following: profile.following_count || 0,
             likes: profile.likes_count || 0,
             votes: profile.votes_count || 0,
-            bio: profile.bio || ''
+            bio: profile.bio || '',
+            totalVotes: profile.total_votes || 0,
+            totalLikes: profile.likes_count || 0,
+            totalShares: 0, // Can be added to backend later
+            pollsCreated: profile.total_polls_created || 0,
+            totalPolls: profile.total_polls_created || 0
           };
           
           setViewedUser(transformedUser);
         } catch (error) {
           console.error('Error fetching user profile:', error);
-          
-          // Fallback to mock data if API fails
-          const user = getUserById(userId);
-          if (user) {
-            setViewedUser(user);
-          } else {
-            toast({
-              title: "Usuario no encontrado",
-              description: "El perfil que buscas no existe o no se pudo cargar",
-              variant: "destructive"
-            });
-            navigate('/profile');
-          }
+          // Show error message instead of falling back to mock data
+          toast({
+            title: "Usuario no encontrado",
+            description: "El perfil que buscas no existe o no se pudo cargar",
+            variant: "destructive"
+          });
+          navigate('/profile');
         } finally {
           setLoading(false);
         }
@@ -400,6 +352,7 @@ const ProfilePage = () => {
       setViewedUser(null);
       setLoading(false);
     }
+  }, [userId, navigate, toast]);
   }, [userId, navigate, toast]);
 
   // Initialize saved polls (mock data)
