@@ -1794,6 +1794,10 @@ async def follow_user(user_id: str, current_user: UserResponse = Depends(get_cur
     if not result.inserted_id:
         raise HTTPException(status_code=500, detail="Failed to follow user")
     
+    # Update follow counts for both users
+    await update_follow_counts(user_id)  # Update followed user's follower count
+    await update_follow_counts(current_user.id)  # Update current user's following count
+    
     return {"message": "Successfully followed user", "follow_id": follow_data.id}
 
 @api_router.delete("/users/{user_id}/follow")
