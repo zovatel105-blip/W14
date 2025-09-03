@@ -945,26 +945,71 @@ const ProfilePage = () => {
 
         {/* BOTONES DE ACCIÓN EXPANDIDOS - USO COMPLETO DEL ANCHO */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mx-0">
-          <Button 
-            variant="outline" 
-            className="w-full rounded-full py-3 sm:py-3 text-sm sm:text-base font-semibold bg-gray-100 hover:bg-gray-200 border-gray-300 min-h-[48px] active:scale-95 transition-transform"
-            onClick={() => setEditProfileModalOpen(true)}
-          >
-            Edit profile
-          </Button>
-          <Button 
-            variant="outline" 
-            className="w-full rounded-full py-3 sm:py-3 text-sm sm:text-base font-semibold bg-gray-100 hover:bg-gray-200 border-gray-300 min-h-[48px] active:scale-95 transition-transform"
-            onClick={() => navigate('/statistics')}
-          >
-            Statistics
-          </Button>
-          <Button 
-            className="w-full rounded-full py-3 sm:py-3 text-sm sm:text-base font-semibold bg-blue-600 hover:bg-blue-700 min-h-[48px] active:scale-95 transition-transform"
-            onClick={() => navigate('/contact')}
-          >
-            Contact
-          </Button>
+          {isOwnProfile ? (
+            // Botones para perfil propio
+            <>
+              <Button 
+                variant="outline" 
+                className="w-full rounded-full py-3 sm:py-3 text-sm sm:text-base font-semibold bg-gray-100 hover:bg-gray-200 border-gray-300 min-h-[48px] active:scale-95 transition-transform"
+                onClick={() => setEditProfileModalOpen(true)}
+              >
+                Edit profile
+              </Button>
+              <Button 
+                variant="outline" 
+                className="w-full rounded-full py-3 sm:py-3 text-sm sm:text-base font-semibold bg-gray-100 hover:bg-gray-200 border-gray-300 min-h-[48px] active:scale-95 transition-transform"
+                onClick={() => navigate('/statistics')}
+              >
+                Statistics
+              </Button>
+              <Button 
+                className="w-full rounded-full py-3 sm:py-3 text-sm sm:text-base font-semibold bg-blue-600 hover:bg-blue-700 min-h-[48px] active:scale-95 transition-transform"
+                onClick={() => navigate('/contact')}
+              >
+                Contact
+              </Button>
+            </>
+          ) : (
+            // Botones para perfil ajeno
+            <>
+              <Button 
+                variant="outline" 
+                className="w-full rounded-full py-3 sm:py-3 text-sm sm:text-base font-semibold bg-blue-600 hover:bg-blue-700 text-white min-h-[48px] active:scale-95 transition-transform"
+                onClick={() => {
+                  const targetUserId = viewedUser?.id || userId;
+                  if (isFollowing(targetUserId)) {
+                    unfollowUser(targetUserId);
+                    toast({
+                      title: "Dejaste de seguir",
+                      description: `Ya no sigues a @${viewedUser?.username || userId}`,
+                    });
+                  } else {
+                    followUser(targetUserId);
+                    toast({
+                      title: "Siguiendo",
+                      description: `Ahora sigues a @${viewedUser?.username || userId}`,
+                    });
+                  }
+                }}
+              >
+                {isFollowing(viewedUser?.id || userId) ? 'Siguiendo' : 'Seguir'}
+              </Button>
+              <Button 
+                variant="outline" 
+                className="w-full rounded-full py-3 sm:py-3 text-sm sm:text-base font-semibold bg-gray-100 hover:bg-gray-200 border-gray-300 min-h-[48px] active:scale-95 transition-transform"
+                onClick={() => navigate(`/messages?user=${viewedUser?.username || userId}`)}
+              >
+                Mensaje
+              </Button>
+              <Button 
+                variant="outline"
+                className="w-full rounded-full py-3 sm:py-3 text-sm sm:text-base font-semibold bg-gray-100 hover:bg-gray-200 border-gray-300 min-h-[48px] active:scale-95 transition-transform"
+                onClick={() => shareProfile(viewedUser || { username: userId })}
+              >
+                Compartir
+              </Button>
+            </>
+          )}
         </div>
 
         {/* TABS EXPANDIDAS - ANCHO COMPLETO */}
