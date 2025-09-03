@@ -459,6 +459,15 @@ const ProfilePage = () => {
   // Determine which user to display and calculate dynamic stats
   const isOwnProfile = !userId || userId === authUser?.username;
   
+  // Debug logging
+  console.log('🔍 PROFILE DEBUG:', {
+    userId,
+    authUser: authUser?.username,
+    isOwnProfile,
+    viewedUser: viewedUser?.username,
+    loading
+  });
+  
   // Filter user's polls based on actual author ID (must be before displayUser calculation)
   const userPolls = polls.filter(poll => {
     if (isOwnProfile) {
