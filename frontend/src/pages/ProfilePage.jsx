@@ -467,6 +467,18 @@ const ProfilePage = () => {
     viewedUser: viewedUser?.username,
     loading
   });
+
+  // Loading guard - return early if we're still loading user data
+  if (loading || (!isOwnProfile && !viewedUser)) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-purple-500/20 border-t-purple-500 rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600 text-lg">Cargando perfil...</p>
+        </div>
+      </div>
+    );
+  }
   
   // Filter user's polls based on actual author ID (must be before displayUser calculation)
   const userPolls = polls.filter(poll => {
