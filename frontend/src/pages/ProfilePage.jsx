@@ -1153,7 +1153,7 @@ const ProfilePage = () => {
               <div className="flex items-center gap-3">
                 <UserPlus className="w-6 h-6 text-blue-600" />
                 <h2 className="text-xl font-bold text-gray-900">
-                  {followersCount} Seguidores
+                  {followersList.length} Seguidores
                 </h2>
               </div>
               <Button
