@@ -1029,9 +1029,9 @@ const ProfilePage = () => {
               <span className="sm:hidden text-[10px]">Likes</span>
             </TabsTrigger>
             <TabsTrigger value="mentions" className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 p-2 sm:p-3 text-xs sm:text-sm min-h-[48px] active:scale-95 transition-transform">
-              <AtSign className="w-4 h-4 sm:w-5 sm:h-5" />
+              <Hash className="w-4 h-4 sm:w-5 sm:h-5" />
               <span className="hidden sm:inline">Menciones</span>
-              <span className="sm:hidden text-[10px]">@</span>
+              <span className="sm:hidden text-[10px]">#</span>
             </TabsTrigger>
             <TabsTrigger value="saved" className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 p-2 sm:p-3 text-xs sm:text-sm min-h-[48px] active:scale-95 transition-transform">
               <Bookmark className="w-4 h-4 sm:w-5 sm:h-5" />
