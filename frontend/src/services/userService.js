@@ -180,8 +180,21 @@ class UserService {
   }
 
   // Get users that a user is following
-  async getUserFollowing(userId) {
+  async getUserFollowing(userIdOrUsername) {
     try {
+      let userId = userIdOrUsername;
+      
+      // If it looks like a username (no UUID format), resolve it to ID via search
+      if (!userIdOrUsername.includes('-') && userIdOrUsername.length > 5) {
+        const searchResult = await this.searchUsers(userIdOrUsername);
+        const user = searchResult.find(u => u.username === userIdOrUsername);
+        if (user) {
+          userId = user.id;
+        } else {
+          throw new Error('Usuario no encontrado');
+        }
+      }
+      
       const response = await fetch(`${this.baseURL}/${userId}/following`, {
         method: 'GET',
         headers: this.getAuthHeaders(),
@@ -189,7 +202,7 @@ class UserService {
 
       return await this.handleResponse(response);
     } catch (error) {
-      console.error(`Error getting following for ${userId}:`, error);
+      console.error(`Error getting following for ${userIdOrUsername}:`, error);
       throw error;
     }
   }
