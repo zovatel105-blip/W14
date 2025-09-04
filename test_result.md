@@ -495,7 +495,7 @@ Si los logs aparecen pero los contadores no se actualizan, el problema está en 
 ✅ **RESULTADO FINAL:**
 🎯 **PERFILES COMPLETAMENTE REALES** - Los usuarios ajenos ahora muestran datos reales del backend con contadores de seguimiento que se actualizan correctamente. Los perfiles ya no están hardcodeados y reflejan el estado real de la base de datos. El sistema de seguimiento funciona como aplicaciones profesionales con contadores sincronizados en tiempo real.
 
-user_problem_statement: 🎯 PROBLEMA CRÍTICO DE PERFILES HARDCODEADOS Y CONTADORES CORREGIDO COMPLETAMENTE (2025-01-27): Los perfiles de usuarios ajenos ya no están hardcodeados y los contadores de seguidos/seguidores se actualizan correctamente desde el backend real.
+user_problem_statement: 🎯 PROBLEMA CRÍTICO MODALES VACÍOS EN PERFIL DE USUARIO RESUELTO COMPLETAMENTE (2025-01-27): Los contadores de seguidores/siguiendo muestran números reales pero los modales aparecían vacíos - problema identificado y solucionado exitosamente.
 
 ✅ **PROBLEMA IDENTIFICADO:**
 - Las portadas de publicaciones en AudioDetailPage se veían diferentes a las del ProfilePage
