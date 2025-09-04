@@ -499,17 +499,29 @@ Si los logs aparecen pero los contadores no se actualizan, el problema está en 
 
 **🎯 MEJORA UX PERFILES AJENOS IMPLEMENTADA (2025-01-27): Botón de ajustes eliminado en perfiles ajenos y reemplazado con botón de compartir usuario - mejora de experiencia de usuario completada exitosamente.**
 
-✅ **MEJORA IMPLEMENTADA:**
+✅ **MEJORAS IMPLEMENTADAS:**
+
+**1. BOTÓN HEADER DINÁMICO:**
 - **PERFIL PROPIO**: Muestra botón de ajustes (Settings) como antes para acceder a configuraciones
 - **PERFIL AJENO**: Muestra botón de compartir (Share2) para compartir el perfil del usuario visitado
 - **LÓGICA**: Usa `isOwnProfile` existente para determinar qué botón mostrar
 - **FUNCIONALIDAD**: Botón de compartir usa `shareProfile(displayUser)` del hook `useShare` existente
 
-✅ **ARCHIVO MODIFICADO:**
-- **ProfilePage.jsx líneas 765-778**: Reemplazado botón estático de ajustes con lógica condicional
+**2. BOTONES DE ACCIÓN SIMPLIFICADOS:**
+- **ELIMINADO**: Botón "Compartir" de la sección de botones de acción (junto a Seguir/Mensaje)
+- **RESULTADO**: Perfiles ajenos ahora solo muestran "Seguir" y "Mensaje" como acciones principales
+- **JUSTIFICACIÓN**: Evita redundancia ya que el compartir ahora está en el header
+
+✅ **ARCHIVOS MODIFICADOS:**
+- **ProfilePage.jsx líneas 765-778**: Botón header dinámico (ajustes vs compartir)
+- **ProfilePage.jsx líneas 945-1021**: Eliminado botón compartir de sección de acciones
 
 ✅ **RESULTADO:**
-🎯 **UX MEJORADA EN PERFILES AJENOS** - Los usuarios ahora ven un botón de compartir apropiado cuando visitan perfiles de otros usuarios, mientras que mantienen acceso a ajustes en su propio perfil. La funcionalidad es más intuitiva y útil.
+🎯 **UX MÁS LIMPIA Y FUNCIONAL** - Los perfiles ajenos ahora tienen:
+- Botón de compartir en header (más prominente y accesible)
+- Solo 2 acciones principales: Seguir y Mensaje (más enfocado)
+- Eliminada redundancia de botones de compartir
+- Interfaz más limpia y organizada
 
 **🎯 PROBLEMA CRÍTICO USERNAME/UUID DISCREPANCIA COMPLETAMENTE RESUELTO (2025-01-27): Frontend pasando usernames a endpoints que esperan UUIDs - discrepancia identificada y corregida exitosamente.**
 
