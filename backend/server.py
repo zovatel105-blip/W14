@@ -589,7 +589,46 @@ async def get_music_info(music_id: str):
             print(f"❌ Error fetching iTunes track {music_id}: {str(e)}")
             return None
     
-    # If not an iTunes ID, check static music library
+    # Check if this is a user audio ID (format: user_audio_XXXXX)
+    if music_id.startswith('user_audio_'):
+        try:
+            # Extract user audio UUID
+            user_audio_id = music_id.replace('user_audio_', '')
+            print(f"🎵 Fetching user audio info for ID: {user_audio_id}")
+            
+            # Query the user_audio collection
+            user_audio = await db.user_audio.find_one({"id": user_audio_id})
+            if user_audio:
+                music_info = {
+                    'id': music_id,
+                    'title': user_audio.get('title'),
+                    'artist': user_audio.get('artist'),
+                    'duration': user_audio.get('duration', 0),
+                    'url': user_audio.get('public_url'),
+                    'preview_url': user_audio.get('public_url'),
+                    'cover': user_audio.get('cover_url'),  # May be None
+                    'category': 'User Audio',
+                    'isOriginal': True,
+                    'isTrending': False,
+                    'uses': user_audio.get('uses_count', 0),
+                    'source': 'User Upload',
+                    'isUserUploaded': True,
+                    'uploader': {
+                        'id': user_audio.get('uploader_id'),
+                        'username': user_audio.get('artist'),  # Artist is usually the uploader's display name
+                    }
+                }
+                print(f"✅ Successfully fetched user audio: {music_info['title']} - {music_info['artist']}")
+                return music_info
+            else:
+                print(f"❌ User audio not found for ID: {user_audio_id}")
+                return None
+                
+        except Exception as e:
+            print(f"❌ Error fetching user audio {music_id}: {str(e)}")
+            return None
+    
+    # If not an iTunes ID or user audio, check static music library
     music_library = {
         # TRENDING
         'music_trending_1': {
