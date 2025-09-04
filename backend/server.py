@@ -4011,6 +4011,36 @@ async def get_posts_using_audio(
                     if poll["id"] not in existing_ids:
                         all_polls.append(poll)
                         existing_ids.add(poll["id"])
+        else:
+            # Estrategia 2.6: FORWARD COMPATIBILITY - Si audio_id es un UUID, también buscar con prefijo
+            import re
+            uuid_pattern = r'^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$'
+            
+            if re.match(uuid_pattern, audio_id):
+                prefixed_id = f"user_audio_{audio_id}"
+                logger.info(f"🔄 COMPATIBILIDAD: Buscando posts con UUID con prefijo = {prefixed_id}")
+                
+                # Buscar por music_id directo con prefijo (posts nuevos)
+                forward_filter = {"music_id": prefixed_id}
+                forward_polls = await db.polls.find(forward_filter).to_list(1000)
+                logger.info(f"📊 Posts encontrados por UUID con prefijo: {len(forward_polls)}")
+                
+                # Evitar duplicados
+                for poll in forward_polls:
+                    if poll["id"] not in existing_ids:
+                        all_polls.append(poll)
+                        existing_ids.add(poll["id"])
+                
+                # También buscar en music.id embebido con prefijo
+                forward_nested_filter = {"music.id": prefixed_id}
+                forward_nested_polls = await db.polls.find(forward_nested_filter).to_list(1000)
+                logger.info(f"📊 Posts encontrados por music.id con prefijo: {len(forward_nested_polls)}")
+                
+                # Evitar duplicados
+                for poll in forward_nested_polls:
+                    if poll["id"] not in existing_ids:
+                        all_polls.append(poll)
+                        existing_ids.add(poll["id"])
         
         # Estrategia 3: Para audio de usuario, buscar en user_audio_use
         if audio_source == "user_audio":
