@@ -592,7 +592,11 @@ Si los logs aparecen pero los contadores no se actualizan, el problema está en 
 ✅ **RESULTADO FINAL:**
 🎯 **DISCREPANCIA USERNAME/UUID COMPLETAMENTE ELIMINADA** - El sistema ahora maneja inteligentemente tanto usernames como UUIDs en todas las operaciones de usuario. Los endpoints backend reciben siempre UUIDs válidos independientemente de si el frontend origina la llamada con username o UUID. **CONTADOR DE MODALES CORREGIDO**: Los modales ahora muestran la cantidad real de usuarios en la lista, eliminando inconsistencias entre total backend vs datos mostrados. Compatibilidad total mantenida sin necesidad de cambios en componentes que llaman estas funciones.
 
-user_problem_statement: 🎯 PROBLEMA CRÍTICO USERNAME/UUID DISCREPANCIA COMPLETAMENTE RESUELTO (2025-01-27): Frontend pasando usernames a endpoints que esperan UUIDs - discrepancia identificada y corregida exitosamente.
+user_problem_statement: 🎯 PROBLEMA CRÍTICO COMPATIBILIDAD UUID AUDIO Y SUBIDA DE AUDIOS RESUELTO (2025-01-27): 
+
+1. **COMPATIBILIDAD UUID AUDIO**: Las publicaciones fueron creadas con music_id igual al UUID del audio (sin prefijo "user_audio_"), pero función actualizada espera prefijo. SOLUCIONADO: Agregado soporte para UUID de user audio con y sin prefijo.
+
+2. **SUBIDA DE AUDIOS**: Usuario no podía subir audios. CAUSA RAÍZ: FFmpeg faltante. SOLUCIONADO: Instalado FFmpeg y sistema de procesamiento de audio completamente operacional.
 
 ✅ **PROBLEMA IDENTIFICADO:**
 - Las portadas de publicaciones en AudioDetailPage se veían diferentes a las del ProfilePage
