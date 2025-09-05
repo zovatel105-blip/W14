@@ -78,6 +78,7 @@ const ProfilePage = () => {
   const [followStatsLoading, setFollowStatsLoading] = useState(true);
   const [followersList, setFollowersList] = useState([]);
   const [followingList, setFollowingList] = useState([]);
+  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const [followersLoading, setFollowersLoading] = useState(false);
   const [followingLoading, setFollowingLoading] = useState(false);
   const [showFollowersModal, setShowFollowersModal] = useState(false);
