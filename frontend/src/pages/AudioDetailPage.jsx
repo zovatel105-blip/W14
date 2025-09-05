@@ -1270,37 +1270,31 @@ const AudioDetailPage = () => {
         </div>
       </div>
 
-      {/* Botones mejorados con diseño más moderno */}
-      <div className="bg-white px-6 py-6">
-        <div className="flex gap-3">
-          {/* Botón Apple Music mejorado */}
+      {/* Botones minimalistas */}
+      <div className="bg-white px-8 py-6">
+        <div className="flex gap-4">
+          {/* Botón Apple Music minimalista */}
           <button 
             onClick={handleAddToItunes}
-            className="flex-1 flex items-center justify-center gap-3 py-5 px-6 bg-gradient-to-r from-gray-50 to-gray-100 hover:from-gray-100 hover:to-gray-200 rounded-2xl transition-all duration-300 shadow-md hover:shadow-lg border border-gray-200"
+            className="flex-1 flex items-center justify-center gap-3 py-4 px-6 bg-gray-50 hover:bg-gray-100 rounded-xl transition-colors border border-gray-200"
           >
-            <div className="w-8 h-8 rounded-full bg-black flex items-center justify-center">
-              <Apple className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-black font-semibold text-base">
+            <Apple className="w-5 h-5 text-gray-700" />
+            <span className="text-gray-700 font-medium">
               Open in Apple Music
             </span>
           </button>
           
-          {/* Botón Add to Favorite mejorado */}
+          {/* Botón Add to Favorite minimalista */}
           <button 
             onClick={handleLike}
-            className={`flex-1 flex items-center justify-center gap-3 py-5 px-6 rounded-2xl transition-all duration-300 shadow-md hover:shadow-lg border ${
+            className={`flex-1 flex items-center justify-center gap-3 py-4 px-6 rounded-xl transition-colors border ${
               isLiked 
-                ? 'bg-gradient-to-r from-red-50 to-pink-50 hover:from-red-100 hover:to-pink-100 border-red-200' 
-                : 'bg-gradient-to-r from-gray-50 to-gray-100 hover:from-gray-100 hover:to-gray-200 border-gray-200'
+                ? 'bg-red-50 hover:bg-red-100 border-red-200 text-red-700' 
+                : 'bg-gray-50 hover:bg-gray-100 border-gray-200 text-gray-700'
             }`}
           >
-            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-              isLiked ? 'bg-red-500' : 'bg-gray-800'
-            }`}>
-              <Heart className={`w-5 h-5 ${isLiked ? 'fill-current text-white' : 'text-white'}`} />
-            </div>
-            <span className="text-black font-semibold text-base">
+            <Heart className={`w-5 h-5 ${isLiked ? 'fill-current' : ''}`} />
+            <span className="font-medium">
               {isLiked ? 'Added to Favorites' : 'Add to Favorite'}
             </span>
           </button>
