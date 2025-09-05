@@ -1351,20 +1351,22 @@ const AudioDetailPage = () => {
         )}
       </div>
 
-      {/* Botón inferior - Ancho completo */}
-      <div className={`${layout.bottomButtonHeight} flex items-center justify-center px-2`}>
-        {/* Botón central "Use sound" con color dinámico */}
-        <button 
-          onClick={handleUseThisSound}
-          className="w-[40%] py-4 rounded-2xl font-semibold text-white text-lg transition-all hover:opacity-90 hover:scale-105"
-          style={{ 
-            backgroundColor: dominantColor,
-            boxShadow: `0 8px 25px ${dominantColor}40`
-          }}
-        >
-          {t('buttons.useSound')}
-        </button>
-      </div>
+      {/* Botón inferior - Solo aparece cuando hay scroll en el grid */}
+      {showUseButton && (
+        <div className={`${layout.bottomButtonHeight} flex items-center justify-center px-2 fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-sm border-t border-gray-100 z-50`}>
+          {/* Botón central "Use sound" con color dinámico */}
+          <button 
+            onClick={handleUseThisSound}
+            className="w-[40%] py-4 rounded-2xl font-semibold text-white text-lg transition-all hover:opacity-90 hover:scale-105"
+            style={{ 
+              backgroundColor: dominantColor,
+              boxShadow: `0 8px 25px ${dominantColor}40`
+            }}
+          >
+            {t('buttons.useSound')}
+          </button>
+        </div>
+      )}
 
       {/* Modales */}
       <PollModal
