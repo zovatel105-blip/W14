@@ -1220,12 +1220,12 @@ const AudioDetailPage = () => {
           </div>
         </div>
 
-        {/* Sección principal del audio - como en la referencia */}
-        <div className="relative px-6 pb-6 z-10">
-          {/* Portada grande centrada */}
-          <div className="flex justify-center mb-6">
-            <div className="relative w-32 h-32">
-              <div className="w-full h-full rounded-3xl overflow-hidden bg-gray-100 shadow-xl border border-gray-200">
+        {/* Sección principal del audio - Diseño mejorado más moderno */}
+        <div className="relative px-6 pb-8 z-10">
+          {/* Portada mejorada con mejor presentación */}
+          <div className="flex justify-center mb-8">
+            <div className="relative">
+              <div className="w-40 h-40 rounded-3xl overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 shadow-2xl border border-white/20">
                 {audio?.cover_url ? (
                   <img 
                     src={audio.cover_url} 
@@ -1233,46 +1233,48 @@ const AudioDetailPage = () => {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                    <Music className="w-12 h-12 text-gray-400" />
+                  <div className="w-full h-full bg-gradient-to-br from-blue-100 to-purple-100 flex items-center justify-center">
+                    <Music className="w-16 h-16 text-gray-500" />
                   </div>
                 )}
               </div>
               
-              {/* Botón de play overlay */}
+              {/* Botón de play mejorado */}
               <button
                 onClick={handlePlayPause}
-                className="absolute inset-0 bg-black/30 rounded-3xl flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity"
+                className="absolute inset-0 bg-black/20 backdrop-blur-sm rounded-3xl flex items-center justify-center opacity-0 hover:opacity-100 transition-all duration-300"
               >
-                {isPlaying ? (
-                  <Pause className="w-8 h-8 text-white" />
-                ) : (
-                  <Play className="w-8 h-8 text-white ml-1" />
-                )}
+                <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-lg">
+                  {isPlaying ? (
+                    <Pause className="w-8 h-8 text-black" />
+                  ) : (
+                    <Play className="w-8 h-8 text-black ml-1" />
+                  )}
+                </div>
               </button>
             </div>
           </div>
 
-          {/* Título prominente como en la referencia */}
-          <div className="text-center mb-4">
-            <h1 className="text-2xl font-bold text-black mb-3 leading-tight">
-              Contains: {audio?.title || 'Solitaire'}
+          {/* Información del audio mejorada */}
+          <div className="text-center mb-6">
+            <h1 className="text-3xl font-black text-black mb-4 leading-tight tracking-tight">
+              Contains: {audio?.title || 'Audio'}
             </h1>
             
-            {/* Usuario con checkmark */}
-            <div className="flex items-center justify-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-                <span className="text-white font-bold text-sm">
-                  {audio?.artist ? audio.artist[0].toUpperCase() : 'W'}
+            {/* Usuario con diseño mejorado */}
+            <div className="flex items-center justify-center gap-3 mb-2">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 flex items-center justify-center shadow-lg">
+                <span className="text-white font-bold text-lg">
+                  {audio?.artist ? audio.artist[0].toUpperCase() : 'A'}
                 </span>
               </div>
               
-              <span className="text-black font-bold text-lg tracking-wider">
-                {(audio?.artist || 'WERENOI').toUpperCase()}
+              <span className="text-black font-bold text-xl tracking-wider">
+                {(audio?.artist || 'ARTIST').toUpperCase()}
               </span>
               
-              <div className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">
-                <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+              <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center shadow-md">
+                <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                 </svg>
               </div>
