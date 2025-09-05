@@ -298,9 +298,15 @@ async def create_or_get_oauth_user(oauth_data: Dict, ip_address: str, user_agent
 
 import pydub
 from pydub import AudioSegment
+from pydub.utils import which
 import librosa
 import soundfile as sf
 import numpy as np
+
+# Configure FFmpeg path for pydub
+AudioSegment.converter = "/usr/bin/ffmpeg"
+AudioSegment.ffmpeg = "/usr/bin/ffmpeg"
+AudioSegment.ffprobe = "/usr/bin/ffprobe"
 
 def process_audio_file(file_path: str, max_duration: int = 60) -> dict:
     """
