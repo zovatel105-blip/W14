@@ -165,20 +165,22 @@ const TikTokPollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, onCr
           console.log('✅ Already playing correct music for this post - keeping state');
           setIsMusicPlaying(true);
         }
-      } else if (!isActive || !hasMusic) {
-        // Este post no está activo O no tiene música
-        if (isPlayingThisPost) {
-          // Solo detener si estaba reproduciendo música de ESTE post específico
-          console.log(`⏹️ Stopping music - post ${poll.id} inactive or no music`);
+      } else if (isActive && !hasMusic) {
+        // CASO CRÍTICO: Post activo sin música - DETENER cualquier música reproduciéndose
+        console.log(`⏸️ Active post has no music - stopping any playing audio`);
+        if (audioManager.isPlaying) {
+          console.log('⏹️ Stopping music - current active post has no music');
           await audioManager.stop();
-          setIsMusicPlaying(false);
-        } else if (!hasMusic && currentPostId) {
-          // Si este post no tiene música pero hay algo reproduciéndose, detenerlo
-          console.log('⏹️ Stopping music - current post has no music');
+        }
+        setIsMusicPlaying(false);
+      } else if (!isActive) {
+        // Post inactivo - solo detener si era música de este post específico
+        if (isPlayingThisPost) {
+          console.log(`⏹️ Stopping music - post ${poll.id} is now inactive`);
           await audioManager.stop();
           setIsMusicPlaying(false);
         } else {
-          // Este post no tiene música, mantener estado false
+          // Post inactivo pero no era su música - mantener estado false
           setIsMusicPlaying(false);
         }
       }
