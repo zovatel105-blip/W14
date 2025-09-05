@@ -1310,7 +1310,7 @@ const ProfilePage = () => {
             ) : (
               <div className="space-y-4">
                 <div className="flex items-center gap-2 mb-4">
-                  <AtSign className="w-5 h-5 text-purple-600" />
+                  <UserCircle className="w-5 h-5 text-purple-600" />
                   <h3 className="text-lg font-semibold text-gray-900">
                     {mentionedPolls.length} menciones encontradas
                   </h3>
