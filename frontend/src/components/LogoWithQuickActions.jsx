@@ -92,9 +92,9 @@ const LogoWithQuickActions = ({ size = 24, className = "" }) => {
         {/* Indicador visual de carga durante long press */}
         {isPressed && (
           <div 
-            className="absolute inset-0 border-2 border-blue-400 rounded-full animate-pulse"
+            className="absolute inset-0 border-2 border-blue-400 rounded-full"
             style={{
-              animation: 'pulse-ring 0.6s ease-out'
+              animation: 'pulse 0.6s ease-out infinite'
             }}
           />
         )}
