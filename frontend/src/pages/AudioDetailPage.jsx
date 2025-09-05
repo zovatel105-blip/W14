@@ -1176,48 +1176,34 @@ const AudioDetailPage = () => {
           }}
         ></div>
         
-        {/* Encabezado superior mejorado - Más limpio y moderno */}
-        <div className={`relative ${layout.headerHeight} flex items-center justify-between z-10 px-4`}>
-          {/* Flecha izquierda estilizada */}
-          <Button 
-            variant="ghost" 
-            size="sm" 
+        {/* Header minimalista */}
+        <div className={`relative ${layout.headerHeight} flex items-center justify-between z-10 px-6`}>
+          {/* Flecha izquierda simple */}
+          <button 
             onClick={() => navigate(-1)}
-            className="text-black hover:bg-gray-100 p-2 rounded-full"
+            className="p-2 rounded-full hover:bg-gray-100 transition-colors"
           >
-            <ArrowLeft className="w-6 h-6 stroke-2" />
-          </Button>
+            <ArrowLeft className="w-6 h-6 text-gray-800" />
+          </button>
           
-          {/* Barra de progreso central estilizada */}
-          <div className="flex-1 mx-6 flex justify-center">
-            <div className="w-32 h-1 bg-gray-200 rounded-full overflow-hidden">
-              <div 
-                className="h-full bg-gray-400 rounded-full transition-all duration-300"
-                style={{ width: `${(playbackPosition / (audio?.duration || 30)) * 100}%` }}
-              ></div>
-            </div>
-          </div>
+          {/* Espacio central vacío para minimalismo */}
+          <div className="flex-1"></div>
           
-          {/* Iconos esquina superior derecha mejorados */}
-          <div className="flex items-center gap-1">
-            {/* Icono de compartir personalizado */}
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={handleShare}
-              className="text-black hover:bg-gray-100 p-2 rounded-full"
-            >
-              <img 
-                src="https://customer-assets.emergentagent.com/job_white-tiktok-icon/artifacts/z274rovs_1000007682-removebg-preview.png" 
-                alt="Share Icon" 
-                className="w-5 h-5"
-                style={{ 
-                  filter: 'brightness(0) drop-shadow(0 0 0.3px black)',
-                  imageRendering: 'crisp-edges'
-                }}
-              />
-            </Button>
-          </div>
+          {/* Solo icono de compartir */}
+          <button 
+            onClick={handleShare}
+            className="p-2 rounded-full hover:bg-gray-100 transition-colors"
+          >
+            <img 
+              src="https://customer-assets.emergentagent.com/job_white-tiktok-icon/artifacts/z274rovs_1000007682-removebg-preview.png" 
+              alt="Share Icon" 
+              className="w-5 h-5"
+              style={{ 
+                filter: 'brightness(0)',
+                imageRendering: 'crisp-edges'
+              }}
+            />
+          </button>
         </div>
 
         {/* Sección principal del audio - Diseño mejorado más moderno */}
