@@ -1270,8 +1270,8 @@ const AudioDetailPage = () => {
         </div>
       </div>
 
-      {/* Botones modernos y compactos */}
-      <div className="bg-white px-8 py-4">
+      {/* Botones más compactos */}
+      <div className="bg-white px-6 py-3">
         <div className="flex gap-3">
           {/* Botón Apple Music moderno y compacto */}
           <button 
