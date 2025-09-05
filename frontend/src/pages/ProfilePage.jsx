@@ -951,7 +951,11 @@ const ProfilePage = () => {
                 className="hover:bg-gray-100 p-3 active:scale-95 transition-transform min-w-[44px] min-h-[44px]" 
                 onClick={() => shareProfile(displayUser)}
               >
-                <Send className="w-5 h-5 sm:w-6 sm:h-6" />
+                <img 
+                  src="https://customer-assets.emergentagent.com/job_user-follow-palette/artifacts/8l5kqkl3_1000007682-removebg-preview.png" 
+                  alt="Compartir" 
+                  className="w-5 h-5 sm:w-6 sm:h-6" 
+                />
               </Button>
             )}
           </div>
