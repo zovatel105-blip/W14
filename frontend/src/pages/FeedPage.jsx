@@ -545,7 +545,7 @@ const FeedPage = () => {
           zIndex: 9999,
         }}
       >
-        <CustomLogo size={24} />
+        <LogoWithQuickActions size={24} />
       </div>
       
       <div className="min-h-screen bg-gray-50 pt-6 relative">
