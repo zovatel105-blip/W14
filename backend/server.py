@@ -1798,6 +1798,7 @@ async def ensure_user_profile(user_id: str):
             "display_name": user_data.get("display_name"),
             "avatar_url": user_data.get("avatar_url"),
             "bio": user_data.get("bio"),
+            "occupation": user_data.get("occupation"),  # ✅ ADDED: Include occupation field
             "is_verified": user_data.get("is_verified", False),
             "followers_count": followers_count,
             "following_count": following_count,
