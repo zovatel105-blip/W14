@@ -1206,10 +1206,10 @@ const AudioDetailPage = () => {
           </button>
         </div>
 
-        {/* Sección principal minimalista */}
-        <div className="relative px-8 py-12 z-10">
+        {/* Sección principal más compacta */}
+        <div className="relative px-6 py-6 z-10">
           {/* Portada simple y centrada */}
-          <div className="flex justify-center mb-8">
+          <div className="flex justify-center mb-4">
             <div className="w-36 h-36 rounded-2xl overflow-hidden bg-gray-50 shadow-sm">
               {audio?.cover_url ? (
                 <img 
@@ -1225,9 +1225,9 @@ const AudioDetailPage = () => {
             </div>
           </div>
 
-          {/* Información del audio minimalista */}
-          <div className="text-center space-y-4">
-            <h1 className="text-2xl font-medium text-gray-900 leading-relaxed">
+          {/* Información del audio más compacta */}
+          <div className="text-center space-y-2">
+            <h1 className="text-2xl font-medium text-gray-900 leading-tight">
               Contains: {audio?.title || 'Audio'}
             </h1>
             
