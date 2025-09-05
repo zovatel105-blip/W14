@@ -7491,6 +7491,78 @@ def test_audio_upload_system(base_url):
         print(f"🚨 SISTEMA DE AUDIO: PROBLEMAS DETECTADOS")
         return False
 
+def create_test_polls_for_verification(base_url):
+    """Create test polls with and without music for verification"""
+    print("\n🔧 Creating test polls for verification...")
+    
+    if not auth_tokens:
+        print("❌ No auth tokens available")
+        return False
+    
+    headers = {"Authorization": f"Bearer {auth_tokens[0]}"}
+    created_polls = 0
+    
+    # Poll with music
+    poll_with_music = {
+        "title": "¿Cuál es tu canción favorita de Bad Bunny?",
+        "description": "Vota por tu favorita",
+        "options": [
+            {
+                "text": "Un Verano Sin Ti",
+                "media_type": "image",
+                "media_url": "https://example.com/verano.jpg"
+            },
+            {
+                "text": "Me Porto Bonito", 
+                "media_type": "image",
+                "media_url": "https://example.com/porto.jpg"
+            }
+        ],
+        "music_id": "music_trending_2",  # Bad Bunny song
+        "tags": ["música", "reggaeton"],
+        "category": "music"
+    }
+    
+    # Poll without music
+    poll_without_music = {
+        "title": "¿Cuál es tu comida favorita?",
+        "description": "Vota por tu plato preferido",
+        "options": [
+            {
+                "text": "Pizza",
+                "media_type": "image", 
+                "media_url": "https://example.com/pizza.jpg"
+            },
+            {
+                "text": "Hamburguesa",
+                "media_type": "image",
+                "media_url": "https://example.com/burger.jpg"
+            }
+        ],
+        "tags": ["comida", "preferencias"],
+        "category": "lifestyle"
+    }
+    
+    polls_to_create = [
+        ("con música", poll_with_music),
+        ("sin música", poll_without_music)
+    ]
+    
+    for poll_type, poll_data in polls_to_create:
+        try:
+            response = requests.post(f"{base_url}/polls", json=poll_data, headers=headers, timeout=10)
+            if response.status_code == 200:
+                poll = response.json()
+                print(f"   ✅ Poll {poll_type} creado: {poll['title'][:30]}...")
+                created_polls += 1
+            else:
+                print(f"   ❌ Error creando poll {poll_type}: {response.status_code}")
+        except Exception as e:
+            print(f"   ❌ Error creando poll {poll_type}: {e}")
+    
+    print(f"   📊 Polls creados: {created_polls}/2")
+    return created_polls >= 1  # At least one poll created
+
 def test_quick_backend_verification(base_url):
     """Quick backend verification for bug fix testing - Spanish review request"""
     print("\n=== VERIFICACIÓN RÁPIDA DEL BACKEND ===")
@@ -7503,6 +7575,10 @@ def test_quick_backend_verification(base_url):
     headers = {"Authorization": f"Bearer {auth_tokens[0]}"}
     success_count = 0
     total_tests = 3
+    
+    # First, create test polls if none exist
+    print("\n🔧 0. Preparando datos de prueba...")
+    create_test_polls_for_verification(base_url)
     
     # 1. Test GET /api/polls - Verificar que funciona y retorna datos de música
     print("\n🎵 1. Testing GET /api/polls - Verificar publicaciones con datos de música")
