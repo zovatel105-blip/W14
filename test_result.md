@@ -679,6 +679,49 @@ Si los logs aparecen pero los contadores no se actualizan, el problema está en 
 
 **SISTEMA DE SINCRONIZACIÓN ROBUSTO**: El problema de desincronización MongoDB ha sido completamente resuelto con actualización dual y función ensure_user_profile mejorada.
 
+**🎯 MEJORAS DE PERFIL AJENO COMPLETAMENTE IMPLEMENTADAS (2025-01-27): Implementadas todas las mejoras solicitadas para perfiles ajenos - botón de seguir con campana de notificaciones, ocultación de textos por defecto y simplificación de tabs.**
+
+✅ **MEJORAS IMPLEMENTADAS COMPLETAMENTE:**
+
+**1. BOTÓN DE SEGUIR CON CAMPANA DE NOTIFICACIONES:**
+- ✅ **Botón Siguiendo Mejorado**: Cuando el usuario está siguiendo a alguien, el botón "Siguiendo" ahora incluye una campana interactiva
+- ✅ **Toggle de Notificaciones**: Campana permite activar/desactivar notificaciones (Bell/BellOff icons)
+- ✅ **Click Separado**: La campana tiene su propio onClick que no interfiere con el botón principal de seguir/no seguir
+- ✅ **Toast Notifications**: Mensajes informativos cuando se activan/desactivan las notificaciones
+- ✅ **Estado Persistente**: El estado de notificaciones se resetea automáticamente cuando se deja de seguir
+
+**2. OCULTACIÓN DE TEXTOS POR DEFECTO:**
+- ✅ **Ocupación**: Eliminado texto "Sin profesión" en perfiles ajenos - ahora aparece vacío hasta que el usuario agregue datos
+- ✅ **Biografía**: Eliminado texto "Este usuario no ha agregado una biografía" - campo queda en blanco en perfiles ajenos
+- ✅ **Lógica Condicional**: Solo perfiles propios muestran textos de placeholder ("Agregar profesión", "Agregar biografía...")
+
+**3. SIMPLIFICACIÓN DE TABS:**
+- ✅ **Solo Posts y Menciones**: Perfiles ajenos ahora muestran únicamente 2 tabs: "Publicaciones" y "Menciones"
+- ✅ **Tabs Ocultos**: "Me gusta" y "Guardados" solo aparecen en perfiles propios
+- ✅ **Grid Responsive**: Layout automático adapta de 4 columnas (perfil propio) a 2 columnas (perfil ajeno)
+- ✅ **Contenido Condicional**: TabsContent de "liked" y "saved" envueltos en condicionales isOwnProfile
+
+**CAMBIOS TÉCNICOS ESPECÍFICOS:**
+- **Icons Agregados**: Bell, BellOff importados de lucide-react
+- **Estado Agregado**: `notificationsEnabled` para manejar el toggle de campana
+- **Botón Seguir Mejorado**: Estructura de botón con campana interactiva y stopPropagation para evitar conflictos
+- **Condicionales isOwnProfile**: Aplicados a ocupación, biografía, tabs y contenidos
+- **Grid Dinámico**: `grid-cols-${isOwnProfile ? '4' : '2'}` para layout responsive
+
+✅ **RESULTADO FINAL:**
+🎯 **PERFIL AJENO COMPLETAMENTE OPTIMIZADO** - Los perfiles ajenos ahora tienen:
+1. Botón de seguir con campana de notificaciones integrada
+2. Campos vacíos (sin textos molestos) hasta que el usuario agregue información
+3. Solo 2 tabs relevantes: Posts y Menciones
+4. Experiencia limpia y profesional que respeta la privacidad del usuario
+
+**FUNCIONALIDAD PRESERVADA:**
+✅ Toda la funcionalidad existente de seguir/no seguir
+✅ Modales de seguidores/siguiendo
+✅ Vista TikTok de publicaciones
+✅ Sistema de notificaciones toast
+✅ Compatibilidad completa entre perfiles propios y ajenos
+
 backend:
   - task: "Verificación Rápida Backend Post-Corrección Bug Frontend"
     implemented: true
