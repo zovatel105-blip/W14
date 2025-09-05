@@ -1174,6 +1174,9 @@ const AudioDetailPage = () => {
   }
 
   if (error || !audio) {
+    console.log('❌ === RENDERIZANDO ESTADO DE ERROR ===');
+    console.log('❌ Error:', error);
+    console.log('❌ Audio exists:', !!audio);
     return (
       <div className="min-h-screen bg-white">
         {/* Header */}
