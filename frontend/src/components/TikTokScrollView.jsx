@@ -637,7 +637,11 @@ const TikTokPollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, onCr
                 src="https://customer-assets.emergentagent.com/job_white-tiktok-icon/artifacts/z274rovs_1000007682-removebg-preview.png" 
                 alt="Share Icon" 
                 className="w-5 h-5 filter brightness-0 invert"
-                style={{ filter: 'brightness(0) invert(1)' }}
+                style={{ 
+                  filter: 'brightness(0) invert(1)',
+                  strokeWidth: '2px',
+                  fontWeight: 'bold'
+                }}
               />
               <span className="font-medium text-sm">{formatNumber(poll.shares)}</span>
             </Button>
