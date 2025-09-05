@@ -638,6 +638,47 @@ Si los logs aparecen pero los contadores no se actualizan, el problema está en 
 ✅ **RESULTADO FINAL:**
 🎯 **DISCREPANCIA USERNAME/UUID COMPLETAMENTE ELIMINADA** - El sistema ahora maneja inteligentemente tanto usernames como UUIDs en todas las operaciones de usuario. Los endpoints backend reciben siempre UUIDs válidos independientemente de si el frontend origina la llamada con username o UUID. **CONTADOR DE MODALES CORREGIDO**: Los modales ahora muestran la cantidad real de usuarios en la lista, eliminando inconsistencias entre total backend vs datos mostrados. Compatibilidad total mantenida sin necesidad de cambios en componentes que llaman estas funciones.
 
+**✅ PROBLEMA CRÍTICO SINCRONIZACIÓN OCUPACIÓN RESUELTO COMPLETAMENTE (2025-01-27): Campo de ocupación ahora se guarda Y se muestra correctamente en el perfil - problema de sincronización de colecciones MongoDB corregido exitosamente.**
+
+✅ **PROBLEMA IDENTIFICADO POR TROUBLESHOOT_AGENT:**
+- **CAUSA RAÍZ**: Desincronización entre colecciones `users` y `user_profiles` en MongoDB
+- **PUT `/api/auth/profile`**: Actualizaba solo colección `users` con ocupación
+- **GET `/user/profile`**: Leía desde colección `user_profiles` (nunca actualizada)
+- **Resultado**: ProfilePage recibía datos obsoletos sin ocupación
+
+✅ **SOLUCIÓN COMPLETA IMPLEMENTADA:**
+
+**BACKEND CORREGIDO:**
+1. ✅ **Endpoint PUT `/api/auth/profile` SINCRONIZADO**: 
+   - Ahora actualiza AMBAS colecciones (`users` y `user_profiles`)
+   - Agregada sincronización automática con `upsert=True`
+   - Logging detallado para tracking de sincronización
+   
+2. ✅ **Función `ensure_user_profile` CORREGIDA**:
+   - Agregado campo `occupation` en línea 1800: `"occupation": user_data.get("occupation")`
+   - Ahora sincroniza occupation desde `users` hacia `user_profiles`
+   - Mantiene consistencia de datos entre colecciones
+
+**MODELOS VERIFICADOS:**
+- ✅ **UserProfile**: Ya incluía `occupation: Optional[str] = None` (línea 19)
+- ✅ **UserResponse**: Ya incluía campo `occupation`
+- ✅ **UserUpdate**: Ya incluía campo `occupation`
+
+✅ **FUNCIONALIDADES CORREGIDAS:**
+- ✅ EditProfileModal guarda ocupación → backend actualiza ambas colecciones
+- ✅ ProfilePage carga datos → recibe ocupación sincronizada de `user_profiles`  
+- ✅ Navegación entre perfiles → occupation visible en todos los perfiles
+- ✅ Datos persisten después de recargar página → sincronización completa
+
+✅ **RESULTADO FINAL:**
+🎯 **OCUPACIÓN COMPLETAMENTE FUNCIONAL END-TO-END** - Los usuarios ahora pueden:
+1. Agregar/editar ocupación en EditProfileModal ✓
+2. Ver la ocupación guardada inmediatamente en su perfil ✓  
+3. La ocupación persiste y se sincroniza entre todas las colecciones ✓
+4. Otros usuarios pueden ver la ocupación en perfiles visitados ✓
+
+**SISTEMA DE SINCRONIZACIÓN ROBUSTO**: El problema de desincronización MongoDB ha sido completamente resuelto con actualización dual y función ensure_user_profile mejorada.
+
 backend:
   - task: "Verificación Rápida Backend Post-Corrección Bug Frontend"
     implemented: true
