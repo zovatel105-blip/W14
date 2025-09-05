@@ -1201,10 +1201,10 @@ const AudioDetailPage = () => {
 
         {/* Sección principal del audio - como en la referencia */}
         <div className="relative px-6 pb-6 z-10">
-          {/* Portada más grande como en la referencia */}
+          {/* Portada grande centrada */}
           <div className="flex justify-center mb-6">
-            <div className="relative w-48 h-48">
-              <div className="w-full h-full rounded-3xl overflow-hidden bg-gray-100 shadow-2xl border border-gray-200">
+            <div className="relative w-32 h-32">
+              <div className="w-full h-full rounded-3xl overflow-hidden bg-gray-100 shadow-xl border border-gray-200">
                 {audio?.cover_url ? (
                   <img 
                     src={audio.cover_url} 
@@ -1213,20 +1213,20 @@ const AudioDetailPage = () => {
                   />
                 ) : (
                   <div className="w-full h-full bg-gray-200 flex items-center justify-center">
-                    <Music className="w-16 h-16 text-gray-400" />
+                    <Music className="w-12 h-12 text-gray-400" />
                   </div>
                 )}
               </div>
               
-              {/* Botón de play overlay más grande */}
+              {/* Botón de play overlay */}
               <button
                 onClick={handlePlayPause}
                 className="absolute inset-0 bg-black/30 rounded-3xl flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity"
               >
                 {isPlaying ? (
-                  <Pause className="w-12 h-12 text-white" />
+                  <Pause className="w-8 h-8 text-white" />
                 ) : (
-                  <Play className="w-12 h-12 text-white ml-1" />
+                  <Play className="w-8 h-8 text-white ml-1" />
                 )}
               </button>
             </div>
