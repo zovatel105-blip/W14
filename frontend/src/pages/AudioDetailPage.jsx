@@ -211,15 +211,31 @@ const AudioDetailPage = () => {
 
   // Extract colors from cover when audio changes
   useEffect(() => {
+    console.log('🎨 === EFECTO DE COLORES EJECUTADO ===');
+    console.log('🎨 Audio exists:', !!audio);
+    console.log('🎨 Cover URL:', audio?.cover_url);
+    
     if (audio && audio.cover_url) {
-      console.log('🎨 Extracting colors from:', audio.cover_url);
-      extractColorsFromCover(audio.cover_url).then(colors => {
-        console.log('🎨 Colors extracted:', colors);
-        setDominantColor(colors.dominant);
-        setGradientColors(colors.gradients);
-      });
+      console.log('🎨 Iniciando extracción de colores de:', audio.cover_url);
+      extractColorsFromCover(audio.cover_url)
+        .then(colors => {
+          console.log('🎨 Colores extraídos exitosamente:', colors);
+          setDominantColor(colors.dominant);
+          setGradientColors(colors.gradients);
+          console.log('🎨 Estados de color actualizados');
+        })
+        .catch(error => {
+          console.error('❌ Error extrayendo colores:', error);
+          // Fallback colors
+          setDominantColor('#10b981');
+          setGradientColors({ primary: '#10b981', secondary: '#f59e0b' });
+        });
+    } else {
+      console.log('🎨 No hay audio o cover_url, usando colores por defecto');
+      setDominantColor('#10b981');
+      setGradientColors({ primary: '#10b981', secondary: '#f59e0b' });
     }
-  }, [audio?.cover_url]); // Solo ejecutar cuando cambie la URL de la portada
+  }, [audio]); // Cambiado a solo [audio] para asegurar que se ejecute
 
   // Check favorites and determine original user after audio is loaded
   useEffect(() => {
