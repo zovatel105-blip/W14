@@ -1176,58 +1176,46 @@ const AudioDetailPage = () => {
           }}
         ></div>
         
-        {/* Encabezado superior - Ancho completo */}
-        <div className={`relative ${layout.headerHeight} flex items-center justify-between z-10 px-2`}>
-          {/* Flecha izquierda (←) esquina superior izquierda */}
+        {/* Encabezado superior mejorado - Más limpio y moderno */}
+        <div className={`relative ${layout.headerHeight} flex items-center justify-between z-10 px-4`}>
+          {/* Flecha izquierda estilizada */}
           <Button 
             variant="ghost" 
             size="sm" 
             onClick={() => navigate(-1)}
-            className="text-gray-900 hover:bg-white/50 p-3"
+            className="text-black hover:bg-gray-100 p-2 rounded-full"
           >
-            <ArrowLeft className={`${layout.iconSize} stroke-2`} />
+            <ArrowLeft className="w-6 h-6 stroke-2" />
           </Button>
           
-          {/* Iconos esquina superior derecha como en la referencia */}
-          <div className="flex items-center gap-2">
-            {/* Botón compartir */}
+          {/* Barra de progreso central estilizada */}
+          <div className="flex-1 mx-6 flex justify-center">
+            <div className="w-32 h-1 bg-gray-200 rounded-full overflow-hidden">
+              <div 
+                className="h-full bg-gray-400 rounded-full transition-all duration-300"
+                style={{ width: `${(playbackPosition / (audio?.duration || 30)) * 100}%` }}
+              ></div>
+            </div>
+          </div>
+          
+          {/* Iconos esquina superior derecha mejorados */}
+          <div className="flex items-center gap-1">
+            {/* Icono de compartir personalizado */}
             <Button 
               variant="ghost" 
               size="sm" 
               onClick={handleShare}
-              className="text-gray-900 hover:bg-white/50 p-3"
+              className="text-black hover:bg-gray-100 p-2 rounded-full"
             >
               <img 
                 src="https://customer-assets.emergentagent.com/job_white-tiktok-icon/artifacts/z274rovs_1000007682-removebg-preview.png" 
                 alt="Share Icon" 
                 className="w-5 h-5"
                 style={{ 
-                  filter: 'brightness(0) drop-shadow(0 0 0.5px black) drop-shadow(0 0 0.5px black)',
+                  filter: 'brightness(0) drop-shadow(0 0 0.3px black)',
                   imageRendering: 'crisp-edges'
                 }}
               />
-            </Button>
-            
-            {/* Botón home */}
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={() => navigate('/feed')}
-              className="text-gray-900 hover:bg-white/50 p-3"
-            >
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
-              </svg>
-            </Button>
-            
-            {/* Botón sonido/mute */}
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={handlePlayPause}
-              className="text-gray-900 hover:bg-white/50 p-3"
-            >
-              <Volume2 className="w-5 h-5" />
             </Button>
           </div>
         </div>
