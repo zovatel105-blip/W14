@@ -1163,7 +1163,11 @@ const ProfilePage = () => {
             <>
               <Button 
                 variant="outline" 
-                className="w-full rounded-full py-3 sm:py-3 text-sm sm:text-base font-semibold bg-blue-600 hover:bg-blue-700 text-white min-h-[48px] active:scale-95 transition-transform flex items-center justify-center gap-2"
+                className={`w-full rounded-full py-3 sm:py-3 text-sm sm:text-base font-semibold text-white min-h-[48px] active:scale-95 transition-transform flex items-center justify-center gap-2 ${
+                  isFollowing(viewedUser?.id || userId) 
+                    ? 'bg-green-600 hover:bg-green-700' 
+                    : 'bg-red-600 hover:bg-red-700'
+                }`}
                 onClick={async () => {
                   const targetUserId = viewedUser?.id || userId;
                   try {
