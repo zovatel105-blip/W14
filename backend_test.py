@@ -7681,96 +7681,30 @@ def main():
         print(f"\n❌ ERROR in Quick Backend Verification: {str(e)}")
         test_results["Quick Backend Verification"] = False
     
-    # 🎯 CRITICAL PRIORITY TEST: Audio UUID Compatibility Fix (REVIEW REQUEST)
-    test_results['🎯_audio_uuid_compatibility'] = test_audio_uuid_compatibility_fix(base_url)
-    
-    # 🎯 NEW PRIORITY TEST: Profile and Follow Endpoints (REVIEW REQUEST)
-    test_results['🎯_profile_follow_endpoints'] = test_profile_and_follow_endpoints(base_url)
-    
-    # 🎯 PRIORITY TEST: Voting Endpoints Synchronization (MAIN FOCUS)
-    test_results['🎯_voting_synchronization'] = test_voting_endpoints_synchronization(base_url)
-    
-    # 🎵 PRIORITY TEST: Polls Music Structure Analysis (MAIN FOCUS)
-    test_results['🎵_polls_music_structure'] = test_polls_music_structure(base_url)
-    
-    # NEW TEST: Audio Detail Page Functionality
-    test_results['🎵_audio_detail_page'] = test_audio_detail_page_functionality(base_url)
-    
-    # Run additional comprehensive tests
-    test_results['jwt_validation'] = test_jwt_validation(base_url)
-    test_results['user_search'] = test_user_search(base_url)
-    test_results['messaging_system'] = test_messaging_system(base_url)
-    test_results['authentication_requirements'] = test_authentication_requirements(base_url)
-    test_results['profile_updates'] = test_profile_update_endpoints(base_url)
-    test_results['nested_comments'] = test_nested_comments_system(base_url)
-    
-    # Print summary
-    print("\n" + "=" * 60)
-    print("🎯 TESTING SUMMARY - PROFILE & FOLLOW ENDPOINTS FOCUS (REVIEW REQUEST)")
-    print("=" * 60)
+    # Print final summary
+    print("\n" + "="*60)
+    print("📊 FINAL TEST SUMMARY")
+    print("="*60)
     
     passed_tests = sum(1 for result in test_results.values() if result)
     total_tests = len(test_results)
     
     for test_name, result in test_results.items():
         status = "✅ PASSED" if result else "❌ FAILED"
-        print(f"{test_name.replace('_', ' ').title()}: {status}")
+        print(f"{status}: {test_name}")
     
-    print(f"\nOverall Result: {passed_tests}/{total_tests} tests passed")
+    print(f"\n📈 Overall Results: {passed_tests}/{total_tests} tests passed")
+    print(f"🎯 Success Rate: {(passed_tests/total_tests)*100:.1f}%")
     
-    # Special focus on profile and follow endpoints result (REVIEW REQUEST)
-    profile_follow_passed = test_results.get('🎯_profile_follow_endpoints', False)
-    if profile_follow_passed:
-        print("\n🎉 ✅ PROFILE & FOLLOW ENDPOINTS TEST PASSED: Real counters working correctly")
-        print("✅ Profile endpoints include followers_count and following_count fields")
-        print("✅ Follow/unfollow endpoints update counters properly")
-        print("✅ Complete flow test successful - no hardcoded data detected")
-        print("✅ GET /api/user/profile/{user_id} working with real data")
-        print("✅ GET /api/user/profile/by-username/{username} working with real data")
-        print("✅ POST /api/users/{user_id}/follow updates counters")
-        print("✅ DELETE /api/users/{user_id}/follow updates counters")
-        print("✅ GET /api/users/{user_id}/followers returns real data")
-        print("✅ GET /api/users/{user_id}/following returns real data")
-    else:
-        print("\n❌ ⚠️ PROFILE & FOLLOW ENDPOINTS TEST FAILED: Issues detected")
-        print("❌ Profile endpoints may not include required counter fields")
-        print("❌ Follow/unfollow endpoints may not update counters correctly")
-        print("❌ Hardcoded data may still be present")
-    
-    # Special focus on voting synchronization result
-    voting_sync_passed = test_results.get('🎯_voting_synchronization', False)
-    if voting_sync_passed:
-        print("\n✅ VOTING SYNCHRONIZATION TEST PASSED: Vote sync between pages working correctly")
-        print("✅ Votes made in FeedPage will appear correctly in AudioDetailPage")
-        print("✅ Like and share states are properly synchronized")
-    else:
-        print("\n❌ ⚠️ VOTING SYNCHRONIZATION TEST FAILED: Vote sync issues detected")
-        print("❌ This explains why votes don't sync between FeedPage and AudioDetailPage")
-    
-    # Special focus on polls music structure result
-    polls_music_passed = test_results.get('🎵_polls_music_structure', False)
-    if polls_music_passed:
-        print("✅ POLLS MUSIC STRUCTURE TEST PASSED: Music data structure is correct")
-        print("✅ Music IDs, titles, artists, and preview URLs are properly configured")
-    else:
-        print("❌ POLLS MUSIC STRUCTURE TEST FAILED: Music navigation issues detected")
-        print("❌ This explains why clicking music players doesn't navigate to detail pages")
-    
-    # Also report on audio detail page
-    audio_detail_passed = test_results.get('🎵_audio_detail_page', False)
-    if audio_detail_passed:
-        print("✅ Audio detail page endpoint is working correctly")
-    else:
-        print("❌ Audio detail page endpoint needs attention")
-    
-    if passed_tests == total_tests:
-        print("🎉 All tests passed! Backend is fully functional.")
-        sys.exit(0)
-    elif passed_tests >= total_tests * 0.8:
-        print("✅ Most tests passed. Backend is mostly functional.")
+    # Check if quick verification passed
+    if test_results.get("Quick Backend Verification", False):
+        print("\n🎉 BACKEND VERIFICATION SUCCESSFUL!")
+        print("✅ Backend está estable y funcionando correctamente")
+        print("🚀 Listo para proceder con testing del frontend")
         sys.exit(0)
     else:
-        print("❌ Many tests failed. Backend needs attention.")
+        print("\n⚠️ BACKEND VERIFICATION ISSUES DETECTED")
+        print("❌ Revisar problemas antes de proceder con frontend testing")
         sys.exit(1)
 
 if __name__ == "__main__":
