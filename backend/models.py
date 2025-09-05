@@ -16,6 +16,7 @@ class UserProfile(BaseModel):
     display_name: Optional[str] = None
     avatar_url: Optional[str] = None
     bio: Optional[str] = None
+    occupation: Optional[str] = None  # Field for user's profession/job
     is_verified: bool = False
     total_votes: int = 0
     total_polls_created: int = 0
