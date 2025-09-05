@@ -249,6 +249,23 @@ const AudioDetailPage = () => {
     };
   }, []);
 
+  // Detect scroll in grid to show Use Sound button
+  useEffect(() => {
+    const handleScroll = () => {
+      const gridElement = document.querySelector('[data-grid-container]');
+      if (gridElement) {
+        const scrollTop = gridElement.scrollTop;
+        setShowUseButton(scrollTop > 100); // Mostrar después de 100px de scroll
+      }
+    };
+
+    const gridElement = document.querySelector('[data-grid-container]');
+    if (gridElement && posts.length > 0) {
+      gridElement.addEventListener('scroll', handleScroll);
+      return () => gridElement.removeEventListener('scroll', handleScroll);
+    }
+  }, [posts]);
+
   const determineOriginalUser = () => {
     console.log('🔍 === DETERMINANDO USUARIO ORIGINAL ===');
     console.log('🔍 Audio título:', audio?.title);
