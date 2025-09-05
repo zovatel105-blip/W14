@@ -6,6 +6,7 @@ import CommentsModal from '../components/CommentsModal';
 import ShareModal from '../components/ShareModal';
 import CreatePollModal from '../components/CreatePollModal';
 import CustomLogo from '../components/CustomLogo';
+import LogoWithQuickActions from '../components/LogoWithQuickActions';
 import pollService from '../services/pollService';
 import { useToast } from '../hooks/use-toast';
 import { useAddiction } from '../contexts/AddictionContext';
