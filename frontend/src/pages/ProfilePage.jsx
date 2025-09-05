@@ -1129,12 +1129,14 @@ const ProfilePage = () => {
           </div>
         </div>
 
-        {/* BIOGRAFÍA EXPANDIDA */}
-        <div className="bg-white rounded-none sm:rounded-lg p-2 sm:p-4 shadow-sm mx-0">
-          <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
-            {displayUser?.bio || (isOwnProfile ? "Agregar biografía..." : "")}
-          </p>
-        </div>
+        {/* BIOGRAFÍA EXPANDIDA - Solo mostrar si hay biografía */}
+        {displayUser?.bio && (
+          <div className="bg-white rounded-none sm:rounded-lg p-2 sm:p-4 shadow-sm mx-0">
+            <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
+              {displayUser.bio}
+            </p>
+          </div>
+        )}
 
         {/* BOTONES DE ACCIÓN EXPANDIDOS - USO COMPLETO DEL ANCHO */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 mx-0">
