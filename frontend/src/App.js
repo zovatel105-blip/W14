@@ -109,6 +109,8 @@ function AppContent() {
             <Route path="/notifications" element={<NotificationsPage />} />
             <Route path="/settings" element={<SettingsPage />} />
             <Route path="/audio/:audioId" element={<AudioDetailPage />} />
+            <Route path="/search" element={<SearchPage />} />
+            <Route path="/moments" element={<MomentsPage />} />
 
             {/* Demo & Test Pages - Remove in production */}
             <Route path="/explore-demo" element={<ExploreDemo />} />
