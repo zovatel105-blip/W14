@@ -14,7 +14,7 @@ import TikTokScrollView from '../components/TikTokScrollView';
 import AvatarUpload from '../components/AvatarUpload';
 import { 
   Settings, Users, Vote, Trophy, Heart, Share, ArrowLeft, AtSign, Bookmark, Grid3X3, Check, 
-  Share2, UserPlus, UserCheck, Menu, ChevronDown, Plus, BarChart3, Mail, MessageCircle, Send, Hash 
+  Share2, UserPlus, UserCheck, Menu, ChevronDown, Plus, BarChart3, Mail, MessageCircle, Send, Hash, Bell, BellOff 
 } from 'lucide-react';
 import pollService from '../services/pollService';
 import userService from '../services/userService';
