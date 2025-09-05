@@ -91,6 +91,9 @@ const ProfilePage = () => {
   const { userId } = useParams();
   const navigate = useNavigate();
 
+  // Verificar si hay múltiples cuentas (por ahora simulado - implementar lógica real más adelante)
+  const hasMultipleAccounts = false; // Cambiar a true cuando haya múltiples cuentas
+
   // Load user's polls
   useEffect(() => {
     const loadUserPolls = async () => {
