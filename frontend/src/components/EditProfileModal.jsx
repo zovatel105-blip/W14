@@ -24,6 +24,7 @@ const EditProfileModal = ({ isOpen, onClose, onProfileUpdate }) => {
       setFormData({
         display_name: user.display_name || '',
         bio: user.bio || '',
+        occupation: user.occupation || '',
         avatar_url: user.avatar_url || ''
       });
     }
