@@ -37,6 +37,7 @@ class User(BaseModel):
     hashed_password: Optional[str] = None  # Allow None for OAuth users
     avatar_url: Optional[str] = None
     bio: Optional[str] = None
+    occupation: Optional[str] = None  # Field for user's profession/job
     is_verified: bool = False
     is_active: bool = True
     created_at: datetime = Field(default_factory=datetime.utcnow)
