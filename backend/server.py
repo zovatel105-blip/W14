@@ -1620,6 +1620,8 @@ async def update_profile(
         update_fields["display_name"] = user_data.display_name.strip()
     if user_data.bio is not None:
         update_fields["bio"] = user_data.bio.strip()
+    if user_data.occupation is not None:
+        update_fields["occupation"] = user_data.occupation.strip()
     if user_data.avatar_url is not None:
         update_fields["avatar_url"] = user_data.avatar_url.strip()
     
