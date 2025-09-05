@@ -1237,7 +1237,6 @@ const ProfilePage = () => {
             <TabsTrigger value="polls" className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 p-2 sm:p-3 text-xs sm:text-sm min-h-[48px] active:scale-95 transition-transform">
               <Grid3X3 className="w-4 h-4 sm:w-5 sm:h-5" />
               <span className="hidden sm:inline">Publicaciones</span>
-              <span className="sm:hidden text-[10px]">Posts</span>
             </TabsTrigger>
             {isOwnProfile && (
               <TabsTrigger value="liked" className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 p-2 sm:p-3 text-xs sm:text-sm min-h-[48px] active:scale-95 transition-transform">
