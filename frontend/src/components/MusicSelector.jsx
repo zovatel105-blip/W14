@@ -465,6 +465,7 @@ const MusicSelector = ({ onSelectMusic, selectedMusic, pollTitle = '' }) => {
         </div>
         {selectedMusic && (
           <Button
+            type="button"
             variant="ghost"
             size="sm"
             onClick={() => onSelectMusic(null)}
