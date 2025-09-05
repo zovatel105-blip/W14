@@ -1250,8 +1250,6 @@ const ProfilePage = () => {
             {isOwnProfile && (
               <TabsTrigger value="saved" className="flex flex-col sm:flex-row items-center gap-1 sm:gap-2 p-2 sm:p-3 text-xs sm:text-sm min-h-[48px] active:scale-95 transition-transform">
                 <Bookmark className="w-4 h-4 sm:w-5 sm:h-5" />
-                <span className="hidden sm:inline">Guardados</span>
-                <span className="sm:hidden text-[10px]">Saved</span>
               </TabsTrigger>
             )}
           </TabsList>
