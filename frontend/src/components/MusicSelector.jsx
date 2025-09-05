@@ -528,6 +528,7 @@ const MusicSelector = ({ onSelectMusic, selectedMusic, pollTitle = '' }) => {
           {mainCategories.map((category) => (
             <Button
               key={category}
+              type="button"
               variant={activeCategory === category ? "default" : "outline"}
               size="sm"
               onClick={() => setActiveCategory(category)}
