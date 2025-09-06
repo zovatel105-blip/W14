@@ -244,7 +244,7 @@ const QuickActionsMenu = ({ isVisible, onClose, onActionSelect }) => {
             <button
               key={action.id}
               onClick={() => handleActionClick(action.id)}
-              className={`absolute w-12 h-12 rounded-full ${action.color} ${action.borderColor} border-2 shadow-lg ${action.shadowColor} flex items-center justify-center transition-all duration-500 hover:scale-110 active:scale-95 group ${
+              className={`absolute w-10 h-10 rounded-full ${action.color} ${action.borderColor} border-2 shadow-lg ${action.shadowColor} flex items-center justify-center transition-all duration-500 hover:scale-110 active:scale-95 group ${
                 isSelected ? 'scale-125 ring-4 ring-white/50' : ''
               }`}
               style={{ 
