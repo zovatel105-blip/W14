@@ -195,15 +195,7 @@ const QuickActionsMenu = ({ isVisible, onClose, onActionSelect }) => {
       {/* Centro del menú - Sin logo duplicado */}
       <div className="relative">
 
-        {/* Botón cerrar */}
-        <button
-          onClick={onClose}
-          className={`absolute -top-1 -right-1 w-5 h-5 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center transition-all duration-300 ${
-            isVisible ? 'scale-100 opacity-100' : 'scale-0 opacity-0'
-          }`}
-        >
-          <X size={10} className="text-white" />
-        </button>
+
 
         {/* Botones de acción radiales */}
         {actions.map((action, index) => {
