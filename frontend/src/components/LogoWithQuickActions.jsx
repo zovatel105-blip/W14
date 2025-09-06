@@ -10,27 +10,19 @@ const LogoWithQuickActions = ({ size = 24, className = "" }) => {
   const { toast } = useToast();
 
   const handleLongPress = useCallback(() => {
-    console.log('🎯 LONG PRESS DETECTED - SHOWING QUICK ACTIONS MENU');
-    console.log('🔄 Setting showQuickActions to true...');
     setShowQuickActions(true);
     setIsPressed(false);
     
     // Haptic feedback si está disponible
     if (navigator.vibrate) {
       navigator.vibrate(50);
-      console.log('📳 Haptic feedback triggered');
     }
-    
-    // Test alert para debugging
-    // alert('Long press detected!');
     
     toast({
       title: "🚀 Menú de acciones rápidas",
       description: "Selecciona una acción",
       duration: 2000,
     });
-    
-    console.log('✅ Long press handler completed');
   }, [toast]);
 
   const handleShortPress = useCallback(() => {
