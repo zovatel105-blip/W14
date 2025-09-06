@@ -166,7 +166,7 @@ const QuickActionsMenu = ({ isVisible, onClose, onActionSelect }) => {
       color: 'bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700',
       borderColor: 'border-blue-300',
       shadowColor: 'shadow-blue-500/50',
-      position: { x: -28, y: -8 }, // AJUSTADO: un poquito más abajo
+      position: { x: -35, y: -5 }, // CORREGIDO: más separado del logo
     },
     {
       id: 'favorites',
