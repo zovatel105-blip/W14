@@ -190,14 +190,7 @@ const QuickActionsMenu = ({ isVisible, onClose, onActionSelect }) => {
         zIndex: 10001,
       }}
     >
-      {/* Overlay de fondo */}
-      <div 
-        className={`fixed inset-0 bg-black/20 backdrop-blur-sm transition-opacity duration-300 ${
-          isVisible ? 'opacity-100' : 'opacity-0'
-        }`}
-        style={{ zIndex: -1 }}
-        onClick={onClose}
-      />
+
 
       {/* Centro del menú - Sin logo duplicado */}
       <div className="relative">
