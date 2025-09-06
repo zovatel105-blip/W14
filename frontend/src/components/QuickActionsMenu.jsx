@@ -93,6 +93,62 @@ const QuickActionsMenu = ({ isVisible, onClose, onActionSelect }) => {
     }
   };
 
+  const handleCreate = () => {
+    toast({
+      title: "✨ Crear publicación...",
+      description: "Abriendo formulario de creación",
+    });
+    
+    // Aquí se puede disparar el modal de crear publicación
+    // O navegar a una página dedicada
+    const createEvent = new CustomEvent('openCreateModal');
+    window.dispatchEvent(createEvent);
+    
+    if (onActionSelect) {
+      onActionSelect('create');
+    }
+  };
+
+  const handleProfile = () => {
+    toast({
+      title: "👤 Mi perfil...",
+      description: "Navegando a tu perfil",
+    });
+    
+    navigate('/profile');
+    
+    if (onActionSelect) {
+      onActionSelect('profile');
+    }
+  };
+
+  const handleSettings = () => {
+    toast({
+      title: "⚙️ Configuraciones...",
+      description: "Abriendo ajustes",
+    });
+    
+    navigate('/settings');
+    
+    if (onActionSelect) {
+      onActionSelect('settings');
+    }
+  };
+
+  const handleFavorites = () => {
+    toast({
+      title: "❤️ Mis favoritos...",
+      description: "Viendo contenido guardado",
+    });
+    
+    // Navegar a favoritos o usar hash para filtrar
+    navigate('/profile#favorites');
+    
+    if (onActionSelect) {
+      onActionSelect('favorites');
+    }
+  };
+
   if (!isVisible && !isAnimating) return null;
 
   const actions = [
