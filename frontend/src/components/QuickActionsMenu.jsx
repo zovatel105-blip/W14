@@ -47,8 +47,8 @@ const QuickActionsMenu = ({ isVisible, onClose, onActionSelect }) => {
         case 'moments':
           handleMoments();
           break;
-        case 'create':
-          handleCreate();
+        case 'moments':
+          handleMoments();
           break;
         case 'profile':
           handleProfile();
