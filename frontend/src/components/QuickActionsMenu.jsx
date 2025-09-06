@@ -81,13 +81,7 @@ const QuickActionsMenu = ({ isVisible, onClose, onActionSelect }) => {
     }
   };
 
-  // Debug logging
-  console.log('🔍 QuickActionsMenu render - isVisible:', isVisible, 'isAnimating:', isAnimating);
-  
-  if (!isVisible && !isAnimating) {
-    console.log('🚫 QuickActionsMenu returning null - not visible and not animating');
-    return null;
-  }
+  if (!isVisible && !isAnimating) return null;
 
   const actions = [
     {
