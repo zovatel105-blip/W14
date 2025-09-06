@@ -264,7 +264,7 @@ const QuickActionsMenu = ({ isVisible, onClose, onActionSelect }) => {
               />
               
               {/* Tooltip */}
-              <div className={`absolute -bottom-8 left-1/2 transform -translate-x-1/2 px-2 py-1 bg-black/80 text-white text-xs rounded whitespace-nowrap transition-all duration-200 ${
+              <div className={`absolute -bottom-6 left-1/2 transform -translate-x-1/2 px-1.5 py-0.5 bg-black/80 text-white text-xs rounded whitespace-nowrap transition-all duration-200 ${
                 isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'
               }`}>
                 {action.label}
