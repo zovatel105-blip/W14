@@ -5,8 +5,6 @@ const useLongPress = (onLongPress, onShortPress, delay = 500) => {
   const preventClick = useRef(false);
 
   const start = useCallback((event) => {
-    console.log('🔄 LONGPRESS HOOK: start() called', event.type);
-    
     // Prevenir el comportamiento por defecto
     event.preventDefault?.();
     
@@ -17,9 +15,7 @@ const useLongPress = (onLongPress, onShortPress, delay = 500) => {
 
     preventClick.current = false;
 
-    console.log(`⏱️ LONGPRESS HOOK: Setting timeout for ${delay}ms`);
     timeout.current = setTimeout(() => {
-      console.log('🚀 LONGPRESS HOOK: Timeout reached - calling onLongPress');
       onLongPress(event);
       preventClick.current = true;
     }, delay);
