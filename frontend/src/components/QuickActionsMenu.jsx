@@ -168,7 +168,7 @@ const QuickActionsMenu = ({ isVisible, onClose, onActionSelect }) => {
       color: 'bg-gradient-to-br from-green-500 to-green-600 hover:from-green-600 hover:to-green-700',
       borderColor: 'border-green-300',
       shadowColor: 'shadow-green-500/50',
-      position: { x: 22, y: 22 }, // Posición exacta: inferior derecha del logo
+      position: { x: 32, y: 12 }, // Ajustado: más visible, derecha del logo
     },
     {
       id: 'profile',
