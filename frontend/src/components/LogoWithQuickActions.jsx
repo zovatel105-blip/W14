@@ -65,8 +65,10 @@ const LogoWithQuickActions = ({ size = 24, className = "" }) => {
     <>
       <div
         {...longPressProps}
-        className={`${className} flex items-center justify-center cursor-pointer select-none transition-all duration-200 ${
-          isPressed ? 'scale-95' : 'hover:scale-105'
+        className={`${className} flex items-center justify-center cursor-pointer select-none transition-all duration-300 ${
+          isPressed 
+            ? 'scale-110 shadow-2xl bg-white/95 animate-pulse' 
+            : 'hover:scale-105 hover:shadow-lg'
         }`}
         onMouseDown={(e) => {
           longPressProps.onMouseDown(e);
