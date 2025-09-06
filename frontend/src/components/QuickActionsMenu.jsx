@@ -175,7 +175,7 @@ const QuickActionsMenu = ({ isVisible, onClose, onActionSelect }) => {
       color: 'bg-gradient-to-br from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700',
       borderColor: 'border-pink-300',
       shadowColor: 'shadow-pink-500/50',
-      position: { x: -8, y: 22 }, // SUBIDO: 8px más arriba
+      position: { x: -8, y: 16 }, // AJUSTADO: manteniendo distancia proporcional
     }
   ];
 
