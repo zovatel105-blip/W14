@@ -193,12 +193,12 @@ const QuickActionsMenu = ({ isVisible, onClose, onActionSelect }) => {
   return (
     <div 
       ref={menuRef}
-      className="fixed top-4 right-4 z-[10000]"
+      className="fixed top-4 right-4 z-[10001]"
       style={{ 
         position: 'fixed',
         top: '16px',
         right: '16px',
-        zIndex: 10000,
+        zIndex: 10001,
       }}
     >
       {/* Overlay de fondo */}
