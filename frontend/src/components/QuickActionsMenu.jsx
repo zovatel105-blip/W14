@@ -153,22 +153,22 @@ const QuickActionsMenu = ({ isVisible, onClose, onActionSelect }) => {
 
   const actions = [
     {
-      id: 'search',
-      icon: Search,
-      label: 'Buscar',
-      color: 'bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700',
-      borderColor: 'border-blue-300',
-      shadowColor: 'shadow-blue-500/50',
-      position: { x: 22, y: -22 }, // Círculo rojo superior derecha - ajustado
-    },
-    {
       id: 'moments',
       icon: Clock,
       label: 'Historias',
       color: 'bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700',
       borderColor: 'border-orange-300',
       shadowColor: 'shadow-orange-500/50',
-      position: { x: -22, y: -22 }, // Círculo rojo superior izquierda
+      position: { x: -22, y: -22 }, // INICIO DEL ARCO: superior izquierda
+    },
+    {
+      id: 'search',
+      icon: Search,
+      label: 'Buscar',
+      color: 'bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700',
+      borderColor: 'border-blue-300',
+      shadowColor: 'shadow-blue-500/50',
+      position: { x: -30, y: 0 }, // ARCO: izquierda del logo
     },
     {
       id: 'profile',
@@ -177,7 +177,7 @@ const QuickActionsMenu = ({ isVisible, onClose, onActionSelect }) => {
       color: 'bg-gradient-to-br from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700',
       borderColor: 'border-purple-300',
       shadowColor: 'shadow-purple-500/50',
-      position: { x: 0, y: 32 }, // Posición exacta: directamente abajo del logo (YA ESTÁ BIEN)
+      position: { x: -26, y: 10 }, // ARCO: intermedio izquierda-abajo
     },
     {
       id: 'favorites',
@@ -186,7 +186,7 @@ const QuickActionsMenu = ({ isVisible, onClose, onActionSelect }) => {
       color: 'bg-gradient-to-br from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700',
       borderColor: 'border-pink-300',
       shadowColor: 'shadow-pink-500/50',
-      position: { x: -22, y: 22 }, // Posición exacta: inferior izquierda del logo (YA ESTÁ BIEN)
+      position: { x: -22, y: 22 }, // FINAL DEL ARCO: inferior izquierda
     }
   ];
 
