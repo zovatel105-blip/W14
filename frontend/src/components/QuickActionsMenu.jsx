@@ -159,7 +159,7 @@ const QuickActionsMenu = ({ isVisible, onClose, onActionSelect }) => {
       color: 'bg-gradient-to-br from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700',
       borderColor: 'border-orange-300',
       shadowColor: 'shadow-orange-500/50',
-      position: { x: -22, y: -18 }, // ARCO: más cerca del logo, más separados
+      position: { x: -18, y: -8 }, // ARCO: más abajo, forma curvada superior
     },
     {
       id: 'search',
@@ -168,7 +168,7 @@ const QuickActionsMenu = ({ isVisible, onClose, onActionSelect }) => {
       color: 'bg-gradient-to-br from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700',
       borderColor: 'border-blue-300',
       shadowColor: 'shadow-blue-500/50',
-      position: { x: -30, y: -2 }, // ARCO: más cerca del logo, más separados
+      position: { x: -26, y: 8 }, // ARCO: más abajo, forma curvada media
     },
     {
       id: 'profile',
@@ -177,7 +177,7 @@ const QuickActionsMenu = ({ isVisible, onClose, onActionSelect }) => {
       color: 'bg-gradient-to-br from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700',
       borderColor: 'border-purple-300',
       shadowColor: 'shadow-purple-500/50',
-      position: { x: -30, y: 25 }, // ARCO: más cerca del logo, más separados
+      position: { x: -26, y: 35 }, // ARCO: más abajo, forma curvada media-inferior
     },
     {
       id: 'favorites',
@@ -186,7 +186,7 @@ const QuickActionsMenu = ({ isVisible, onClose, onActionSelect }) => {
       color: 'bg-gradient-to-br from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700',
       borderColor: 'border-pink-300',
       shadowColor: 'shadow-pink-500/50',
-      position: { x: -22, y: 40 }, // ARCO: más cerca del logo, más separados
+      position: { x: -18, y: 50 }, // ARCO: más abajo, forma curvada inferior
     }
   ];
 
