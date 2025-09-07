@@ -260,12 +260,12 @@ const SearchPage = () => {
         </div>
       </div>
 
-      {/* Tabs and Sort */}
+      {/* Tabs */}
       {hasSearched && (
         <div className="bg-white border-b border-gray-200">
           <div className="max-w-4xl mx-auto px-4">
             {/* Mobile Layout */}
-            <div className="block md:hidden py-3 space-y-3">
+            <div className="block md:hidden py-3">
               {/* Filter Tabs - Mobile */}
               <div className="flex space-x-1 overflow-x-auto pb-1">
                 {tabs.map((tab) => {
@@ -286,25 +286,10 @@ const SearchPage = () => {
                   );
                 })}
               </div>
-              
-              {/* Sort Options - Mobile */}
-              <div className="flex items-center justify-center">
-                <select
-                  value={sortBy}
-                  onChange={(e) => handleSortChange(e.target.value)}
-                  className="text-sm border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
-                >
-                  {sortOptions.map((option) => (
-                    <option key={option.id} value={option.id}>
-                      Ordenar por {option.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
             </div>
             
             {/* Desktop Layout */}
-            <div className="hidden md:flex items-center justify-between py-3">
+            <div className="hidden md:flex items-center justify-center py-3">
               {/* Filter Tabs - Desktop */}
               <div className="flex space-x-1">
                 {tabs.map((tab) => {
@@ -324,22 +309,6 @@ const SearchPage = () => {
                     </button>
                   );
                 })}
-              </div>
-              
-              {/* Sort Options - Desktop */}
-              <div className="flex items-center space-x-2">
-                <span className="text-sm text-gray-500">Ordenar:</span>
-                <select
-                  value={sortBy}
-                  onChange={(e) => handleSortChange(e.target.value)}
-                  className="text-sm border border-gray-300 rounded-lg px-3 py-1 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                >
-                  {sortOptions.map((option) => (
-                    <option key={option.id} value={option.id}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
               </div>
             </div>
           </div>
