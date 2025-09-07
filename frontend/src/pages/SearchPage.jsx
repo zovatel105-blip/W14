@@ -331,45 +331,50 @@ const SearchPage = () => {
         ) : isLoading ? (
           <div className="text-center py-16">
             <div className="w-8 h-8 border-4 border-blue-200 border-t-blue-500 rounded-full animate-spin mx-auto mb-4"></div>
-            <p className="text-gray-600">Buscando...</p>
+            <p className="text-gray-500">Buscando...</p>
           </div>
-        ) : searchResults.length === 0 ? (
-          <div className="text-center py-16">
-            <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Search size={24} className="text-gray-400" />
-            </div>
-            <h3 className="text-lg font-semibold text-gray-700 mb-2">No se encontraron resultados</h3>
-            <p className="text-gray-500">Intenta con otros términos de búsqueda</p>
-          </div>
-        ) : (
-          <div className="space-y-2">
-            {searchResults.map((result) => (
-              <div
-                key={result.id}
-                onClick={() => handleResultClick(result)}
-                className="bg-white rounded-lg p-4 border border-gray-200 hover:border-gray-300 hover:shadow-sm transition-all cursor-pointer"
-              >
-                <div className="flex items-center gap-3">
-                  {result.avatar ? (
-                    <img
-                      src={result.avatar}
-                      alt={result.title}
-                      className="w-10 h-10 rounded-full bg-gray-200"
-                    />
-                  ) : (
-                    <div className="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
-                      {React.createElement(result.icon, { size: 20, className: 'text-gray-600' })}
-                    </div>
-                  )}
-                  <div>
-                    <h4 className="font-semibold text-gray-900">{result.title}</h4>
-                    <p className="text-gray-500 text-sm">{result.subtitle}</p>
-                  </div>
-                </div>
+        ) : searchResults.length > 0 ? (
+          /* Search Results */
+          <div>
+            <div className="mb-4 flex items-center justify-between">
+              <p className="text-sm text-gray-600">
+                {searchResults.length} resultado{searchResults.length !== 1 ? 's' : ''} para "{searchQuery}"
+              </p>
+              <div className="flex items-center space-x-2 text-xs text-gray-500">
+                <TrendingUp size={14} />
+                <span>Ordenado por {sortOptions.find(s => s.id === sortBy)?.label.toLowerCase()}</span>
               </div>
-            ))}
+            </div>
+            
+            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+              {searchResults.map((result, index) => (
+                <SearchResultItem
+                  key={`${result.type}-${result.id}-${index}`}
+                  result={result}
+                  onItemClick={handleResultClick}
+                />
+              ))}
+            </div>
           </div>
-        )}
+        ) : hasSearched ? (
+          /* No Results */
+          <div className="text-center py-16">
+            <Search size={64} className="text-gray-300 mx-auto mb-4" />
+            <h3 className="text-xl font-semibold text-gray-700 mb-2">No se encontraron resultados</h3>
+            <p className="text-gray-500 mb-6">
+              No pudimos encontrar nada para "{searchQuery}". Intenta con términos diferentes.
+            </p>
+            
+            {/* Show discovery content even when no results */}
+            <div className="mt-12">
+              <DiscoverySection
+                trendingContent={discoveryData.trending_posts || []}
+                suggestedUsers={discoveryData.suggested_users || []}
+                trendingHashtags={discoveryData.trending_hashtags || []}
+              />
+            </div>
+          </div>
+        ) : null}
       </div>
     </div>
   );
