@@ -45,13 +45,12 @@ const SearchPage = () => {
   const tabs = [
     { id: 'all', label: 'Todo', icon: Search },
     { id: 'users', label: 'Usuarios', icon: User },
-    { id: 'posts', label: 'Posts', icon: Hash },
+    { id: 'posts', label: 'Posts', icon: FileText },
     { id: 'hashtags', label: 'Hashtags', icon: Hash },
     { id: 'sounds', label: 'Sonidos', icon: Music },
   ];
 
   const sortOptions = [
-    { id: 'relevance', label: 'Relevancia' },
     { id: 'popularity', label: 'Popularidad' },
     { id: 'recent', label: 'Reciente' },
   ];
