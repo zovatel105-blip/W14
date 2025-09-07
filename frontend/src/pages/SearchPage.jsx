@@ -28,14 +28,12 @@ const SearchPage = () => {
   useEffect(() => {
     const query = searchParams.get('q') || '';
     const filter = searchParams.get('filter') || 'all';
-    const sort = searchParams.get('sort') || 'popularity';
     
     setSearchQuery(query);
     setActiveTab(filter);
-    setSortBy(sort);
     
     if (query) {
-      handleSearch(query, filter, sort);
+      handleSearch(query, filter);
     } else {
       loadDiscoveryContent();
     }
