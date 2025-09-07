@@ -43,7 +43,7 @@ const SearchPage = () => {
   const tabs = [
     { id: 'all', label: 'Todo', icon: Search },
     { id: 'users', label: 'Usuarios', icon: User },
-    { id: 'posts', label: 'Posts', icon: FileText },
+    { id: 'posts', label: 'Posts', icon: PostsIcon },
     { id: 'hashtags', label: 'Hashtags', icon: Hash },
     { id: 'sounds', label: 'Sonidos', icon: Music },
   ];
