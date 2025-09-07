@@ -277,8 +277,48 @@ const SearchPage = () => {
       {hasSearched && (
         <div className="bg-white border-b border-gray-200">
           <div className="max-w-4xl mx-auto px-4">
-            <div className="flex items-center justify-between py-3">
-              {/* Filter Tabs */}
+            {/* Mobile Layout */}
+            <div className="block md:hidden py-3 space-y-3">
+              {/* Filter Tabs - Mobile */}
+              <div className="flex space-x-1 overflow-x-auto pb-1">
+                {tabs.map((tab) => {
+                  const Icon = tab.icon;
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => handleTabChange(tab.id)}
+                      className={`flex items-center space-x-1 px-3 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap flex-shrink-0 ${
+                        activeTab === tab.id
+                          ? 'bg-blue-100 text-blue-700'
+                          : 'text-gray-600 hover:bg-gray-100'
+                      }`}
+                    >
+                      <Icon size={14} />
+                      <span>{tab.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+              
+              {/* Sort Options - Mobile */}
+              <div className="flex items-center justify-center">
+                <select
+                  value={sortBy}
+                  onChange={(e) => handleSortChange(e.target.value)}
+                  className="text-sm border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white"
+                >
+                  {sortOptions.map((option) => (
+                    <option key={option.id} value={option.id}>
+                      Ordenar por {option.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
+            
+            {/* Desktop Layout */}
+            <div className="hidden md:flex items-center justify-between py-3">
+              {/* Filter Tabs - Desktop */}
               <div className="flex space-x-1">
                 {tabs.map((tab) => {
                   const Icon = tab.icon;
@@ -293,15 +333,15 @@ const SearchPage = () => {
                       }`}
                     >
                       <Icon size={16} />
-                      <span className="hidden sm:inline">{tab.label}</span>
+                      <span>{tab.label}</span>
                     </button>
                   );
                 })}
               </div>
               
-              {/* Sort Options */}
+              {/* Sort Options - Desktop */}
               <div className="flex items-center space-x-2">
-                <span className="text-sm text-gray-500 hidden sm:inline">Ordenar:</span>
+                <span className="text-sm text-gray-500">Ordenar:</span>
                 <select
                   value={sortBy}
                   onChange={(e) => handleSortChange(e.target.value)}
