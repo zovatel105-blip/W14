@@ -59,7 +59,7 @@ const SearchPage = () => {
     const params = new URLSearchParams();
     if (query) params.set('q', query);
     if (filter !== 'all') params.set('filter', filter);
-    if (sort !== 'relevance') params.set('sort', sort);
+    if (sort !== 'popularity') params.set('sort', sort);
     setSearchParams(params);
   };
 
