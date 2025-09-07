@@ -321,7 +321,7 @@ const SearchPage = () => {
       {/* Content */}
       <div className="max-w-4xl mx-auto px-4 py-6">
         {!searchQuery.trim() ? (
-          /* Discovery Section - when no search query */
+          // Discovery Section - when no search query
           <DiscoverySection
             trendingContent={discoveryData.trending_posts || []}
             suggestedUsers={discoveryData.suggested_users || []}
