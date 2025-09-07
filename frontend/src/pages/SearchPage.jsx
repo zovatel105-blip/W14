@@ -63,7 +63,7 @@ const SearchPage = () => {
     }
   };
 
-  const handleSearch = async (query, filter = activeTab, sort = sortBy) => {
+  const handleSearch = async (query, filter = activeTab) => {
     if (!query.trim()) {
       setSearchResults([]);
       setHasSearched(false);
@@ -75,7 +75,7 @@ const SearchPage = () => {
     setHasSearched(true);
     
     try {
-      const response = await searchService.universalSearch(query, filter, sort, 50);
+      const response = await searchService.universalSearch(query, filter, 'popularity', 50);
       setSearchResults(response.results || []);
       
       // Also load discovery content for empty states
