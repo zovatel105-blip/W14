@@ -274,6 +274,8 @@ const SearchPage = () => {
         </div>
       </div>
 
+      {/* Tabs and Sort */}
+      {hasSearched && (
         <div className="bg-white border-b border-gray-200">
           <div className="max-w-4xl mx-auto px-4">
             <div className="flex items-center justify-between py-3">
