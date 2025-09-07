@@ -119,12 +119,12 @@ const SearchPage = () => {
   // Debounced search
   useEffect(() => {
     const debounceTimer = setTimeout(() => {
-      handleSearch(searchQuery, activeTab, sortBy);
-      updateURLParams(searchQuery, activeTab, sortBy);
+      handleSearch(searchQuery, activeTab);
+      updateURLParams(searchQuery, activeTab);
     }, 500);
 
     return () => clearTimeout(debounceTimer);
-  }, [searchQuery, activeTab, sortBy]);
+  }, [searchQuery, activeTab]);
 
   // Debounced autocomplete
   useEffect(() => {
