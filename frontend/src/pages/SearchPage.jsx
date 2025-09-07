@@ -1,47 +1,98 @@
-import React, { useState, useEffect } from 'react';
-import { Search, User, Hash, Music, ArrowLeft } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { Search, User, Hash, Music, ArrowLeft, TrendingUp, Loader, X } from 'lucide-react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useToast } from '../hooks/use-toast';
+import searchService from '../services/searchService';
+import SearchResultItem from '../components/search/SearchResultItem';
+import AutocompleteDropdown from '../components/search/AutocompleteDropdown';
+import DiscoverySection from '../components/search/DiscoverySection';
 
 const SearchPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const [autocompleteResults, setAutocompleteResults] = useState([]);
+  const [discoveryData, setDiscoveryData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [isAutocompleteLoading, setIsAutocompleteLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('all');
+  const [sortBy, setSortBy] = useState('relevance');
+  const [showAutocomplete, setShowAutocomplete] = useState(false);
+  const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1);
+  const [hasSearched, setHasSearched] = useState(false);
+  
+  const searchInputRef = useRef(null);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Initialize from URL params
+  useEffect(() => {
+    const query = searchParams.get('q') || '';
+    const filter = searchParams.get('filter') || 'all';
+    const sort = searchParams.get('sort') || 'relevance';
+    
+    setSearchQuery(query);
+    setActiveTab(filter);
+    setSortBy(sort);
+    
+    if (query) {
+      handleSearch(query, filter, sort);
+    } else {
+      loadDiscoveryContent();
+    }
+  }, []);
 
   const tabs = [
     { id: 'all', label: 'Todo', icon: Search },
     { id: 'users', label: 'Usuarios', icon: User },
+    { id: 'posts', label: 'Posts', icon: Hash },
     { id: 'hashtags', label: 'Hashtags', icon: Hash },
-    { id: 'music', label: 'Música', icon: Music },
+    { id: 'sounds', label: 'Sonidos', icon: Music },
   ];
 
-  const handleSearch = async (query) => {
+  const sortOptions = [
+    { id: 'relevance', label: 'Relevancia' },
+    { id: 'popularity', label: 'Popularidad' },
+    { id: 'recent', label: 'Reciente' },
+  ];
+
+  const updateURLParams = (query, filter, sort) => {
+    const params = new URLSearchParams();
+    if (query) params.set('q', query);
+    if (filter !== 'all') params.set('filter', filter);
+    if (sort !== 'relevance') params.set('sort', sort);
+    setSearchParams(params);
+  };
+
+  const loadDiscoveryContent = async () => {
+    try {
+      const suggestions = await searchService.getSearchSuggestions();
+      setDiscoveryData(suggestions);
+    } catch (error) {
+      console.error('Error loading discovery content:', error);
+    }
+  };
+
+  const handleSearch = async (query, filter = activeTab, sort = sortBy) => {
     if (!query.trim()) {
       setSearchResults([]);
+      setHasSearched(false);
+      loadDiscoveryContent();
       return;
     }
 
     setIsLoading(true);
+    setHasSearched(true);
+    
     try {
-      // Simular búsqueda - aquí se integraría con el backend
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      const response = await searchService.universalSearch(query, filter, sort, 50);
+      setSearchResults(response.results || []);
       
-      // Resultados mock para demostración
-      const mockResults = [
-        { id: 1, type: 'user', title: '@usuario_ejemplo', subtitle: 'Usuario Verificado', avatar: '/api/placeholder/40/40' },
-        { id: 2, type: 'hashtag', title: '#tendencia', subtitle: '1.2M publicaciones', icon: Hash },
-        { id: 3, type: 'music', title: 'Canción Popular', subtitle: 'Artista Famoso', icon: Music },
-      ].filter(item => activeTab === 'all' || item.type === activeTab.slice(0, -1));
+      // Also load discovery content for empty states
+      if (!response.results || response.results.length === 0) {
+        await loadDiscoveryContent();
+      }
       
-      setSearchResults(mockResults);
-      
-      toast({
-        title: "🔍 Búsqueda completada",
-        description: `Se encontraron ${mockResults.length} resultados`,
-      });
     } catch (error) {
       console.error('Error searching:', error);
       toast({
@@ -49,24 +100,122 @@ const SearchPage = () => {
         description: "No se pudo realizar la búsqueda. Intenta de nuevo.",
         variant: "destructive",
       });
+      setSearchResults([]);
     } finally {
       setIsLoading(false);
     }
   };
 
+  const handleAutocomplete = async (query) => {
+    if (!query || query.length < 2) {
+      setAutocompleteResults([]);
+      setShowAutocomplete(false);
+      return;
+    }
+
+    setIsAutocompleteLoading(true);
+    try {
+      const response = await searchService.getAutocomplete(query);
+      setAutocompleteResults(response.suggestions || []);
+      setShowAutocomplete(true);
+    } catch (error) {
+      console.error('Error in autocomplete:', error);
+      setAutocompleteResults([]);
+    } finally {
+      setIsAutocompleteLoading(false);
+    }
+  };
+
+  // Debounced search
   useEffect(() => {
     const debounceTimer = setTimeout(() => {
-      handleSearch(searchQuery);
+      handleSearch(searchQuery, activeTab, sortBy);
+      updateURLParams(searchQuery, activeTab, sortBy);
     }, 500);
 
     return () => clearTimeout(debounceTimer);
-  }, [searchQuery, activeTab]);
+  }, [searchQuery, activeTab, sortBy]);
+
+  // Debounced autocomplete
+  useEffect(() => {
+    const debounceTimer = setTimeout(() => {
+      handleAutocomplete(searchQuery);
+    }, 200);
+
+    return () => clearTimeout(debounceTimer);
+  }, [searchQuery]);
+
+  const handleInputChange = (e) => {
+    setSearchQuery(e.target.value);
+    setSelectedSuggestionIndex(-1);
+  };
+
+  const handleInputFocus = () => {
+    if (searchQuery.length >= 2) {
+      setShowAutocomplete(true);
+    }
+  };
+
+  const handleInputBlur = () => {
+    // Delay to allow clicking on suggestions
+    setTimeout(() => {
+      setShowAutocomplete(false);
+    }, 200);
+  };
+
+  const handleSuggestionClick = (suggestion) => {
+    setSearchQuery(suggestion.text || suggestion.display);
+    setShowAutocomplete(false);
+    searchInputRef.current?.focus();
+  };
+
+  const handleKeyDown = (e) => {
+    if (!showAutocomplete || autocompleteResults.length === 0) return;
+
+    switch (e.key) {
+      case 'ArrowDown':
+        e.preventDefault();
+        setSelectedSuggestionIndex(prev => 
+          prev < autocompleteResults.length - 1 ? prev + 1 : 0
+        );
+        break;
+      case 'ArrowUp':
+        e.preventDefault();
+        setSelectedSuggestionIndex(prev => 
+          prev > 0 ? prev - 1 : autocompleteResults.length - 1
+        );
+        break;
+      case 'Enter':
+        e.preventDefault();
+        if (selectedSuggestionIndex >= 0) {
+          handleSuggestionClick(autocompleteResults[selectedSuggestionIndex]);
+        }
+        break;
+      case 'Escape':
+        setShowAutocomplete(false);
+        setSelectedSuggestionIndex(-1);
+        break;
+    }
+  };
+
+  const clearSearch = () => {
+    setSearchQuery('');
+    setSearchResults([]);
+    setHasSearched(false);
+    loadDiscoveryContent();
+    searchInputRef.current?.focus();
+  };
+
+  const handleTabChange = (tabId) => {
+    setActiveTab(tabId);
+  };
+
+  const handleSortChange = (sortId) => {
+    setSortBy(sortId);
+  };
 
   const handleResultClick = (result) => {
-    toast({
-      title: `Seleccionaste: ${result.title}`,
-      description: "Funcionalidad de navegación próximamente disponible",
-    });
+    console.log('Result clicked:', result);
   };
 
   return (
