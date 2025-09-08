@@ -172,7 +172,18 @@ const ContentCreationPage = () => {
     if (!isImage) {
       toast({
         title: "Error",
-        description: "Solo se permiten archivos de imagen",
+        description: "Solo se permiten archivos de imagen (JPG, PNG, GIF, WEBP)",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Check file size (max 10MB)
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    if (file.size > maxSize) {
+      toast({
+        title: "Error",
+        description: "La imagen es muy grande. Máximo 10MB permitido.",
         variant: "destructive"
       });
       return;
@@ -184,7 +195,9 @@ const ContentCreationPage = () => {
       newImages[currentSlotIndex] = {
         url: base64,
         type: 'image',
-        file: file
+        file: file,
+        name: file.name,
+        size: file.size
       };
       setImages(newImages);
 
@@ -193,9 +206,10 @@ const ContentCreationPage = () => {
         description: `Imagen agregada al slot ${currentSlotIndex + 1}`,
       });
     } catch (error) {
+      console.error('Error loading image:', error);
       toast({
         title: "Error",
-        description: "No se pudo cargar la imagen",
+        description: "No se pudo cargar la imagen. Intenta con otra imagen.",
         variant: "destructive"
       });
     }
