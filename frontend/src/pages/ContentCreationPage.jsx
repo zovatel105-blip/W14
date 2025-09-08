@@ -203,7 +203,7 @@ const LayoutPreview = ({ layout, options = [], onImageUpload, onImageRemove, onO
                     </div>
                   </>
                 ) : (
-                  {/* Fullscreen Upload Area - Like TikTok camera */}
+                  /* Fullscreen Upload Area - Like TikTok camera */
                   <div className="w-full h-full flex items-center justify-center bg-black relative">
                     {/* Animated background */}
                     <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-pink-900/20 to-blue-900/20"></div>
