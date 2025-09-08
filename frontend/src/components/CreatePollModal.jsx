@@ -14,6 +14,7 @@ import { Label } from './ui/label';
 import { Textarea } from './ui/textarea';
 import { Plus, X, Sparkles, Upload, Image, Video, Play, Music, Send, AtSign, Settings } from 'lucide-react';
 import { useToast } from '../hooks/use-toast';
+import { useTikTok } from '../contexts/TikTokContext';
 import { fileToBase64 } from '../services/mockData';
 import pollService from '../services/pollService';
 import MusicSelector from './MusicSelector';
