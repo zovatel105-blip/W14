@@ -267,6 +267,16 @@ const ContentCreationPage = () => {
     }
   }, [isAuthenticated, navigate]);
 
+  // Hide RightSideNavigation when on create page
+  useEffect(() => {
+    hideRightNavigationBar();
+    
+    // Restore navigation when leaving the page
+    return () => {
+      showRightNavigationBar();
+    };
+  }, [hideRightNavigationBar, showRightNavigationBar]);
+
   // States
   const [selectedLayout, setSelectedLayout] = useState(LAYOUT_OPTIONS[0]); // Off by default
   const [showLayoutMenu, setShowLayoutMenu] = useState(false);
