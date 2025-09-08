@@ -520,8 +520,8 @@ const ContentCreationPage = () => {
               ) : (
                 <div className="flex items-center justify-center gap-2">
                   <span>Crear publicación</span>
-                  {images.filter(img => img).length >= 2 && title.trim() && (
-                    <span className="text-sm opacity-75">({images.filter(img => img).length} opciones)</span>
+                  {options.filter(opt => opt && opt.media).length >= 2 && title.trim() && (
+                    <span className="text-sm opacity-75">({options.filter(opt => opt && opt.media).length} opciones)</span>
                   )}
                 </div>
               )}
