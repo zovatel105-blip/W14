@@ -198,62 +198,19 @@ const LayoutPreview = ({ layout, options = [], onImageUpload, onImageRemove, onO
                 )}
               </div>
 
-              {/* Title/Description input */}
-              <div className="p-4 bg-gray-900 rounded-b-xl">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center">
-                    <span className="text-white text-sm font-bold">{String.fromCharCode(65 + slotIndex)}</span>
-                  </div>
-                  <span className="text-white text-sm font-semibold">Opción {String.fromCharCode(65 + slotIndex)}</span>
-                  {option.media && (
-                    <div className="flex items-center gap-1 text-green-400 text-xs">
-                      <div className="w-2 h-2 bg-green-400 rounded-full"></div>
-                      Preview activo
-                    </div>
-                  )}
+              {/* Simple Edit Controls - Hidden by default */}
+              {option.media && (
+                <div className="mt-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <UserMentionInput
+                    placeholder={`Texto para opción ${String.fromCharCode(65 + slotIndex)}...`}
+                    value={option.text}
+                    onChange={(newText) => onOptionTextChange(slotIndex, newText)}
+                    onMentionSelect={(user) => onMentionSelect(slotIndex, user)}
+                    className="w-full bg-black/50 text-white text-sm px-3 py-2 rounded-lg border border-gray-600 focus:border-white focus:outline-none"
+                    data-option-index={slotIndex}
+                  />
                 </div>
-                
-                <UserMentionInput
-                  placeholder={`Describe la opción ${String.fromCharCode(65 + slotIndex)} (aparecerá en el preview)...`}
-                  value={option.text}
-                  onChange={(newText) => onOptionTextChange(slotIndex, newText)}
-                  onMentionSelect={(user) => onMentionSelect(slotIndex, user)}
-                  className="w-full bg-gray-800 text-white text-sm px-4 py-3 rounded-lg border border-gray-600 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-                  data-option-index={slotIndex}
-                />
-                
-                {/* Mentioned users display - Edit Mode */}
-                {option.mentionedUsers && option.mentionedUsers.length > 0 && (
-                  <div className="mt-3">
-                    <p className="text-gray-400 text-xs mb-2 font-medium">Usuarios mencionados en esta opción:</p>
-                    <div className="flex flex-wrap gap-2">
-                      {option.mentionedUsers.map((user, userIndex) => (
-                        <span
-                          key={user.id}
-                          className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-sm px-3 py-1.5 rounded-full font-medium"
-                        >
-                          <AtSign className="w-3 h-3" />
-                          {user.username}
-                          <button
-                            onClick={() => {
-                              const newMentioned = option.mentionedUsers.filter((_, i) => i !== userIndex);
-                              updateOption(slotIndex, 'mentionedUsers', newMentioned);
-                            }}
-                            className="ml-1 w-4 h-4 bg-white/20 rounded-full flex items-center justify-center hover:bg-white/30 transition-colors"
-                          >
-                            <X className="w-2.5 h-2.5" />
-                          </button>
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                )}
-                
-                {/* Tips */}
-                <div className="mt-3 text-xs text-gray-500 bg-gray-800 p-2 rounded-lg">
-                  💡 <strong>Tip:</strong> El texto y menciones aparecerán exactamente como se muestran en el preview de arriba
-                </div>
-              </div>
+              )}
             </div>
           );
         })}
