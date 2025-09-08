@@ -75,33 +75,90 @@ const LayoutPreview = ({ layout, options = [], onImageUpload, onImageRemove, onO
                 {String.fromCharCode(65 + slotIndex)}
               </div>
               
-              {/* Image or upload area */}
+              {/* Image or upload area with preview overlay */}
               <div 
-                className="w-full h-32 cursor-pointer hover:bg-gray-700 transition-colors relative"
+                className="w-full h-40 cursor-pointer hover:bg-gray-700 transition-colors relative rounded-lg overflow-hidden"
                 onClick={() => onImageUpload(slotIndex)}
               >
                 {option.media ? (
                   <>
+                    {/* Background Image */}
                     <img 
                       src={option.media.url} 
                       alt={`Opción ${slotIndex + 1}`}
                       className="w-full h-full object-cover"
                     />
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onImageRemove(slotIndex);
-                      }}
-                      className="absolute top-2 right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
-                    >
-                      <X className="w-3 h-3" />
-                    </button>
+                    
+                    {/* Preview Overlay - How it will look when published */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent flex flex-col justify-end p-2">
+                      {/* Option Text Overlay */}
+                      {option.text && (
+                        <div className="text-white font-semibold text-sm leading-tight mb-1 drop-shadow-lg">
+                          {option.text}
+                        </div>
+                      )}
+                      
+                      {/* Mentioned Users in Preview */}
+                      {option.mentionedUsers && option.mentionedUsers.length > 0 && (
+                        <div className="flex flex-wrap gap-1 mb-1">
+                          {option.mentionedUsers.slice(0, 2).map((user) => (
+                            <span
+                              key={user.id}
+                              className="inline-flex items-center gap-1 bg-white/20 backdrop-blur-sm text-white text-xs px-1.5 py-0.5 rounded-full"
+                            >
+                              <AtSign className="w-2 h-2" />
+                              {user.username}
+                            </span>
+                          ))}
+                          {option.mentionedUsers.length > 2 && (
+                            <span className="text-white/80 text-xs">+{option.mentionedUsers.length - 2} más</span>
+                          )}
+                        </div>
+                      )}
+                      
+                      {/* Vote percentage preview (fake for preview) */}
+                      <div className="flex items-center justify-between">
+                        <div className="bg-white/10 backdrop-blur-sm rounded-full px-2 py-1">
+                          <span className="text-white text-xs font-medium">Opción {String.fromCharCode(65 + slotIndex)}</span>
+                        </div>
+                        <div className="text-white/80 text-xs">
+                          Vista previa
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Edit/Remove buttons */}
+                    <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity z-20">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          // Focus on text input for this option
+                          const textInput = document.querySelector(`input[data-option-index="${slotIndex}"]`);
+                          if (textInput) textInput.focus();
+                        }}
+                        className="w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors"
+                        title="Editar texto"
+                      >
+                        <Edit3 className="w-3 h-3" />
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onImageRemove(slotIndex);
+                        }}
+                        className="w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors"
+                        title="Eliminar imagen"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </div>
                   </>
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center text-gray-400 group-hover:text-gray-300 transition-colors">
+                  <div className="w-full h-full flex items-center justify-center text-gray-400 group-hover:text-gray-300 transition-colors border-2 border-dashed border-gray-600 rounded-lg">
                     <div className="text-center">
-                      <Plus className="w-6 h-6 mx-auto mb-1" />
-                      <span className="text-xs">Agregar imagen</span>
+                      <Plus className="w-8 h-8 mx-auto mb-2" />
+                      <span className="text-sm font-medium">Agregar imagen</span>
+                      <p className="text-xs text-gray-500 mt-1">Opción {String.fromCharCode(65 + slotIndex)}</p>
                     </div>
                   </div>
                 )}
