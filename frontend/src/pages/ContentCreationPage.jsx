@@ -527,12 +527,12 @@ const ContentCreationPage = () => {
               )}
             </button>
             {/* Help text */}
-            {(!title.trim() || images.filter(img => img).length < 2) && (
+            {(!title.trim() || options.filter(opt => opt && opt.media).length < 2) && (
               <p className="text-gray-400 text-sm mt-2 text-center">
                 {!title.trim() 
                   ? "Agrega una pregunta o descripción" 
-                  : images.filter(img => img).length < 2 
-                    ? `Necesitas al menos 2 imágenes (tienes ${images.filter(img => img).length})`
+                  : options.filter(opt => opt && opt.media).length < 2 
+                    ? `Necesitas al menos 2 imágenes (tienes ${options.filter(opt => opt && opt.media).length})`
                     : ""}
               </p>
             )}
