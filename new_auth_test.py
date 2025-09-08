@@ -12,8 +12,8 @@ import random
 from datetime import datetime
 
 def get_backend_url():
-    """Get backend URL for testing"""
-    return "http://localhost:8001/api"
+    """Get backend URL for testing - use external URL that frontend uses"""
+    return "https://d7c2740d-da5b-47bd-876f-962d7046e92d.preview.emergentagent.com/api"
 
 def test_auth_endpoints():
     """Test the auth endpoints that the new auth page will use"""
