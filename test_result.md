@@ -896,13 +896,13 @@ Sidebar Derecho (20px width):
 - ✅ **Testing confirmado**: 0 botones RightSideNavigation encontrados en /create
 - ✅ **No conflictos**: RightSideNavigation no aparece en páginas de creación
 
-**11. TÍTULO CENTRADO EN PARTE SUPERIOR:**
-- ✅ **Posición centrada**: Título ahora aparece centrado en top de cada tarjeta
-- ✅ **text-center**: Alineación central con mx-auto inline-block
-- ✅ **top-4**: Posicionado en parte superior de cada preview
-- ✅ **Backdrop mejorado**: bg-black/50 backdrop-blur-sm para legibilidad
-- ✅ **Reorganización**: Identificador opción (izquierda), música (derecha)
-- ✅ **Menciones abajo**: Movidas a bottom para no interferir con título
+**11. TÍTULO PRINCIPAL CENTRADO EN ZONA CENTRAL:**
+- ✅ **Posición correcta**: Título principal centrado en top de zona central
+- ✅ **text-center**: Alineación central en p-4 text-center  
+- ✅ **Typography**: text-white text-2xl font-bold para destacar
+- ✅ **Condicional**: Solo aparece cuando hay título escrito
+- ✅ **Separado de tarjetas**: No interfiere con preview de opciones
+- ✅ **Testing confirmado**: 1 elemento de título encontrado por script
 
 **OBJETIVO ALCANZADO**: Preview limpio de imágenes fullscreen con información esencial, sin elementos adicionales de interfaz simulada, todos los botones principales agrupados en el sidebar derecho, RightSideNavigation correctamente oculta en creación, y título perfectamente centrado en la parte superior de cada tarjeta como solicitado.
 
