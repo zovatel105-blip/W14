@@ -724,7 +724,15 @@ Si los logs aparecen pero los contadores no se actualizan, el problema está en 
 - ✅ **Estados de Carga**: Loading states y feedback visual
 - ✅ **Navegación**: Botón X cierra y regresa al feed correctamente
 
-**6. CORRECCIONES Y MEJORAS DE CREATEPOLLMODAL APLICADAS:**
+**6. SISTEMA DE MENCIONES Y TÍTULOS IMPLEMENTADO:**
+- ✅ **UserMentionInput**: Integrado en cada slot para menciones con @username
+- ✅ **Títulos por Opción**: Campo de texto individual para cada slot/opción
+- ✅ **Identificadores**: Letras A, B, C, D... para identificar cada opción
+- ✅ **Menciones Visuales**: Display de usuarios mencionados con @ y colores
+- ✅ **Notificaciones**: Toast cuando se menciona un usuario exitosamente
+- ✅ **Datos Estructurados**: Menciones y texto incluidos en pollData para backend
+
+**7. CORRECCIONES Y MEJORAS DE CREATEPOLLMODAL APLICADAS:**
 - ✅ **Autenticación Robusta**: Verificación de sesión activa con redirección automática
 - ✅ **Validación Mejorada**: Validación de archivos (tamaño máximo 10MB, tipos permitidos)
 - ✅ **Manejo de Errores**: Error handling detallado con mensajes específicos
