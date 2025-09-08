@@ -18,6 +18,7 @@ import NewAuthPage from './pages/NewAuthPage';
 import AudioDetailPage from './pages/AudioDetailPage';
 import SearchPage from './pages/SearchPage';
 import MomentsPage from './pages/MomentsPage';
+import ContentCreationPage from './pages/ContentCreationPage';
 import TestFOMO from './TestFOMO';
 import { Toaster } from './components/ui/toaster';
 import { createPoll } from './services/mockData';
