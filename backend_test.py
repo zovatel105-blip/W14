@@ -11,10 +11,10 @@ import time
 import random
 from datetime import datetime, timedelta
 
-# Get backend URL - use localhost since services are running locally
+# Get backend URL - use external URL from frontend/.env
 def get_backend_url():
-    # Backend is running on localhost:8001 with /api prefix
-    return "http://localhost:8001/api"
+    # Use external URL as configured in frontend/.env
+    return "https://d7c2740d-da5b-47bd-876f-962d7046e92d.preview.emergentagent.com/api"
 
 # Global variables for test data
 test_users = []
