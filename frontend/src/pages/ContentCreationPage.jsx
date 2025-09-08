@@ -566,29 +566,29 @@ const ContentCreationPage = () => {
 
   return (
     <div className="fixed inset-0 bg-black z-50 flex flex-col">
-      {/* Top Bar */}
-      <div className="flex items-center justify-between px-4 py-3 bg-black border-b border-gray-800">
+      {/* Top Bar - Exactly like TikTok */}
+      <div className="flex items-center justify-between px-4 py-4 bg-black">
         {/* Close button - Left */}
         <button
           onClick={handleClose}
-          className="w-10 h-10 flex items-center justify-center text-white hover:text-gray-300 transition-colors"
+          className="w-8 h-8 flex items-center justify-center text-white"
         >
           <X className="w-6 h-6" />
         </button>
 
-        {/* Add Sound button - Center */}
+        {/* Add Sound button - Center (pill style) */}
         <button
           onClick={() => setShowMusicSelector(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-gray-800 hover:bg-gray-700 rounded-full text-white transition-colors max-w-xs"
+          className="flex items-center gap-2 px-6 py-3 bg-gray-700 hover:bg-gray-600 rounded-full text-white transition-colors"
         >
-          <Music className="w-5 h-5 flex-shrink-0" />
-          <span className="text-sm font-medium truncate">
-            {selectedMusic ? `🎵 ${selectedMusic.title}` : 'Add sound'}
+          <Music className="w-4 h-4" />
+          <span className="text-sm font-medium">
+            {selectedMusic ? selectedMusic.title : 'Add sound'}
           </span>
         </button>
 
         {/* Empty space - Right */}
-        <div className="w-10"></div>
+        <div className="w-8"></div>
       </div>
 
       {/* Main Content */}
