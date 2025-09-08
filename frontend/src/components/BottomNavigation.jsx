@@ -51,15 +51,12 @@ const BottomNavigation = ({ onCreatePoll }) => {
             label="Explorar"
           />
 
-          {/* Create Poll Button - Special styling */}
-          <CreatePollModal onCreatePoll={onCreatePoll}>
-            <div className="flex flex-col items-center gap-1 px-3 py-2 transition-all duration-300 min-w-[60px] group">
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center shadow-lg group-hover:shadow-xl group-hover:scale-110 transition-all duration-300">
-                <Plus className="w-5 h-5 text-white" />
-              </div>
-              <span className="text-xs font-medium text-blue-600">Crear</span>
-            </div>
-          </CreatePollModal>
+          {/* Create Content Button - Navigate to creation page */}
+          <NavigationItem
+            to="/create"
+            icon={Plus}
+            label="Crear"
+          />
 
           <NavigationItem
             to="/messages"
