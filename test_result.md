@@ -839,13 +839,22 @@ Los usuarios ahora tienen una experiencia completa de creación de contenido id�
 - ✅ **Menciones Integradas**: Hasta 4 menciones únicas + contador
 - ✅ **Texto por Opción**: Solo descripción específica en footer si existe
 
-**ESTRUCTURA FINAL DE INFORMACIÓN:**
+**ESTRUCTURA FINAL LIMPIA:**
 ```
-Top Section de cada tarjeta:
-├── Perfil Usuario (@usuario_a + botón Seguir)
-├── Título Principal (si existe)
-├── Música Seleccionada (♪ título - artista)
-└── Menciones Globales (@user1 @user2 +3 más)
+Preview limpio de cada tarjeta:
+┌─────────────────────────────────────┐
+│ ○A Opción A                         │
+│ 📝 "Título principal"               │
+│ 🎵 ♪ Song - Artist                 │
+│ 👥 @user1 @user2 @user3 +2 más     │
+├─────────────────────────────────────┤
+│                                     │
+│        [IMAGEN FULLSCREEN]          │
+│        (sin elementos UI)           │
+│                                     │
+├─────────────────────────────────────┤
+│ "Descripción específica opción"     │
+└─────────────────────────────────────┘
 ```
 
 **RESULTADO FINAL**: La experiencia es **COMPLETAMENTE IDÉNTICA AL FEED REAL DE TIKTOK** - cada opción se presenta como un video completo ya publicado con:
