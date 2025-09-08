@@ -896,7 +896,15 @@ Sidebar Derecho (20px width):
 - ✅ **Testing confirmado**: 0 botones RightSideNavigation encontrados en /create
 - ✅ **No conflictos**: RightSideNavigation no aparece en páginas de creación
 
-**OBJETIVO ALCANZADO**: Preview limpio de imágenes fullscreen con información esencial, sin elementos adicionales de interfaz simulada, todos los botones principales agrupados en el sidebar derecho como solicitado, y RightSideNavigation correctamente oculta cuando CreatePollModal está abierto.
+**11. TÍTULO CENTRADO EN PARTE SUPERIOR:**
+- ✅ **Posición centrada**: Título ahora aparece centrado en top de cada tarjeta
+- ✅ **text-center**: Alineación central con mx-auto inline-block
+- ✅ **top-4**: Posicionado en parte superior de cada preview
+- ✅ **Backdrop mejorado**: bg-black/50 backdrop-blur-sm para legibilidad
+- ✅ **Reorganización**: Identificador opción (izquierda), música (derecha)
+- ✅ **Menciones abajo**: Movidas a bottom para no interferir con título
+
+**OBJETIVO ALCANZADO**: Preview limpio de imágenes fullscreen con información esencial, sin elementos adicionales de interfaz simulada, todos los botones principales agrupados en el sidebar derecho, RightSideNavigation correctamente oculta en creación, y título perfectamente centrado en la parte superior de cada tarjeta como solicitado.
 
 ✅ **MEJORAS IMPLEMENTADAS COMPLETAMENTE:**
 
