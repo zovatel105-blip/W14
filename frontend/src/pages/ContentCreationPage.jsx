@@ -160,7 +160,7 @@ const ContentCreationPage = () => {
   const [showLayoutMenu, setShowLayoutMenu] = useState(false);
   const [showMusicSelector, setShowMusicSelector] = useState(false);
   const [selectedMusic, setSelectedMusic] = useState(null);
-  const [images, setImages] = useState([]);
+  const [options, setOptions] = useState([]); // Changed from images to options
   const [title, setTitle] = useState('');
   const [isCreating, setIsCreating] = useState(false);
   const [currentSlotIndex, setCurrentSlotIndex] = useState(0);
