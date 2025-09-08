@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { X, Music, LayoutGrid, Plus, Upload, Image as ImageIcon, Video, AtSign, Edit3 } from 'lucide-react';
 import { useToast } from '../hooks/use-toast';
 import { useAuth } from '../contexts/AuthContext';
+import { useTikTok } from '../contexts/TikTokContext';
 import MusicSelector from '../components/MusicSelector';
 import UserMentionInput from '../components/UserMentionInput';
 import { fileToBase64 } from '../services/mockData';
