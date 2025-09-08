@@ -805,18 +805,27 @@ Los usuarios ahora tienen una experiencia completa de creación de contenido id�
 9. **Recibir feedback detallado** sobre errores y validaciones
 10. **Navegación fluida** con manejo de estados de autenticación
 
-**🎯 FUNCIONALIDAD COMPLETA TIPO TIKTOK CON PREVIEW FULLSCREEN IMPLEMENTADA**: Los usuarios pueden crear publicaciones tipo encuesta con múltiples opciones, cada una con imagen, título personalizado, menciones de usuarios, música de fondo, y selección de layout visual. **CADA SLOT ES UNA TARJETA FULLSCREEN ESTILO TIKTOK** (aspecto 9:16) que muestra EXACTAMENTE cómo se verá cuando se publique, incluyendo:
+**🎯 FUNCIONALIDAD COMPLETA TIPO TIKTOK CON DISEÑO LIMPIO IMPLEMENTADA**: Los usuarios pueden crear publicaciones tipo encuesta con múltiples opciones, cada una con imagen, título personalizado, menciones de usuarios, música de fondo, y selección de layout visual. **DISEÑO EXACTAMENTE IGUAL A LA REFERENCIA DE USUARIO** siguiendo la estructura limpia de TikTok:
 
-🎬 **EXPERIENCIA VISUAL IDÉNTICA A TIKTOK:**
-- Tarjetas verticales con proporción de pantalla móvil
-- Botones laterales (❤️💬📤) simulando interfaz real
-- Avatar circular y nombre de opción en header
-- Barra de progreso inferior simulando video
-- Gradientes auténticos y efectos backdrop-blur
-- Texto grande y menciones como posts reales
-- Música integrada con indicador "Sonido original"
+📱 **ESTRUCTURA IDÉNTICA A TIKTOK (SEGÚN REFERENCIA):**
+- **Top Bar**: X (izquierda), "Add sound" pill (centro), vacío (derecha)
+- **Zona Central**: Completamente negra para mostrar contenido limpio
+- **Sidebar Derecho**: Solo botón de layouts con íconos visuales
+- **Bottom Bar**: Input de descripción, música seleccionada, botón "Publicar"
 
-La experiencia es ahora **100% idéntica a crear contenido en TikTok** con preview en tiempo real que replica exactamente la interfaz y apariencia de la aplicación original.
+🎨 **MENÚ DE LAYOUTS VERTICAL COMO TIKTOK:**
+- Íconos visuales para cada layout (Off, Vertical, Horizontal, etc.)
+- Selección resaltada en blanco como en referencia
+- Desplegable vertical desde el botón lateral
+- Grid 2x2, 3x3 y todas las opciones con íconos representativos
+
+🃏 **TARJETAS DE PREVIEW FULLSCREEN:**
+- Aspecto 9:16 como pantalla móvil real
+- UI completa de TikTok con botones laterales
+- Preview auténtico del contenido final
+- Controles de edición ocultos hasta hover
+
+La experiencia es ahora **EXACTAMENTE como la referencia mostrada** con diseño limpio, sin elementos innecesarios, y estructura idéntica a TikTok real.
 
 ✅ **MEJORAS IMPLEMENTADAS COMPLETAMENTE:**
 
