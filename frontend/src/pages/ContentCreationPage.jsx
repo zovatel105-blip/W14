@@ -558,21 +558,26 @@ const ContentCreationPage = () => {
 
   return (
     <div className="fixed inset-0 bg-black z-50 flex flex-col">
-      {/* Top Bar - Exactly like TikTok */}
-      <div className="flex items-center justify-between px-4 py-4 bg-black">
+      {/* Top Bar - Mobile Optimized */}
+      <div className="flex items-center justify-between px-4 py-3 bg-black border-b border-gray-800 md:py-4">
         {/* Close button - Left */}
         <button
           onClick={handleClose}
-          className="w-8 h-8 flex items-center justify-center text-white"
+          className="w-10 h-10 flex items-center justify-center text-white active:bg-gray-800 rounded-full transition-colors md:w-8 md:h-8"
         >
           <X className="w-6 h-6" />
         </button>
 
-        {/* Empty space - Center */}
-        <div className="flex-1"></div>
+        {/* Title for mobile */}
+        <h1 className="text-white font-semibold text-lg md:hidden">Crear</h1>
 
-        {/* Empty space - Right */}
-        <div className="w-8"></div>
+        {/* Mobile menu button - Right */}
+        <button
+          onClick={() => setShowLayoutMenu(!showLayoutMenu)}
+          className="w-10 h-10 flex items-center justify-center text-white active:bg-gray-800 rounded-full transition-colors md:w-8 md:h-8"
+        >
+          <LayoutGrid className="w-6 h-6" />
+        </button>
       </div>
 
       {/* Main Content */}
