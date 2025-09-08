@@ -763,16 +763,37 @@ pollData = {
 }
 ```
 
+**ESTRUCTURA MEJORADA DE OPCIONES:**
+```javascript
+option = {
+  text: "Descripción de la opción A",
+  media: {
+    url: base64,
+    type: 'image',
+    file: fileObject
+  },
+  mentionedUsers: [{
+    id: "user_id",
+    username: "usuario",
+    is_verified: false
+  }]
+}
+```
+
 **RESULTADO FINAL:**
 Los usuarios ahora tienen una experiencia completa de creación de contenido idéntica a TikTok donde pueden:
 1. **Acceder autenticado** desde el botón "+" de navegación
 2. **Seleccionar audio** de la biblioteca existente con preview
 3. **Elegir entre 8 plantillas** de layout diferentes con vista previa
 4. **Subir imágenes validadas** a cada slot del layout (máx 10MB)
-5. **Ver preview en tiempo real** de su publicación con música
-6. **Crear contenido robusto** usando la misma lógica mejorada del sistema
-7. **Recibir feedback detallado** sobre errores y validaciones
-8. **Navegación fluida** con manejo de estados de autenticación
+5. **Agregar títulos personalizados** a cada opción (A, B, C, D...)
+6. **Mencionar usuarios** con @username en cada opción individual
+7. **Ver preview en tiempo real** de su publicación con música y textos
+8. **Crear contenido robusto** usando la misma lógica mejorada del sistema
+9. **Recibir feedback detallado** sobre errores y validaciones
+10. **Navegación fluida** con manejo de estados de autenticación
+
+**🎯 FUNCIONALIDAD COMPLETA TIPO TIKTOK IMPLEMENTADA**: Los usuarios pueden crear publicaciones tipo encuesta con múltiples opciones, cada una con imagen, título personalizado, menciones de usuarios, música de fondo, y selección de layout visual, proporcionando una experiencia de creación de contenido completamente profesional.
 
 ✅ **MEJORAS IMPLEMENTADAS COMPLETAMENTE:**
 
