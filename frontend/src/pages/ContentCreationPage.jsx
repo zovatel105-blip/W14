@@ -102,7 +102,16 @@ const ContentCreationPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
+  const { isAuthenticated, user } = useAuth();
   const fileInputRef = useRef(null);
+
+  // Redirect if not authenticated
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/');
+      return;
+    }
+  }, [isAuthenticated, navigate]);
 
   // States
   const [selectedLayout, setSelectedLayout] = useState(LAYOUT_OPTIONS[0]); // Off by default
