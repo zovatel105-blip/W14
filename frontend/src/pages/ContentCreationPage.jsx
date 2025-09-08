@@ -261,19 +261,19 @@ const ContentCreationPage = () => {
 
     try {
       const base64 = await fileToBase64(file);
-      const newImages = [...images];
-      newImages[currentSlotIndex] = {
+      const mediaData = {
         url: base64,
         type: 'image',
         file: file,
         name: file.name,
         size: file.size
       };
-      setImages(newImages);
+      
+      updateOption(currentSlotIndex, 'media', mediaData);
 
       toast({
         title: "✅ Imagen agregada",
-        description: `Imagen agregada al slot ${currentSlotIndex + 1}`,
+        description: `Imagen agregada a la opción ${String.fromCharCode(65 + currentSlotIndex)}`,
       });
     } catch (error) {
       console.error('Error loading image:', error);
@@ -289,9 +289,7 @@ const ContentCreationPage = () => {
   };
 
   const handleImageRemove = (slotIndex) => {
-    const newImages = [...images];
-    newImages[slotIndex] = null;
-    setImages(newImages);
+    updateOption(slotIndex, 'media', null);
   };
 
   const handleCreate = async () => {
