@@ -222,15 +222,15 @@ const LayoutPreview = ({ layout, options = [], title, selectedMusic, onImageUplo
                 )}
               </div>
 
-              {/* Floating edit controls */}
+              {/* Mobile/Desktop edit controls */}
               {option.media && (
-                <div className="absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300">
+                <div className="absolute bottom-2 left-2 right-2 opacity-0 group-hover:opacity-100 md:group-hover:opacity-100 transition-all duration-300">
                   <UserMentionInput
-                    placeholder={`Descripción para esta publicación...`}
+                    placeholder={`Descripción opción ${String.fromCharCode(65 + slotIndex)}...`}
                     value={option.text}
                     onChange={(newText) => onOptionTextChange(slotIndex, newText)}
                     onMentionSelect={(user) => onMentionSelect(slotIndex, user)}
-                    className="w-full bg-black/50 backdrop-blur-sm text-white px-4 py-2 rounded-full border border-white/20 focus:border-white/40 focus:outline-none placeholder-gray-300"
+                    className="w-full bg-black/60 backdrop-blur-sm text-white px-3 py-2 text-sm rounded-lg border border-white/20 focus:border-white/40 focus:outline-none placeholder-gray-300"
                     data-option-index={slotIndex}
                   />
                 </div>
