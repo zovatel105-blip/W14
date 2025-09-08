@@ -313,8 +313,8 @@ const ContentCreationPage = () => {
       return;
     }
 
-    const validImages = images.filter(img => img);
-    if (validImages.length === 0) {
+    const validOptions = options.filter(opt => opt && opt.media);
+    if (validOptions.length === 0) {
       toast({
         title: "Error", 
         description: "Necesitas agregar al menos una imagen",
@@ -324,7 +324,7 @@ const ContentCreationPage = () => {
     }
 
     // Validate minimum options (like CreatePollModal)
-    if (validImages.length < 2) {
+    if (validOptions.length < 2) {
       toast({
         title: "Error",
         description: "Necesitas al menos 2 opciones para crear una votación",
