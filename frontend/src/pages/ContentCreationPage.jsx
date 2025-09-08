@@ -211,6 +211,17 @@ const ContentCreationPage = () => {
   };
 
   const handleCreate = async () => {
+    // Validate authentication
+    if (!isAuthenticated) {
+      toast({
+        title: "Error de autenticación",
+        description: "Necesitas iniciar sesión para crear contenido",
+        variant: "destructive"
+      });
+      navigate('/');
+      return;
+    }
+
     if (!title.trim()) {
       toast({
         title: "Error",
@@ -220,7 +231,8 @@ const ContentCreationPage = () => {
       return;
     }
 
-    if (images.filter(img => img).length === 0) {
+    const validImages = images.filter(img => img);
+    if (validImages.length === 0) {
       toast({
         title: "Error", 
         description: "Necesitas agregar al menos una imagen",
@@ -229,33 +241,44 @@ const ContentCreationPage = () => {
       return;
     }
 
+    // Validate minimum options (like CreatePollModal)
+    if (validImages.length < 2) {
+      toast({
+        title: "Error",
+        description: "Necesitas al menos 2 opciones para crear una votación",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setIsCreating(true);
 
     try {
-      // Prepare poll data similar to CreatePollModal
+      // Prepare poll data exactly like CreatePollModal
+      const processedOptions = validImages.map((img, index) => ({
+        text: `Opción ${index + 1}`, // Keep text simple
+        media_type: 'image',
+        media_url: img.url,
+        thumbnail_url: img.url, // For images, thumbnail is same as url
+        mentioned_users: [] // No mentions for now
+      }));
+
       const pollData = {
         title: title.trim(),
-        options: images.filter(img => img).map((img, index) => ({
-          text: `Opción ${index + 1}`,
-          media: {
-            type: 'image',
-            url: img.url
-          },
-          mentionedUsers: []
-        })),
-        music: selectedMusic ? {
-          id: selectedMusic.id,
-          title: selectedMusic.title,
-          artist: selectedMusic.artist,
-          preview_url: selectedMusic.preview_url,
-          artwork_url: selectedMusic.artwork_url
-        } : null,
-        layout: selectedLayout.id,
-        mentionedUsers: []
+        description: null, // No description field
+        options: processedOptions,
+        music_id: selectedMusic?.id || null, // Use music_id format
+        tags: [], // No tags
+        category: 'general', // Default category
+        mentioned_users: [], // No global mentions
+        video_playback_settings: null, // No video settings
+        layout: selectedLayout.id // Custom field for layout
       };
 
-      // Create poll using existing service
-      await pollService.createPoll(pollData);
+      console.log('Creating poll with data:', pollData);
+
+      // Create poll using API
+      const newPoll = await pollService.createPoll(pollData);
 
       toast({
         title: "🎉 ¡Publicación creada!",
@@ -267,10 +290,26 @@ const ContentCreationPage = () => {
 
     } catch (error) {
       console.error('Error creating content:', error);
+      
+      // Enhanced error handling
+      let errorMessage = "No se pudo crear la publicación. Inténtalo de nuevo.";
+      
+      if (error.message) {
+        if (error.message.includes('Not authenticated')) {
+          errorMessage = "Tu sesión ha expirado. Inicia sesión nuevamente.";
+          // Redirect to login if token expired
+          setTimeout(() => navigate('/'), 2000);
+        } else if (error.message.includes('validation')) {
+          errorMessage = "Error en los datos. Verifica que todos los campos estén correctos.";
+        } else {
+          errorMessage = error.message;
+        }
+      }
+
       toast({
-        title: "Error",
-        description: "No se pudo crear la publicación. Inténtalo de nuevo.",
-        variant: "destructive"
+        title: "Error al crear publicación",
+        description: errorMessage,
+        variant: "destructive",
       });
     } finally {
       setIsCreating(false);
