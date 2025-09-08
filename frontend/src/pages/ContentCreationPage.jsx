@@ -337,13 +337,21 @@ const ContentCreationPage = () => {
 
     try {
       // Prepare poll data exactly like CreatePollModal
-      const processedOptions = validImages.map((img, index) => ({
-        text: `Opción ${index + 1}`, // Keep text simple
-        media_type: 'image',
-        media_url: img.url,
-        thumbnail_url: img.url, // For images, thumbnail is same as url
-        mentioned_users: [] // No mentions for now
-      }));
+      const allMentionedUsers = [];
+      const processedOptions = validOptions.map((opt) => {
+        // Collect mentioned users from this option
+        if (opt.mentionedUsers) {
+          allMentionedUsers.push(...opt.mentionedUsers.map(user => user.id));
+        }
+        
+        return {
+          text: opt.text.trim() || `Opción ${String.fromCharCode(65 + options.indexOf(opt))}`, // Use provided text or default
+          media_type: 'image',
+          media_url: opt.media.url,
+          thumbnail_url: opt.media.url, // For images, thumbnail is same as url
+          mentioned_users: opt.mentionedUsers ? opt.mentionedUsers.map(user => user.id) : []
+        };
+      });
 
       const pollData = {
         title: title.trim(),
