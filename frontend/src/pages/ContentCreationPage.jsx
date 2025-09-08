@@ -626,6 +626,11 @@ const ContentCreationPage = () => {
             <div className="flex items-center justify-between">
               <div className="text-gray-400 text-sm">
                 {options.filter(opt => opt && opt.media).length} / {getSlotsCount()} opciones
+                {options.filter(opt => opt && opt.media).length < 2 && (
+                  <div className="text-yellow-400 text-xs mt-1">
+                    Necesitas al menos 2 opciones
+                  </div>
+                )}
               </div>
               
               <button
@@ -643,6 +648,15 @@ const ContentCreationPage = () => {
                 )}
               </button>
             </div>
+
+            {/* Help text */}
+            {(!title.trim()) && (
+              <div className="text-center">
+                <p className="text-gray-500 text-xs">
+                  💡 Agrega un título para continuar
+                </p>
+              </div>
+            )}
           </div>
         </div>
 
