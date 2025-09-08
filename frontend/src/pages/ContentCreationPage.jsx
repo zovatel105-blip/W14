@@ -61,40 +61,81 @@ const LayoutPreview = ({ layout, options = [], onImageUpload, onImageRemove, onO
   const slots = Array.from({ length: getSlotsCount() }, (_, index) => index);
 
   return (
-    <div className={`grid gap-1 w-full h-full ${getLayoutStyle()}`}>
-      {slots.map((slotIndex) => (
-        <div
-          key={slotIndex}
-          className="relative bg-gray-800 border border-gray-600 rounded-lg overflow-hidden group cursor-pointer hover:border-gray-400 transition-colors"
-          onClick={() => onImageUpload(slotIndex)}
-        >
-          {images[slotIndex] ? (
-            <>
-              <img 
-                src={images[slotIndex].url} 
-                alt={`Slot ${slotIndex + 1}`}
-                className="w-full h-full object-cover"
-              />
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onImageRemove(slotIndex);
-                }}
-                className="absolute top-1 right-1 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+    <div className="space-y-4">
+      <div className={`grid gap-2 w-full ${getLayoutStyle()}`} style={{minHeight: '300px'}}>
+        {slots.map((slotIndex) => {
+          const option = options[slotIndex] || { text: '', media: null, mentionedUsers: [] };
+          return (
+            <div
+              key={slotIndex}
+              className="relative bg-gray-800 border border-gray-600 rounded-lg overflow-hidden group"
+            >
+              {/* Letter identifier */}
+              <div className="absolute top-2 left-2 w-6 h-6 bg-gray-900 rounded-full flex items-center justify-center text-white font-bold text-sm z-10">
+                {String.fromCharCode(65 + slotIndex)}
+              </div>
+              
+              {/* Image or upload area */}
+              <div 
+                className="w-full h-32 cursor-pointer hover:bg-gray-700 transition-colors relative"
+                onClick={() => onImageUpload(slotIndex)}
               >
-                <X className="w-3 h-3" />
-              </button>
-            </>
-          ) : (
-            <div className="w-full h-full flex items-center justify-center text-gray-400 group-hover:text-gray-300 transition-colors">
-              <div className="text-center">
-                <Plus className="w-6 h-6 mx-auto mb-1" />
-                <span className="text-xs">Agregar</span>
+                {option.media ? (
+                  <>
+                    <img 
+                      src={option.media.url} 
+                      alt={`Opción ${slotIndex + 1}`}
+                      className="w-full h-full object-cover"
+                    />
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onImageRemove(slotIndex);
+                      }}
+                      className="absolute top-2 right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                    >
+                      <X className="w-3 h-3" />
+                    </button>
+                  </>
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-gray-400 group-hover:text-gray-300 transition-colors">
+                    <div className="text-center">
+                      <Plus className="w-6 h-6 mx-auto mb-1" />
+                      <span className="text-xs">Agregar imagen</span>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Title/Description input */}
+              <div className="p-2 bg-gray-900">
+                <UserMentionInput
+                  placeholder={`Descripción opción ${String.fromCharCode(65 + slotIndex)} (opcional)...`}
+                  value={option.text}
+                  onChange={(newText) => onOptionTextChange(slotIndex, newText)}
+                  onMentionSelect={(user) => onMentionSelect(slotIndex, user)}
+                  className="w-full bg-gray-800 text-white text-xs px-2 py-1 rounded border border-gray-600 focus:border-blue-500 focus:outline-none"
+                />
+                
+                {/* Mentioned users display */}
+                {option.mentionedUsers && option.mentionedUsers.length > 0 && (
+                  <div className="mt-1 flex flex-wrap gap-1">
+                    {option.mentionedUsers.map((user) => (
+                      <span
+                        key={user.id}
+                        className="inline-flex items-center gap-1 bg-purple-600 text-white text-xs px-1 py-0.5 rounded"
+                      >
+                        <AtSign className="w-2 h-2" />
+                        {user.username}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
-          )}
-        </div>
-      ))}
+          );
+        })}
+      </div>
     </div>
   );
 };
