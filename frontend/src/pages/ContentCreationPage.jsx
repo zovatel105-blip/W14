@@ -493,12 +493,14 @@ const ContentCreationPage = () => {
 
           {/* Layout Preview */}
           <div className="flex-1 flex items-center justify-center">
-            <div className="w-full max-w-md h-96 bg-gray-900 rounded-lg p-2">
+            <div className="w-full max-w-md bg-gray-900 rounded-lg p-2">
               <LayoutPreview
                 layout={selectedLayout}
-                images={images}
+                options={options}
                 onImageUpload={handleImageUpload}
                 onImageRemove={handleImageRemove}
+                onOptionTextChange={handleOptionTextChange}
+                onMentionSelect={handleMentionSelect}
               />
             </div>
           </div>
