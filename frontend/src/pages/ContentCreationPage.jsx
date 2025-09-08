@@ -377,7 +377,7 @@ const ContentCreationPage = () => {
 
       // Reset form data (like CreatePollModal)
       setTitle('');
-      setImages([]);
+      setOptions([]);
       setSelectedMusic(null);
       setSelectedLayout(LAYOUT_OPTIONS[0]);
       setShowMusicSelector(false);
