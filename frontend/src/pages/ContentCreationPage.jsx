@@ -300,8 +300,18 @@ const ContentCreationPage = () => {
         description: "Tu contenido ha sido publicado exitosamente",
       });
 
-      // Navigate to feed
-      navigate('/feed');
+      // Reset form data (like CreatePollModal)
+      setTitle('');
+      setImages([]);
+      setSelectedMusic(null);
+      setSelectedLayout(LAYOUT_OPTIONS[0]);
+      setShowMusicSelector(false);
+      setShowLayoutMenu(false);
+
+      // Navigate to feed after a short delay to show the success message
+      setTimeout(() => {
+        navigate('/feed');
+      }, 1500);
 
     } catch (error) {
       console.error('Error creating content:', error);
