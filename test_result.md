@@ -758,6 +758,18 @@ backend:
         - working: true
           agent: "main"
           comment: "✅ SISTEMA DE SUBIDA DE AUDIOS COMPLETAMENTE OPERACIONAL (2025-01-27): PROBLEMA: Usuario reportaba que no podía subir sus audios al sistema. CAUSA RAÍZ IDENTIFICADA: FFmpeg no estaba instalado en el sistema, causando que el procesamiento de audio fallara. SOLUCIÓN IMPLEMENTADA: 1) ✅ INSTALACIÓN DE FFMPEG: Ejecutado 'apt install ffmpeg' exitosamente, verificada versión 5.1.7 funcionando correctamente, eliminados warnings de FFmpeg en logs del backend. 2) ✅ VERIFICACIÓN DEL SISTEMA: Endpoint POST /api/audio/upload completamente funcional, directorio /app/backend/uploads/audio/ con permisos correctos, procesamiento de audio con FFmpeg operacional. 3) ✅ COMPONENTES VERIFICADOS: Frontend MusicSelector.jsx con lógica de upload correcta, validaciones de tipo y tamaño de archivo funcionando, manejo de errores y autenticación implementado. RESULTADO: Los usuarios ahora pueden subir archivos de audio (MP3, M4A, WAV, AAC) exitosamente. El sistema procesa, optimiza y almacena los audios correctamente."
+
+  - task: "New Auth Page Backend Support"
+    implemented: true
+    working: true
+    file: "/app/backend/server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+        - working: true
+          agent: "testing"
+          comment: "✅ NEW AUTH PAGE BACKEND COMPLETAMENTE VERIFICADO (2025-01-27): Testing exhaustivo de endpoints backend para nueva página de autenticación simplificada. CONTEXTO: Usuario creó NewAuthPage.jsx para reemplazar AuthPage complejo con funcionalidad simplificada (login + register, sin Google OAuth, validación básica, redirección a /feed). TESTING REALIZADO: ✅ HEALTH CHECK: API funcionando correctamente en URL externa, ✅ REGISTRO (POST /api/auth/register): Endpoint funcional, acepta email/username/display_name/password, retorna JWT válido + datos usuario, manejo correcto de emails duplicados (400), validación campos requeridos (422), ✅ LOGIN (POST /api/auth/login): Endpoint funcional, acepta email/password, retorna JWT válido + datos usuario, rechaza credenciales inválidas (400), ✅ JWT VALIDATION: Tokens generados correctamente, validación en GET /api/auth/me funcional, rechazo de tokens inválidos (401), ✅ SEGURIDAD: Contraseñas no expuestas en respuestas, datos usuario almacenados correctamente, ✅ FORMATO RESPUESTA: Estructura compatible con frontend (access_token, token_type, expires_in, user object con id/email/username/display_name). RESULTADO: Backend 100% listo para nueva página de autenticación. Todos los endpoints necesarios funcionando correctamente con manejo de errores apropiado y formato de respuesta compatible con frontend."
 user_problem_statement: 🎯 PROBLEMA CRÍTICO COMPATIBILIDAD UUID AUDIO Y SUBIDA DE AUDIOS RESUELTO (2025-01-27): 
 
 1. **COMPATIBILIDAD UUID AUDIO**: Las publicaciones fueron creadas con music_id igual al UUID del audio (sin prefijo "user_audio_"), pero función actualizada espera prefijo. SOLUCIONADO: Agregado soporte para UUID de user audio con y sin prefijo.
