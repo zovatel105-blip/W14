@@ -358,6 +358,27 @@ const ContentCreationPage = () => {
             />
           </div>
 
+          {/* Selected Music Display */}
+          {selectedMusic && (
+            <div className="mb-4 bg-gray-800 rounded-lg p-3 border border-gray-600">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 bg-gray-700 rounded-lg flex items-center justify-center">
+                  <Music className="w-6 h-6 text-white" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-white font-medium truncate">{selectedMusic.title}</p>
+                  <p className="text-gray-400 text-sm truncate">{selectedMusic.artist}</p>
+                </div>
+                <button
+                  onClick={() => setSelectedMusic(null)}
+                  className="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-white rounded-full hover:bg-gray-700"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* Layout Preview */}
           <div className="flex-1 flex items-center justify-center">
             <div className="w-full max-w-md h-96 bg-gray-900 rounded-lg p-2">
