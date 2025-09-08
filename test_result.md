@@ -876,7 +876,7 @@ Preview limpio de cada tarjeta:
 ✅ **Preview fullscreen auténtico** solo con imágenes
 ✅ **Información esencial** (música, título, menciones) en header
 ✅ **Funcionalidades completas** con layouts, edición y creación
-✅ **Botones principales** música y publicar visibles y funcionales
+✅ **Botones agrupados en sidebar** música, layout y publicar juntos
 ✅ **Experiencia profesional** enfocada en el contenido real
 
 **OBJETIVO ALCANZADO**: Preview limpio de imágenes fullscreen con información esencial, sin elementos adicionales de interfaz simulada.
