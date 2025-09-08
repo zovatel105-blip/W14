@@ -75,9 +75,9 @@ const LayoutPreview = ({ layout, options = [], onImageUpload, onImageRemove, onO
                 {String.fromCharCode(65 + slotIndex)}
               </div>
               
-              {/* Image or upload area with fullscreen-style preview */}
+              {/* Fullscreen Feed-style Preview */}
               <div 
-                className="w-full aspect-[9/16] cursor-pointer hover:bg-gray-700 transition-colors relative rounded-xl overflow-hidden shadow-2xl"
+                className="w-full h-full cursor-pointer relative overflow-hidden"
                 onClick={() => onImageUpload(slotIndex)}
               >
                 {option.media ? (
