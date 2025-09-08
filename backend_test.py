@@ -14,7 +14,7 @@ from datetime import datetime, timedelta
 # Get backend URL - use external URL from frontend/.env
 def get_backend_url():
     # Use external URL as configured in frontend/.env
-    return "https://d7c2740d-da5b-47bd-876f-962d7046e92d.preview.emergentagent.com/api"
+    return "https://create-screen.preview.emergentagent.com/api"
 
 # Global variables for test data
 test_users = []
