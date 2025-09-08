@@ -589,63 +589,38 @@ const ContentCreationPage = () => {
             />
           </div>
 
-          {/* Bottom Controls - Like TikTok bottom bar */}
-          <div className="bg-black border-t border-gray-800 p-4 space-y-3">
+          {/* Bottom Info Bar - Simplified */}
+          <div className="bg-black border-t border-gray-800 p-4">
             {/* Title Input */}
             <input
               type="text"
               placeholder="Describe tu publicación..."
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full bg-transparent text-white px-0 py-2 border-b border-gray-600 focus:border-white focus:outline-none placeholder-gray-400"
+              className="w-full bg-transparent text-white px-0 py-2 border-b border-gray-600 focus:border-white focus:outline-none placeholder-gray-400 text-lg"
             />
 
-            {/* Selected Music Display - Compact */}
-            {selectedMusic && (
-              <div className="flex items-center gap-3 text-white">
-                <Music className="w-4 h-4" />
-                <span className="text-sm truncate flex-1">{selectedMusic.title} - {selectedMusic.artist}</span>
-                <button
-                  onClick={() => setSelectedMusic(null)}
-                  className="w-6 h-6 flex items-center justify-center text-gray-400 hover:text-white"
-                >
-                  <X className="w-3 h-3" />
-                </button>
-              </div>
-            )}
-
-            {/* Progress and Create */}
-            <div className="flex items-center justify-between">
-              <div className="text-gray-400 text-sm">
+            {/* Status Info */}
+            <div className="mt-3 flex items-center justify-between text-sm">
+              <div className="text-gray-400">
                 {options.filter(opt => opt && opt.media).length} / {getSlotsCount()} opciones
-                {options.filter(opt => opt && opt.media).length < 2 && (
-                  <div className="text-yellow-400 text-xs mt-1">
-                    Necesitas al menos 2 opciones
-                  </div>
-                )}
               </div>
               
-              <button
-                onClick={handleCreate}
-                disabled={isCreating || !title.trim() || options.filter(opt => opt && opt.media).length < 2}
-                className="px-12 py-3 bg-red-500 hover:bg-red-600 disabled:bg-gray-500 text-white font-bold rounded-full disabled:opacity-50 transition-all duration-200 shadow-lg hover:shadow-xl disabled:cursor-not-allowed"
-              >
-                {isCreating ? (
-                  <div className="flex items-center gap-2">
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    Publicando...
-                  </div>
-                ) : (
-                  'Publicar'
-                )}
-              </button>
+              {selectedMusic && (
+                <div className="flex items-center gap-2 text-white">
+                  <Music className="w-4 h-4" />
+                  <span className="truncate max-w-40">{selectedMusic.title}</span>
+                </div>
+              )}
             </div>
 
             {/* Help text */}
-            {(!title.trim()) && (
-              <div className="text-center">
+            {(!title.trim() || options.filter(opt => opt && opt.media).length < 2) && (
+              <div className="mt-2 text-center">
                 <p className="text-gray-500 text-xs">
-                  💡 Agrega un título para continuar
+                  {!title.trim() 
+                    ? "💡 Agrega un título para continuar" 
+                    : "📸 Agrega al menos 2 imágenes"}
                 </p>
               </div>
             )}
