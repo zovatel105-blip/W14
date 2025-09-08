@@ -653,14 +653,23 @@ const ContentCreationPage = () => {
         </div>
 
         {/* Right Sidebar Menu - Like TikTok */}
-        <div className="w-16 bg-black flex flex-col items-center pt-4">
+        <div className="w-20 bg-black flex flex-col items-center pt-4 gap-4">
+          {/* Add Sound Button */}
+          <button
+            onClick={() => setShowMusicSelector(true)}
+            className="w-12 h-12 bg-gray-700 hover:bg-gray-600 rounded-lg flex items-center justify-center text-white transition-colors shadow-lg"
+            title={selectedMusic ? `🎵 ${selectedMusic.title}` : 'Add sound'}
+          >
+            <Music className="w-6 h-6" />
+          </button>
+
           {/* Layout Button */}
           <div className="relative">
             <button
               onClick={() => setShowLayoutMenu(!showLayoutMenu)}
-              className="w-10 h-10 bg-gray-700 hover:bg-gray-600 rounded-lg flex items-center justify-center text-white transition-colors"
+              className="w-12 h-12 bg-gray-700 hover:bg-gray-600 rounded-lg flex items-center justify-center text-white transition-colors"
             >
-              <LayoutGrid className="w-5 h-5" />
+              <LayoutGrid className="w-6 h-6" />
             </button>
 
             {/* Layout Menu - Vertical like TikTok */}
