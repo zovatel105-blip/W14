@@ -315,6 +315,20 @@ const ContentCreationPage = () => {
     }
   };
 
+  const getSlotsCount = () => {
+    switch (selectedLayout.id) {
+      case 'off': return 1;
+      case 'vertical': return 2;
+      case 'horizontal': return 2;
+      case 'triptych-vertical': return 3;
+      case 'triptych-horizontal': return 3;
+      case 'grid-2x2': return 4;
+      case 'grid-3x3': return 9;
+      case 'horizontal-3x3': return 9;
+      default: return 1;
+    }
+  };
+
   const handleImageUpload = (slotIndex) => {
     setCurrentSlotIndex(slotIndex);
     fileInputRef.current?.click();
