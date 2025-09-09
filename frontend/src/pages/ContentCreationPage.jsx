@@ -69,7 +69,7 @@ const LayoutPreview = ({ layout, options = [], title, selectedMusic, onImageUplo
           return (
             <div
               key={slotIndex}
-              className="relative bg-gray-800 border border-gray-600 rounded-lg overflow-hidden group"
+              className="relative bg-black border border-gray-700 rounded-xl overflow-hidden group aspect-[9/16]"
             >
               {/* Letter identifier */}
               <div className="absolute top-2 left-2 w-6 h-6 bg-gray-900 rounded-full flex items-center justify-center text-white font-bold text-sm z-10">
