@@ -120,6 +120,7 @@ function AppContent() {
             <Route path="/moments" element={<MomentsPage />} />
             <Route path="/create" element={<ContentCreationPage />} />
             <Route path="/test-connection" element={<TestConnection />} />
+            <Route path="/create-preview-demo" element={<CreatePreviewDemo />} />
 
             {/* Demo & Test Pages - Remove in production */}
             <Route path="/explore-demo" element={<ExploreDemo />} />
