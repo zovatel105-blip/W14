@@ -488,7 +488,7 @@ const ContentCreationPage = () => {
         }
         
         return {
-          text: opt.text.trim() || `Opción ${String.fromCharCode(65 + options.indexOf(opt))}`, // Use provided text or default
+          text: opt.text.trim() || '', // Use provided text or empty string
           media_type: 'image',
           media_url: opt.media.url,
           thumbnail_url: opt.media.url, // For images, thumbnail is same as url
