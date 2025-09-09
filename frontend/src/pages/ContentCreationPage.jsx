@@ -429,7 +429,7 @@ const ContentCreationPage = () => {
   const location = useLocation();
   const { toast } = useToast();
   const { isAuthenticated, user } = useAuth();
-  const { enterTikTokMode, exitTikTokMode } = useTikTok();
+  const { enterTikTokMode, exitTikTokMode, hideRightNavigationBar, showRightNavigationBar } = useTikTok();
   const fileInputRef = useRef(null);
 
   // Redirect if not authenticated
