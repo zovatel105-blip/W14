@@ -22,8 +22,9 @@ class UserProfile(BaseModel):
     total_polls_created: int = 0
     followers_count: int = 0
     following_count: int = 0
-    likes_count: int = 0
-    votes_count: int = 0
+    likes_count: int = 0  # Likes received on user's content
+    votes_count: int = 0  # Votes made by this user
+    likes_given: int = 0  # Likes given by this user
     last_activity: datetime = Field(default_factory=datetime.utcnow)
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
