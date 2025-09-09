@@ -127,7 +127,7 @@ const TestConnection = () => {
         </button>
         
         <button 
-          onClick={testSimpleEndpoint}
+          onClick={testRegistration}
           disabled={loading}
           style={{ 
             padding: '10px 20px', 
@@ -137,7 +137,7 @@ const TestConnection = () => {
             cursor: loading ? 'not-allowed' : 'pointer' 
           }}
         >
-          Test Root Endpoint
+          Test Registration API
         </button>
       </div>
       
