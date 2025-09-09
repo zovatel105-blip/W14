@@ -63,13 +63,13 @@ const LayoutPreview = ({ layout, options = [], title, selectedMusic, onImageUplo
 
   return (
     <div className="w-full h-full">
-      <div className={`grid gap-1 w-full h-full ${getLayoutStyle()}`}>
+      <div className={`grid gap-0 w-full h-full ${getLayoutStyle()}`}>
         {slots.map((slotIndex) => {
           const option = options[slotIndex] || { text: '', media: null, mentionedUsers: [] };
           return (
             <div
               key={slotIndex}
-              className="relative bg-black border border-gray-600 overflow-hidden group w-full h-full min-h-0"
+              className="relative bg-black overflow-hidden group w-full h-full min-h-0"
             >
               {/* Letter identifier */}
               <div className="absolute top-2 left-2 w-6 h-6 bg-gray-900 rounded-full flex items-center justify-center text-white font-bold text-sm z-10">
