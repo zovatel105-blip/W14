@@ -13,7 +13,8 @@ const ResponsiveLayout = ({ children, onCreatePoll }) => {
   // Check if we're on a page that should use the TikTok-style layout
   const isFeedPage = location.pathname === '/feed';
   const isExplorePage = location.pathname === '/explore';
-  const shouldUseTikTokLayout = (isFeedPage || isExplorePage) && isTikTokMode;
+  const isCreatePage = location.pathname === '/create';
+  const shouldUseTikTokLayout = (isFeedPage || isExplorePage || isCreatePage) && isTikTokMode;
 
   if (shouldUseTikTokLayout) {
     // Mobile TikTok mode - full screen without sidebars
