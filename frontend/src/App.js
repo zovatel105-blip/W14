@@ -21,8 +21,6 @@ import SearchPage from './pages/SearchPage';
 import MomentsPage from './pages/MomentsPage';
 import ContentCreationPage from './pages/ContentCreationPage';
 import TestFOMO from './TestFOMO';
-import TestConnection from './TestConnection';
-import CreatePreviewDemo from './CreatePreviewDemo';
 import { Toaster } from './components/ui/toaster';
 import { createPoll } from './services/mockData';
 import { useToast } from './hooks/use-toast';
