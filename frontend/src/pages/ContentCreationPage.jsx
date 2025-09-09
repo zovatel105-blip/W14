@@ -809,9 +809,9 @@ const ContentCreationPage = () => {
           )}
         </div>
 
-        {/* Right Sidebar - Hidden in preview mode */}
+        {/* Right Sidebar - Compact - Hidden in preview mode */}
         {!previewMode && (
-          <div className="w-20 bg-black flex flex-col items-center pt-4 gap-4">
+          <div className="w-16 bg-black flex flex-col items-center pt-4 gap-3">
             {/* Add Sound Button */}
             <button
               onClick={() => setShowMusicSelector(true)}
