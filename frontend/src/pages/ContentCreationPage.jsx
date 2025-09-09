@@ -739,7 +739,7 @@ const ContentCreationPage = () => {
   }
 
   return (
-    <div className="fixed inset-0 z-50 relative h-full w-full overflow-hidden">
+    <div className="fixed inset-0 z-50 relative h-screen w-screen overflow-hidden" style={{ margin: 0, padding: 0 }}>
       {/* Main Content Area - Preview ocupa TODA la pantalla */}
       <div className="w-full h-full min-h-screen">
         <LayoutPreview
