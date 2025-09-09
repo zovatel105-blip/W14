@@ -44,64 +44,59 @@ const CreatePreviewDemo = () => {
         </div>
       </div>
 
-      {/* Main Content */}
+      {/* Main Content - Ocupando toda la altura restante */}
       <div className="flex-1 relative">
-        {/* Central Zone - Full width always */}
-        <div className="w-full h-full bg-black relative">
-          {/* Layout Preview que ocupa TODA la pantalla disponible */}
-          <div className="w-full h-full">
-            <div className="grid grid-cols-2 gap-0 w-full h-full">
-                {/* Opción A */}
-                <div className="relative bg-black overflow-hidden group w-full h-full min-h-0">
-                  {/* Letter identifier */}
-                  <div className="absolute top-4 left-4 w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white font-bold text-sm z-10">
-                    A
-                  </div>
+        {/* Layout Preview que ocupa TODA la pantalla disponible */}
+        <div className="w-full h-full">
+          <div className="grid grid-cols-2 gap-0 w-full h-full">
+            {/* Opción A */}
+            <div className="relative bg-black overflow-hidden w-full h-full">
+              {/* Letter identifier */}
+              <div className="absolute top-4 left-4 w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white font-bold text-sm z-10">
+                A
+              </div>
 
-                  {/* Background Image */}
-                  <img 
-                    src="https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=500&h=800&fit=crop" 
-                    alt="Opción A"
-                    className="w-full h-full object-cover"
-                  />
-                  
-                  {/* Overlay gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40">
-                    {/* Content text at bottom */}
-                    <div className="absolute bottom-4 left-4 right-4">
-                      <p className="text-white font-medium text-lg leading-tight">
-                        Esta es la Opción A - Ahora el preview ocupa TODA la pantalla
-                      </p>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Opción B */}
-                <div className="relative bg-black overflow-hidden group w-full h-full min-h-0">
-                  {/* Letter identifier */}
-                  <div className="absolute top-4 left-4 w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white font-bold text-sm z-10">
-                    B
-                  </div>
-
-                  {/* Background Image */}
-                  <img 
-                    src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&h=800&fit=crop" 
-                    alt="Opción B"
-                    className="w-full h-full object-cover"
-                  />
-                  
-                  {/* Overlay gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40">
-                    {/* Content text at bottom */}
-                    <div className="absolute bottom-4 left-4 right-4">
-                      <p className="text-white font-medium text-lg leading-tight">
-                        Esta es la Opción B - La descripción ahora está pequeña arriba
-                      </p>
-                    </div>
-                  </div>
+              {/* Background Image */}
+              <img 
+                src="https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=500&h=800&fit=crop" 
+                alt="Opción A"
+                className="w-full h-full object-cover"
+              />
+              
+              {/* Overlay gradient */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40">
+                {/* Content text at bottom */}
+                <div className="absolute bottom-4 left-4 right-4">
+                  <p className="text-white font-medium text-lg leading-tight">
+                    Esta es la Opción A - Ahora el preview ocupa TODA la pantalla
+                  </p>
                 </div>
               </div>
             </div>
+
+            {/* Opción B */}
+            <div className="relative bg-black overflow-hidden w-full h-full">
+              {/* Letter identifier */}
+              <div className="absolute top-4 left-4 w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white font-bold text-sm z-10">
+                B
+              </div>
+
+              {/* Background Image */}
+              <img 
+                src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&h=800&fit=crop" 
+                alt="Opción B"
+                className="w-full h-full object-cover"
+              />
+              
+              {/* Overlay gradient */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40">
+                {/* Content text at bottom */}
+                <div className="absolute bottom-4 left-4 right-4">
+                  <p className="text-white font-medium text-lg leading-tight">
+                    Esta es la Opción B - La descripción ahora está pequeña arriba
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
