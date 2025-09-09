@@ -432,14 +432,13 @@ const ContentCreationPage = () => {
   const { enterTikTokMode, exitTikTokMode } = useTikTok();
   const fileInputRef = useRef(null);
 
-  // Redirect if not authenticated (unless it's demo mode)
+  // Redirect if not authenticated
   useEffect(() => {
-    const isDemoMode = location.pathname.startsWith('/create-demo');
-    if (!isAuthenticated && !isDemoMode) {
+    if (!isAuthenticated) {
       navigate('/');
       return;
     }
-  }, [isAuthenticated, navigate, location.pathname]);
+  }, [isAuthenticated, navigate]);
 
   // Enter TikTok mode when on create page (hides all navigation)
   useEffect(() => {
