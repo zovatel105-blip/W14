@@ -592,35 +592,55 @@ const ContentCreationPage = () => {
 
   return (
     <div className="fixed inset-0 bg-black z-50 flex flex-col">
-      {/* Top Bar - Exactly like TikTok reference */}
-      <div className="flex items-center justify-between px-4 py-4 bg-black">
-        {/* Close button - Left */}
-        <button
-          onClick={handleClose}
-          className="w-8 h-8 flex items-center justify-center text-white"
-        >
-          <X className="w-6 h-6" />
-        </button>
+      {/* Top Bar - Hidden in preview mode */}
+      {!previewMode && (
+        <div className="flex items-center justify-between px-4 py-4 bg-black">
+          {/* Close button - Left */}
+          <button
+            onClick={handleClose}
+            className="w-8 h-8 flex items-center justify-center text-white"
+          >
+            <X className="w-6 h-6" />
+          </button>
 
-        {/* Add Sound button - Center (pill style) */}
-        <button
-          onClick={() => setShowMusicSelector(true)}
-          className="flex items-center gap-2 px-6 py-3 bg-gray-700 hover:bg-gray-600 rounded-full text-white transition-colors"
-        >
-          <Music className="w-5 h-5" />
-          <span className="text-sm font-medium truncate max-w-40">
-            {selectedMusic ? `🎵 ${selectedMusic.title}` : 'Add sound'}
-          </span>
-        </button>
+          {/* Add Sound button - Center (pill style) */}
+          <button
+            onClick={() => setShowMusicSelector(true)}
+            className="flex items-center gap-2 px-6 py-3 bg-gray-700 hover:bg-gray-600 rounded-full text-white transition-colors"
+          >
+            <Music className="w-5 h-5" />
+            <span className="text-sm font-medium truncate max-w-40">
+              {selectedMusic ? `🎵 ${selectedMusic.title}` : 'Add sound'}
+            </span>
+          </button>
 
-        {/* Empty space - Right */}
-        <div className="w-8"></div>
-      </div>
+          {/* Preview button - Right */}
+          <button
+            onClick={() => setPreviewMode(true)}
+            className="w-8 h-8 flex items-center justify-center text-white bg-gray-700 rounded-lg"
+            title="Vista previa fullscreen"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </button>
+        </div>
+      )}
 
       {/* Main Content */}
-      <div className="flex-1 flex">
-        {/* Central Zone */}
-        <div className="flex-1 bg-black flex flex-col">
+      <div className={`flex-1 ${previewMode ? 'flex' : 'flex'}`}>
+        {/* Central Zone - Full width in preview mode */}
+        <div className={`${previewMode ? 'w-full' : 'flex-1'} bg-black flex flex-col relative`}>
+          {/* Exit preview button - Only visible in preview mode */}
+          {previewMode && (
+            <button
+              onClick={() => setPreviewMode(false)}
+              className="absolute top-4 right-4 z-50 w-10 h-10 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center text-white"
+            >
+              <X className="w-6 h-6" />
+            </button>
+          )}
+
           {/* Main Content Area - Fullscreen Layout Preview */}
           <div className="flex-1">
             <LayoutPreview
@@ -632,93 +652,98 @@ const ContentCreationPage = () => {
               onImageRemove={handleImageRemove}
               onOptionTextChange={handleOptionTextChange}
               onMentionSelect={handleMentionSelect}
+              fullscreen={previewMode}
             />
           </div>
 
-          {/* Bottom Actions */}
-          <div className="bg-black border-t border-gray-800 p-4">
-            {/* Title Input */}
-            <input
-              type="text"
-              placeholder="Describe tu publicación..."
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="w-full bg-transparent text-white px-0 py-3 border-b border-gray-600 focus:border-white focus:outline-none placeholder-gray-400 text-lg"
-            />
+          {/* Bottom Actions - Hidden in preview mode */}
+          {!previewMode && (
+            <div className="bg-black border-t border-gray-800 p-4">
+              {/* Title Input */}
+              <input
+                type="text"
+                placeholder="Describe tu publicación..."
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                className="w-full bg-transparent text-white px-0 py-3 border-b border-gray-600 focus:border-white focus:outline-none placeholder-gray-400 text-lg"
+              />
 
-            {/* Status Info */}
-            <div className="mt-3 flex items-center justify-between text-sm">
-              <div className="text-gray-400">
-                {options.filter(opt => opt && opt.media).length} / {getSlotsCount()} opciones
+              {/* Status Info */}
+              <div className="mt-3 flex items-center justify-between text-sm">
+                <div className="text-gray-400">
+                  {options.filter(opt => opt && opt.media).length} / {getSlotsCount()} opciones
+                </div>
+                
+                {selectedMusic && (
+                  <div className="flex items-center gap-2 text-white">
+                    <Music className="w-4 h-4" />
+                    <span className="truncate max-w-32 text-xs">{selectedMusic.title}</span>
+                  </div>
+                )}
               </div>
-              
-              {selectedMusic && (
-                <div className="flex items-center gap-2 text-white">
-                  <Music className="w-4 h-4" />
-                  <span className="truncate max-w-32 text-xs">{selectedMusic.title}</span>
+            </div>
+          )}
+        </div>
+
+        {/* Right Sidebar - Hidden in preview mode */}
+        {!previewMode && (
+          <div className="w-20 bg-black flex flex-col items-center pt-4 gap-4">
+            {/* Add Sound Button */}
+            <button
+              onClick={() => setShowMusicSelector(true)}
+              className="w-12 h-12 bg-gray-700 hover:bg-gray-600 rounded-lg flex items-center justify-center text-white transition-colors shadow-lg"
+              title={selectedMusic ? `🎵 ${selectedMusic.title}` : 'Add sound'}
+            >
+              <Music className="w-6 h-6" />
+            </button>
+
+            {/* Layout Button */}
+            <div className="relative">
+              <button
+                onClick={() => setShowLayoutMenu(!showLayoutMenu)}
+                className="w-12 h-12 bg-gray-700 hover:bg-gray-600 rounded-lg flex items-center justify-center text-white transition-colors"
+              >
+                <LayoutGrid className="w-6 h-6" />
+              </button>
+
+              {/* Layout Menu */}
+              {showLayoutMenu && (
+                <div className="absolute right-full top-0 mr-3 w-64 bg-gray-800 rounded-lg shadow-xl overflow-hidden z-50">
+                  <div className="py-2">
+                    {LAYOUT_OPTIONS.map((layout) => (
+                      <button
+                        key={layout.id}
+                        onClick={() => handleLayoutSelect(layout)}
+                        className={`w-full px-4 py-2 text-left hover:bg-gray-700 transition-colors ${
+                          selectedLayout.id === layout.id ? 'bg-gray-600 text-white' : 'text-gray-300'
+                        }`}
+                      >
+                        <div className="font-medium">{layout.name}</div>
+                        <div className="text-sm text-gray-400">{layout.description}</div>
+                      </button>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
-          </div>
-        </div>
 
-        {/* Right Sidebar */}
-        <div className="w-20 bg-black flex flex-col items-center pt-4 gap-4">
-          {/* Add Sound Button */}
-          <button
-            onClick={() => setShowMusicSelector(true)}
-            className="w-12 h-12 bg-gray-700 hover:bg-gray-600 rounded-lg flex items-center justify-center text-white transition-colors shadow-lg"
-            title={selectedMusic ? `🎵 ${selectedMusic.title}` : 'Add sound'}
-          >
-            <Music className="w-6 h-6" />
-          </button>
-
-          {/* Layout Button */}
-          <div className="relative">
+            {/* Publish Button */}
             <button
-              onClick={() => setShowLayoutMenu(!showLayoutMenu)}
-              className="w-12 h-12 bg-gray-700 hover:bg-gray-600 rounded-lg flex items-center justify-center text-white transition-colors"
+              onClick={handleCreate}
+              disabled={isCreating || !title.trim() || options.filter(opt => opt && opt.media).length < 2}
+              className="w-12 h-12 bg-red-500 hover:bg-red-600 disabled:bg-gray-500 rounded-lg flex items-center justify-center text-white transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              title={isCreating ? 'Publicando...' : 'Publicar'}
             >
-              <LayoutGrid className="w-6 h-6" />
+              {isCreating ? (
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+              ) : (
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                </svg>
+              )}
             </button>
-
-            {/* Layout Menu */}
-            {showLayoutMenu && (
-              <div className="absolute right-full top-0 mr-3 w-64 bg-gray-800 rounded-lg shadow-xl overflow-hidden z-50">
-                <div className="py-2">
-                  {LAYOUT_OPTIONS.map((layout) => (
-                    <button
-                      key={layout.id}
-                      onClick={() => handleLayoutSelect(layout)}
-                      className={`w-full px-4 py-2 text-left hover:bg-gray-700 transition-colors ${
-                        selectedLayout.id === layout.id ? 'bg-gray-600 text-white' : 'text-gray-300'
-                      }`}
-                    >
-                      <div className="font-medium">{layout.name}</div>
-                      <div className="text-sm text-gray-400">{layout.description}</div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
-
-          {/* Publish Button */}
-          <button
-            onClick={handleCreate}
-            disabled={isCreating || !title.trim() || options.filter(opt => opt && opt.media).length < 2}
-            className="w-12 h-12 bg-red-500 hover:bg-red-600 disabled:bg-gray-500 rounded-lg flex items-center justify-center text-white transition-colors shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-            title={isCreating ? 'Publicando...' : 'Publicar'}
-          >
-            {isCreating ? (
-              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-            ) : (
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-              </svg>
-            )}
-          </button>
-        </div>
+        )}
       </div>
 
       {/* Music Selector Modal */}
