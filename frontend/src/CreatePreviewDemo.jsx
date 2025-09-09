@@ -47,12 +47,10 @@ const CreatePreviewDemo = () => {
       {/* Main Content */}
       <div className="flex-1 relative">
         {/* Central Zone - Full width always */}
-        <div className="w-full bg-black flex flex-col relative">
-          {/* Main Content Area - Fullscreen Layout Preview */}
-          <div className="flex-1">
-            {/* Layout Preview que ocupa TODA la pantalla */}
-            <div className="w-full h-full">
-              <div className="grid grid-cols-2 gap-0 w-full h-full">
+        <div className="w-full h-full bg-black relative">
+          {/* Layout Preview que ocupa TODA la pantalla disponible */}
+          <div className="w-full h-full">
+            <div className="grid grid-cols-2 gap-0 w-full h-full">
                 {/* Opción A */}
                 <div className="relative bg-black overflow-hidden group w-full h-full min-h-0">
                   {/* Letter identifier */}
