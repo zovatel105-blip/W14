@@ -3630,6 +3630,18 @@ async def vote_on_poll(
     if result.modified_count == 0:
         raise HTTPException(status_code=400, detail="Invalid option ID")
     
+    # Update user profiles after vote
+    try:
+        # Update the voter's profile (increment votes_count)
+        await ensure_user_profile(current_user.id)
+        
+        # Update the poll author's profile (increment total_votes received)
+        poll_author_id = poll.get("author_id")
+        if poll_author_id:
+            await ensure_user_profile(poll_author_id)
+    except Exception as e:
+        print(f"Error updating profiles after vote: {e}")
+    
     return {"message": "Vote recorded successfully"}
 
 @api_router.post("/polls/{poll_id}/like")
