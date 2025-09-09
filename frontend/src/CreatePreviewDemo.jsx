@@ -10,53 +10,127 @@ const CreatePreviewDemo = () => {
       {/* Preview que ocupa TODA la pantalla incluyendo header */}
       <div className="w-full h-full">
         <div className="grid grid-cols-2 gap-0 w-full h-full">
-          {/* Opción A */}
-          <div className="relative bg-black overflow-hidden w-full h-full">
-            {/* Letter identifier */}
-            <div className="absolute top-4 left-4 w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white font-bold text-sm z-10">
-              A
+          {/* Opción A - Empty state like reference */}
+          <div className="w-full h-full flex items-center justify-center relative">
+            {/* Main gradient background - matches the reference */}
+            <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900"></div>
+            
+            {/* TikTok-style right sidebar */}
+            <div className="absolute top-1/2 right-4 transform -translate-y-1/2 z-20">
+              <div className="flex flex-col gap-4">
+                {/* Like Button */}
+                <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                  <span className="text-white text-xl">❤️</span>
+                </div>
+                
+                {/* Comment Button */}
+                <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                  <span className="text-white text-xl">💬</span>
+                </div>
+                
+                {/* Share Button */}
+                <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                  <span className="text-white text-xl">📤</span>
+                </div>
+                
+                {/* Plus Button (matches reference) */}
+                <div className="w-12 h-12 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full flex items-center justify-center shadow-lg">
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                  </svg>
+                </div>
+                
+                {/* More options */}
+                <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                  <span className="text-white text-xl">💭</span>
+                </div>
+                
+                <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                  <span className="text-white text-xl">👤</span>
+                </div>
+              </div>
+            </div>
+            
+            {/* Central upload content - matches reference exactly */}
+            <div className="text-center z-10">
+              {/* Large circular button with gradient - exactly like reference */}
+              <div className="w-32 h-32 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full flex items-center justify-center mb-8 mx-auto shadow-2xl">
+                <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+              </div>
+              
+              {/* Text exactly like reference */}
+              <h3 className="text-white text-3xl font-bold mb-4">Opción A</h3>
+              <p className="text-white text-xl mb-2">Toca para agregar tu imagen</p>
+              <p className="text-gray-300 text-base">Se verá exactamente como en el feed</p>
             </div>
 
-            {/* Background Image */}
-            <img 
-              src="https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=500&h=800&fit=crop" 
-              alt="Opción A"
-              className="w-full h-full object-cover"
-            />
-            
-            {/* Overlay gradient */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40">
-              {/* Content text at bottom */}
-              <div className="absolute bottom-4 left-4 right-4">
-                <p className="text-white font-medium text-lg leading-tight">
-                  Esta es la Opción A - Ahora el preview ocupa TODA la pantalla incluyendo header
-                </p>
-              </div>
+            {/* Letter identifier - top left like TikTok */}
+            <div className="absolute top-6 left-6 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white font-bold text-lg z-20">
+              A
             </div>
           </div>
 
-          {/* Opción B */}
-          <div className="relative bg-black overflow-hidden w-full h-full">
-            {/* Letter identifier */}
-            <div className="absolute top-4 left-4 w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white font-bold text-sm z-10">
-              B
+          {/* Opción B - Empty state like reference */}
+          <div className="w-full h-full flex items-center justify-center relative">
+            {/* Main gradient background - matches the reference */}
+            <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900"></div>
+            
+            {/* TikTok-style right sidebar */}
+            <div className="absolute top-1/2 right-4 transform -translate-y-1/2 z-20">
+              <div className="flex flex-col gap-4">
+                {/* Like Button */}
+                <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                  <span className="text-white text-xl">❤️</span>
+                </div>
+                
+                {/* Comment Button */}
+                <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                  <span className="text-white text-xl">💬</span>
+                </div>
+                
+                {/* Share Button */}
+                <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                  <span className="text-white text-xl">📤</span>
+                </div>
+                
+                {/* Plus Button (matches reference) */}
+                <div className="w-12 h-12 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full flex items-center justify-center shadow-lg">
+                  <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                  </svg>
+                </div>
+                        
+                {/* More options */}
+                <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                  <span className="text-white text-xl">💭</span>
+                </div>
+                
+                <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                  <span className="text-white text-xl">👤</span>
+                </div>
+              </div>
+            </div>
+            
+            {/* Central upload content - matches reference exactly */}
+            <div className="text-center z-10">
+              {/* Large circular button with gradient - exactly like reference */}
+              <div className="w-32 h-32 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full flex items-center justify-center mb-8 mx-auto shadow-2xl">
+                <svg className="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                </svg>
+              </div>
+              
+              {/* Text exactly like reference */}
+              <h3 className="text-white text-3xl font-bold mb-4">Opción B</h3>
+              <p className="text-white text-xl mb-2">Toca para agregar tu imagen</p>
+              <p className="text-gray-300 text-base">Se verá exactamente como en el feed</p>
             </div>
 
-            {/* Background Image */}
-            <img 
-              src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&h=800&fit=crop" 
-              alt="Opción B"
-              className="w-full h-full object-cover"
-            />
-            
-            {/* Overlay gradient */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40">
-              {/* Content text at bottom */}
-              <div className="absolute bottom-4 left-4 right-4">
-                <p className="text-white font-medium text-lg leading-tight">
-                  Esta es la Opción B - El preview ahora incluye el área del header
-                </p>
-              </div>
+            {/* Letter identifier - top left like TikTok */}
+            <div className="absolute top-6 left-6 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white font-bold text-lg z-20">
+              B
             </div>
           </div>
         </div>
