@@ -222,9 +222,9 @@ const LayoutPreview = ({ layout, options = [], title, selectedMusic, onImageUplo
                 )}
               </div>
 
-              {/* Mobile/Desktop edit controls */}
+              {/* Edit controls */}
               {option.media && (
-                <div className="absolute bottom-2 left-2 right-2 opacity-0 group-hover:opacity-100 md:group-hover:opacity-100 transition-all duration-300">
+                <div className="absolute bottom-2 left-2 right-2 opacity-0 group-hover:opacity-100 transition-all duration-300">
                   <UserMentionInput
                     placeholder={`Descripción opción ${String.fromCharCode(65 + slotIndex)}...`}
                     value={option.text}
