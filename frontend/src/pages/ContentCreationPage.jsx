@@ -718,36 +718,50 @@ const ContentCreationPage = () => {
     <div className="fixed inset-0 bg-black z-50 flex flex-col">
       {/* Top Bar - Compact - Hidden in preview mode */}
       {!previewMode && (
-        <div className="flex items-center justify-between px-4 py-3 bg-black">
-          {/* Close button - Left */}
-          <button
-            onClick={handleClose}
-            className="w-8 h-8 flex items-center justify-center text-white"
-          >
-            <X className="w-6 h-6" />
-          </button>
+        <div className="bg-black">
+          {/* Main Controls Row */}
+          <div className="flex items-center justify-between px-4 py-3">
+            {/* Close button - Left */}
+            <button
+              onClick={handleClose}
+              className="w-8 h-8 flex items-center justify-center text-white"
+            >
+              <X className="w-6 h-6" />
+            </button>
 
-          {/* Add Sound button - Center (pill style) */}
-          <button
-            onClick={() => setShowMusicSelector(true)}
-            className="flex items-center gap-2 px-6 py-3 bg-gray-700 hover:bg-gray-600 rounded-full text-white transition-colors"
-          >
-            <Music className="w-5 h-5" />
-            <span className="text-sm font-medium truncate max-w-40">
-              {selectedMusic ? `🎵 ${selectedMusic.title}` : 'Add sound'}
-            </span>
-          </button>
+            {/* Add Sound button - Center (pill style) */}
+            <button
+              onClick={() => setShowMusicSelector(true)}
+              className="flex items-center gap-2 px-6 py-3 bg-gray-700 hover:bg-gray-600 rounded-full text-white transition-colors"
+            >
+              <Music className="w-5 h-5" />
+              <span className="text-sm font-medium truncate max-w-40">
+                {selectedMusic ? `🎵 ${selectedMusic.title}` : 'Add sound'}
+              </span>
+            </button>
 
-          {/* Preview button - Right */}
-          <button
-            onClick={() => setPreviewMode(true)}
-            className="w-8 h-8 flex items-center justify-center text-white bg-gray-700 rounded-lg"
-            title="Vista previa fullscreen"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-          </button>
+            {/* Preview button - Right */}
+            <button
+              onClick={() => setPreviewMode(true)}
+              className="w-8 h-8 flex items-center justify-center text-white bg-gray-700 rounded-lg"
+              title="Vista previa fullscreen"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </button>
+          </div>
+
+          {/* Description Input - Small, below Add Sound */}
+          <div className="px-4 pb-2">
+            <input
+              type="text"
+              placeholder="Describe tu publicación..."
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="w-full bg-transparent text-white px-0 py-1 border-b border-gray-600 focus:border-white focus:outline-none placeholder-gray-400 text-sm"
+            />
+          </div>
         </div>
       )}
 
