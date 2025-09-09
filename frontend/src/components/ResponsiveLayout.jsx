@@ -22,7 +22,7 @@ const ResponsiveLayout = ({ children, onCreatePoll }) => {
     const backgroundClass = isCreatePage ? '' : 'bg-black';
     
     return (
-      <div className={`relative min-h-screen ${backgroundClass}`}>
+      <div className={`relative h-screen ${backgroundClass}`}>
         {children}
         {/* Right side navigation for mobile TikTok mode */}
         <div className="lg:hidden">
