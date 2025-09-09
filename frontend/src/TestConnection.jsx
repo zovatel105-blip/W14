@@ -61,16 +61,40 @@ const TestConnection = () => {
     setLoading(false);
   };
 
-  const testSimpleEndpoint = async () => {
+  const testRegistration = async () => {
     setLoading(true);
-    setResult('Testing simple endpoint...');
+    setResult('Testing registration endpoint...');
     
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/`);
-      const data = await response.text();
-      setResult(`Simple endpoint response: ${data}`);
+      const backendUrl = process.env.REACT_APP_BACKEND_URL;
+      const testUser = {
+        email: 'testuser_' + Date.now() + '@example.com',
+        username: 'testuser_' + Date.now(),
+        display_name: 'Test User Registration',
+        password: 'testpass123'
+      };
+      
+      console.log('Testing registration with:', testUser);
+      
+      const response = await fetch(`${backendUrl}/api/auth/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(testUser)
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setResult(`REGISTRATION SUCCESS!\nStatus: ${response.status}\nUser created: ${data.user.email}\nUsername: ${data.user.username}\nDisplay name: ${data.user.display_name}`);
+      } else {
+        const errorData = await response.text();
+        setResult(`REGISTRATION FAILED\nStatus: ${response.status}\nError: ${errorData}`);
+      }
+      
     } catch (error) {
-      setResult(`Simple endpoint error: ${error.message}`);
+      console.error('Registration test error:', error);
+      setResult(`REGISTRATION NETWORK ERROR: ${error.name} - ${error.message}\n\nThis is the exact same error users see: "No se pudo conectar al servidor"`);
     }
     
     setLoading(false);
