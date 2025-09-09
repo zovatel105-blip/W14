@@ -9,60 +9,95 @@ const CreatePreviewDemo = () => {
     <div className="fixed inset-0 bg-black z-50 relative">
       {/* Preview que ocupa TODA la pantalla incluyendo header */}
       <div className="w-full h-full">
-        {/* Layout Preview que ocupa TODA la pantalla disponible */}
-        <div className="w-full h-full">
-          <div className="grid grid-cols-2 gap-0 w-full h-full">
-            {/* Opción A */}
-            <div className="relative bg-black overflow-hidden w-full h-full">
-              {/* Letter identifier */}
-              <div className="absolute top-4 left-4 w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white font-bold text-sm z-10">
-                A
-              </div>
-
-              {/* Background Image */}
-              <img 
-                src="https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=500&h=800&fit=crop" 
-                alt="Opción A"
-                className="w-full h-full object-cover"
-              />
-              
-              {/* Overlay gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40">
-                {/* Content text at bottom */}
-                <div className="absolute bottom-4 left-4 right-4">
-                  <p className="text-white font-medium text-lg leading-tight">
-                    Esta es la Opción A - Ahora el preview ocupa TODA la pantalla
-                  </p>
-                </div>
-              </div>
+        <div className="grid grid-cols-2 gap-0 w-full h-full">
+          {/* Opción A */}
+          <div className="relative bg-black overflow-hidden w-full h-full">
+            {/* Letter identifier */}
+            <div className="absolute top-4 left-4 w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white font-bold text-sm z-10">
+              A
             </div>
 
-            {/* Opción B */}
-            <div className="relative bg-black overflow-hidden w-full h-full">
-              {/* Letter identifier */}
-              <div className="absolute top-4 left-4 w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white font-bold text-sm z-10">
-                B
+            {/* Background Image */}
+            <img 
+              src="https://images.unsplash.com/photo-1518837695005-2083093ee35b?w=500&h=800&fit=crop" 
+              alt="Opción A"
+              className="w-full h-full object-cover"
+            />
+            
+            {/* Overlay gradient */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40">
+              {/* Content text at bottom */}
+              <div className="absolute bottom-4 left-4 right-4">
+                <p className="text-white font-medium text-lg leading-tight">
+                  Esta es la Opción A - Ahora el preview ocupa TODA la pantalla incluyendo header
+                </p>
               </div>
+            </div>
+          </div>
 
-              {/* Background Image */}
-              <img 
-                src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&h=800&fit=crop" 
-                alt="Opción B"
-                className="w-full h-full object-cover"
-              />
-              
-              {/* Overlay gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40">
-                {/* Content text at bottom */}
-                <div className="absolute bottom-4 left-4 right-4">
-                  <p className="text-white font-medium text-lg leading-tight">
-                    Esta es la Opción B - La descripción ahora está pequeña arriba
-                  </p>
-                </div>
+          {/* Opción B */}
+          <div className="relative bg-black overflow-hidden w-full h-full">
+            {/* Letter identifier */}
+            <div className="absolute top-4 left-4 w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white font-bold text-sm z-10">
+              B
+            </div>
+
+            {/* Background Image */}
+            <img 
+              src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&h=800&fit=crop" 
+              alt="Opción B"
+              className="w-full h-full object-cover"
+            />
+            
+            {/* Overlay gradient */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/40">
+              {/* Content text at bottom */}
+              <div className="absolute bottom-4 left-4 right-4">
+                <p className="text-white font-medium text-lg leading-tight">
+                  Esta es la Opción B - El preview ahora incluye el área del header
+                </p>
               </div>
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Header Controls - Floating on top */}
+      <div className="absolute top-0 left-0 right-0 z-50">
+        {/* Main Controls Row */}
+        <div className="flex items-center justify-between px-4 py-3">
+          {/* Close button - Left */}
+          <button className="w-8 h-8 flex items-center justify-center text-white bg-black/50 backdrop-blur-sm rounded-lg">
+            <X className="w-6 h-6" />
+          </button>
+
+          {/* Add Sound button - Center (pill style) */}
+          <button className="flex items-center gap-2 px-6 py-3 bg-black/70 backdrop-blur-sm hover:bg-black/80 rounded-full text-white transition-colors">
+            <Music className="w-5 h-5" />
+            <span className="text-sm font-medium truncate max-w-40">
+              {selectedMusic ? `🎵 ${selectedMusic.title}` : 'Add sound'}
+            </span>
+          </button>
+
+          {/* Preview button - Right */}
+          <button className="w-8 h-8 flex items-center justify-center text-white bg-black/50 backdrop-blur-sm rounded-lg">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Description Input - Small, below Add Sound */}
+        <div className="px-4 pb-2">
+          <input
+            type="text"
+            placeholder="Describe tu publicación..."
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="w-full bg-black/50 backdrop-blur-sm text-white px-3 py-2 rounded-lg border border-white/20 focus:border-white/50 focus:outline-none placeholder-gray-300 text-sm"
+          />
+        </div>
+      </div>
 
         {/* Floating Right Sidebar - Overlay on top of content */}
         <div className="absolute top-4 right-4 z-40 flex flex-col gap-3">
