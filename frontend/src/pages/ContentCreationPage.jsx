@@ -96,8 +96,7 @@ const LayoutPreview = ({ layout, options = [], title, selectedMusic, onImageUplo
           
           {/* Feed-style overlay */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/20">
-            {/* Right Side Actions like TikTok - but bigger for preview - HIDDEN */}
-            {false && (
+            {/* Right Side Actions like TikTok - but bigger for preview */}
             <div className="absolute top-1/2 right-6 transform -translate-y-1/2 z-20">
               <div className="flex flex-col gap-6">
                 {/* Like Button */}
@@ -119,7 +118,6 @@ const LayoutPreview = ({ layout, options = [], title, selectedMusic, onImageUplo
                 <p className="text-white text-sm text-center font-medium">3.1K</p>
               </div>
             </div>
-            )}
 
             {/* Music Disc - Spinning */}
             {selectedMusic && (
