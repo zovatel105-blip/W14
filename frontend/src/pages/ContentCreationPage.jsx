@@ -834,15 +834,6 @@ const ContentCreationPage = () => {
       {/* Floating Right Sidebar - Overlay on top of content - Hidden in preview mode */}
       {!previewMode && (
         <div className="absolute top-16 sm:top-20 right-2 sm:right-4 z-40 flex flex-col gap-2 sm:gap-3">
-          {/* Add Sound Button */}
-          <button
-            onClick={() => setShowMusicSelector(true)}
-            className="w-10 h-10 sm:w-12 sm:h-12 bg-black/70 backdrop-blur-sm hover:bg-black/80 rounded-full flex items-center justify-center text-white transition-all shadow-lg border border-white/10"
-            title={selectedMusic ? `🎵 ${selectedMusic.title}` : 'Add sound'}
-          >
-            <Music className="w-5 h-5 sm:w-6 sm:h-6" />
-          </button>
-
           {/* Layout Button */}
           <div className="relative">
             <button
