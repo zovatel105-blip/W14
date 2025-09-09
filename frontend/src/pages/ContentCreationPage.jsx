@@ -443,6 +443,7 @@ const ContentCreationPage = () => {
   // Enter TikTok mode when on create page (hides all navigation)
   useEffect(() => {
     enterTikTokMode();
+    hideRightNavigationBar(); // Explicitly hide right navigation
     
     // Remove any body margins/padding that could cause white space
     document.body.style.margin = '0';
@@ -454,10 +455,11 @@ const ContentCreationPage = () => {
     // Exit TikTok mode when leaving the page
     return () => {
       exitTikTokMode();
+      showRightNavigationBar(); // Restore right navigation
       // Restore body styles
       document.body.style.overflow = 'auto';
     };
-  }, [enterTikTokMode, exitTikTokMode]);
+  }, [enterTikTokMode, exitTikTokMode, hideRightNavigationBar, showRightNavigationBar]);
 
   // States
   const [selectedLayout, setSelectedLayout] = useState(LAYOUT_OPTIONS[0]); // Off by default
