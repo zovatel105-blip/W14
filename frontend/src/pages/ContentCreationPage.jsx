@@ -343,37 +343,61 @@ const LayoutPreview = ({ layout, options = [], title, selectedMusic, onImageUplo
                     </div>
                   </>
                 ) : (
-                  /* Fullscreen Upload Area - Like TikTok camera */
-                  <div className="w-full h-full flex items-center justify-center bg-black relative">
-                    {/* Animated background */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-pink-900/20 to-blue-900/20"></div>
+                  /* Fullscreen Upload Area - Exactly like the reference image */}
+                  <div className="w-full h-full flex items-center justify-center relative">
+                    {/* Main gradient background - matches the reference */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900"></div>
                     
-                    {/* Upload Content */}
+                    {/* TikTok-style right sidebar */}
+                    <div className="absolute top-1/2 right-4 transform -translate-y-1/2 z-20">
+                      <div className="flex flex-col gap-4">
+                        {/* Like Button */}
+                        <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                          <span className="text-white text-xl">❤️</span>
+                        </div>
+                        
+                        {/* Comment Button */}
+                        <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                          <span className="text-white text-xl">💬</span>
+                        </div>
+                        
+                        {/* Share Button */}
+                        <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                          <span className="text-white text-xl">📤</span>
+                        </div>
+                        
+                        {/* Plus Button (matches reference) */}
+                        <div className="w-12 h-12 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full flex items-center justify-center shadow-lg">
+                          <Plus className="w-6 h-6 text-white" />
+                        </div>
+                        
+                        {/* More options */}
+                        <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                          <span className="text-white text-xl">💭</span>
+                        </div>
+                        
+                        <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                          <span className="text-white text-xl">👤</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    {/* Central upload content - matches reference exactly */}
                     <div className="text-center z-10">
-                      <div className="w-20 h-20 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full flex items-center justify-center mb-6 mx-auto shadow-2xl animate-pulse">
-                        <Plus className="w-10 h-10 text-white" />
+                      {/* Large circular button with gradient - exactly like reference */}
+                      <div className="w-32 h-20 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full flex items-center justify-center mb-8 mx-auto shadow-2xl">
+                        <Plus className="w-12 h-12 text-white" />
                       </div>
-                      <h3 className="text-white text-2xl font-bold mb-2">Opción {String.fromCharCode(65 + slotIndex)}</h3>
-                      <p className="text-gray-300 text-lg">Toca para agregar tu imagen</p>
-                      <p className="text-gray-500 text-sm mt-4">Se verá exactamente como en el feed</p>
+                      
+                      {/* Text exactly like reference */}
+                      <h3 className="text-white text-3xl font-bold mb-4">Opción {String.fromCharCode(65 + slotIndex)}</h3>
+                      <p className="text-white text-xl mb-2">Toca para agregar tu imagen</p>
+                      <p className="text-gray-300 text-base">Se verá exactamente como en el feed</p>
                     </div>
 
-                    {/* TikTok-style decorative elements */}
-                    <div className="absolute top-6 right-6 flex flex-col gap-4 opacity-30">
-                      <div className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center">
-                        <span className="text-white">❤️</span>
-                      </div>
-                      <div className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center">
-                        <span className="text-white">💬</span>
-                      </div>
-                      <div className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center">
-                        <span className="text-white">📤</span>
-                      </div>
-                    </div>
-
-                    {/* Bottom decorative bar */}
-                    <div className="absolute bottom-0 left-0 right-0 h-1 bg-white/20">
-                      <div className="h-full w-0 bg-white animate-pulse"></div>
+                    {/* Letter identifier - top left like TikTok */}
+                    <div className="absolute top-6 left-6 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white font-bold text-lg z-20">
+                      {String.fromCharCode(65 + slotIndex)}
                     </div>
                   </div>
                 )}
