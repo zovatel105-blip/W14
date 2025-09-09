@@ -62,14 +62,14 @@ const LayoutPreview = ({ layout, options = [], title, selectedMusic, onImageUplo
   const slots = Array.from({ length: getSlotsCount() }, (_, index) => index);
 
   return (
-    <div className="w-full h-full min-h-[600px]">
-      <div className={`grid gap-2 w-full h-full ${getLayoutStyle()}`}>
+    <div className="w-full h-full">
+      <div className={`grid gap-1 w-full h-full ${getLayoutStyle()}`}>
         {slots.map((slotIndex) => {
           const option = options[slotIndex] || { text: '', media: null, mentionedUsers: [] };
           return (
             <div
               key={slotIndex}
-              className="relative bg-black border border-gray-700 rounded-xl overflow-hidden group aspect-[9/16]"
+              className="relative bg-black border border-gray-600 overflow-hidden group w-full h-full min-h-0"
             >
               {/* Letter identifier */}
               <div className="absolute top-2 left-2 w-6 h-6 bg-gray-900 rounded-full flex items-center justify-center text-white font-bold text-sm z-10">
