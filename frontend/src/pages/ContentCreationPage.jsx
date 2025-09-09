@@ -816,61 +816,61 @@ const ContentCreationPage = () => {
 
       {/* Floating Right Sidebar - Overlay on top of content - Hidden in preview mode */}
       {!previewMode && (
-        <div className="absolute top-20 right-4 z-40 flex flex-col gap-3">
-            {/* Add Sound Button */}
+        <div className="absolute top-16 sm:top-20 right-2 sm:right-4 z-40 flex flex-col gap-2 sm:gap-3">
+          {/* Add Sound Button */}
+          <button
+            onClick={() => setShowMusicSelector(true)}
+            className="w-10 h-10 sm:w-12 sm:h-12 bg-black/70 backdrop-blur-sm hover:bg-black/80 rounded-full flex items-center justify-center text-white transition-all shadow-lg border border-white/10"
+            title={selectedMusic ? `🎵 ${selectedMusic.title}` : 'Add sound'}
+          >
+            <Music className="w-5 h-5 sm:w-6 sm:h-6" />
+          </button>
+
+          {/* Layout Button */}
+          <div className="relative">
             <button
-              onClick={() => setShowMusicSelector(true)}
-              className="w-12 h-12 bg-black/70 backdrop-blur-sm hover:bg-black/80 rounded-full flex items-center justify-center text-white transition-all shadow-lg border border-white/10"
-              title={selectedMusic ? `🎵 ${selectedMusic.title}` : 'Add sound'}
+              onClick={() => setShowLayoutMenu(!showLayoutMenu)}
+              className="w-10 h-10 sm:w-12 sm:h-12 bg-black/70 backdrop-blur-sm hover:bg-black/80 rounded-full flex items-center justify-center text-white transition-all shadow-lg border border-white/10"
             >
-              <Music className="w-6 h-6" />
+              <LayoutGrid className="w-5 h-5 sm:w-6 sm:h-6" />
             </button>
 
-            {/* Layout Button */}
-            <div className="relative">
-              <button
-                onClick={() => setShowLayoutMenu(!showLayoutMenu)}
-                className="w-12 h-12 bg-black/70 backdrop-blur-sm hover:bg-black/80 rounded-full flex items-center justify-center text-white transition-all shadow-lg border border-white/10"
-              >
-                <LayoutGrid className="w-6 h-6" />
-              </button>
-
-              {/* Layout Menu */}
-              {showLayoutMenu && (
-                <div className="absolute right-full top-0 mr-3 w-64 bg-gray-900 rounded-lg shadow-xl overflow-hidden z-50 border border-white/10">
-                  <div className="py-2">
-                    {LAYOUT_OPTIONS.map((layout) => (
-                      <button
-                        key={layout.id}
-                        onClick={() => handleLayoutSelect(layout)}
-                        className={`w-full px-4 py-2 text-left hover:bg-gray-700 transition-colors ${
-                          selectedLayout.id === layout.id ? 'bg-gray-600 text-white' : 'text-gray-300'
-                        }`}
-                      >
-                        <div className="font-medium">{layout.name}</div>
-                        <div className="text-sm text-gray-400">{layout.description}</div>
-                      </button>
-                    ))}
-                  </div>
+            {/* Layout Menu */}
+            {showLayoutMenu && (
+              <div className="absolute right-full top-0 mr-2 sm:mr-3 w-56 sm:w-64 bg-gray-900 rounded-lg shadow-xl overflow-hidden z-50 border border-white/10">
+                <div className="py-2">
+                  {LAYOUT_OPTIONS.map((layout) => (
+                    <button
+                      key={layout.id}
+                      onClick={() => handleLayoutSelect(layout)}
+                      className={`w-full px-3 sm:px-4 py-2 text-left hover:bg-gray-700 transition-colors ${
+                        selectedLayout.id === layout.id ? 'bg-gray-600 text-white' : 'text-gray-300'
+                      }`}
+                    >
+                      <div className="font-medium text-sm sm:text-base">{layout.name}</div>
+                      <div className="text-xs sm:text-sm text-gray-400">{layout.description}</div>
+                    </button>
+                  ))}
                 </div>
-              )}
-            </div>
+              </div>
+            )}
+          </div>
 
-            {/* Publish Button */}
-            <button
-              onClick={handleCreate}
-              disabled={isCreating || !title.trim() || options.filter(opt => opt && opt.media).length < 2}
-              className="w-12 h-12 bg-red-500/90 backdrop-blur-sm hover:bg-red-600/90 disabled:bg-gray-500/70 rounded-full flex items-center justify-center text-white transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed border border-white/10"
-              title={isCreating ? 'Publicando...' : 'Publicar'}
-            >
-              {isCreating ? (
-                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-              ) : (
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-                </svg>
-              )}
-            </button>
+          {/* Publish Button */}
+          <button
+            onClick={handleCreate}
+            disabled={isCreating || !title.trim() || options.filter(opt => opt && opt.media).length < 2}
+            className="w-10 h-10 sm:w-12 sm:h-12 bg-red-500/90 backdrop-blur-sm hover:bg-red-600/90 disabled:bg-gray-500/70 rounded-full flex items-center justify-center text-white transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed border border-white/10"
+            title={isCreating ? 'Publicando...' : 'Publicar'}
+          >
+            {isCreating ? (
+              <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+            ) : (
+              <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+              </svg>
+            )}
+          </button>
         </div>
       )}
 
