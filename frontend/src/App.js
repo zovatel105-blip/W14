@@ -15,6 +15,7 @@ import MessagesPage from './pages/MessagesPage';
 import SettingsPage from './pages/SettingsPage';
 import AuthPage from './pages/AuthPage';
 import NewAuthPage from './pages/NewAuthPage';
+import ModernAuthPage from './pages/ModernAuthPage';
 import AudioDetailPage from './pages/AudioDetailPage';
 import SearchPage from './pages/SearchPage';
 import MomentsPage from './pages/MomentsPage';
