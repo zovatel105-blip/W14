@@ -767,8 +767,8 @@ const ContentCreationPage = () => {
 
       {/* Main Content */}
       <div className="flex-1 relative">
-        {/* Central Zone - Full width always */}
-        <div className="w-full bg-black flex flex-col relative">
+        {/* Central Zone - Full width and height always */}
+        <div className="w-full h-full bg-black relative">
           {/* Exit preview button - Only visible in preview mode */}
           {previewMode && (
             <button
@@ -780,7 +780,7 @@ const ContentCreationPage = () => {
           )}
 
           {/* Main Content Area - Fullscreen Layout Preview */}
-          <div className="flex-1">
+          <div className="w-full h-full">
             <LayoutPreview
               layout={selectedLayout}
               options={options}
