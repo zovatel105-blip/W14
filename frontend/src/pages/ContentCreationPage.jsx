@@ -726,9 +726,8 @@ const ContentCreationPage = () => {
     }
   };
 
-  // Show loading screen if not authenticated (unless it's demo mode)
-  const isDemoMode = location.pathname.startsWith('/create-demo');
-  if (!isAuthenticated && !isDemoMode) {
+  // Show loading screen if not authenticated
+  if (!isAuthenticated) {
     return (
       <div className="fixed inset-0 bg-black z-50 flex items-center justify-center">
         <div className="text-white text-center">
