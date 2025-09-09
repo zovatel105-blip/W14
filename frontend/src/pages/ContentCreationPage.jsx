@@ -348,8 +348,7 @@ const LayoutPreview = ({ layout, options = [], title, selectedMusic, onImageUplo
                     {/* Main gradient background - matches the reference */}
                     <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900"></div>
                     
-                    {/* TikTok-style right sidebar - HIDDEN */}
-                    {false && (
+                    {/* TikTok-style right sidebar - responsive */}
                     <div className="absolute top-1/2 right-2 sm:right-4 transform -translate-y-1/2 z-20">
                       <div className="flex flex-col gap-2 sm:gap-3 lg:gap-4">
                         {/* Like Button */}
@@ -382,7 +381,6 @@ const LayoutPreview = ({ layout, options = [], title, selectedMusic, onImageUplo
                         </div>
                       </div>
                     </div>
-                    )}
                     
                     {/* Central upload content - responsive for mobile */}
                     <div className="text-center z-10 px-4">
