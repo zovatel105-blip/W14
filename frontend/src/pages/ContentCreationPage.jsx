@@ -62,8 +62,8 @@ const LayoutPreview = ({ layout, options = [], title, selectedMusic, onImageUplo
   const slots = Array.from({ length: getSlotsCount() }, (_, index) => index);
 
   return (
-    <div className="w-full h-full min-h-96">
-      <div className={`grid gap-1 w-full h-full ${getLayoutStyle()}`}>
+    <div className="w-full h-full min-h-[600px]">
+      <div className={`grid gap-2 w-full h-full ${getLayoutStyle()}`}>
         {slots.map((slotIndex) => {
           const option = options[slotIndex] || { text: '', media: null, mentionedUsers: [] };
           return (
