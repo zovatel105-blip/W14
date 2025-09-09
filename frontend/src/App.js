@@ -97,7 +97,7 @@ function AppContent() {
 
   // Show auth page if not authenticated and not on demo page
   if (!isAuthenticated && !isDemoPage) {
-    return <NewAuthPage />;
+    return <ModernAuthPage />;
   }
 
   return (
