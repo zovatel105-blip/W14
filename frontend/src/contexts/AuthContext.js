@@ -136,7 +136,13 @@ export const AuthProvider = ({ children }) => {
       return { success: true, user: data.user };
     } catch (error) {
       console.error('Login error:', error);
-      return { success: false, error: error.message };
+      
+      // Distinguish between network errors and authentication errors
+      if (error.name === 'TypeError' && error.message.includes('fetch')) {
+        return { success: false, error: 'No se pudo conectar al servidor. Verifica tu conexión.' };
+      } else {
+        return { success: false, error: error.message };  
+      }
     }
   };
 
