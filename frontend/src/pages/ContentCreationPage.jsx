@@ -348,36 +348,36 @@ const LayoutPreview = ({ layout, options = [], title, selectedMusic, onImageUplo
                     {/* Main gradient background - matches the reference */}
                     <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900"></div>
                     
-                    {/* TikTok-style right sidebar */}
-                    <div className="absolute top-1/2 right-4 transform -translate-y-1/2 z-20">
-                      <div className="flex flex-col gap-4">
+                    {/* TikTok-style right sidebar - responsive */}
+                    <div className="absolute top-1/2 right-2 sm:right-4 transform -translate-y-1/2 z-20">
+                      <div className="flex flex-col gap-2 sm:gap-3 lg:gap-4">
                         {/* Like Button */}
-                        <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                          <span className="text-white text-xl">❤️</span>
+                        <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                          <span className="text-white text-sm sm:text-base lg:text-xl">❤️</span>
                         </div>
                         
                         {/* Comment Button */}
-                        <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                          <span className="text-white text-xl">💬</span>
+                        <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                          <span className="text-white text-sm sm:text-base lg:text-xl">💬</span>
                         </div>
                         
                         {/* Share Button */}
-                        <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                          <span className="text-white text-xl">📤</span>
+                        <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                          <span className="text-white text-sm sm:text-base lg:text-xl">📤</span>
                         </div>
                         
                         {/* Plus Button (matches reference) */}
-                        <div className="w-12 h-12 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full flex items-center justify-center shadow-lg">
-                          <Plus className="w-6 h-6 text-white" />
+                        <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full flex items-center justify-center shadow-lg">
+                          <Plus className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-white" />
                         </div>
                         
                         {/* More options */}
-                        <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                          <span className="text-white text-xl">💭</span>
+                        <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                          <span className="text-white text-sm sm:text-base lg:text-xl">💭</span>
                         </div>
                         
-                        <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                          <span className="text-white text-xl">👤</span>
+                        <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                          <span className="text-white text-sm sm:text-base lg:text-xl">👤</span>
                         </div>
                       </div>
                     </div>
