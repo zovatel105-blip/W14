@@ -106,6 +106,7 @@ function AppContent() {
           <Routes>
             {/* Redirect root to feed */}
             <Route path="/" element={<Navigate to="/feed" replace />} />
+            <Route path="/dashboard" element={<Navigate to="/feed" replace />} />
             
             {/* Main pages */}
             <Route path="/feed" element={<FeedPage />} />
