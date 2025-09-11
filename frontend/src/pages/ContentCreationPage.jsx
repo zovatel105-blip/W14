@@ -973,14 +973,13 @@ const ContentCreationPage = () => {
         className="hidden"
       />
 
-      {/* TikTok-style Image Crop Modal */}
-      <TikTokCropModal
+      {/* Simple Crop Modal with Fixed Frame Logic */}
+      <SimpleCropModal
         isOpen={showCropModal}
         onClose={handleCropCancel}
         onSave={handleCropSave}
-        imageFile={selectedFileForCrop}
-        aspectRatio={9/16} // TikTok vertical aspect ratio
-        cropShape="rect"
+        mediaFile={selectedFileForCrop}
+        frameAspectRatio={9/16} // TikTok vertical aspect ratio
         title="Ajustar Imagen"
       />
     </div>
