@@ -131,8 +131,9 @@ const TikTokVotingCard = ({
     <motion.div
       ref={cardRef}
       className={cn(
-        "relative w-full max-w-sm mx-auto bg-black rounded-3xl overflow-hidden",
+        "relative w-full mx-auto bg-black rounded-3xl overflow-hidden",
         getAspectRatio(), // Dynamic aspect ratio based on layout
+        getMaxWidth(), // Dynamic max width based on layout
         className
       )}
       initial={{ opacity: 0, scale: 0.9 }}
