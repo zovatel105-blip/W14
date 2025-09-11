@@ -37,6 +37,36 @@ const InlineCrop = ({
     }
   }, [isActive]);
 
+  // Add global event listeners for better touch support
+  useEffect(() => {
+    if (!isActive) return;
+
+    const handleGlobalTouchMove = (e) => {
+      if (isDragging) {
+        handleTouchMove(e);
+      }
+    };
+
+    const handleGlobalTouchEnd = (e) => {
+      if (isDragging) {
+        handleTouchEnd(e);
+      }
+    };
+
+    // Add global listeners
+    document.addEventListener('touchmove', handleGlobalTouchMove, { passive: false });
+    document.addEventListener('touchend', handleGlobalTouchEnd);
+    document.addEventListener('mousemove', handleGlobalTouchMove);
+    document.addEventListener('mouseup', handleGlobalTouchEnd);
+
+    return () => {
+      document.removeEventListener('touchmove', handleGlobalTouchMove);
+      document.removeEventListener('touchend', handleGlobalTouchEnd);
+      document.removeEventListener('mousemove', handleGlobalTouchMove);
+      document.removeEventListener('mouseup', handleGlobalTouchEnd);
+    };
+  }, [isActive, isDragging]);
+
   // Get distance between two touches
   const getDistance = (touches) => {
     const dx = touches[0].clientX - touches[1].clientX;
