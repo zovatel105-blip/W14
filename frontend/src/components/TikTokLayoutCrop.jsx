@@ -369,6 +369,19 @@ const TikTokLayoutCrop = ({
 
         {/* TikTok Bottom Controls */}
         <div className="absolute bottom-0 left-0 right-0 z-50 p-6 bg-gradient-to-t from-black/80 to-transparent">
+          {/* Real-time debug panel */}
+          <div className="text-center mb-4 text-white bg-black/60 rounded-lg p-3">
+            <div className="text-sm font-mono">
+              <div>Marco: {cropFrame.x.toFixed(0)}, {cropFrame.y.toFixed(0)} | {cropFrame.width.toFixed(0)}%</div>
+              <div>Media: {mediaTransform.translateX.toFixed(0)}, {mediaTransform.translateY.toFixed(0)} | {mediaTransform.scale.toFixed(2)}x</div>
+              <div className="mt-1">
+                {isDraggingFrame && <span className="text-yellow-400">📱 Moviendo marco</span>}
+                {isDraggingMedia && <span className="text-blue-400">🖼️ Moviendo imagen</span>}
+                {!isDraggingFrame && !isDraggingMedia && <span className="text-green-400">⏸️ Listo para tocar</span>}
+              </div>
+            </div>
+          </div>
+          
           <div className="flex items-center justify-center gap-8">
             <Button
               variant="ghost"
@@ -377,11 +390,6 @@ const TikTokLayoutCrop = ({
             >
               <RotateCcw className="w-6 h-6" />
             </Button>
-            
-            <div className="text-center text-white">
-              <div className="text-sm opacity-80">Marco: {cropFrame.width.toFixed(0)}%</div>
-              <div className="text-xs opacity-60">Zoom: {mediaTransform.scale.toFixed(1)}x</div>
-            </div>
             
             <Button
               variant="ghost"
@@ -392,7 +400,7 @@ const TikTokLayoutCrop = ({
           </div>
           
           <div className="text-center mt-4 text-white/70 text-sm">
-            Arrastra el marco • Pellizca la imagen para zoom
+            Toca el marco para moverlo • Toca la imagen para moverla • Pellizca para zoom
           </div>
         </div>
 
