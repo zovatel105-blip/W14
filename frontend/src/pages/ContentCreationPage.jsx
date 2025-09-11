@@ -40,7 +40,7 @@ const LayoutPreview = ({ layout, options = [], title, selectedMusic, onImageUplo
       case 'grid-3x2':
         return 'grid-cols-3 grid-rows-2';
       case 'horizontal-3x2':
-        return 'grid-cols-6 grid-rows-1';
+        return 'grid-cols-2 grid-rows-3'; // Changed to 2x3 for better usability
       default:
         return 'grid-cols-1 grid-rows-1';
     }
