@@ -23,6 +23,47 @@ const TikTokVotingCard = ({
   
   const cardRef = useRef(null);
   
+  // Convert layout ID to CSS grid classes
+  const getLayoutGridClass = () => {
+    const layout = poll.layout || 'vertical'; // Default to vertical if no layout
+    switch (layout) {
+      case 'off':
+        return 'grid-cols-1 grid-rows-1';
+      case 'vertical':
+        return 'grid-cols-2 grid-rows-1';
+      case 'horizontal':
+        return 'grid-cols-1 grid-rows-2';
+      case 'triptych-vertical':
+        return 'grid-cols-3 grid-rows-1';
+      case 'triptych-horizontal':
+        return 'grid-cols-1 grid-rows-3';
+      case 'grid-2x2':
+        return 'grid-cols-2 grid-rows-2';
+      case 'grid-3x2':
+        return 'grid-cols-3 grid-rows-2';
+      case 'horizontal-3x2':
+        return 'grid-cols-6 grid-rows-1';
+      default:
+        return 'grid-cols-2 grid-rows-1'; // Default fallback
+    }
+  };
+  
+  // Get maximum number of options to show based on layout
+  const getMaxOptions = () => {
+    const layout = poll.layout || 'vertical';
+    switch (layout) {
+      case 'off': return 1;
+      case 'vertical': return 2;
+      case 'horizontal': return 2;
+      case 'triptych-vertical': return 3;
+      case 'triptych-horizontal': return 3;
+      case 'grid-2x2': return 4;
+      case 'grid-3x2': return 6;
+      case 'horizontal-3x2': return 6;
+      default: return 2;
+    }
+  };
+  
   const handleVote = async (optionId) => {
     if (selectedOption) return; // Already voted
     
