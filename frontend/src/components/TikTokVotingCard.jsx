@@ -48,19 +48,23 @@ const TikTokVotingCard = ({
     }
   };
   
-  // Get maximum number of options to show based on layout
-  const getMaxOptions = () => {
+  // Get appropriate aspect ratio based on layout
+  const getAspectRatio = () => {
     const layout = poll.layout || 'vertical';
     switch (layout) {
-      case 'off': return 1;
-      case 'vertical': return 2;
-      case 'horizontal': return 2;
-      case 'triptych-vertical': return 3;
-      case 'triptych-horizontal': return 3;
-      case 'grid-2x2': return 4;
-      case 'grid-3x2': return 6;
-      case 'horizontal-3x2': return 6;
-      default: return 2;
+      case 'horizontal':
+      case 'triptych-horizontal':
+        return 'aspect-[16/9]'; // Horizontal format
+      case 'horizontal-3x2':
+        return 'aspect-[21/9]'; // Extra wide for 6 horizontal items
+      case 'grid-3x2':
+        return 'aspect-[3/2]'; // Slightly wider than square
+      case 'grid-2x2':
+        return 'aspect-square'; // Square format
+      case 'triptych-vertical':
+        return 'aspect-[9/12]'; // Slightly taller than normal
+      default:
+        return 'aspect-[9/16]'; // Default TikTok aspect ratio
     }
   };
   
