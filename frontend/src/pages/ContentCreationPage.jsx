@@ -254,7 +254,7 @@ const LayoutPreview = ({ layout, options = [], title, selectedMusic, onImageUplo
                           <button
                             onClick={(e) => {
                               e.stopPropagation();
-                              handleCropFromPreview(slotIndex);
+                              onCropFromPreview(slotIndex);
                             }}
                             className="w-8 h-8 bg-black/70 backdrop-blur-sm hover:bg-black/80 rounded-full flex items-center justify-center text-white transition-all shadow-lg border border-white/20"
                             title="Ajustar imagen"
