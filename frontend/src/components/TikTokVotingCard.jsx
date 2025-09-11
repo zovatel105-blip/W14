@@ -53,14 +53,17 @@ const TikTokVotingCard = ({
     const layout = poll.layout || 'vertical';
     switch (layout) {
       case 'horizontal-3x2':
-        return 'max-w-4xl'; // Extra wide for 6 horizontal items
+        return 'max-w-5xl sm:max-w-6xl'; // Responsive extra wide for horizontal layout
       case 'grid-3x2':
+        return 'max-w-3xl sm:max-w-4xl'; // Responsive wide for 3x2 grid
       case 'triptych-horizontal':
-        return 'max-w-2xl'; // Wider than default
+        return 'max-w-2xl sm:max-w-3xl'; // Responsive for horizontal triptych
+      case 'triptych-vertical':
+        return 'max-w-xl sm:max-w-2xl'; // Better width for vertical triptych
       case 'grid-2x2':
-        return 'max-w-lg'; // Medium width
+        return 'max-w-lg sm:max-w-xl'; // Responsive medium width
       default:
-        return 'max-w-sm'; // Default narrow width
+        return 'max-w-sm sm:max-w-md'; // Responsive default width
     }
   };
   
