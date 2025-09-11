@@ -521,13 +521,36 @@ const ContentCreationPage = () => {
     event.target.value = '';
   };
 
+  // Handle crop from preview (TikTok style)
+  const handleCropFromPreview = (slotIndex) => {
+    const option = options[slotIndex];
+    if (!option?.media?.file || option.media.type !== 'image') {
+      return;
+    }
+    
+    setCurrentSlotIndex(slotIndex);
+    setSelectedFileForCrop(option.media.file);
+    setShowCropModal(true);
+  };
+
   // Handle crop save
   const handleCropSave = (cropResult) => {
     setShowCropModal(false);
     setSelectedFileForCrop(null);
     
-    // Process the cropped image
-    processImageFile(cropResult.file, cropResult.base64);
+    // Replace the image in the current slot with cropped version
+    const mediaData = {
+      url: cropResult.base64,
+      type: 'image',
+      file: cropResult.file
+    };
+
+    updateOption(currentSlotIndex, 'media', mediaData);
+
+    toast({
+      title: "Imagen ajustada",
+      description: "La imagen se ha recortado exitosamente",
+    });
   };
 
   // Handle crop cancel
