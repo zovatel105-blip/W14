@@ -425,12 +425,16 @@ const ContentCreationPage = () => {
       let mediaData;
       
       if (isVideo) {
+        console.log('🎥 Processing video upload...');
         // For videos, use the proper upload endpoint
         const formData = new FormData();
         formData.append('file', file);
         formData.append('upload_type', 'GENERAL');
         
         const token = localStorage.getItem('authToken');
+        console.log('🔑 Using token:', token ? 'Token present' : 'No token');
+        console.log('🌐 Upload URL:', `${config.BACKEND_URL}/api/upload`);
+        
         const response = await fetch(`${config.BACKEND_URL}/api/upload`, {
           method: 'POST',
           headers: {
@@ -439,11 +443,16 @@ const ContentCreationPage = () => {
           body: formData
         });
         
+        console.log('📡 Upload response status:', response.status);
+        
         if (!response.ok) {
-          throw new Error(`Upload failed: ${response.status}`);
+          const errorText = await response.text();
+          console.error('❌ Upload failed:', response.status, errorText);
+          throw new Error(`Upload failed: ${response.status} - ${errorText}`);
         }
         
         const uploadResult = await response.json();
+        console.log('✅ Upload success:', uploadResult);
         
         mediaData = {
           url: uploadResult.public_url,
@@ -458,6 +467,7 @@ const ContentCreationPage = () => {
         };
         
       } else {
+        console.log('🖼️ Processing image upload...');
         // For images, continue using base64 (it's fine for images)
         const base64 = await fileToBase64(file);
         mediaData = {
