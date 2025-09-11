@@ -234,9 +234,11 @@ const LayoutPreview = ({ layout, options = [], title, selectedMusic, onImageUplo
                         </div>
                       </div>
                     ) : (
-                      <img 
-                        src={option.media.url} 
-                        alt={`Opción ${slotIndex + 1}`}
+                      <InlineCrop
+                        isActive={cropActiveSlot === slotIndex}
+                        imageSrc={option.media.url}
+                        onSave={handleInlineCropSave}
+                        onCancel={handleInlineCropCancel}
                         className="w-full h-full object-cover"
                       />
                     )}
