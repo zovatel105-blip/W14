@@ -2466,16 +2466,30 @@ async def unfollow_user(user_id: str, current_user: UserResponse = Depends(get_c
 
 @api_router.get("/users/{user_id}/follow-status")
 async def get_follow_status(user_id: str, current_user: UserResponse = Depends(get_current_user)):
-    """Get follow status for a specific user"""
+    """Get follow status for a specific user with caching"""
+    
+    # Check cache first
+    cache_key = f"{current_user.id}:{user_id}"
+    if cache_key in follow_status_cache and is_follow_cache_valid(follow_status_cache[cache_key]):
+        return follow_status_cache[cache_key]['data']
+    
     follow_relationship = await db.follows.find_one({
         "follower_id": current_user.id,
         "following_id": user_id
     })
     
-    return FollowStatus(
+    result = FollowStatus(
         is_following=follow_relationship is not None,
         follow_id=follow_relationship["id"] if follow_relationship else None
     )
+    
+    # Cache the result
+    follow_status_cache[cache_key] = {
+        'data': result,
+        'cached_at': datetime.utcnow()
+    }
+    
+    return result
 
 @api_router.get("/users/following")
 async def get_following_users(current_user: UserResponse = Depends(get_current_user)):
