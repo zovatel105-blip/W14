@@ -980,16 +980,6 @@ const ContentCreationPage = () => {
         onChange={handleFileChange}
         className="hidden"
       />
-
-      {/* TikTok Layout Crop Modal */}
-      <TikTokLayoutCrop
-        isOpen={showCropModal}
-        onClose={handleCropCancel}
-        onSave={handleCropSave}
-        mediaFile={selectedFileForCrop}
-        aspectRatio={9/16} // TikTok vertical aspect ratio
-        title="Ajustar"
-      />
     </div>
   );
 };
