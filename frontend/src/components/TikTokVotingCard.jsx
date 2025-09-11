@@ -207,12 +207,15 @@ const TikTokVotingCard = ({
                           </div>
                         </div>
                       </>
-                    ) : (
+                    ) : option.media?.url ? (
                       <img 
-                        src={option.media?.url} 
+                        src={option.media.url} 
                         alt={`Option ${optionNumber}`}
                         className="w-full h-full object-cover"
                       />
+                    ) : (
+                      // Default background when no media (matching ContentCreationPage)
+                      <div className="w-full h-full bg-gradient-to-br from-purple-900 via-blue-900 to-pink-900"></div>
                     )}
                   </div>
                   
