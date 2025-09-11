@@ -9,7 +9,7 @@ import UserMentionInput from '../components/UserMentionInput';
 import { fileToBase64 } from '../services/mockData';
 import pollService from '../services/pollService';
 import UploadWidget from '../components/UploadWidget';
-import TikTokCropModal from '../components/TikTokCropModal';
+import SimpleCropModal from '../components/SimpleCropModal';
 import config from '../config/config';
 
 // Layout Icon Components
