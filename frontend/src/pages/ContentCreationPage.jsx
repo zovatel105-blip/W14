@@ -826,6 +826,9 @@ const ContentCreationPage = () => {
           onOptionTextChange={handleOptionTextChange}
           onMentionSelect={handleMentionSelect}
           onCropFromPreview={handleCropFromPreview}
+          cropActiveSlot={cropActiveSlot}
+          onInlineCropSave={handleInlineCropSave}
+          onInlineCropCancel={handleInlineCropCancel}
           fullscreen={previewMode}
         />
       </div>
