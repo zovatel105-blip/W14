@@ -9,7 +9,7 @@ import { useToast } from '../hooks/use-toast';
 import { useAuth } from '../contexts/AuthContext';
 import uploadService from '../services/uploadService';
 import { cn } from '../lib/utils';
-import ImageCropModal from './ImageCropModal';
+import TikTokCropModal from './TikTokCropModal';
 
 const AvatarUpload = ({
   currentAvatar = null,
