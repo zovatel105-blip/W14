@@ -203,20 +203,23 @@ const InlineCrop = ({
   // Crop mode - interactive overlay
   return (
     <div className={`relative w-full h-full overflow-hidden ${className}`}>
-      {/* Interactive image */}
+      {/* Interactive image - fills entire container */}
       <div
         ref={containerRef}
         className="absolute inset-0 cursor-move select-none"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
+        onMouseDown={handleTouchStart}
+        onMouseMove={handleTouchMove}
+        onMouseUp={handleTouchEnd}
         style={{ touchAction: 'none' }}
       >
         <img
           ref={imageRef}
           src={imageSrc}
           alt="Crop preview"
-          className="absolute inset-0 w-full h-full object-cover"
+          className="w-full h-full object-cover"
           style={{
             transform: `translate(${transform.translateX}px, ${transform.translateY}px) scale(${transform.scale})`,
             transformOrigin: 'center'
@@ -225,56 +228,38 @@ const InlineCrop = ({
         />
       </div>
 
-      {/* Crop overlay controls */}
+      {/* Minimal overlay - only essential controls */}
       <div className="absolute inset-0 pointer-events-none">
-        {/* Grid overlay */}
-        <div className="absolute inset-0 grid grid-cols-3 grid-rows-3">
+        {/* Simple grid overlay */}
+        <div className="absolute inset-0 grid grid-cols-3 grid-rows-3 opacity-30">
           {[...Array(9)].map((_, i) => (
-            <div key={i} className="border border-white/30" />
+            <div key={i} className="border border-white/50" />
           ))}
-        </div>
-
-        {/* Corner indicators */}
-        <div className="absolute top-2 left-2 w-4 h-4 border-l-2 border-t-2 border-white" />
-        <div className="absolute top-2 right-2 w-4 h-4 border-r-2 border-t-2 border-white" />
-        <div className="absolute bottom-2 left-2 w-4 h-4 border-l-2 border-b-2 border-white" />
-        <div className="absolute bottom-2 right-2 w-4 h-4 border-r-2 border-b-2 border-white" />
-
-        {/* Center move indicator */}
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-white/80 rounded-full flex items-center justify-center">
-          <Move className="w-4 h-4 text-black" />
         </div>
       </div>
 
-      {/* Control buttons */}
-      <div className="absolute top-2 left-1/2 transform -translate-x-1/2 flex gap-2 pointer-events-auto">
+      {/* Floating control buttons - minimal */}
+      <div className="absolute top-4 right-4 flex gap-2 pointer-events-auto">
         <button
           onClick={onCancel}
-          className="w-8 h-8 bg-black/70 hover:bg-black/80 rounded-full flex items-center justify-center text-white border border-white/20"
+          className="w-10 h-10 bg-black/80 hover:bg-black/90 rounded-full flex items-center justify-center text-white shadow-lg"
         >
-          <X className="w-4 h-4" />
-        </button>
-        
-        <button
-          onClick={handleReset}
-          className="w-8 h-8 bg-black/70 hover:bg-black/80 rounded-full flex items-center justify-center text-white border border-white/20"
-        >
-          <RotateCcw className="w-4 h-4" />
+          <X className="w-5 h-5" />
         </button>
         
         <button
           onClick={handleSave}
-          className="w-8 h-8 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center text-white"
+          className="w-10 h-10 bg-red-500 hover:bg-red-600 rounded-full flex items-center justify-center text-white shadow-lg"
         >
-          <Check className="w-4 h-4" />
+          <Check className="w-5 h-5" />
         </button>
       </div>
 
-      {/* Debug info */}
-      <div className="absolute bottom-2 left-2 bg-black/70 text-white text-xs px-2 py-1 rounded pointer-events-none">
-        <div>Zoom: {transform.scale.toFixed(2)}x</div>
-        <div>X: {transform.translateX.toFixed(0)}, Y: {transform.translateY.toFixed(0)}</div>
-        <div>{isDragging ? '👆 Arrastrando' : '✋ Listo'}</div>
+      {/* Debug info - bottom left */}
+      <div className="absolute bottom-4 left-4 bg-black/80 text-white text-xs px-3 py-2 rounded-lg pointer-events-none">
+        <div>🔍 {transform.scale.toFixed(2)}x</div>
+        <div>📍 {transform.translateX.toFixed(0)}, {transform.translateY.toFixed(0)}</div>
+        <div>{isDragging ? '👆 Moviendo' : '✋ Toca para mover'}</div>
       </div>
 
       {/* Hidden canvas for crop generation */}
