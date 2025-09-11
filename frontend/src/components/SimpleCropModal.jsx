@@ -94,6 +94,7 @@ const SimpleCropModal = ({
   // Touch handlers
   const handleTouchStart = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     const touches = e.touches;
     
     if (touches.length === 1) {
@@ -103,21 +104,26 @@ const SimpleCropModal = ({
         x: touches[0].clientX,
         y: touches[0].clientY
       });
+      console.log('👆 Touch start - drag mode activated');
     } else if (touches.length === 2) {
       // Two touches - start pinching
       setIsDragging(false);
       setLastDistance(getDistance(touches));
+      console.log('🤏 Two fingers detected - pinch mode activated');
     }
   };
 
   const handleTouchMove = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     const touches = e.touches;
     
     if (touches.length === 1 && isDragging) {
       // Single touch - dragging (move X/Y)
       const deltaX = touches[0].clientX - lastPanPoint.x;
       const deltaY = touches[0].clientY - lastPanPoint.y;
+      
+      console.log(`🔄 Dragging: deltaX=${deltaX}, deltaY=${deltaY}`);
       
       setTransform(prev => ({
         ...prev,
@@ -134,6 +140,8 @@ const SimpleCropModal = ({
       const distance = getDistance(touches);
       const scaleDelta = distance / lastDistance;
       
+      console.log(`🔍 Pinching: distance=${distance}, scaleDelta=${scaleDelta}`);
+      
       setTransform(prev => ({
         ...prev,
         scale: Math.max(0.5, Math.min(3, prev.scale * scaleDelta))
@@ -143,8 +151,11 @@ const SimpleCropModal = ({
     }
   };
 
-  const handleTouchEnd = () => {
+  const handleTouchEnd = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     setIsDragging(false);
+    console.log('👆 Touch end - gestures stopped');
   };
 
   // Mouse handlers for desktop
