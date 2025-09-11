@@ -763,7 +763,7 @@ const ContentCreationPage = () => {
       <input
         ref={fileInputRef}
         type="file"
-        accept="image/*"
+        accept="image/*,video/*"
         onChange={handleFileChange}
         className="hidden"
       />
