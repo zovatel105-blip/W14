@@ -184,7 +184,7 @@ const TikTokVotingCard = ({
               return (
                 <motion.div
                   key={option.id}
-                  className="relative cursor-pointer group overflow-hidden"
+                  className="relative cursor-pointer group overflow-hidden w-full h-full min-h-0"
                   onClick={() => handleVote(option.id)}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
