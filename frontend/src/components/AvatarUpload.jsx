@@ -21,6 +21,8 @@ const AvatarUpload = ({
   const [isUploading, setIsUploading] = useState(false);
   const [preview, setPreview] = useState(null);
   const [dragOver, setDragOver] = useState(false);
+  const [showCropModal, setShowCropModal] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
   const { toast } = useToast();
   const { user, updateUser } = useAuth();
 
