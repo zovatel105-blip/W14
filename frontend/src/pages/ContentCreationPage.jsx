@@ -229,7 +229,7 @@ const LayoutPreview = ({ layout, options = [], title, selectedMusic, onImageUplo
                       
                       {/* Text responsive for mobile */}
                       <h3 className="text-white text-xl sm:text-2xl lg:text-3xl font-bold mb-2 sm:mb-3 lg:mb-4">Opción {String.fromCharCode(65 + slotIndex)}</h3>
-                      <p className="text-white text-base sm:text-lg lg:text-xl mb-1 sm:mb-2">Toca para agregar tu imagen</p>
+                      <p className="text-white text-base sm:text-lg lg:text-xl mb-1 sm:mb-2">Toca para agregar imagen o video</p>
                       <p className="text-gray-300 text-sm sm:text-base">Se verá exactamente como en el feed</p>
                     </div>
 
