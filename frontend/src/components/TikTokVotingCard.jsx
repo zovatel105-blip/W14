@@ -27,8 +27,10 @@ const TikTokVotingCard = ({
   const getLayoutGridClass = () => {
     const layout = poll.layout || 'vertical'; // Default to vertical if no layout
     
-    // Debug logging
-    console.log(`🎨 TikTokVotingCard - Poll ID: ${poll.id}, Layout: ${layout}, Title: ${poll.title}`);
+    // Debug logging for posts with clear layout info
+    if (poll.title && (poll.title.includes('LADO A LADO') || poll.title.includes('ARRIBA Y ABAJO'))) {
+      console.log(`🎨 LAYOUT DEBUG - Poll: "${poll.title}" | Layout: "${layout}" | Grid Class: grid-cols-${layout === 'horizontal' ? '1' : layout === 'vertical' ? '2' : 'unknown'} grid-rows-${layout === 'horizontal' ? '2' : layout === 'vertical' ? '1' : 'unknown'}`);
+    }
     
     switch (layout) {
       case 'off':
