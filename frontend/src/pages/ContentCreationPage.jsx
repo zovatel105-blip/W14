@@ -405,8 +405,7 @@ const ContentCreationPage = () => {
   const [currentSlotIndex, setCurrentSlotIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [previewMode, setPreviewMode] = useState(false); // New state for fullscreen preview
-  const [showCropModal, setShowCropModal] = useState(false);
-  const [selectedFileForCrop, setSelectedFileForCrop] = useState(null);
+  const [cropActiveSlot, setCropActiveSlot] = useState(null); // Which slot is in crop mode
 
   // Initialize with pre-selected audio if provided
   useEffect(() => {
