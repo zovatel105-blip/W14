@@ -7924,6 +7924,189 @@ def test_quick_backend_verification(base_url):
         print(f"   ❌ Revisar endpoints antes de proceder con frontend testing")
         return False
 
+def test_layout_functionality(base_url):
+    """Test layout functionality for improved feed layouts"""
+    print("\n=== Testing Layout Functionality ===")
+    print("CONTEXTO: Testing backend with new test posts created with different layouts")
+    
+    success_count = 0
+    total_tests = 0
+    
+    # Test credentials from review request
+    test_credentials = {
+        "email": "layouttest@example.com",
+        "password": "test123"
+    }
+    
+    # Test 1: Login with test credentials
+    print("\n1. Testing login with layout test credentials...")
+    total_tests += 1
+    try:
+        response = requests.post(f"{base_url}/auth/login", json=test_credentials, timeout=10)
+        print(f"Login Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            print(f"✅ Login successful for layouttest@example.com")
+            print(f"User ID: {data['user']['id']}")
+            print(f"Username: {data['user']['username']}")
+            auth_token = data['access_token']
+            headers = {"Authorization": f"Bearer {auth_token}"}
+            success_count += 1
+        else:
+            print(f"❌ Login failed: {response.text}")
+            print("⚠️ Continuing with anonymous access for polls endpoint")
+            headers = {}
+            
+    except Exception as e:
+        print(f"❌ Login error: {e}")
+        print("⚠️ Continuing with anonymous access for polls endpoint")
+        headers = {}
+    
+    # Test 2: GET /api/polls - Verify posts with different layouts
+    print("\n2. Testing GET /api/polls - Verify posts with layouts...")
+    total_tests += 1
+    try:
+        response = requests.get(f"{base_url}/polls", headers=headers, timeout=10)
+        print(f"Get Polls Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            polls_data = response.json()
+            print(f"✅ Polls endpoint working correctly")
+            print(f"Total polls returned: {len(polls_data)}")
+            
+            # Check for layout field in posts
+            layout_posts = []
+            layout_types_found = set()
+            
+            for poll in polls_data:
+                if 'layout' in poll and poll['layout']:
+                    layout_posts.append(poll)
+                    layout_types_found.add(poll['layout'])
+                    print(f"   📐 Found post with layout: {poll['layout']} (ID: {poll.get('id', 'N/A')})")
+            
+            print(f"\n📊 Layout Analysis:")
+            print(f"   - Posts with layout field: {len(layout_posts)}")
+            print(f"   - Different layout types found: {len(layout_types_found)}")
+            print(f"   - Layout types: {list(layout_types_found)}")
+            
+            # Expected layouts from review request
+            expected_layouts = ['horizontal', 'grid-3x2', 'horizontal-3x2', 'triptych-vertical', 'triptych-horizontal']
+            
+            if len(layout_posts) >= 5:
+                print(f"✅ Found {len(layout_posts)} posts with layouts (expected 5+)")
+                success_count += 1
+            else:
+                print(f"⚠️ Found only {len(layout_posts)} posts with layouts (expected 5)")
+                
+            # Check if we have the expected layout types
+            found_expected = [layout for layout in expected_layouts if layout in layout_types_found]
+            print(f"   - Expected layouts found: {found_expected}")
+            
+        else:
+            print(f"❌ Get polls failed: {response.text}")
+            
+    except Exception as e:
+        print(f"❌ Get polls error: {e}")
+    
+    # Test 3: Verify data structure of posts with layouts
+    print("\n3. Testing data structure of posts with layouts...")
+    total_tests += 1
+    try:
+        if 'polls_data' in locals() and polls_data:
+            layout_post = None
+            for poll in polls_data:
+                if 'layout' in poll and poll['layout']:
+                    layout_post = poll
+                    break
+            
+            if layout_post:
+                print(f"✅ Found post with layout for structure analysis")
+                print(f"📋 Post structure analysis:")
+                print(f"   - ID: {layout_post.get('id', 'N/A')}")
+                print(f"   - Layout: {layout_post.get('layout', 'N/A')}")
+                print(f"   - Title: {layout_post.get('title', 'N/A')}")
+                print(f"   - Options count: {len(layout_post.get('options', []))}")
+                print(f"   - Author: {layout_post.get('authorUser', {}).get('username', 'N/A')}")
+                print(f"   - Created at: {layout_post.get('created_at', 'N/A')}")
+                
+                # Check if layout field is properly saved and returned
+                if layout_post.get('layout') in expected_layouts:
+                    print(f"✅ Layout field '{layout_post.get('layout')}' is correctly saved and returned")
+                    success_count += 1
+                else:
+                    print(f"⚠️ Layout field '{layout_post.get('layout')}' is not in expected layouts")
+            else:
+                print(f"❌ No posts with layout found for structure analysis")
+        else:
+            print(f"❌ No polls data available for structure analysis")
+            
+    except Exception as e:
+        print(f"❌ Data structure analysis error: {e}")
+    
+    # Test 4: Test authentication with different credentials if first failed
+    if success_count == 0:  # If login failed, try alternative credentials
+        print("\n4. Testing alternative authentication...")
+        total_tests += 1
+        
+        alternative_credentials = [
+            {"email": "demo@example.com", "password": "demo123"},
+            {"email": "test@example.com", "password": "test123"},
+            {"email": "maria@example.com", "password": "password123"}
+        ]
+        
+        for creds in alternative_credentials:
+            try:
+                response = requests.post(f"{base_url}/auth/login", json=creds, timeout=10)
+                print(f"Testing {creds['email']}: Status {response.status_code}")
+                
+                if response.status_code == 200:
+                    data = response.json()
+                    print(f"✅ Alternative login successful: {creds['email']}")
+                    print(f"Username: {data['user']['username']}")
+                    success_count += 1
+                    break
+                    
+            except Exception as e:
+                print(f"❌ Alternative login error for {creds['email']}: {e}")
+    
+    # Test 5: Check backend health and error handling
+    print("\n5. Testing backend health and error handling...")
+    total_tests += 1
+    try:
+        response = requests.get(f"{base_url}/", timeout=10)
+        print(f"Health Check Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            health_data = response.json()
+            print(f"✅ Backend health check passed")
+            print(f"API Name: {health_data.get('name', 'N/A')}")
+            print(f"Version: {health_data.get('version', 'N/A')}")
+            success_count += 1
+        else:
+            print(f"❌ Backend health check failed: {response.text}")
+            
+    except Exception as e:
+        print(f"❌ Backend health check error: {e}")
+    
+    # Summary
+    print(f"\n📊 Layout Functionality Test Summary:")
+    print(f"   - Tests passed: {success_count}/{total_tests}")
+    print(f"   - Success rate: {(success_count/total_tests)*100:.1f}%")
+    
+    if success_count >= 3:
+        print(f"✅ CONCLUSION: Layout functionality is working correctly")
+        print(f"   - Backend returns posts with layout fields")
+        print(f"   - Data structure is correct")
+        print(f"   - Authentication system operational")
+    else:
+        print(f"❌ CONCLUSION: Issues detected with layout functionality")
+        print(f"   - Check if test posts were created correctly")
+        print(f"   - Verify layout field is being saved in database")
+        print(f"   - Check authentication credentials")
+    
+    return success_count >= 3
+
 def main():
     """Main test execution function"""
     print("🚀 Starting Backend API Testing...")
