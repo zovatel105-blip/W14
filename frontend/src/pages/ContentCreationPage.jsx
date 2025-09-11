@@ -510,15 +510,10 @@ const ContentCreationPage = () => {
       return;
     }
 
-    // For images, open crop modal
+    // Process files directly without crop - crop will be available after upload
     if (isImage) {
-      setSelectedFileForCrop(file);
-      setShowCropModal(true);
-      return;
-    }
-
-    // For videos, process directly (no crop)
-    if (isVideo) {
+      processImageFile(file);
+    } else if (isVideo) {
       processVideoFile(file);
     }
 
