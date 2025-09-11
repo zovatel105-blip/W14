@@ -9,6 +9,7 @@ import UserMentionInput from '../components/UserMentionInput';
 import { fileToBase64 } from '../services/mockData';
 import pollService from '../services/pollService';
 import UploadWidget from '../components/UploadWidget';
+import ImageCropModal from '../components/ImageCropModal';
 import config from '../config/config';
 
 // Layout Icon Components
