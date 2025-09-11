@@ -516,7 +516,7 @@ const ContentCreationPage = () => {
     if (validOptions.length === 0) {
       toast({
         title: "Error", 
-        description: "Necesitas agregar al menos una imagen",
+        description: "Necesitas agregar al menos una imagen o video",
         variant: "destructive"
       });
       return;
