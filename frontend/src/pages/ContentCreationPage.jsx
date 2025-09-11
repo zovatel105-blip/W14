@@ -421,45 +421,51 @@ const ContentCreationPage = () => {
     }
 
     try {
-      const base64 = await fileToBase64(file);
-      let mediaData = {
-        url: base64,
-        type: isVideo ? 'video' : 'image',
-        file: file,
-        name: file.name,
-        size: file.size
-      };
+      let mediaData;
       
-      // Para videos, crear thumbnail
       if (isVideo) {
-        const canvas = document.createElement('canvas');
-        canvas.width = 400;
-        canvas.height = 600;
-        const ctx = canvas.getContext('2d');
+        // For videos, use the proper upload endpoint
+        const formData = new FormData();
+        formData.append('file', file);
+        formData.append('upload_type', 'GENERAL');
         
-        // Fondo degradado
-        const gradient = ctx.createLinearGradient(0, 0, 0, 600);
-        gradient.addColorStop(0, '#1f2937');
-        gradient.addColorStop(1, '#111827');
-        ctx.fillStyle = gradient;
-        ctx.fillRect(0, 0, 400, 600);
+        const token = localStorage.getItem('authToken');
+        const response = await fetch(`${import.meta.env.REACT_APP_BACKEND_URL}/api/upload`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          },
+          body: formData
+        });
         
-        // Ícono de play
-        ctx.fillStyle = '#ffffff';
-        ctx.beginPath();
-        ctx.moveTo(160, 250);
-        ctx.lineTo(160, 350);
-        ctx.lineTo(240, 300);
-        ctx.closePath();
-        ctx.fill();
+        if (!response.ok) {
+          throw new Error(`Upload failed: ${response.status}`);
+        }
         
-        // Agregar texto
-        ctx.fillStyle = '#ffffff';
-        ctx.font = '16px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto';
-        ctx.textAlign = 'center';
-        ctx.fillText('Video Preview', 200, 380);
+        const uploadResult = await response.json();
         
-        mediaData.thumbnail = canvas.toDataURL('image/png');
+        mediaData = {
+          url: uploadResult.public_url,
+          thumbnail: uploadResult.thumbnail_url,
+          type: 'video',
+          file: file,
+          name: file.name,
+          size: file.size,
+          duration: uploadResult.duration,
+          width: uploadResult.width,
+          height: uploadResult.height
+        };
+        
+      } else {
+        // For images, continue using base64 (it's fine for images)
+        const base64 = await fileToBase64(file);
+        mediaData = {
+          url: base64,
+          type: 'image',
+          file: file,
+          name: file.name,
+          size: file.size
+        };
       }
       
       updateOption(currentSlotIndex, 'media', mediaData);
