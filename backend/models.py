@@ -315,6 +315,7 @@ class PollResponse(BaseModel):
     tags: List[str]
     category: Optional[str]
     mentioned_users: List[str] = []  # List of user IDs mentioned in the poll
+    layout: Optional[str] = None  # Layout configuration
     created_at: datetime
     time_ago: str  # Campo calculado como "hace 2 horas"
 
