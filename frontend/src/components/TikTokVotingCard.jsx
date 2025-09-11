@@ -42,7 +42,7 @@ const TikTokVotingCard = ({
       case 'grid-3x2':
         return 'grid-cols-3 grid-rows-2';
       case 'horizontal-3x2':
-        return 'grid-cols-6 grid-rows-1';
+        return 'grid-cols-2 grid-rows-3'; // Changed to 2 cols x 3 rows for better visibility
       default:
         return 'grid-cols-2 grid-rows-1'; // Default fallback
     }
