@@ -486,10 +486,10 @@ const ContentCreationPage = () => {
         description: `${isVideo ? 'Video' : 'Imagen'} agregado a la opción ${String.fromCharCode(65 + currentSlotIndex)}`,
       });
     } catch (error) {
-      console.error('Error loading image:', error);
+      console.error('❌ File upload error:', error);
       toast({
         title: "Error",
-        description: "No se pudo cargar la imagen. Intenta con otra imagen.",
+        description: error.message || "No se pudo cargar la imagen. Intenta con otra imagen.",
         variant: "destructive"
       });
     }
