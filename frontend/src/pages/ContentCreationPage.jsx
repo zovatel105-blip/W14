@@ -210,9 +210,9 @@ const LayoutPreview = ({ layout, options = [], title, selectedMusic, onImageUplo
                 onClick={() => {
                   // If image exists, open crop directly. If not, upload new image.
                   if (option.media && option.media.type === 'image') {
-                    handleCropFromPreview(slotIndex);
+                    onCropFromPreview(slotIndex);
                   } else {
-                    handleImageUpload(slotIndex);
+                    onImageUpload(slotIndex);
                   }
                 }}
               >
