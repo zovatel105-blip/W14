@@ -62,9 +62,19 @@ const TikTokVotingCard = ({
     const layout = poll.layout || 'vertical';
     const baseStyle = { gap: '1px' };
     
+    // Debug logging for horizontal layout
+    if (poll.title && poll.title.includes('ARRIBA Y ABAJO')) {
+      console.log(`🔧 getGridStyle called for: "${poll.title}"`);
+      console.log(`   Layout: "${layout}"`);
+    }
+    
     switch (layout) {
       case 'horizontal': // "Arriba y abajo" - 2 elementos verticalmente
-        return { ...baseStyle, gridTemplateRows: 'repeat(2, 1fr)' };
+        const horizontalStyle = { ...baseStyle, gridTemplateRows: 'repeat(2, 1fr)' };
+        if (poll.title && poll.title.includes('ARRIBA Y ABAJO')) {
+          console.log(`   Applying horizontal style:`, horizontalStyle);
+        }
+        return horizontalStyle;
       case 'triptych-horizontal': // "Arriba y abajo" - 3 elementos verticalmente  
         return { ...baseStyle, gridTemplateRows: 'repeat(3, 1fr)' };
       case 'grid-2x2':
