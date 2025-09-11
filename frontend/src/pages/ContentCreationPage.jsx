@@ -940,6 +940,19 @@ const ContentCreationPage = () => {
         onChange={handleFileChange}
         className="hidden"
       />
+
+      {/* Image Crop Modal */}
+      <ImageCropModal
+        isOpen={showCropModal}
+        onClose={handleCropCancel}
+        onSave={handleCropSave}
+        imageFile={selectedFileForCrop}
+        aspectRatio={null} // Free aspect ratio for content creation
+        cropShape="rect"
+        title="Recortar Imagen"
+        minWidth={150}
+        minHeight={150}
+      />
     </div>
   );
 };
