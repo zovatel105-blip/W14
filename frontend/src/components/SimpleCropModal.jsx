@@ -344,13 +344,15 @@ const SimpleCropModal = ({
         <div className="flex-1 flex items-center justify-center p-4">
           <div
             ref={containerRef}
-            className="relative w-full h-full max-w-sm max-h-[70vh] bg-gray-900 overflow-hidden"
+            className="relative w-full h-full max-w-sm max-h-[70vh] bg-gray-900 overflow-hidden select-none"
+            style={{ touchAction: 'none' }} // Prevent default touch behaviors
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp} // Stop dragging when mouse leaves
             onWheel={handleWheel}
           >
             {/* Media underneath (moves and scales) */}
