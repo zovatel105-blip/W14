@@ -455,6 +455,13 @@ const SimpleCropModal = ({
 
         {/* Bottom Controls */}
         <div className="p-4 text-white">
+          {/* Debug info - shows current transform values */}
+          <div className="text-center mb-4 text-xs text-gray-400 bg-black/50 rounded p-2">
+            <div>Scale: {transform.scale.toFixed(2)}x</div>
+            <div>Position: {transform.translateX.toFixed(0)}, {transform.translateY.toFixed(0)}</div>
+            <div>Status: {isDragging ? '👆 Arrastrando' : '⏸️ Listo'}</div>
+          </div>
+          
           <div className="flex items-center justify-center gap-8">
             <Button
               variant="ghost"
