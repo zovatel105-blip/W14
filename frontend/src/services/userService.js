@@ -133,7 +133,12 @@ class UserService {
         headers: this.getAuthHeaders(),
       });
 
-      return await this.handleResponse(response);
+      const result = await this.handleResponse(response);
+      
+      // Clear cache for this user after follow action
+      this.followStatusCache.delete(userId);
+      
+      return result;
     } catch (error) {
       console.error(`Error following user ${userIdOrUsername}:`, error);
       throw error;
