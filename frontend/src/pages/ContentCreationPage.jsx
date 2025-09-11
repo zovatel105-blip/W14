@@ -470,16 +470,45 @@ const ContentCreationPage = () => {
     }
   };
 
-  // Handle crop from preview (TikTok style)
+  // Handle crop from preview (inline crop mode)
   const handleCropFromPreview = (slotIndex) => {
     const option = options[slotIndex];
     if (!option?.media?.file || option.media.type !== 'image') {
       return;
     }
     
-    setCurrentSlotIndex(slotIndex);
-    setSelectedFileForCrop(option.media.file);
-    setShowCropModal(true);
+    // Activate inline crop for this slot
+    setCropActiveSlot(slotIndex);
+  };
+
+  // Handle inline crop save
+  const handleInlineCropSave = (cropResult) => {
+    if (cropActiveSlot === null) return;
+    
+    // Convert blob to file
+    const croppedFile = new File([cropResult.blob], 'cropped-image.jpg', {
+      type: 'image/jpeg'
+    });
+    
+    // Update the option with cropped image
+    const mediaData = {
+      url: cropResult.base64,
+      type: 'image',
+      file: croppedFile
+    };
+
+    updateOption(cropActiveSlot, 'media', mediaData);
+    setCropActiveSlot(null); // Exit crop mode
+
+    toast({
+      title: "Imagen ajustada",
+      description: "La imagen se ha recortado exitosamente",
+    });
+  };
+
+  // Handle inline crop cancel
+  const handleInlineCropCancel = () => {
+    setCropActiveSlot(null);
   };
 
   const getSlotsCount = () => {
