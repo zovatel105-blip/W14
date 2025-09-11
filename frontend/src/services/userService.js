@@ -85,12 +85,27 @@ class UserService {
         }
       }
       
+      // Check cache first
+      const cacheKey = userId;
+      const cached = this.followStatusCache.get(cacheKey);
+      if (cached && (Date.now() - cached.timestamp) < this.CACHE_EXPIRY_MS) {
+        return cached.data;
+      }
+      
       const response = await fetch(config.API_ENDPOINTS.USERS.FOLLOW_STATUS(userId), {
         method: 'GET',
         headers: this.getAuthHeaders(),
       });
 
-      return await this.handleResponse(response);
+      const result = await this.handleResponse(response);
+      
+      // Cache the result
+      this.followStatusCache.set(cacheKey, {
+        data: result,
+        timestamp: Date.now()
+      });
+      
+      return result;
     } catch (error) {
       console.error(`Error getting follow status for ${userIdOrUsername}:`, error);
       throw error;
