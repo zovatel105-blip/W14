@@ -290,17 +290,15 @@ const AvatarUpload = ({
         )}
       </AnimatePresence>
 
-      {/* Image Crop Modal */}
-      <ImageCropModal
+      {/* TikTok-style Image Crop Modal */}
+      <TikTokCropModal
         isOpen={showCropModal}
         onClose={handleCropCancel}
         onSave={handleCropSave}
         imageFile={selectedFile}
         aspectRatio={1} // Square crop for avatars
         cropShape="round"
-        title="Recortar Foto de Perfil"
-        minWidth={200}
-        minHeight={200}
+        title="Ajustar Foto de Perfil"
       />
     </div>
   );
