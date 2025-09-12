@@ -373,17 +373,10 @@ const InlineCrop = ({
         />
       </div>
 
-      {/* Crop frame with clean, soft lines - optimized for object-cover */}
+      {/* Minimal crop frame - very subtle */}
       <div className="absolute inset-0 pointer-events-none z-20">
-        {/* Rule of thirds grid - minimal and clean */}
-        <div className="absolute inset-0 grid grid-cols-3 grid-rows-3 opacity-20">
-          {[...Array(9)].map((_, i) => (
-            <div key={i} className="border border-white/60" />
-          ))}
-        </div>
-        
-        {/* Crop frame border - subtle for layout adaptation */}
-        <div className="absolute inset-0 border-2 border-white/80 rounded-sm shadow-lg" />
+        {/* Only border frame - no grid overlay */}
+        <div className="absolute inset-0 border border-white/30 rounded-sm" />
       </div>
 
       {/* Floating control - only cancel button */}
