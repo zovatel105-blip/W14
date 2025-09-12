@@ -61,33 +61,30 @@ const InlineCrop = ({
     e.stopPropagation();
     
     console.log('🖱️ Double click detected - isActive:', isActive, 'hasChanges:', hasChanges);
-    console.log('🖱️ Event type:', e.type, 'Event target:', e.target);
     
-    if (!isActive) {
-      console.log('❌ Double click ignored - not active');
+    if (!isActive || !hasChanges) {
+      console.log('❌ Save ignored - not active or no changes');
       return;
     }
     
-    if (!hasChanges) {
-      console.log('❌ Double click ignored - no changes to save');
-      return;
-    }
+    console.log('💾 BEFORE SAVE - Current state:');
+    console.log('   position:', position);
+    console.log('   scale:', scale);
     
-    console.log('💾 Double click save - position:', position, 'scale:', scale);
     const transformData = {
       transform: {
-        position: position,
+        position: { x: position.x, y: position.y }, // Explicit copy
         scale: scale
       },
       originalImageSrc: imageSrc
     };
     
-    console.log('📤 Sending transform data via onSave:', transformData);
+    console.log('📤 SAVING transform data:', transformData);
+    console.log('📤 Expected to see this position/scale after save:', transformData.transform);
+    
     onSave(transformData);
     setHasChanges(false);
     
-    // ❌ REMOVED: setTimeout(() => onCancel(), 200) - This was causing race condition
-    // Let parent component handle the timing after state update completes
     console.log('✅ Save completed - parent will handle crop exit timing');
   }, [isActive, hasChanges, position, scale, imageSrc, onSave]);
 
