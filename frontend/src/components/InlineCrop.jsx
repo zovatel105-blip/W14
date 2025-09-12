@@ -388,6 +388,23 @@ const InlineCrop = ({
         </div>
       )}
       
+      {/* Temporary save button for debugging */}
+      {hasChanges && (
+        <div className="absolute top-2 right-2 z-50">
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              console.log('🔘 Manual save button clicked');
+              handleDoubleClick(e);
+            }}
+            className="bg-green-500 hover:bg-green-600 text-white p-2 rounded shadow-lg text-xs font-bold"
+          >
+            GUARDAR
+          </button>
+        </div>
+      )}
+      
       {/* Instructions overlay */}
       <div className="absolute bottom-4 left-4 right-4 bg-black/70 text-white text-sm p-3 rounded-lg z-40">
         <div className="text-center">
