@@ -59,12 +59,13 @@ const InlineCrop = ({
       if (hasChanges) {
         onSave({
           position: position,
+          scale: scale,
           originalImageSrc: imageSrc
         });
         setHasChanges(false);
       }
     }, 800);
-  }, [hasChanges, position, imageSrc, onSave]);
+  }, [hasChanges, position, scale, imageSrc, onSave]);
 
   // Cleanup
   useEffect(() => {
