@@ -272,19 +272,6 @@ const InlineCrop = ({
         />
       </div>
 
-      {/* Only Save button */}
-      <div className="absolute top-4 right-4 pointer-events-auto z-30">
-        <button
-          onClick={() => {
-            scheduleAutoSave(); // Save changes when user clicks save
-            onCancel(); // Then exit crop mode
-          }}
-          className="w-12 h-12 bg-red-500/90 hover:bg-red-500 backdrop-blur-sm rounded-full flex items-center justify-center text-white shadow-xl transition-all duration-200"
-        >
-          <Check className="w-6 h-6" />
-        </button>
-      </div>
-
     </div>
   );
 };
