@@ -1157,7 +1157,7 @@ const ProfilePage = () => {
               <Button 
                 variant="outline" 
                 className="w-full rounded-full py-3 sm:py-3 text-sm sm:text-base font-semibold bg-gray-100 hover:bg-gray-200 border-gray-300 min-h-[48px] active:scale-95 transition-transform"
-                onClick={() => navigate('/statistics')}
+                onClick={() => setStatisticsModalOpen(true)}
               >
                 Statistics
               </Button>
