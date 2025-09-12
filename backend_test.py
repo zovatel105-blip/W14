@@ -14,7 +14,7 @@ from datetime import datetime, timedelta
 # Get backend URL - use external URL from frontend/.env
 def get_backend_url():
     # Use external URL as configured in frontend/.env
-    return "https://stories-interface.preview.emergentagent.com/api"
+    return "https://cropx-migrate.preview.emergentagent.com/api"
 
 # Global variables for test data
 test_users = []
