@@ -259,27 +259,16 @@ const InlineCrop = ({
 
 
   if (!isActive) {
-    // Normal image display with applied transform if saved - showing complete image with blurred background
+    // Normal image display with applied transform - image adapts to layout slot shape
     const displayTransform = savedTransform || { scale: 1, translateX: 0, translateY: 0 };
     
     return (
       <div className={`relative w-full h-full overflow-hidden ${className}`}>
-        {/* Blurred background version of the same image */}
-        <div className="absolute inset-0">
-          <img
-            src={imageSrc}
-            alt="Background blur"
-            className="w-full h-full object-cover blur-lg opacity-50 scale-110"
-            onDragStart={(e) => e.preventDefault()}
-          />
-          <div className="absolute inset-0 bg-black/30" /> {/* Subtle dark overlay */}
-        </div>
-        
-        {/* Main image - complete and centered */}
+        {/* Image fills the entire layout slot */}
         <img
           src={imageSrc}
           alt="Preview"
-          className="relative w-full h-full object-contain z-10" /* Changed from object-cover to object-contain */
+          className="w-full h-full object-cover" /* Back to object-cover for layout adaptation */
           style={{
             transform: `translate(${displayTransform.translateX}px, ${displayTransform.translateY}px) scale(${displayTransform.scale})`,
             transformOrigin: 'center',
