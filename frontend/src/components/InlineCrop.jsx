@@ -300,11 +300,6 @@ const InlineCrop = ({
     const displayPosition = savedTransform?.transform?.position || { x: 50, y: 50 };
     const displayScale = savedTransform?.transform?.scale || 1;
     
-    console.log('🔍 INACTIVE RENDER - savedTransform:', savedTransform);
-    console.log('🔍 INACTIVE RENDER - displayPosition:', displayPosition, 'displayScale:', displayScale);
-    console.log('🎯 INACTIVE CSS - objectPosition:', `${displayPosition.x}% ${displayPosition.y}%`);
-    console.log('🎯 INACTIVE CSS - transform:', `scale(${displayScale})`);
-    
     return (
       <div className={`relative w-full h-full overflow-hidden ${className}`} ref={containerRef}>
         <img
