@@ -59,10 +59,20 @@ const InlineCrop = ({
     // Schedule auto-save after 800ms of inactivity
     autoSaveTimeoutRef.current = setTimeout(async () => {
       if (hasChanges) {
-        await handleSave();
+        const croppedBlob = await generateCrop();
+        if (croppedBlob) {
+          const reader = new FileReader();
+          reader.onload = () => {
+            onSave({
+              blob: croppedBlob,
+              base64: reader.result
+            });
+          };
+          reader.readAsDataURL(croppedBlob);
+        }
       }
     }, 800);
-  }, [hasChanges]);
+  }, [hasChanges, generateCrop, onSave]);
 
   // Cleanup timeout on unmount
   useEffect(() => {
