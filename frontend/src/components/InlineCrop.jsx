@@ -334,6 +334,41 @@ const InlineCrop = ({
           onDragStart={(e) => e.preventDefault()}
         />
       </div>
+      
+      {/* Save button - visible when there are changes */}
+      {hasChanges && (
+        <div className="absolute top-4 right-4 z-50">
+          <button
+            onClick={() => {
+              console.log('💾 Manual save clicked - position:', position, 'scale:', scale);
+              const transformData = {
+                transform: {
+                  position: position,
+                  scale: scale
+                },
+                originalImageSrc: imageSrc
+              };
+              onSave(transformData);
+              setHasChanges(false);
+              setTimeout(() => onCancel(), 200);
+            }}
+            className="bg-green-500 hover:bg-green-600 text-white p-2 rounded-full shadow-lg transition-all duration-200 flex items-center justify-center"
+          >
+            <Check size={20} />
+          </button>
+        </div>
+      )}
+      
+      {/* Instructions overlay */}
+      <div className="absolute bottom-4 left-4 right-4 bg-black/70 text-white text-sm p-3 rounded-lg z-40">
+        <div className="text-center">
+          <p className="mb-1 font-medium">✋ Ajusta la imagen</p>
+          <p className="text-xs opacity-80">
+            • Arrastra para mover • Pellizca/rueda para zoom
+            {hasChanges && <span className="block mt-1 text-green-300">• Presiona ✓ para guardar cambios</span>}
+          </p>
+        </div>
+      </div>
     </div>
   );
 };
