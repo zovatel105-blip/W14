@@ -302,16 +302,16 @@ const InlineCrop = ({
 
 
   if (!isActive) {
-    // Complete image as uploaded, scaled to fill layout entirely - no background
+    // Image IS the background - fills layout completely, no dark areas
     const displayTransform = savedTransform || calculateSmartTransform();
     
     return (
       <div className={`relative w-full h-full overflow-hidden ${className}`} ref={containerRef}>
-        {/* Only the image - complete as uploaded, scaled to fill layout entirely */}
+        {/* Image fills entire layout - image IS the background */}
         <img
           src={imageSrc}
           alt="Preview"
-          className="w-full h-full object-contain" /* Complete image, scaled to fill entirely */
+          className="w-full h-full object-cover" /* Image fills completely, IS the background */
           style={{
             transform: `translate(${displayTransform.translateX}px, ${displayTransform.translateY}px) scale(${displayTransform.scale})`,
             transformOrigin: 'center',
