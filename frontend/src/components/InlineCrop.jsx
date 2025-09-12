@@ -11,6 +11,7 @@ import { Check, X } from 'lucide-react';
 const InlineCrop = ({
   isActive = false,
   imageSrc = '',
+  savedTransform = null, // Saved transform parameters
   onSave = () => {},
   onCancel = () => {},
   className = ''
