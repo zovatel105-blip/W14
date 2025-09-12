@@ -755,6 +755,7 @@ const ContentCreationPage = () => {
           media_type: opt.media.type, // Use the actual media type (image or video)
           media_url: opt.media.url,
           thumbnail_url: opt.media.thumbnail || opt.media.url, // Use thumbnail for videos, original for images
+          media_transform: opt.media.transform || null, // ✅ Include crop transform data
           mentioned_users: opt.mentionedUsers ? opt.mentionedUsers.map(user => user.id) : []
         };
       });
