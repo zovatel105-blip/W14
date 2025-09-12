@@ -937,7 +937,7 @@ const ContentCreationPage = () => {
                     <button
                       key={layout.id}
                       onClick={() => handleLayoutSelect(layout)}
-                      className={`w-full px-3 sm:px-4 py-2 text-left hover:bg-gray-700 transition-colors ${
+                      className={`w-full px-2 py-2 text-left hover:bg-gray-700 transition-colors ${
                         selectedLayout.id === layout.id ? 'bg-gray-600 text-white' : 'text-gray-300'
                       }`}
                     >
