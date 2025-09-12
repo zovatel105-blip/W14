@@ -337,6 +337,7 @@ const InlineCrop = ({
         onTouchStart={handleStart}
         onMouseDown={handleStart}
         onWheel={handleWheel}
+        onDoubleClick={handleDoubleClick}
         style={{ touchAction: 'none', pointerEvents: 'auto' }}
       >
         <img
@@ -351,27 +352,7 @@ const InlineCrop = ({
           }}
           onDragStart={(e) => e.preventDefault()}
         />
-  return (
-    <div 
-      className={`relative w-full h-full overflow-hidden ${className}`} 
-      ref={containerRef}
-      onTouchStart={handleStart}
-      onMouseDown={handleStart}
-      onDoubleClick={handleDoubleClick}
-    >
-      <img 
-        src={imageSrc}
-        alt="Crop image"
-        className="w-full h-full object-cover select-none"
-        style={{
-          objectPosition: `${position.x}% ${position.y}%`,
-          transform: `scale(${scale})`,
-          transformOrigin: 'center',
-          transition: isInteracting ? 'none' : 'transform 0.2s ease-out'
-        }}
-        onWheel={handleWheel}
-        onDragStart={(e) => e.preventDefault()}
-      />
+      </div>
       
       {/* Instructions overlay */}
       <div className="absolute bottom-4 left-4 right-4 bg-black/70 text-white text-sm p-3 rounded-lg z-40">
