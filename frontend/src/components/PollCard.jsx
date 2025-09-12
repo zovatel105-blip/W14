@@ -27,7 +27,7 @@ const MediaPreview = ({ media, isWinner, isSelected, onClick, percentage, option
   if (media.type === 'video') {
     return (
       <motion.div 
-        className={cn("relative w-full rounded-lg overflow-hidden group cursor-pointer", heightClass)} 
+        className={cn("relative w-full rounded-lg overflow-hidden group cursor-pointer hover:scale-105 transition-transform duration-300", heightClass)} 
         onClick={handleClick}
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
