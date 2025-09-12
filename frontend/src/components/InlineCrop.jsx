@@ -368,30 +368,6 @@ const InlineCrop = ({
         />
       </div>
       
-      {/* Temporary debug indicator for hasChanges */}
-      {hasChanges && (
-        <div className="absolute top-2 left-2 bg-orange-500 text-white text-xs px-2 py-1 rounded z-50">
-          CAMBIOS: ✓
-        </div>
-      )}
-      
-      {/* Temporary save button for debugging - centered */}
-      {hasChanges && (
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50">
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              console.log('🔘 Manual save button clicked');
-              handleDoubleClick(e);
-            }}
-            className="bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded-lg shadow-lg text-sm font-bold transition-all duration-200 hover:scale-105"
-          >
-            💾 GUARDAR CAMBIOS
-          </button>
-        </div>
-      )}
-      
       {/* Instructions overlay */}
       <div className="absolute bottom-4 left-4 right-4 bg-black/70 text-white text-sm p-3 rounded-lg z-40">
         <div className="text-center">
@@ -400,7 +376,7 @@ const InlineCrop = ({
             • Arrastra para mover • Pellizca/rueda para zoom
             {hasChanges && (
               <span className="block mt-1 text-green-300 font-medium">
-                • Usa el botón central GUARDAR CAMBIOS
+                • Doble click para guardar cambios
               </span>
             )}
           </p>
