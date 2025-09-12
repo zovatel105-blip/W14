@@ -298,7 +298,7 @@ const InlineCrop = ({
           ref={imageRef}
           src={imageSrc}
           alt="Crop preview"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-contain" /* Changed from object-cover to object-contain */
           style={{
             transform: `translate(${transform.translateX}px, ${transform.translateY}px) scale(${transform.scale})`,
             transformOrigin: 'center',
