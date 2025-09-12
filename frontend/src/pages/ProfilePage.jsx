@@ -1050,7 +1050,14 @@ const ProfilePage = () => {
             <div className="relative w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 flex-shrink-0">
               {/* Borde degradado solo si hay historia */}
               {displayUser?.hasStory ? (
-                <div className="absolute inset-0 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 rounded-full p-0.5">
+                <button
+                  onClick={() => {
+                    if (userStories.length > 0) {
+                      setShowStoryViewer(true);
+                    }
+                  }}
+                  className="absolute inset-0 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 rounded-full p-0.5 hover:scale-105 transition-transform duration-200 cursor-pointer"
+                >
                   <div className="w-full h-full bg-white rounded-full overflow-hidden relative">
                     {isOwnProfile ? (
                       <AvatarUpload
@@ -1074,7 +1081,7 @@ const ProfilePage = () => {
                       </Avatar>
                     )}
                   </div>
-                </div>
+                </button>
               ) : (
                 // Sin borde degradado si no hay historia
                 <div className="w-full h-full bg-white rounded-full overflow-hidden relative border-2 border-gray-200">
