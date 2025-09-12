@@ -388,9 +388,9 @@ const InlineCrop = ({
         </div>
       )}
       
-      {/* Temporary save button for debugging */}
+      {/* Temporary save button for debugging - centered */}
       {hasChanges && (
-        <div className="absolute top-2 right-2 z-50">
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50">
           <button
             onClick={(e) => {
               e.preventDefault();
@@ -398,9 +398,9 @@ const InlineCrop = ({
               console.log('🔘 Manual save button clicked');
               handleDoubleClick(e);
             }}
-            className="bg-green-500 hover:bg-green-600 text-white p-2 rounded shadow-lg text-xs font-bold"
+            className="bg-green-500 hover:bg-green-600 text-white px-4 py-3 rounded-lg shadow-lg text-sm font-bold transition-all duration-200 hover:scale-105"
           >
-            GUARDAR
+            💾 GUARDAR CAMBIOS
           </button>
         </div>
       )}
