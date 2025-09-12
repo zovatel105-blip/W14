@@ -29,6 +29,8 @@ const InlineCrop = ({
   const containerRef = useRef(null);
   const autoSaveTimeoutRef = useRef(null);
 
+  console.log('🔍 InlineCrop render - isActive:', isActive, 'savedTransform:', savedTransform);
+
   // Always sync with savedTransform when it changes
   useEffect(() => {
     if (savedTransform && savedTransform.transform) {
