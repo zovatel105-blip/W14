@@ -312,22 +312,6 @@ const InlineCrop = ({
   }, [isActive, isInteracting, handleMove, handleEnd]); // FIXED: Added missing dependencies
 
 
-
-  // Handle save
-  const handleSave = async () => {
-    const croppedBlob = await generateCrop();
-    if (croppedBlob) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        onSave({
-          blob: croppedBlob,
-          base64: reader.result
-        });
-      };
-      reader.readAsDataURL(croppedBlob);
-    }
-  };
-
   if (!isActive) {
     // Normal image display when not cropping
     return (
