@@ -67,6 +67,7 @@ const ProfilePage = () => {
   const [savedPolls, setSavedPolls] = useState([]);
   const [pollsLoading, setPollsLoading] = useState(true);
   const [editProfileModalOpen, setEditProfileModalOpen] = useState(false);
+  const [statisticsModalOpen, setStatisticsModalOpen] = useState(false);
   const [showCommentsModal, setShowCommentsModal] = useState(false);
   const [selectedPollId, setSelectedPollId] = useState(null);
   const [selectedPollTitle, setSelectedPollTitle] = useState('');
