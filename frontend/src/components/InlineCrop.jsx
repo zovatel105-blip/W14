@@ -126,10 +126,10 @@ const InlineCrop = ({
         const deltaX = touch.clientX - lastTouch.x;
         const deltaY = touch.clientY - lastTouch.y;
         
-        // Better sensitivity for drag
+        // Better sensitivity for drag - INVERTED for intuitive movement
         const sensitivity = 0.3;
-        const deltaPercentX = deltaX * sensitivity;
-        const deltaPercentY = deltaY * sensitivity;
+        const deltaPercentX = -deltaX * sensitivity; // NEGATIVE for correct direction
+        const deltaPercentY = -deltaY * sensitivity; // NEGATIVE for correct direction
         
         setPosition(prev => ({
           x: Math.max(10, Math.min(90, prev.x + deltaPercentX)),
