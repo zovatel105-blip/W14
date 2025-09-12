@@ -306,14 +306,6 @@ const InlineCrop = ({
           }}
           onDragStart={(e) => e.preventDefault()}
         />
-        
-        {/* DEBUG: Only show when NOT active */}
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-green-500 text-white text-sm p-2 rounded pointer-events-none z-50">
-          <div>INACTIVE</div>
-          <div>P: {displayPosition.x},{displayPosition.y}</div>
-          <div>S: {displayScale}</div>
-          <div>ST: {savedTransform ? 'YES' : 'NO'}</div>
-        </div>
       </div>
     );
   }
