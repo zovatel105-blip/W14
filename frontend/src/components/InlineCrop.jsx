@@ -53,8 +53,10 @@ const InlineCrop = ({
   const saveOnExit = useCallback(() => {
     if (hasChanges) {
       onSave({
-        position: position,
-        scale: scale,
+        transform: {
+          position: position,
+          scale: scale
+        },
         originalImageSrc: imageSrc
       });
       setHasChanges(false);
