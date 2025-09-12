@@ -19,9 +19,24 @@ const InlineCrop = ({
   console.log('🔍 savedTransform details:', JSON.stringify(savedTransform, null, 2));
   console.log('🔍 Current state - position will be initialized based on savedTransform or defaults');
 
-  // Enhanced position and scale state
-  const [position, setPosition] = useState({ x: 50, y: 50 }); // Percentage for object-position
-  const [scale, setScale] = useState(1); // Scale for zoom
+  // Enhanced position and scale state - Initialize from savedTransform if available
+  const [position, setPosition] = useState(() => {
+    if (savedTransform && savedTransform.transform && savedTransform.transform.position) {
+      console.log('🎯 Initializing position from savedTransform:', savedTransform.transform.position);
+      return savedTransform.transform.position;
+    }
+    console.log('🎯 Initializing position to default: 50, 50');
+    return { x: 50, y: 50 };
+  }); // Percentage for object-position
+  
+  const [scale, setScale] = useState(() => {
+    if (savedTransform && savedTransform.transform && savedTransform.transform.scale) {
+      console.log('🎯 Initializing scale from savedTransform:', savedTransform.transform.scale);
+      return savedTransform.transform.scale;
+    }
+    console.log('🎯 Initializing scale to default: 1');
+    return 1;
+  }); // Scale for zoom
   const [hasChanges, setHasChanges] = useState(false);
   
   // Touch interaction state
