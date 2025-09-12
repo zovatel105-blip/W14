@@ -65,29 +65,13 @@ const InlineCrop = ({
 
   const prevActiveRef = useRef(isActive);
 
-  // Save when component becomes inactive (user exits crop mode)
-  useEffect(() => {
-    return () => {
-      // Cleanup: Save when unmounting or becoming inactive
-      if (hasChanges) {
-        onSave({
-          transform: {
-            position: position,
-            scale: scale
-          },
-          originalImageSrc: imageSrc
-        });
-      }
-    };
-  }, [hasChanges, position, scale, imageSrc, onSave]);
-
-  // Also save when isActive changes from true to false
+  // Save ONLY when isActive changes from true to false (user exits crop mode)
   useEffect(() => {
     if (prevActiveRef.current === true && isActive === false && hasChanges) {
       console.log('💾 Saving on exit - position:', position, 'scale:', scale);
       onSave({
         transform: {
-          position: position,
+          position: position,  
           scale: scale
         },
         originalImageSrc: imageSrc
@@ -96,7 +80,7 @@ const InlineCrop = ({
     }
     
     prevActiveRef.current = isActive;
-  }, [isActive, hasChanges, position, scale, imageSrc, onSave]);
+  }, [isActive]); // ONLY depend on isActive to avoid constant saves
 
   // Cleanup
   useEffect(() => {
