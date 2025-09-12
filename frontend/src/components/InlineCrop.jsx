@@ -174,18 +174,13 @@ const InlineCrop = ({
     }
   }, [isActive, isInteracting, isDragging, lastTouch, lastDistance]);
 
-  // Handle end of interaction - with auto-save
+  // Handle end of interaction
   const handleEnd = useCallback(() => {
     if (!isActive) return;
     
     setIsDragging(false);
     setIsInteracting(false);
-    
-    // Auto-save after interaction ends
-    if (hasChanges) {
-      scheduleAutoSave();
-    }
-  }, [isActive, hasChanges, scheduleAutoSave]);
+  }, [isActive]);
 
   // Handle mouse wheel zoom - with auto-save
   const handleWheel = (e) => {
