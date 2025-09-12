@@ -777,17 +777,19 @@ const ContentCreationPage = () => {
         description: "Tu contenido ha sido publicado exitosamente",
       });
 
-      // Reset form data (like CreatePollModal)
-      setTitle('');
-      setOptions([]);
-      setSelectedMusic(null);
-      setSelectedLayout(LAYOUT_OPTIONS[0]);
-      setShowMusicSelector(false);
-      setShowLayoutMenu(false);
-
-      // Navigate to feed after a short delay to show the success message
+      // Navigate to feed FIRST, then reset form data to avoid interfering with crop state
       setTimeout(() => {
         navigate('/feed');
+        
+        // Reset form data AFTER navigation starts (to avoid crop state interference)
+        setTimeout(() => {
+          setTitle('');
+          setOptions([]);
+          setSelectedMusic(null);
+          setSelectedLayout(LAYOUT_OPTIONS[0]);
+          setShowMusicSelector(false);
+          setShowLayoutMenu(false);
+        }, 100);
       }, 1500);
 
     } catch (error) {
