@@ -247,7 +247,7 @@ const InlineCrop = ({
     }
   }, [savedTransform]);
 
-  // Reset position when becoming active
+  // Load position when becoming active - DO NOT reset if no savedTransform
   useEffect(() => {
     if (isActive) {
       if (savedTransform && savedTransform.transform) {
@@ -255,9 +255,8 @@ const InlineCrop = ({
         setScale(savedTransform.transform.scale || 1);
         console.log('🔄 Loading saved transform for active mode:', savedTransform.transform);
       } else {
-        setPosition({ x: 50, y: 50 });
-        setScale(1);
-        console.log('🔄 Loading default transform for active mode');
+        // DON'T reset - keep current values to preserve user adjustments
+        console.log('🔄 No saved transform - keeping current position/scale');
       }
       setHasChanges(false);
       setIsInteracting(false);
