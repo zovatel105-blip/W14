@@ -3563,12 +3563,6 @@ async def create_poll(
             media_transform=option_data.get("media_transform"),  # ✅ Include transform data
             mentioned_users=option_data.get("mentioned_users", [])
         )
-        
-        # ✅ DEBUG: Log what transform data is being saved
-        if option_data.get("media_transform"):
-            print(f"🔍 BACKEND SAVING media_transform: {option_data.get('media_transform')}")
-        else:
-            print("🔍 BACKEND: No media_transform data received")
         options.append(option)
     
     # Create poll
