@@ -27,10 +27,12 @@ const InlineCrop = ({
   const [lastTouch, setLastTouch] = useState({ x: 0, y: 0 });
   const [lastDistance, setLastDistance] = useState(0);
   const [isInteracting, setIsInteracting] = useState(false);
+  const [hasChanges, setHasChanges] = useState(false);
 
   const containerRef = useRef(null);
   const imageRef = useRef(null);
   const canvasRef = useRef(null);
+  const autoSaveTimeoutRef = useRef(null);
 
   // Reset transform when becoming active
   useEffect(() => {
