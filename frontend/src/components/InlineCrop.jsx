@@ -29,6 +29,15 @@ const InlineCrop = ({
   const containerRef = useRef(null);
   const autoSaveTimeoutRef = useRef(null);
 
+  // Always sync with savedTransform when it changes
+  useEffect(() => {
+    if (savedTransform && savedTransform.transform) {
+      console.log('🔄 Syncing with savedTransform:', savedTransform.transform);
+      setPosition(savedTransform.transform.position);
+      setScale(savedTransform.transform.scale || 1);
+    }
+  }, [savedTransform]);
+
   // Reset position when becoming active
   useEffect(() => {
     if (isActive) {
@@ -36,11 +45,11 @@ const InlineCrop = ({
         // Load from nested structure that we save
         setPosition(savedTransform.transform.position);
         setScale(savedTransform.transform.scale || 1);
-        console.log('🔄 Loading saved transform:', savedTransform.transform);
+        console.log('🔄 Loading saved transform for active mode:', savedTransform.transform);
       } else {
         setPosition({ x: 50, y: 50 }); // Default center
         setScale(1);
-        console.log('🔄 Loading default transform');
+        console.log('🔄 Loading default transform for active mode');
       }
       setHasChanges(false);
       setIsInteracting(false);
@@ -50,7 +59,7 @@ const InlineCrop = ({
         autoSaveTimeoutRef.current = null;
       }
     }
-  }, [isActive, savedTransform]);
+  }, [isActive]); // Remove savedTransform dependency to avoid double updates
 
   // Save only when exiting crop mode
   const saveOnExit = useCallback(() => {
