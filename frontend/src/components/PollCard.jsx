@@ -85,6 +85,10 @@ const MediaPreview = ({ media, isWinner, isSelected, onClick, percentage, option
         src={media.url} 
         alt="Poll option"
         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+        style={media.transform ? {
+          objectPosition: `${media.transform.position?.x || 50}% ${media.transform.position?.y || 50}%`,
+          transform: `scale(${media.transform.scale || 1})`
+        } : {}}
       />
       
       {/* Progress Bar Background - Fills vertically from bottom */}
