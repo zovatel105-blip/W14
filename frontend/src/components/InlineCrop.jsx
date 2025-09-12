@@ -79,8 +79,8 @@ const InlineCrop = ({
     }
   };
 
-  // Handle movement during interaction
-  const handleMove = (e) => {
+  // Handle movement during interaction - wrapped in useCallback
+  const handleMove = useCallback((e) => {
     if (!isActive || !isInteracting) return;
     
     e.preventDefault();
@@ -142,10 +142,10 @@ const InlineCrop = ({
       
       setLastTouch({ x: e.clientX, y: e.clientY });
     }
-  };
+  }, [isActive, isInteracting, isDragging, lastTouch, lastDistance]);
 
-  // Handle end of interaction
-  const handleEnd = (e) => {
+  // Handle end of interaction - wrapped in useCallback
+  const handleEnd = useCallback((e) => {
     if (!isActive) return;
     
     setIsDragging(false);
@@ -156,7 +156,7 @@ const InlineCrop = ({
       ...prev,
       scale: Math.max(0.5, Math.min(3, prev.scale))
     }));
-  };
+  }, [isActive]);
 
   // Handle mouse wheel for desktop zoom
   const handleWheel = (e) => {
