@@ -160,8 +160,8 @@ const InlineCrop = ({
       const deltaY = e.clientY - lastTouch.y;
       
       const sensitivity = 0.3;
-      const deltaPercentX = deltaX * sensitivity;
-      const deltaPercentY = deltaY * sensitivity;
+      const deltaPercentX = -deltaX * sensitivity; // NEGATIVE for correct direction
+      const deltaPercentY = -deltaY * sensitivity; // NEGATIVE for correct direction
       
       setPosition(prev => ({
         x: Math.max(10, Math.min(90, prev.x + deltaPercentX)),
