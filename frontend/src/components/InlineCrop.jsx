@@ -45,36 +45,18 @@ const InlineCrop = ({
     };
   }, [imageSize]);
 
-  // Simple bounds for object-cover - prevents black areas naturally
+  // Very conservative movement limits to prevent any black areas
   const constrainTransform = useCallback((newTransform) => {
-    if (!containerRef.current || !imageRef.current) {
-      return newTransform;
-    }
-
-    const container = containerRef.current.getBoundingClientRect();
-    const containerAspect = container.width / container.height;
-    const imageAspect = imageSize.width / imageSize.height;
-    
-    // For object-cover, calculate how much the image extends beyond container
-    let maxMoveX = 0;
-    let maxMoveY = 0;
-    
-    if (imageAspect > containerAspect) {
-      // Image is wider - it extends horizontally
-      const imageWidth = container.height * imageAspect * newTransform.scale;
-      maxMoveX = Math.max(0, (imageWidth - container.width) / 2);
-    } else {
-      // Image is taller - it extends vertically  
-      const imageHeight = container.width / imageAspect * newTransform.scale;
-      maxMoveY = Math.max(0, (imageHeight - container.height) / 2);
-    }
+    // Limit movement to very small amounts to prevent black areas
+    const maxMove = 50; // Very conservative limit
     
     return {
       ...newTransform,
-      translateX: Math.max(-maxMoveX, Math.min(maxMoveX, newTransform.translateX)),
-      translateY: Math.max(-maxMoveY, Math.min(maxMoveY, newTransform.translateY))
+      translateX: Math.max(-maxMove, Math.min(maxMove, newTransform.translateX)),
+      translateY: Math.max(-maxMove, Math.min(maxMove, newTransform.translateY)),
+      scale: Math.max(1, Math.min(2, newTransform.scale)) // Scale only up, never down
     };
-  }, [imageSize]);
+  }, []);
 
   // Reset transform when becoming active, or load saved transform
   useEffect(() => {
