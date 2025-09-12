@@ -324,29 +324,16 @@ const InlineCrop = ({
 
 
   if (!isActive) {
-    // Complete image as uploaded + intelligent background to fill layout - no dark areas
+    // Complete image as uploaded, scaled to fill layout entirely - no background
     const displayTransform = savedTransform || calculateSmartTransform();
     
     return (
       <div className={`relative w-full h-full overflow-hidden ${className}`} ref={containerRef}>
-        {/* Background: same image fills layout shape to avoid dark areas */}
-        <div className="absolute inset-0">
-          <img
-            src={imageSrc}
-            alt="Background fill"
-            className="w-full h-full object-cover blur-sm opacity-80 scale-105"
-            style={{
-              transform: `translate(${displayTransform.translateX * 0.1}px, ${displayTransform.translateY * 0.1}px) scale(${1 + (displayTransform.scale - 1) * 0.1})`,
-            }}
-            onDragStart={(e) => e.preventDefault()}
-          />
-        </div>
-        
-        {/* Foreground: complete image as uploaded - no cropping */}
+        {/* Only the image - complete as uploaded, scaled to fill layout entirely */}
         <img
           src={imageSrc}
           alt="Preview"
-          className="relative w-full h-full object-contain z-10" /* Shows COMPLETE image as uploaded */
+          className="w-full h-full object-contain" /* Complete image, scaled to fill entirely */
           style={{
             transform: `translate(${displayTransform.translateX}px, ${displayTransform.translateY}px) scale(${displayTransform.scale})`,
             transformOrigin: 'center',
