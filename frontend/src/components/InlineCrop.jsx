@@ -192,7 +192,12 @@ const InlineCrop = ({
       ...prev,
       scale: Math.max(0.5, Math.min(3, prev.scale))
     }));
-  }, [isActive]);
+    
+    // Schedule auto-save after interaction ends
+    if (hasChanges) {
+      scheduleAutoSave();
+    }
+  }, [isActive, hasChanges, scheduleAutoSave]);
 
   // Handle mouse wheel for desktop zoom
   const handleWheel = (e) => {
