@@ -232,8 +232,9 @@ const InlineCrop = ({
   }, [isActive, isInteracting, handleMove, handleEnd]);
 
   if (!isActive) {
-    // Normal display with object-position
+    // Normal display with object-position and scale
     const displayPosition = savedTransform?.position || { x: 50, y: 50 };
+    const displayScale = savedTransform?.scale || 1;
     
     return (
       <div className={`relative w-full h-full overflow-hidden ${className}`} ref={containerRef}>
@@ -242,7 +243,9 @@ const InlineCrop = ({
           alt="Preview"
           className="w-full h-full object-cover"
           style={{
-            objectPosition: `${displayPosition.x}% ${displayPosition.y}%`
+            objectPosition: `${displayPosition.x}% ${displayPosition.y}%`,
+            transform: `scale(${displayScale})`,
+            transformOrigin: 'center'
           }}
           onDragStart={(e) => e.preventDefault()}
         />
