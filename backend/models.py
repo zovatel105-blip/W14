@@ -338,6 +338,7 @@ class PollOption(BaseModel):
     media_type: Optional[str] = None  # "image", "video", None
     media_url: Optional[str] = None
     thumbnail_url: Optional[str] = None
+    media_transform: Optional[dict] = None  # ✅ Transform data for image cropping/positioning
     mentioned_users: List[str] = []  # List of user IDs mentioned in this option
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
