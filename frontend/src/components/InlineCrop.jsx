@@ -136,6 +136,7 @@ const InlineCrop = ({
         }));
         
         setLastTouch({ x: touch.clientX, y: touch.clientY });
+        setHasChanges(true); // Mark as changed
         
       } else if (touches.length === 2) {
         // Two finger pinch - zoom with limits and bounce
