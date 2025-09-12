@@ -324,10 +324,10 @@ const InlineCrop = ({
     );
   }
 
-  // Crop mode - complete image scaled to fill, no background
+  // Crop mode - image IS the background, fills completely
   return (
     <div className={`relative w-full h-full overflow-hidden ${className}`} style={{ pointerEvents: 'auto' }}>
-      {/* Interactive image container - no background, only image */}
+      {/* Interactive image container - image IS the background */}
       <div
         ref={containerRef}
         className="absolute inset-0 cursor-move select-none z-10"
@@ -340,7 +340,7 @@ const InlineCrop = ({
           ref={imageRef}
           src={imageSrc}
           alt="Adjust preview"
-          className="w-full h-full object-contain" /* Complete image scaled to fill entirely */
+          className="w-full h-full object-cover" /* Image fills completely, IS the background */
           style={{
             transform: `translate(${transform.translateX}px, ${transform.translateY}px) scale(${transform.scale})`,
             transformOrigin: 'center',
