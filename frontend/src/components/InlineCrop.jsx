@@ -121,14 +121,18 @@ const InlineCrop = ({
         const distance = getDistance(touches);
         const scaleFactor = distance / lastDistance;
         
+        console.log('🤏 Pinch zoom - distance:', distance, 'lastDistance:', lastDistance, 'scaleFactor:', scaleFactor);
+        
         if (scaleFactor > 0.8 && scaleFactor < 1.2) {
           setScale(prev => {
-            const newScale = prev * scaleFactor;
-            return Math.max(1, Math.min(3, newScale)); // Scale 1x to 3x
+            const newScale = Math.max(1, Math.min(3, prev * scaleFactor)); // Scale 1x to 3x
+            console.log('🔍 Scale update - previous:', prev, 'new:', newScale);
+            return newScale;
           });
           
           setLastDistance(distance);
           setHasChanges(true);
+          console.log('✅ pinch hasChanges set to true');
         }
       }
     } else if (isDragging) {
