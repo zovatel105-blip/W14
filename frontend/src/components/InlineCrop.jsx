@@ -34,8 +34,10 @@ const InlineCrop = ({
     if (isActive) {
       if (savedTransform && savedTransform.position) {
         setPosition(savedTransform.position);
+        setScale(savedTransform.scale || 1);
       } else {
         setPosition({ x: 50, y: 50 }); // Default center
+        setScale(1);
       }
       setHasChanges(false);
       setIsInteracting(false);
