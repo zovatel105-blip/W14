@@ -501,18 +501,18 @@ const ContentCreationPage = () => {
   const handleInlineCropSave = (transformResult) => {
     if (cropActiveSlot === null) return;
     
+    console.log('📥 Received transform data:', transformResult);
+    
     // Update the option media with transform data (no actual cropping)
     updateOption(cropActiveSlot, 'media', {
       ...options[cropActiveSlot].media,
       transform: transformResult.transform // Save position and scale
     });
     
-    setCropActiveSlot(null); // Exit crop mode
-
-    toast({
-      title: "Imagen ajustada",
-      description: "La posición y zoom se guardaron correctamente"
-    });
+    console.log('💾 Updated option media with transform:', transformResult.transform);
+    
+    // Don't exit crop mode immediately - let the component handle it
+    // setCropActiveSlot(null); // Removed this
   };
 
   // Handle inline crop cancel
