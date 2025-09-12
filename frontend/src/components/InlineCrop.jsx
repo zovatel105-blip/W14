@@ -259,30 +259,16 @@ const InlineCrop = ({
 
 
   if (!isActive) {
-    // Smart layout adaptation: complete image + blurred background for layout fitting
+    // Image adapts COMPLETELY to layout shape - no gaps, fills entire slot
     const displayTransform = savedTransform || { scale: 1, translateX: 0, translateY: 0 };
     
     return (
       <div className={`relative w-full h-full overflow-hidden ${className}`}>
-        {/* Blurred background that adapts to layout shape */}
-        <div className="absolute inset-0">
-          <img
-            src={imageSrc}
-            alt="Background blur"
-            className="w-full h-full object-cover blur-sm opacity-40 scale-105"
-            style={{
-              transform: `translate(${displayTransform.translateX * 0.1}px, ${displayTransform.translateY * 0.1}px) scale(${1 + (displayTransform.scale - 1) * 0.1})`,
-            }}
-            onDragStart={(e) => e.preventDefault()}
-          />
-          <div className="absolute inset-0 bg-black/20" />
-        </div>
-        
-        {/* Main image - always complete and visible */}
+        {/* Image fills the entire layout slot completely */}
         <img
           src={imageSrc}
           alt="Preview"
-          className="relative w-full h-full object-contain z-10" /* Always shows complete image */
+          className="w-full h-full object-cover" /* COMPLETE layout adaptation */
           style={{
             transform: `translate(${displayTransform.translateX}px, ${displayTransform.translateY}px) scale(${displayTransform.scale})`,
             transformOrigin: 'center',
