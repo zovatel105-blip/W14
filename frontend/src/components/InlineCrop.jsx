@@ -286,7 +286,7 @@ const InlineCrop = ({
 
   // Crop mode - TikTok-style interface
   return (
-    <div className={`relative w-full h-full overflow-hidden ${className}`}>
+    <div className={`relative w-full h-full overflow-hidden ${className}`} style={{ pointerEvents: 'auto' }}>
       {/* Dark semi-transparent overlay outside visible area */}
       <div className="absolute inset-0 bg-black/40" />
       
@@ -297,7 +297,7 @@ const InlineCrop = ({
         onTouchStart={handleStart}
         onMouseDown={handleStart}
         onWheel={handleWheel}
-        style={{ touchAction: 'none' }}
+        style={{ touchAction: 'none', pointerEvents: 'auto' }}
       >
         <img
           ref={imageRef}
