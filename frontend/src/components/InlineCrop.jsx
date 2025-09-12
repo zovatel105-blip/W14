@@ -286,10 +286,12 @@ const InlineCrop = ({
     );
   }
 
-  // Crop mode - TikTok-style interface optimized for layout adaptation
+  // Crop mode - TikTok-style interface with smart object-fit
+  const hasBeenAdjusted = savedTransform !== null;
+  
   return (
     <div className={`relative w-full h-full overflow-hidden ${className}`} style={{ pointerEvents: 'auto' }}>
-      {/* Dark semi-transparent overlay for crop mode contrast */}
+      {/* Background for object-contain mode */}
       <div className="absolute inset-0 bg-black/40 z-5" />
       
       {/* Interactive image container */}
@@ -305,7 +307,7 @@ const InlineCrop = ({
           ref={imageRef}
           src={imageSrc}
           alt="Adjust preview"
-          className="w-full h-full object-cover" /* Back to object-cover for layout adaptation */
+          className={`w-full h-full ${hasBeenAdjusted ? 'object-cover' : 'object-contain'}`} /* Smart object-fit based on adjustment state */
           style={{
             transform: `translate(${transform.translateX}px, ${transform.translateY}px) scale(${transform.scale})`,
             transformOrigin: 'center',
