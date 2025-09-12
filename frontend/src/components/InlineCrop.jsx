@@ -49,17 +49,22 @@ const InlineCrop = ({
     }
   }, [isActive, savedTransform]);
 
-  // Save only when exiting crop mode - no auto-save during interaction
+  // Auto-save after interaction ends
   const scheduleAutoSave = useCallback(() => {
-    // Only save when exiting, not during interaction
-    if (hasChanges) {
-      onSave({
-        position: position,
-        scale: scale,
-        originalImageSrc: imageSrc
-      });
-      setHasChanges(false);
+    if (autoSaveTimeoutRef.current) {
+      clearTimeout(autoSaveTimeoutRef.current);
     }
+    
+    autoSaveTimeoutRef.current = setTimeout(() => {
+      if (hasChanges) {
+        onSave({
+          position: position,
+          scale: scale,
+          originalImageSrc: imageSrc
+        });
+        setHasChanges(false);
+      }
+    }, 800);
   }, [hasChanges, position, scale, imageSrc, onSave]);
 
   // Cleanup
