@@ -71,8 +71,10 @@ const InlineCrop = ({
       // Cleanup: Save when unmounting or becoming inactive
       if (hasChanges) {
         onSave({
-          position: position,
-          scale: scale,
+          transform: {
+            position: position,
+            scale: scale
+          },
           originalImageSrc: imageSrc
         });
       }
@@ -84,8 +86,10 @@ const InlineCrop = ({
     if (prevActiveRef.current === true && isActive === false && hasChanges) {
       console.log('💾 Saving on exit - position:', position, 'scale:', scale);
       onSave({
-        position: position,
-        scale: scale,
+        transform: {
+          position: position,
+          scale: scale
+        },
         originalImageSrc: imageSrc
       });
       setHasChanges(false);
