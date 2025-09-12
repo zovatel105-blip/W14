@@ -345,6 +345,10 @@ const InlineCrop = ({
   }
 
   // Crop mode - active image with gestures
+  console.log('🎯 ACTIVE RENDER - position:', position, 'scale:', scale);
+  console.log('🎯 ACTIVE CSS - objectPosition:', `${position.x}% ${position.y}%`);
+  console.log('🎯 ACTIVE CSS - transform:', `scale(${scale})`);
+  
   return (
     <div className={`relative w-full h-full overflow-hidden ${className}`} style={{ pointerEvents: 'auto' }}>
       <div
