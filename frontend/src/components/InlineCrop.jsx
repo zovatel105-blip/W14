@@ -291,16 +291,26 @@ const InlineCrop = ({
     );
   }
 
-  // Crop mode - TikTok-style interface
+  // Crop mode - TikTok-style interface with blurred background
   return (
     <div className={`relative w-full h-full overflow-hidden ${className}`} style={{ pointerEvents: 'auto' }}>
-      {/* Dark semi-transparent overlay outside visible area */}
-      <div className="absolute inset-0 bg-black/40" />
+      {/* Blurred background version of the same image */}
+      <div className="absolute inset-0">
+        <img
+          src={imageSrc}
+          alt="Background blur"
+          className="w-full h-full object-cover blur-lg opacity-30 scale-110 z-0"
+          onDragStart={(e) => e.preventDefault()}
+        />
+      </div>
       
-      {/* Interactive image container - REMOVED redundant local handlers */}
+      {/* Dark semi-transparent overlay for crop mode */}
+      <div className="absolute inset-0 bg-black/30 z-5" />
+      
+      {/* Interactive image container */}
       <div
         ref={containerRef}
-        className="absolute inset-0 cursor-move select-none"
+        className="absolute inset-0 cursor-move select-none z-10"
         onTouchStart={handleStart}
         onMouseDown={handleStart}
         onWheel={handleWheel}
