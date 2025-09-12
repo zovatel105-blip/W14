@@ -362,11 +362,22 @@ const InlineCrop = ({
     );
   }
 
-  // Crop mode - pure layout adapted image with interactive adjustment
+  // Crop mode - complete image as uploaded with background fill - no dark areas
   return (
     <div className={`relative w-full h-full overflow-hidden ${className}`} style={{ pointerEvents: 'auto' }}>
-      {/* Minimal dark overlay for crop mode contrast only */}
-      <div className="absolute inset-0 bg-black/20 z-5" />
+      {/* Background: same image fills layout to avoid dark areas during adjustment */}
+      <div className="absolute inset-0">
+        <img
+          src={imageSrc}
+          alt="Background fill"
+          className="w-full h-full object-cover blur-sm opacity-60 scale-105"
+          style={{
+            transform: `translate(${transform.translateX * 0.1}px, ${transform.translateY * 0.1}px) scale(${1 + (transform.scale - 1) * 0.1})`,
+          }}
+          onDragStart={(e) => e.preventDefault()}
+        />
+        <div className="absolute inset-0 bg-black/10" /> {/* Very subtle overlay */}
+      </div>
       
       {/* Interactive image container */}
       <div
@@ -381,7 +392,7 @@ const InlineCrop = ({
           ref={imageRef}
           src={imageSrc}
           alt="Adjust preview"
-          className="w-full h-full object-cover" /* Pure layout adaptation - fills completely */
+          className="w-full h-full object-contain" /* Shows COMPLETE image as uploaded during adjustment */
           style={{
             transform: `translate(${transform.translateX}px, ${transform.translateY}px) scale(${transform.scale})`,
             transformOrigin: 'center',
