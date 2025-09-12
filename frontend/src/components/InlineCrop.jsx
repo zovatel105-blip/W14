@@ -28,7 +28,8 @@ const InlineCrop = ({
   const [lastTouch, setLastTouch] = useState({ x: 0, y: 0 });
   const [lastDistance, setLastDistance] = useState(0);
   const [isInteracting, setIsInteracting] = useState(false);
-  const [hasChanges, setHasChanges] = useState(false);
+  const [imageSize, setImageSize] = useState({ width: 1, height: 1 });
+  const [containerSize, setContainerSize] = useState({ width: 1, height: 1 });
 
   const containerRef = useRef(null);
   const imageRef = useRef(null);
