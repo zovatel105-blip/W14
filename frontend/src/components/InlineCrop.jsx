@@ -324,6 +324,8 @@ const InlineCrop = ({
     
     console.log('🔍 INACTIVE RENDER - savedTransform:', savedTransform);
     console.log('🔍 INACTIVE RENDER - displayPosition:', displayPosition, 'displayScale:', displayScale);
+    console.log('🎯 INACTIVE CSS - objectPosition:', `${displayPosition.x}% ${displayPosition.y}%`);
+    console.log('🎯 INACTIVE CSS - transform:', `scale(${displayScale})`);
     
     return (
       <div className={`relative w-full h-full overflow-hidden ${className}`} ref={containerRef}>
