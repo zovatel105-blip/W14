@@ -1577,7 +1577,7 @@ const ProfilePage = () => {
         <StatisticsModal
           isOpen={statisticsModalOpen}
           onClose={() => setStatisticsModalOpen(false)}
-          user={user}
+          user={displayUser}
           polls={polls}
           followersCount={followersCount}
           followingCount={followingCount}
