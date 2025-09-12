@@ -285,17 +285,6 @@ const InlineCrop = ({
         </button>
       </div>
 
-      {/* Status indicator */}
-      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 pointer-events-none z-30">
-        <div className="bg-black/70 backdrop-blur-sm text-white text-sm px-4 py-2 rounded-full shadow-lg">
-          {isInteracting 
-            ? '👆 Ajustando posición...' 
-            : hasChanges 
-              ? '💾 Guardando ajustes...'
-              : '👆 Arrastra para ajustar'
-          }
-        </div>
-      </div>
     </div>
   );
 };
