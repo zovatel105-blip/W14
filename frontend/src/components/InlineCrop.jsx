@@ -31,6 +31,107 @@ const InlineCrop = ({
 
   console.log('🔍 InlineCrop render - isActive:', isActive, 'savedTransform:', savedTransform);
 
+  // ALL HOOKS MUST BE AT THE TOP - before any returns
+  
+  // Always sync with savedTransform when it changes
+  useEffect(() => {
+    if (savedTransform && savedTransform.transform) {
+      console.log('🔄 Syncing with savedTransform:', savedTransform.transform);
+      setPosition(savedTransform.transform.position);
+      setScale(savedTransform.transform.scale || 1);
+    }
+  }, [savedTransform]);
+
+  // Reset position when becoming active
+  useEffect(() => {
+    if (isActive) {
+      if (savedTransform && savedTransform.transform) {
+        // Load from nested structure that we save
+        setPosition(savedTransform.transform.position);
+        setScale(savedTransform.transform.scale || 1);
+        console.log('🔄 Loading saved transform for active mode:', savedTransform.transform);
+      } else {
+        setPosition({ x: 50, y: 50 }); // Default center
+        setScale(1);
+        console.log('🔄 Loading default transform for active mode');
+      }
+      setHasChanges(false);
+      setIsInteracting(false);
+      
+      if (autoSaveTimeoutRef.current) {
+        clearTimeout(autoSaveTimeoutRef.current);
+        autoSaveTimeoutRef.current = null;
+      }
+    }
+  }, [isActive]); // Remove savedTransform dependency to avoid double updates
+
+  // Save ONLY when isActive changes from true to false (user exits crop mode)
+  useEffect(() => {
+    if (prevActiveRef.current === true && isActive === false && hasChanges) {
+      console.log('💾 Saving on exit - position:', position, 'scale:', scale);
+      
+      const transformData = {
+        transform: {
+          position: position,  
+          scale: scale
+        },
+        originalImageSrc: imageSrc
+      };
+      
+      console.log('📤 Sending transform data:', transformData);
+      onSave(transformData);
+      setHasChanges(false);
+      
+      // Exit crop mode after successful save - increased delay
+      setTimeout(() => {
+        console.log('🚪 Calling onCancel to exit crop mode');
+        onCancel();  
+      }, 200);
+    }
+    
+    prevActiveRef.current = isActive;
+  }, [isActive, hasChanges, position, scale, imageSrc, onSave, onCancel]);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (autoSaveTimeoutRef.current) {
+        clearTimeout(autoSaveTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  // Global event listeners for smooth gesture handling - FIXED dependencies
+  useEffect(() => {
+    if (!isActive) return;
+
+    const handleGlobalMove = (e) => {
+      if (isInteracting) {
+        handleMove(e);
+      }
+    };
+
+    const handleGlobalEnd = (e) => {
+      if (isInteracting) {
+        handleEnd(e);
+      }
+    };
+
+    // Add global listeners for smooth gesture tracking
+    document.addEventListener('touchmove', handleGlobalMove, { passive: false });
+    document.addEventListener('touchend', handleGlobalEnd);
+    document.addEventListener('mousemove', handleGlobalMove);
+    document.addEventListener('mouseup', handleGlobalEnd);
+
+    return () => {
+      document.removeEventListener('touchmove', handleGlobalMove);
+      document.removeEventListener('touchend', handleGlobalEnd);
+      document.removeEventListener('mousemove', handleGlobalMove);
+      document.removeEventListener('mouseup', handleGlobalEnd);
+    };
+  }, [isActive, isInteracting, handleMove, handleEnd]);
+
+  // NOW SAFE TO HAVE CONDITIONAL RETURNS
   if (!isActive) {
     // ALWAYS use savedTransform data directly, no internal state
     const displayPosition = savedTransform?.transform?.position || { x: 50, y: 50 };
