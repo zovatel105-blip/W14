@@ -36,12 +36,35 @@ const InlineCrop = ({
   const imageRef = useRef(null);
   const autoSaveTimeoutRef = useRef(null);
 
-  // Calculate optimal positioning to show maximum image while filling layout completely
+  // Calculate scale to make complete image (object-contain) fill layout entirely
   const calculateSmartTransform = useCallback(() => {
-    // For object-cover, we focus on optimal positioning, not scaling
-    // object-cover already fills the layout completely
+    if (!containerRef.current || imageSize.width <= 1 || imageSize.height <= 1) {
+      return { scale: 1, translateX: 0, translateY: 0 };
+    }
+
+    const container = containerRef.current.getBoundingClientRect();
+    const containerAspect = container.width / container.height;
+    const imageAspect = imageSize.width / imageSize.height;
+    
+    // Calculate what object-contain natural size would be
+    let naturalWidth, naturalHeight;
+    if (imageAspect > containerAspect) {
+      // Image is wider - object-contain fits by width
+      naturalWidth = container.width;
+      naturalHeight = container.width / imageAspect;
+    } else {
+      // Image is taller - object-contain fits by height  
+      naturalWidth = container.height * imageAspect;
+      naturalHeight = container.height;
+    }
+    
+    // Calculate scale needed to make this natural size fill the entire container
+    const scaleX = container.width / naturalWidth;
+    const scaleY = container.height / naturalHeight;
+    const scale = Math.max(scaleX, scaleY);
+
     return {
-      scale: 1,
+      scale: scale,
       translateX: 0,
       translateY: 0
     };
