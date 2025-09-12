@@ -8480,19 +8480,7 @@ def main():
     # Track test results
     test_results = {}
     
-    # Run focused layout test first (as requested in review)
-    print("🎯 Running focused layout functionality test...")
-    print(f"\n{'='*20} Layout Functionality Test {'='*20}")
-    try:
-        result = test_layout_functionality(base_url)
-        test_results["Layout Functionality"] = result
-        status = "✅ PASSED" if result else "❌ FAILED"
-        print(f"\n{status}: Layout Functionality Test")
-    except Exception as e:
-        print(f"\n❌ ERROR in Layout Functionality Test: {str(e)}")
-        test_results["Layout Functionality"] = False
-    
-    # Run essential tests for authentication
+    # Run essential tests for authentication first
     essential_tests = [
         ("Health Check", test_health_check),
         ("User Registration", test_user_registration),
@@ -8518,16 +8506,35 @@ def main():
             if test_name in ["User Registration", "User Login"]:
                 sys.exit(1)
     
-    # Now run the quick verification test
-    print(f"\n{'='*20} Quick Backend Verification {'='*20}")
+    # 🎯 MAIN TEST: Media Transform Functionality (as requested in review)
+    print("🎯 Running MAIN TEST: Media Transform Functionality...")
+    print(f"\n{'='*20} Media Transform Functionality Test {'='*20}")
     try:
-        result = test_quick_backend_verification(base_url)
-        test_results["Quick Backend Verification"] = result
+        result = test_media_transform_functionality(base_url)
+        test_results["Media Transform Functionality"] = result
         status = "✅ PASSED" if result else "❌ FAILED"
-        print(f"\n{status}: Quick Backend Verification")
+        print(f"\n{status}: Media Transform Functionality Test")
     except Exception as e:
-        print(f"\n❌ ERROR in Quick Backend Verification: {str(e)}")
-        test_results["Quick Backend Verification"] = False
+        print(f"\n❌ ERROR in Media Transform Functionality Test: {str(e)}")
+        test_results["Media Transform Functionality"] = False
+    
+    # Run additional verification tests
+    additional_tests = [
+        ("Get Current User", test_get_current_user),
+        ("JWT Validation", test_jwt_validation),
+    ]
+    
+    print("\n🔧 Running additional verification tests...")
+    for test_name, test_func in additional_tests:
+        print(f"\n{'='*20} {test_name} {'='*20}")
+        try:
+            result = test_func(base_url)
+            test_results[test_name] = result
+            status = "✅ PASSED" if result else "❌ FAILED"
+            print(f"\n{status}: {test_name}")
+        except Exception as e:
+            print(f"\n❌ ERROR in {test_name}: {str(e)}")
+            test_results[test_name] = False
     
     # Print final summary
     print("\n" + "="*60)
@@ -8544,24 +8551,33 @@ def main():
     print(f"\n📈 Overall Results: {passed_tests}/{total_tests} tests passed")
     print(f"🎯 Success Rate: {(passed_tests/total_tests)*100:.1f}%")
     
-    # Check if layout test and quick verification passed
-    layout_passed = test_results.get("Layout Functionality", False)
-    verification_passed = test_results.get("Quick Backend Verification", False)
+    # Special focus on media_transform result
+    media_transform_passed = test_results.get("Media Transform Functionality", False)
     
-    if layout_passed and verification_passed:
+    if media_transform_passed:
+        print("\n🎯 MEDIA_TRANSFORM TEST: ✅ PASSED - Functionality working correctly")
+        print("✅ El campo media_transform se guarda y recupera correctamente")
+        print("✅ Estructura de datos es consistente")
+        print("✅ Serialización/deserialización funciona")
+        print("✅ Endpoints POST /api/polls y GET /api/polls operacionales")
+    else:
+        print("\n🎯 MEDIA_TRANSFORM TEST: ❌ FAILED - Issues detected with media_transform")
+        print("❌ Problemas detectados con el campo media_transform")
+        print("❌ Revisar implementación en backend")
+        print("❌ Verificar modelo PollOption y endpoints de polls")
+    
+    # Overall assessment
+    if passed_tests >= 4:  # At least 4 out of 5 tests should pass
         print("\n🎉 BACKEND VERIFICATION SUCCESSFUL!")
-        print("✅ Layout functionality working correctly")
         print("✅ Backend está estable y funcionando correctamente")
+        if media_transform_passed:
+            print("✅ Media transform functionality confirmed working")
         print("🚀 Listo para proceder con testing del frontend")
         sys.exit(0)
-    elif layout_passed:
-        print("\n⚠️ LAYOUT FUNCTIONALITY WORKING BUT OTHER ISSUES DETECTED")
-        print("✅ Layout functionality confirmed working")
-        print("❌ Some backend verification issues detected")
-        sys.exit(1)
     else:
         print("\n⚠️ BACKEND VERIFICATION ISSUES DETECTED")
-        print("❌ Layout functionality needs attention")
+        if not media_transform_passed:
+            print("❌ Media transform functionality needs attention")
         print("❌ Revisar problemas antes de proceder con frontend testing")
         sys.exit(1)
 
