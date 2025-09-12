@@ -182,7 +182,7 @@ const InlineCrop = ({
     setIsInteracting(false);
   }, [isActive]);
 
-  // Handle mouse wheel zoom - with auto-save
+  // Handle mouse wheel zoom
   const handleWheel = (e) => {
     if (!isActive) return;
     
@@ -196,7 +196,6 @@ const InlineCrop = ({
     });
     
     setHasChanges(true);
-    scheduleAutoSave(); // Auto-save after wheel zoom
   };
 
   // Global event listeners
