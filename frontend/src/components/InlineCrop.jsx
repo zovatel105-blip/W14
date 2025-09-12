@@ -211,6 +211,9 @@ const InlineCrop = ({
       ...prev,
       scale: Math.max(0.5, Math.min(3, prev.scale * scaleDelta))
     }));
+    
+    setHasChanges(true); // Mark as changed
+    scheduleAutoSave(); // Auto-save after wheel zoom
   };
 
   // Global event listeners for smooth gesture handling - FIXED dependencies
