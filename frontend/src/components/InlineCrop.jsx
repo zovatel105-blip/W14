@@ -374,13 +374,7 @@ const InlineCrop = ({
         />
       </div>
 
-      {/* Minimal crop frame - very subtle */}
-      <div className="absolute inset-0 pointer-events-none z-20">
-        {/* Only border frame - no grid overlay */}
-        <div className="absolute inset-0 border border-white/30 rounded-sm" />
-      </div>
-
-      {/* Floating control - only cancel button */}
+      {/* Floating control - only cancel button - NO borders or frames */}
       <div className="absolute top-4 right-4 pointer-events-auto z-30">
         <button
           onClick={onCancel}
