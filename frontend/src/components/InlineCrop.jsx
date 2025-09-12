@@ -39,8 +39,39 @@ const InlineCrop = ({
     if (isActive) {
       setTransform({ scale: 1, translateX: 0, translateY: 0 });
       setIsInteracting(false);
+      setHasChanges(false);
+      
+      // Clear any pending auto-save
+      if (autoSaveTimeoutRef.current) {
+        clearTimeout(autoSaveTimeoutRef.current);
+        autoSaveTimeoutRef.current = null;
+      }
     }
   }, [isActive]);
+
+  // Auto-save after interaction ends
+  const scheduleAutoSave = useCallback(() => {
+    // Clear previous timeout
+    if (autoSaveTimeoutRef.current) {
+      clearTimeout(autoSaveTimeoutRef.current);
+    }
+    
+    // Schedule auto-save after 800ms of inactivity
+    autoSaveTimeoutRef.current = setTimeout(async () => {
+      if (hasChanges) {
+        await handleSave();
+      }
+    }, 800);
+  }, [hasChanges]);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (autoSaveTimeoutRef.current) {
+        clearTimeout(autoSaveTimeoutRef.current);
+      }
+    };
+  }, []);
 
   // Get distance between two touches (pinch gesture detection)
   const getDistance = (touches) => {
