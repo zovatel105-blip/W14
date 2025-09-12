@@ -168,7 +168,8 @@ class PollService {
         media: option.media ? {
           ...option.media,
           url: this.normalizeMediaUrl(option.media.url),
-          thumbnail: this.normalizeMediaUrl(option.media.thumbnail || option.media.url)
+          thumbnail: this.normalizeMediaUrl(option.media.thumbnail || option.media.url),
+          transform: option.media.transform  // ✅ CRITICAL FIX: Preserve transform data
         } : null
       })),
       totalVotes: backendPoll.total_votes,
