@@ -173,15 +173,18 @@ const InlineCrop = ({
     }
   }, [isActive, isInteracting, isDragging, lastTouch, lastDistance]);
 
-  // Handle end of interaction - no auto-save, just stop interaction
+  // Handle end of interaction - with auto-save
   const handleEnd = useCallback(() => {
     if (!isActive) return;
     
     setIsDragging(false);
     setIsInteracting(false);
     
-    // No auto-save here - only save when user exits crop mode
-  }, [isActive]);
+    // Auto-save after interaction ends
+    if (hasChanges) {
+      scheduleAutoSave();
+    }
+  }, [isActive, hasChanges, scheduleAutoSave]);
 
   // Handle mouse wheel zoom - no auto-save
   const handleWheel = (e) => {
