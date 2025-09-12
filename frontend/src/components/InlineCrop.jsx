@@ -264,11 +264,12 @@ const InlineCrop = ({
   }, [isActive, isInteracting, handleMove, handleEnd]);
 
   if (!isActive) {
-    // Normal display with object-position and scale
+    // Always use savedTransform when inactive, ignore internal state
     const displayPosition = savedTransform?.transform?.position || { x: 50, y: 50 };
     const displayScale = savedTransform?.transform?.scale || 1;
     
-    console.log('📷 Displaying inactive image with savedTransform:', savedTransform);
+    console.log('📷 Displaying inactive image');
+    console.log('📍 savedTransform:', savedTransform);
     console.log('📍 Using position:', displayPosition, 'scale:', displayScale);
     
     return (
