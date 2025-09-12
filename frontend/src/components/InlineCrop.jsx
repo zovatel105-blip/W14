@@ -51,7 +51,7 @@ const InlineCrop = ({
     }
   }, [isActive, savedTransform]);
 
-  // Auto-save after interaction ends - saves transform data only, no cropping
+  // Auto-save after interaction ends - marks image as adjusted for layout adaptation
   const scheduleAutoSave = useCallback(() => {
     // Clear previous timeout
     if (autoSaveTimeoutRef.current) {
@@ -61,7 +61,7 @@ const InlineCrop = ({
     // Schedule auto-save after 800ms of inactivity
     autoSaveTimeoutRef.current = setTimeout(() => {
       if (hasChanges) {
-        // Save transform parameters for layout positioning
+        // Save transform parameters - marks as adjusted for layout adaptation
         onSave({
           transform: {
             scale: transform.scale,
