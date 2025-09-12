@@ -210,46 +210,65 @@ const SearchPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-50">
-        <div className="max-w-4xl mx-auto px-3 sm:px-4 py-3 sm:py-4">
-          <div className="flex items-center gap-3 sm:gap-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50/30">
+      {/* Logo fijo SIEMPRE VISIBLE - Como en FeedPage */}
+      <div 
+        className="fixed top-4 right-4 z-[9999] flex items-center justify-center w-10 h-10 rounded-full bg-white/95 backdrop-blur-md border border-white/60 shadow-lg hover:scale-110 transition-transform duration-300"
+        style={{ 
+          position: 'fixed',
+          top: '16px',
+          right: '16px',
+          zIndex: 9999,
+        }}
+      >
+        <LogoWithQuickActions size={24} />
+      </div>
+
+      {/* Modern Header with Glassmorphism */}
+      <div className="bg-white/80 backdrop-blur-xl border-b border-white/20 sticky top-0 z-50 shadow-lg">
+        <div className="max-w-6xl mx-auto px-3 sm:px-6 py-4 sm:py-6">
+          <div className="flex items-center gap-4 sm:gap-6">
             <button
               onClick={() => navigate(-1)}
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors flex-shrink-0"
+              className="p-3 hover:bg-black/5 rounded-2xl transition-all duration-300 flex-shrink-0 group hover:scale-110 active:scale-95"
             >
-              <ArrowLeft size={20} className="text-gray-700" />
+              <ArrowLeft size={22} className="text-gray-700 group-hover:text-black transition-colors" />
             </button>
             
             <div className="flex-1 relative">
-              <Search size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 z-10" />
-              
-              {searchQuery && (
-                <button
-                  onClick={clearSearch}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 z-10"
-                >
-                  <X size={16} />
-                </button>
-              )}
-              
-              <input
-                ref={searchInputRef}
-                type="text"
-                placeholder="Buscar usuarios, posts, hashtags, sonidos..."
-                value={searchQuery}
-                onChange={handleInputChange}
-                onFocus={handleInputFocus}
-                onBlur={handleInputBlur}
-                onKeyDown={handleKeyDown}
-                className="w-full pl-10 pr-10 py-2.5 sm:py-3 bg-gray-100 rounded-full border-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all text-sm sm:text-base"
-                autoFocus
-              />
+              {/* Enhanced Search Input */}
+              <div className="relative group">
+                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-2xl blur-xl opacity-0 group-focus-within:opacity-100 transition-opacity duration-500"></div>
+                <div className="relative">
+                  <Search size={20} className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 z-10 group-focus-within:text-blue-500 transition-colors" />
+                  
+                  {searchQuery && (
+                    <button
+                      onClick={clearSearch}
+                      className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-red-500 z-10 p-1 rounded-full hover:bg-red-50 transition-all duration-200"
+                    >
+                      <X size={18} />
+                    </button>
+                  )}
+                  
+                  <input
+                    ref={searchInputRef}
+                    type="text"
+                    placeholder="¿Qué estás buscando hoy? ✨"
+                    value={searchQuery}
+                    onChange={handleInputChange}
+                    onFocus={handleInputFocus}
+                    onBlur={handleInputBlur}
+                    onKeyDown={handleKeyDown}
+                    className="w-full pl-12 pr-12 py-4 sm:py-5 bg-white/90 backdrop-blur-sm rounded-2xl border-2 border-gray-200/50 focus:border-blue-400/60 focus:ring-4 focus:ring-blue-100/50 transition-all duration-300 text-sm sm:text-base font-medium placeholder-gray-400 shadow-lg hover:shadow-xl focus:shadow-2xl"
+                    autoFocus
+                  />
+                </div>
+              </div>
               
               {isAutocompleteLoading && (
-                <div className="absolute right-10 top-1/2 transform -translate-y-1/2">
-                  <Loader size={16} className="text-gray-400 animate-spin" />
+                <div className="absolute right-14 top-1/2 transform -translate-y-1/2">
+                  <div className="w-5 h-5 border-2 border-blue-300 border-t-blue-600 rounded-full animate-spin"></div>
                 </div>
               )}
               
@@ -265,28 +284,30 @@ const SearchPage = () => {
         </div>
       </div>
 
-      {/* Tabs */}
+      {/* Modern Tabs with Enhanced Design */}
       {hasSearched && (
-        <div className="bg-white border-b border-gray-200">
-          <div className="max-w-4xl mx-auto px-4">
+        <div className="bg-white/70 backdrop-blur-md border-b border-white/30 shadow-sm">
+          <div className="max-w-6xl mx-auto px-4 sm:px-6">
             {/* Mobile Layout */}
-            <div className="block md:hidden py-3">
-              {/* Filter Tabs - Mobile */}
-              <div className="flex space-x-1 overflow-x-auto pb-1">
+            <div className="block lg:hidden py-4">
+              <div className="flex space-x-2 overflow-x-auto pb-2 scrollbar-hide">
                 {tabs.map((tab) => {
                   const Icon = tab.icon;
                   return (
                     <button
                       key={tab.id}
                       onClick={() => handleTabChange(tab.id)}
-                      className={`flex items-center space-x-1 px-3 py-2 rounded-full text-sm font-medium transition-colors whitespace-nowrap flex-shrink-0 ${
+                      className={`flex items-center space-x-2 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-300 whitespace-nowrap flex-shrink-0 min-w-fit relative overflow-hidden group ${
                         activeTab === tab.id
-                          ? 'bg-blue-100 text-blue-700'
-                          : 'text-gray-600 hover:bg-gray-100'
+                          ? `bg-gradient-to-r ${tab.color} text-white shadow-lg scale-105`
+                          : 'text-gray-600 hover:bg-white/60 hover:text-gray-800 bg-white/40'
                       }`}
                     >
-                      <Icon size={14} />
-                      <span>{tab.label}</span>
+                      {activeTab === tab.id && (
+                        <div className="absolute inset-0 bg-white/20 animate-pulse"></div>
+                      )}
+                      <Icon size={16} className="relative z-10" />
+                      <span className="relative z-10">{tab.label}</span>
                     </button>
                   );
                 })}
@@ -294,23 +315,28 @@ const SearchPage = () => {
             </div>
             
             {/* Desktop Layout */}
-            <div className="hidden md:flex items-center justify-center py-3">
-              {/* Filter Tabs - Desktop */}
-              <div className="flex space-x-1">
+            <div className="hidden lg:flex items-center justify-center py-6">
+              <div className="flex space-x-3 bg-white/60 backdrop-blur-sm rounded-2xl p-2 shadow-lg border border-white/40">
                 {tabs.map((tab) => {
                   const Icon = tab.icon;
                   return (
                     <button
                       key={tab.id}
                       onClick={() => handleTabChange(tab.id)}
-                      className={`flex items-center space-x-2 px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                      className={`group flex items-center space-x-3 px-6 py-4 rounded-xl text-sm font-semibold transition-all duration-300 relative overflow-hidden ${
                         activeTab === tab.id
-                          ? 'bg-blue-100 text-blue-700'
-                          : 'text-gray-600 hover:bg-gray-100'
+                          ? `bg-gradient-to-r ${tab.color} text-white shadow-xl scale-105`
+                          : 'text-gray-600 hover:bg-white/80 hover:text-gray-800 hover:scale-102'
                       }`}
                     >
-                      <Icon size={16} />
-                      <span>{tab.label}</span>
+                      {activeTab === tab.id && (
+                        <div className="absolute inset-0 bg-white/20 animate-pulse"></div>
+                      )}
+                      <Icon size={18} className="relative z-10 group-hover:scale-110 transition-transform" />
+                      <div className="relative z-10">
+                        <span className="block">{tab.label}</span>
+                        <span className="text-xs opacity-80 block">{tab.description}</span>
+                      </div>
                     </button>
                   );
                 })}
@@ -320,45 +346,82 @@ const SearchPage = () => {
         </div>
       )}
 
-      {/* Content */}
-      <div className="max-w-4xl mx-auto px-3 sm:px-4 py-4 sm:py-6">
+      {/* Enhanced Content Area */}
+      <div className="max-w-6xl mx-auto px-3 sm:px-6 py-6 sm:py-8">
         {!searchQuery.trim() ? (
-          <DiscoverySection
-            trendingContent={discoveryData.trending_posts || []}
-            suggestedUsers={discoveryData.suggested_users || []}
-            trendingHashtags={discoveryData.trending_hashtags || []}
-          />
-        ) : isLoading ? (
-          <div className="text-center py-16">
-            <div className="w-8 h-8 border-4 border-blue-200 border-t-blue-500 rounded-full animate-spin mx-auto mb-4"></div>
-            <p className="text-gray-500">Buscando...</p>
-          </div>
-        ) : searchResults.length > 0 ? (
-          /* Search Results */
-          <div>
-            <div className="mb-4">
-              <p className="text-sm text-gray-600 text-center sm:text-left">
-                {searchResults.length} resultado{searchResults.length !== 1 ? 's' : ''} para "{searchQuery}"
+          <div className="space-y-8">
+            {/* Welcome Section */}
+            <div className="text-center py-12">
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl mb-6 shadow-xl">
+                <Search size={32} className="text-white" />
+              </div>
+              <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+                Descubre lo <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">increíble</span>
+              </h1>
+              <p className="text-gray-600 text-lg mb-8 max-w-md mx-auto">
+                Explora contenido trending, usuarios populares y los hashtags del momento
               </p>
             </div>
             
-            <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+            <DiscoverySection
+              trendingContent={discoveryData.trending_posts || []}
+              suggestedUsers={discoveryData.suggested_users || []}
+              trendingHashtags={discoveryData.trending_hashtags || []}
+            />
+          </div>
+        ) : isLoading ? (
+          <div className="text-center py-20">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl mb-6 shadow-xl animate-pulse">
+              <Search size={24} className="text-white animate-ping" />
+            </div>
+            <h3 className="text-2xl font-bold text-gray-900 mb-2">Buscando...</h3>
+            <p className="text-gray-600">Encontrando los mejores resultados para ti</p>
+            <div className="mt-6 flex justify-center">
+              <div className="flex space-x-2">
+                <div className="w-3 h-3 bg-blue-500 rounded-full animate-bounce"></div>
+                <div className="w-3 h-3 bg-purple-500 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                <div className="w-3 h-3 bg-pink-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+              </div>
+            </div>
+          </div>
+        ) : searchResults.length > 0 ? (
+          /* Enhanced Search Results */
+          <div className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900">Resultados de búsqueda</h2>
+                <p className="text-gray-600 mt-1">
+                  {searchResults.length} resultado{searchResults.length !== 1 ? 's' : ''} para "{searchQuery}"
+                </p>
+              </div>
+              <div className="flex items-center space-x-2">
+                <span className="text-sm text-gray-500">Filtrar por:</span>
+                <span className={`px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r ${tabs.find(t => t.id === activeTab)?.color} text-white`}>
+                  {tabs.find(t => t.id === activeTab)?.label}
+                </span>
+              </div>
+            </div>
+            
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-white/40 overflow-hidden shadow-xl">
               {searchResults.map((result, index) => (
-                <SearchResultItem
-                  key={`${result.type}-${result.id}-${index}`}
-                  result={result}
-                  onItemClick={handleResultClick}
-                />
+                <div key={`${result.type}-${result.id}-${index}`} className="hover:bg-blue-50/50 transition-colors border-b border-gray-100/50 last:border-b-0">
+                  <SearchResultItem
+                    result={result}
+                    onItemClick={handleResultClick}
+                  />
+                </div>
               ))}
             </div>
           </div>
         ) : hasSearched ? (
-          /* No Results */
-          <div className="text-center py-16">
-            <Search size={64} className="text-gray-300 mx-auto mb-4" />
-            <h3 className="text-xl font-semibold text-gray-700 mb-2">No se encontraron resultados</h3>
-            <p className="text-gray-500 mb-6">
-              No pudimos encontrar nada para "{searchQuery}". Intenta con términos diferentes.
+          /* Enhanced No Results */
+          <div className="text-center py-20">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-gray-100 rounded-2xl mb-6">
+              <Search size={32} className="text-gray-400" />
+            </div>
+            <h3 className="text-2xl font-bold text-gray-900 mb-2">No encontramos nada</h3>
+            <p className="text-gray-600 mb-8 max-w-md mx-auto">
+              No pudimos encontrar resultados para "{searchQuery}". Intenta con otros términos o explora el contenido trending.
             </p>
             
             {/* Show discovery content even when no results */}
@@ -372,6 +435,19 @@ const SearchPage = () => {
           </div>
         ) : null}
       </div>
+      
+      <style jsx>{`
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+        .hover\\:scale-102:hover {
+          transform: scale(1.02);
+        }
+      `}</style>
     </div>
   );
 };
