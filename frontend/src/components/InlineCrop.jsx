@@ -176,16 +176,21 @@ const InlineCrop = ({
   const handleWheel = (e) => {
     if (!isActive) return;
     
+    console.log('🎡 handleWheel triggered - deltaY:', e.deltaY, 'current scale:', scale);
+    
     e.preventDefault();
     
     const scaleDelta = e.deltaY > 0 ? 0.95 : 1.05;
+    console.log('📏 Scale delta:', scaleDelta);
     
     setScale(prev => {
-      const newScale = prev * scaleDelta;
-      return Math.max(1, Math.min(3, newScale));
+      const newScale = Math.max(1, Math.min(3, prev * scaleDelta));
+      console.log('🔍 Wheel scale update - previous:', prev, 'new:', newScale);
+      return newScale;
     });
     
     setHasChanges(true);
+    console.log('✅ Wheel hasChanges set to true');
   };
 
   // Always sync with savedTransform when it changes
