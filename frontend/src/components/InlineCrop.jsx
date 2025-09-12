@@ -354,8 +354,8 @@ const InlineCrop = ({
       </div>
 
       {/* Auto-save indicator - bottom center */}
-      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 pointer-events-none">
-        <div className="bg-black/60 backdrop-blur-sm text-white text-sm px-4 py-2 rounded-full">
+      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 pointer-events-none z-30">
+        <div className="bg-black/70 backdrop-blur-sm text-white text-sm px-4 py-2 rounded-full shadow-lg">
           {isInteracting 
             ? (isDragging ? '👆 Ajustando posición...' : '🤏 Ajustando zoom...') 
             : hasChanges 
