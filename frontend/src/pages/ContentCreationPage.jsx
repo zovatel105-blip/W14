@@ -254,7 +254,8 @@ const LayoutPreview = ({ layout, options = [], title, selectedMusic, onImageUplo
                         savedTransform={(() => {
                           const transform = option.media.transform || null;
                           console.log(`🔍 PASSING savedTransform to slot ${slotIndex}:`, transform);
-                          return transform;
+                          // ✅ FIX: InlineCrop expects { transform: {...} } structure, not raw transform
+                          return transform ? { transform } : null;
                         })()}
                         onSave={onInlineCropSave}
                         onCancel={onInlineCropCancel}
