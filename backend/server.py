@@ -3586,7 +3586,7 @@ async def create_poll(
     )
     
     # Insert into database
-    await db.polls.insert_one(poll.dict())
+    await db.polls.insert_one(poll.model_dump())  # Pydantic v2
     
     # Send notifications to mentioned users (both general and option-specific)
     all_mentioned_users = set(poll_data.mentioned_users)
