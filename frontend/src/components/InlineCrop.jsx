@@ -285,10 +285,10 @@ const InlineCrop = ({
         />
         
         {/* DEBUG VISUAL - Remove after testing */}
-        <div className="absolute top-2 left-2 bg-red-500 text-white text-xs p-1 rounded pointer-events-none">
-          P: {displayPosition.x},{displayPosition.y} S: {displayScale}
-          <br />
-          ST: {savedTransform ? 'YES' : 'NO'}
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-red-500 text-white text-sm p-2 rounded pointer-events-none z-50">
+          <div>P: {displayPosition.x},{displayPosition.y}</div>
+          <div>S: {displayScale}</div>
+          <div>ST: {savedTransform ? 'YES' : 'NO'}</div>
         </div>
       </div>
     );
