@@ -413,7 +413,7 @@ const InlineCrop = ({
             • Arrastra para mover • Pellizca/rueda para zoom
             {hasChanges && (
               <span className="block mt-1 text-green-300 font-medium">
-                • Doble click para guardar cambios
+                • Doble click o botón GUARDAR para salvar cambios
               </span>
             )}
           </p>
