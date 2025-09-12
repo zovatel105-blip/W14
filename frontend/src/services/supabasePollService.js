@@ -63,6 +63,9 @@ class SupabasePollService {
   // Get polls with media transform data
   async getPolls(limit = 20, offset = 0) {
     try {
+      // Get current user first
+      const { data: { user } } = await supabase.auth.getUser();
+
       const { data: polls, error: pollsError } = await supabase
         .from('polls')
         .select(`
@@ -100,7 +103,7 @@ class SupabasePollService {
         backgroundColor: poll.background_color,
         tags: poll.tags,
         createdAt: poll.created_at,
-        isLiked: poll.poll_likes?.some(like => like.user_id === (await supabase.auth.getUser()).data.user?.id),
+        isLiked: poll.poll_likes?.some(like => like.user_id === user?.id),
         options: poll.options.map(option => ({
           id: option.id,
           text: option.text,
@@ -114,7 +117,7 @@ class SupabasePollService {
             transform: option.media_transform // ✅ Transform data preserved directly from DB
           } : null,
           hasVoted: poll.votes?.some(vote => 
-            vote.option_id === option.id && vote.user_id === (await supabase.auth.getUser()).data.user?.id
+            vote.option_id === option.id && vote.user_id === user?.id
           )
         }))
       }));
