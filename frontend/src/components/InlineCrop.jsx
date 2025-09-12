@@ -72,10 +72,17 @@ const InlineCrop = ({
 
   // Handle movement
   const handleMove = useCallback((e) => {
-    if (!isActive || !isInteracting) return;
+    console.log('🚶‍♂️ handleMove called - isActive:', isActive, 'isInteracting:', isInteracting, 'isDragging:', isDragging);
+    
+    if (!isActive || !isInteracting) {
+      console.log('❌ handleMove early return - isActive:', isActive, 'isInteracting:', isInteracting);
+      return;
+    }
     
     e.preventDefault();
     e.stopPropagation();
+    
+    console.log('✅ handleMove proceeding with movement logic');
     
     if (e.touches) {
       const touches = e.touches;
