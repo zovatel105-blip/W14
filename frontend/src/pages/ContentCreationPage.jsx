@@ -206,14 +206,27 @@ const LayoutPreview = ({ layout, options = [], title, selectedMusic, onImageUplo
               
               {/* Fullscreen Feed-style Preview */}
               <div 
-                className="w-full h-full cursor-pointer relative overflow-hidden"
-                onClick={() => {
+                className={`w-full h-full relative overflow-hidden ${
+                  cropActiveSlot === slotIndex ? '' : 'cursor-pointer'
+                }`}
+                onClick={(e) => {
+                  // FIXED: Don't intercept events when in crop mode
+                  if (cropActiveSlot === slotIndex) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    return;
+                  }
+                  
                   // If image exists, open crop directly. If not, upload new image.
                   if (option.media && option.media.type === 'image') {
                     onCropFromPreview(slotIndex);
                   } else {
                     onImageUpload(slotIndex);
                   }
+                }}
+                style={{
+                  // FIXED: Disable pointer events on parent when crop is active
+                  pointerEvents: cropActiveSlot === slotIndex ? 'none' : 'auto'
                 }}
               >
                 {option.media ? (
