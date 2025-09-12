@@ -285,14 +285,19 @@ const InlineCrop = ({
       const deltaX = e.clientX - lastTouch.x;
       const deltaY = e.clientY - lastTouch.y;
       
-      setTransform(prev => ({
-        ...prev,
-        translateX: prev.translateX + deltaX,
-        translateY: prev.translateY + deltaY
-      }));
-      
-      setLastTouch({ x: e.clientX, y: e.clientY });
-      setHasChanges(true); // Mark as changed
+        setTransform(prev => {
+          const newTransform = {
+            ...prev,
+            translateX: prev.translateX + deltaX,
+            translateY: prev.translateY + deltaY
+          };
+          
+          // Constrain movement so image always covers the container completely
+          return constrainTransform(newTransform);
+        });
+        
+        setLastTouch({ x: e.clientX, y: e.clientY });
+        setHasChanges(true); // Mark as changed
     }
   }, [isActive, isInteracting, isDragging, lastTouch, lastDistance]);
 
