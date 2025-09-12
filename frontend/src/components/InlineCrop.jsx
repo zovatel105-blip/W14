@@ -176,6 +176,7 @@ const InlineCrop = ({
       }));
       
       setLastTouch({ x: e.clientX, y: e.clientY });
+      setHasChanges(true); // Mark as changed
     }
   }, [isActive, isInteracting, isDragging, lastTouch, lastDistance]);
 
