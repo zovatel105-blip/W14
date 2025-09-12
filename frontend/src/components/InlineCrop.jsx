@@ -32,12 +32,15 @@ const InlineCrop = ({
   // Reset position when becoming active
   useEffect(() => {
     if (isActive) {
-      if (savedTransform && savedTransform.position) {
-        setPosition(savedTransform.position);
-        setScale(savedTransform.scale || 1);
+      if (savedTransform && savedTransform.transform) {
+        // Load from nested structure that we save
+        setPosition(savedTransform.transform.position);
+        setScale(savedTransform.transform.scale || 1);
+        console.log('🔄 Loading saved transform:', savedTransform.transform);
       } else {
         setPosition({ x: 50, y: 50 }); // Default center
         setScale(1);
+        console.log('🔄 Loading default transform');
       }
       setHasChanges(false);
       setIsInteracting(false);
