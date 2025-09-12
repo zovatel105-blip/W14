@@ -104,7 +104,7 @@ const InlineCrop = ({
     });
   }, [transform]);
 
-  // Auto-save after interaction ends - moved after generateCrop
+  // Auto-save after interaction ends - saves transform data only, no cropping
   const scheduleAutoSave = useCallback(() => {
     // Clear previous timeout
     if (autoSaveTimeoutRef.current) {
@@ -112,22 +112,21 @@ const InlineCrop = ({
     }
     
     // Schedule auto-save after 800ms of inactivity
-    autoSaveTimeoutRef.current = setTimeout(async () => {
+    autoSaveTimeoutRef.current = setTimeout(() => {
       if (hasChanges) {
-        const croppedBlob = await generateCrop();
-        if (croppedBlob) {
-          const reader = new FileReader();
-          reader.onload = () => {
-            onSave({
-              blob: croppedBlob,
-              base64: reader.result
-            });
-          };
-          reader.readAsDataURL(croppedBlob);
-        }
+        // Save only transform parameters, not cropped image
+        onSave({
+          transform: {
+            scale: transform.scale,
+            translateX: transform.translateX,
+            translateY: transform.translateY
+          },
+          originalImageSrc: imageSrc
+        });
+        setHasChanges(false); // Reset changes after save
       }
     }, 800);
-  }, [hasChanges, generateCrop, onSave]);
+  }, [hasChanges, transform, imageSrc, onSave]);
 
   // Cleanup timeout on unmount
   useEffect(() => {
