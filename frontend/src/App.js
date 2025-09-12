@@ -123,7 +123,6 @@ function AppContent() {
             <Route path="/battle-demo" element={<LiveBattleDemoPage />} />
             <Route path="/feed-demo" element={<FeedDemoPage />} />
             <Route path="/grid-demo" element={<GridDemo />} />
-            <Route path="/test-fomo" element={<TestFOMO />} />
             <Route path="/test-crop" element={<InlineCropTest />} />
           </Routes>
 
