@@ -554,7 +554,7 @@ const ProfilePage = () => {
     pollsCreated: userPolls.length,
     totalPolls: userPolls.length,
     verified: authUser?.is_verified || false,
-    hasStory: Math.random() > 0.5, // Simulación temporal - luego conectar con backend real
+    hasStory: userHasStories, // ✅ REAL DATA: Verificación real de historias activas desde backend
   } : viewedUser; // Use real viewed user data, no fallback to mock data
 
   // Add null safety check to prevent charAt errors
