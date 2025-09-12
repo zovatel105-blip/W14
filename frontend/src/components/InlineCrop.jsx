@@ -140,17 +140,27 @@ const InlineCrop = ({
       const deltaX = e.clientX - lastTouch.x;
       const deltaY = e.clientY - lastTouch.y;
       
+      console.log('🖱️ Mouse drag - deltaX:', deltaX, 'deltaY:', deltaY, 'lastTouch:', lastTouch);
+      
       const sensitivity = 0.3;
       const deltaPercentX = -deltaX * sensitivity; // NEGATIVE for correct direction
       const deltaPercentY = -deltaY * sensitivity; // NEGATIVE for correct direction
       
-      setPosition(prev => ({
-        x: Math.max(10, Math.min(90, prev.x + deltaPercentX)),
-        y: Math.max(10, Math.min(90, prev.y + deltaPercentY))
-      }));
+      console.log('📊 Mouse calculated deltas - deltaPercentX:', deltaPercentX, 'deltaPercentY:', deltaPercentY);
+      console.log('📍 Mouse previous position:', position);
+      
+      setPosition(prev => {
+        const newPos = {
+          x: Math.max(10, Math.min(90, prev.x + deltaPercentX)),
+          y: Math.max(10, Math.min(90, prev.y + deltaPercentY))
+        };
+        console.log('🎯 Mouse new position calculated:', newPos);
+        return newPos;
+      });
       
       setLastTouch({ x: e.clientX, y: e.clientY });
       setHasChanges(true);
+      console.log('✅ Mouse hasChanges set to true');
     }
   }, [isActive, isInteracting, isDragging, lastTouch, lastDistance]);
 
