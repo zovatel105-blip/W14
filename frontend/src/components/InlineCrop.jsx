@@ -36,34 +36,34 @@ const InlineCrop = ({
   const imageRef = useRef(null);
   const autoSaveTimeoutRef = useRef(null);
 
-  // Calculate scale to make complete image fill layout entirely - no background needed
+  // Calculate perfect scale to make complete image fill layout entirely - no gaps
   const calculateSmartTransform = useCallback(() => {
     if (!containerRef.current || imageSize.width <= 1 || imageSize.height <= 1) {
       return { scale: 1, translateX: 0, translateY: 0 };
     }
 
     const container = containerRef.current.getBoundingClientRect();
+    
+    // Calculate what object-contain would do
     const containerAspect = container.width / container.height;
     const imageAspect = imageSize.width / imageSize.height;
-
-    let scale = 1;
     
-    // Calculate scale to make object-contain fill the entire layout
+    let naturalScale;
     if (imageAspect > containerAspect) {
-      // Image is wider - scale up so image height fills container height completely
-      scale = container.height / (container.width / imageAspect);
+      // Image is wider - object-contain would fit by width
+      naturalScale = container.width / imageSize.width;
     } else {
-      // Image is taller - scale up so image width fills container width completely  
-      scale = container.width / (container.height * imageAspect);
+      // Image is taller - object-contain would fit by height
+      naturalScale = container.height / imageSize.height;
     }
-
-    // Ensure scale makes image fill completely
-    const scaleX = container.width / imageSize.width;
-    const scaleY = container.height / imageSize.height;
-    scale = Math.max(scaleX, scaleY);
+    
+    // Calculate how much we need to scale up to fill completely
+    const scaleToFillWidth = container.width / (imageSize.width * naturalScale);
+    const scaleToFillHeight = container.height / (imageSize.height * naturalScale);
+    const scaleToFill = Math.max(scaleToFillWidth, scaleToFillHeight);
 
     return {
-      scale: scale,
+      scale: scaleToFill,
       translateX: 0,
       translateY: 0
     };
