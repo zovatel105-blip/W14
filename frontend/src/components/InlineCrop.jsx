@@ -36,7 +36,7 @@ const InlineCrop = ({
   const imageRef = useRef(null);
   const autoSaveTimeoutRef = useRef(null);
 
-  // Calculate smart initial positioning for best image display in layout
+  // Calculate scale to make complete image fill layout entirely - no background needed
   const calculateSmartTransform = useCallback(() => {
     if (!containerRef.current || imageSize.width <= 1 || imageSize.height <= 1) {
       return { scale: 1, translateX: 0, translateY: 0 };
@@ -46,29 +46,26 @@ const InlineCrop = ({
     const containerAspect = container.width / container.height;
     const imageAspect = imageSize.width / imageSize.height;
 
-    // For object-cover, we want optimal positioning, not scaling
-    // object-cover automatically handles the scaling to fill completely
-    
-    let translateX = 0;
-    let translateY = 0;
     let scale = 1;
-
-    // Smart positioning based on aspect ratio differences
-    if (Math.abs(containerAspect - imageAspect) > 0.1) {
-      // Significant aspect ratio difference - use smart positioning
-      if (imageAspect > containerAspect) {
-        // Image is wider than container - center horizontally
-        translateX = 0;
-      } else {
-        // Image is taller than container - center vertically  
-        translateY = 0;
-      }
+    
+    // Calculate scale to make object-contain fill the entire layout
+    if (imageAspect > containerAspect) {
+      // Image is wider - scale up so image height fills container height completely
+      scale = container.height / (container.width / imageAspect);
+    } else {
+      // Image is taller - scale up so image width fills container width completely  
+      scale = container.width / (container.height * imageAspect);
     }
+
+    // Ensure scale makes image fill completely
+    const scaleX = container.width / imageSize.width;
+    const scaleY = container.height / imageSize.height;
+    scale = Math.max(scaleX, scaleY);
 
     return {
       scale: scale,
-      translateX: translateX,
-      translateY: translateY
+      translateX: 0,
+      translateY: 0
     };
   }, [imageSize]);
 
