@@ -3899,7 +3899,8 @@ async def get_poll_by_id(
                 "media": {
                     "type": option.get("media_type"),
                     "url": media_url,
-                    "thumbnail": thumbnail_url
+                    "thumbnail": thumbnail_url,
+                    "transform": option.get("media_transform")  # ✅ Include transform data
                 } if media_url else None
             }
             options.append(option_dict)
