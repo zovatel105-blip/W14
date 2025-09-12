@@ -391,10 +391,10 @@ const InlineCrop = ({
       <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 pointer-events-none">
         <div className="bg-black/60 backdrop-blur-sm text-white text-sm px-4 py-2 rounded-full">
           {isInteracting 
-            ? (isDragging ? '👆 Moviendo...' : '🤏 Zoom...') 
+            ? (isDragging ? '👆 Ajustando posición...' : '🤏 Ajustando zoom...') 
             : hasChanges 
-              ? '💾 Guardando automáticamente...'
-              : '👆 Arrastra • 🤏 Pellizca para zoom'
+              ? '💾 Guardando ajustes...'
+              : '👆 Arrastra • 🤏 Pellizca para ajustar'
           }
         </div>
       </div>
