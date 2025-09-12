@@ -503,7 +503,6 @@ const ContentCreationPage = () => {
     
     console.log('📥 Received transform data:', transformResult);
     console.log('📍 Current slot:', cropActiveSlot);
-    console.log('📦 Current option before update:', options[cropActiveSlot]);
     
     // Update the option media with transform data (no actual cropping)
     const updatedMedia = {
@@ -511,15 +510,14 @@ const ContentCreationPage = () => {
       transform: transformResult.transform // Save position and scale
     };
     
-    console.log('📦 Updated media data:', updatedMedia);
-    
     updateOption(cropActiveSlot, 'media', updatedMedia);
-    
-    // Verify the update worked
-    setTimeout(() => {
-      console.log('✅ Option after update:', options[cropActiveSlot]);
-    }, 100);
+    console.log('💾 Updated option media with transform');
   };
+
+  // Add useEffect to properly verify state changes
+  useEffect(() => {
+    console.log('📦 Options state updated:', options);
+  }, [options]);
 
   // Handle inline crop cancel
   const handleInlineCropCancel = () => {
