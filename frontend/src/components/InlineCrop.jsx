@@ -259,16 +259,17 @@ const InlineCrop = ({
 
 
   if (!isActive) {
-    // Normal image display with applied transform - image adapts to layout slot shape
+    // Normal image display with applied transform - smart object fit based on state
     const displayTransform = savedTransform || { scale: 1, translateX: 0, translateY: 0 };
+    const hasBeenAdjusted = savedTransform !== null; // Has user made adjustments?
     
     return (
       <div className={`relative w-full h-full overflow-hidden ${className}`}>
-        {/* Image fills the entire layout slot */}
+        {/* Image shows complete initially, then adapts to layout after adjustments */}
         <img
           src={imageSrc}
           alt="Preview"
-          className="w-full h-full object-cover" /* Back to object-cover for layout adaptation */
+          className={`w-full h-full ${hasBeenAdjusted ? 'object-cover' : 'object-contain'}`} /* Smart object-fit */
           style={{
             transform: `translate(${displayTransform.translateX}px, ${displayTransform.translateY}px) scale(${displayTransform.scale})`,
             transformOrigin: 'center',
@@ -276,6 +277,11 @@ const InlineCrop = ({
           }}
           onDragStart={(e) => e.preventDefault()}
         />
+        
+        {/* Subtle background for object-contain state */}
+        {!hasBeenAdjusted && (
+          <div className="absolute inset-0 bg-gray-900 -z-10" />
+        )}
       </div>
     );
   }
