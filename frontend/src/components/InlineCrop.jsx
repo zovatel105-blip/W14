@@ -115,7 +115,14 @@ const InlineCrop = ({
     resizeObserver.observe(containerRef.current);
 
     return () => resizeObserver.disconnect();
-  }, [isActive]);
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (autoSaveTimeoutRef.current) {
+        clearTimeout(autoSaveTimeoutRef.current);
+      }
+    };
+  }, []);
 
   // Auto-save after interaction ends - marks image as adjusted for layout adaptation
   const scheduleAutoSave = useCallback(() => {
