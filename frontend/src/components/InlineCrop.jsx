@@ -327,46 +327,24 @@ const InlineCrop = ({
 
 
   if (!isActive) {
-    // Smart display: complete image on upload, then adapts to layout after adjustments
-    const displayTransform = savedTransform || { scale: 1, translateX: 0, translateY: 0 };
-    const hasBeenAdjusted = savedTransform !== null; // Has user made adjustments?
+    // Smart display: complete image perfectly fitted to layout with no empty areas
+    const displayTransform = savedTransform || calculateSmartTransform();
     
     return (
-      <div className={`relative w-full h-full overflow-hidden ${className}`}>
-        {/* Blurred background to fill uncovered areas when showing complete image */}
-        {!hasBeenAdjusted && (
-          <div className="absolute inset-0">
-            <img
-              src={imageSrc}
-              alt="Background blur"
-              className="w-full h-full object-cover blur-lg opacity-50 scale-110"
-              onDragStart={(e) => e.preventDefault()}
-            />
-            <div className="absolute inset-0 bg-black/30" />
-          </div>
-        )}
-        
-        {/* Main image - complete on upload, then adapts to layout after adjustments */}
+      <div className={`relative w-full h-full overflow-hidden ${className}`} ref={containerRef}>
+        {/* Image perfectly fitted: complete + no empty areas + adapted to layout */}
         <img
           src={imageSrc}
           alt="Preview"
-          className={`relative w-full h-full ${hasBeenAdjusted ? 'object-cover' : 'object-contain'} z-10`}
+          className="w-full h-full object-cover"
           style={{
             transform: `translate(${displayTransform.translateX}px, ${displayTransform.translateY}px) scale(${displayTransform.scale})`,
             transformOrigin: 'center',
             transition: 'transform 0.2s ease-out'
           }}
+          onLoad={handleImageLoad}
           onDragStart={(e) => e.preventDefault()}
         />
-        
-        {/* Subtle hint for first-time users */}
-        {!hasBeenAdjusted && (
-          <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 opacity-75 pointer-events-none z-20">
-            <div className="bg-black/70 text-white text-xs px-3 py-1 rounded-full">
-              👆 Toca para ajustar al layout
-            </div>
-          </div>
-        )}
       </div>
     );
   }
