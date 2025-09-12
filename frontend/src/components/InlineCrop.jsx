@@ -259,15 +259,15 @@ const InlineCrop = ({
 
 
   if (!isActive) {
-    // Normal image display with applied transform if saved
+    // Normal image display with applied transform if saved - showing complete image
     const displayTransform = savedTransform || { scale: 1, translateX: 0, translateY: 0 };
     
     return (
-      <div className={`relative w-full h-full overflow-hidden ${className}`}>
+      <div className={`relative w-full h-full overflow-hidden bg-black ${className}`}>
         <img
           src={imageSrc}
           alt="Preview"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-contain" /* Changed from object-cover to object-contain */
           style={{
             transform: `translate(${displayTransform.translateX}px, ${displayTransform.translateY}px) scale(${displayTransform.scale})`,
             transformOrigin: 'center',
