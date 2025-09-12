@@ -280,21 +280,11 @@ const InlineCrop = ({
     );
   }
 
-  // Crop mode - TikTok-style interface with blurred background
+  // Crop mode - TikTok-style interface optimized for layout adaptation
   return (
     <div className={`relative w-full h-full overflow-hidden ${className}`} style={{ pointerEvents: 'auto' }}>
-      {/* Blurred background version of the same image */}
-      <div className="absolute inset-0">
-        <img
-          src={imageSrc}
-          alt="Background blur"
-          className="w-full h-full object-cover blur-lg opacity-30 scale-110 z-0"
-          onDragStart={(e) => e.preventDefault()}
-        />
-      </div>
-      
-      {/* Dark semi-transparent overlay for crop mode */}
-      <div className="absolute inset-0 bg-black/30 z-5" />
+      {/* Dark semi-transparent overlay for crop mode contrast */}
+      <div className="absolute inset-0 bg-black/40 z-5" />
       
       {/* Interactive image container */}
       <div
@@ -308,8 +298,8 @@ const InlineCrop = ({
         <img
           ref={imageRef}
           src={imageSrc}
-          alt="Crop preview"
-          className="w-full h-full object-contain" /* Changed from object-cover to object-contain */
+          alt="Adjust preview"
+          className="w-full h-full object-cover" /* Back to object-cover for layout adaptation */
           style={{
             transform: `translate(${transform.translateX}px, ${transform.translateY}px) scale(${transform.scale})`,
             transformOrigin: 'center',
