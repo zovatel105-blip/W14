@@ -9,6 +9,7 @@ import PollCard from '../components/PollCard';
 import EditProfileModal from '../components/EditProfileModal';
 import CommentsModal from '../components/CommentsModal';
 import ShareModal from '../components/ShareModal';
+import StatisticsModal from '../components/StatisticsModal';
 import TikTokProfileGrid from '../components/TikTokProfileGrid';
 import TikTokScrollView from '../components/TikTokScrollView';
 import AvatarUpload from '../components/AvatarUpload';
