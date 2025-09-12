@@ -36,21 +36,6 @@ const InlineCrop = ({
   const imageRef = useRef(null);
   const autoSaveTimeoutRef = useRef(null);
 
-  // Reset transform when becoming active, or load saved transform
-  useEffect(() => {
-    if (isActive) {
-      // Load saved transform if available, otherwise reset
-      const initialTransform = savedTransform || { scale: 1, translateX: 0, translateY: 0 };
-      setTransform(initialTransform);
-      setIsInteracting(false);
-      setHasChanges(false);
-      
-      // Clear any pending auto-save
-      if (autoSaveTimeoutRef.current) {
-        clearTimeout(autoSaveTimeoutRef.current);
-        autoSaveTimeoutRef.current = null;
-      }
-    }
   // Calculate smart initial transform for complete image + layout adaptation
   const calculateSmartTransform = useCallback(() => {
     if (!containerRef.current || imageSize.width <= 1 || imageSize.height <= 1) {
@@ -86,6 +71,27 @@ const InlineCrop = ({
       translateY: 0
     };
   }, [imageSize]);
+
+  // Reset transform when becoming active, or load saved transform
+  useEffect(() => {
+    if (isActive) {
+      // Load saved transform if available, otherwise calculate smart transform
+      if (savedTransform) {
+        setTransform(savedTransform);
+      } else {
+        const smartTransform = calculateSmartTransform();
+        setTransform(smartTransform);
+      }
+      setIsInteracting(false);
+      setHasChanges(false);
+      
+      // Clear any pending auto-save
+      if (autoSaveTimeoutRef.current) {
+        clearTimeout(autoSaveTimeoutRef.current);
+        autoSaveTimeoutRef.current = null;
+      }
+    }
+  }, [isActive, savedTransform, calculateSmartTransform]);
 
   // Handle image load to get dimensions
   const handleImageLoad = useCallback((e) => {
