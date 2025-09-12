@@ -2947,6 +2947,362 @@ def test_poll_endpoints(base_url):
     print(f"\nPoll Endpoints Tests Summary: {success_count}/20 tests passed")
     return success_count >= 16  # At least 16 out of 20 tests should pass
 
+def test_media_transform_functionality(base_url):
+    """Test específico para media_transform en polls - OBJETIVO PRINCIPAL"""
+    print("\n🎯 === TESTING MEDIA_TRANSFORM FUNCTIONALITY ===")
+    print("OBJETIVO: Verificar si el campo media_transform se guarda y recupera correctamente en los polls")
+    
+    if not auth_tokens:
+        print("❌ No auth tokens available for media_transform test")
+        return False
+    
+    headers = {"Authorization": f"Bearer {auth_tokens[0]}"}
+    success_count = 0
+    total_tests = 0
+    
+    # Test 1: POST /api/polls - Crear poll con media_transform
+    print("\n📋 1. POST /api/polls - Crear poll con media_transform")
+    total_tests += 1
+    
+    poll_data = {
+        "title": "Test Transform Poll",
+        "options": [
+            {
+                "text": "Opción 1",
+                "media_type": "image",
+                "media_url": "https://example.com/image.jpg",
+                "media_transform": {
+                    "position": {"x": 25, "y": 75},
+                    "scale": 1.3
+                }
+            },
+            {
+                "text": "Opción 2", 
+                "media_type": "image",
+                "media_url": "https://example.com/image2.jpg",
+                "media_transform": {
+                    "position": {"x": 50, "y": 50},
+                    "scale": 1.0
+                }
+            }
+        ]
+    }
+    
+    created_poll_id = None
+    
+    try:
+        print(f"   📤 Enviando poll con media_transform...")
+        print(f"   📊 Transform data: {poll_data['options'][0]['media_transform']}")
+        
+        response = requests.post(f"{base_url}/polls", json=poll_data, headers=headers, timeout=15)
+        print(f"   Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            created_poll_id = data.get('poll_id')
+            print(f"   ✅ Poll creado exitosamente")
+            print(f"   🆔 Poll ID: {created_poll_id}")
+            
+            # Verificar que la respuesta incluye media_transform
+            if 'poll' in data and 'options' in data['poll']:
+                options = data['poll']['options']
+                if len(options) > 0 and 'media' in options[0]:
+                    media = options[0]['media']
+                    if 'transform' in media:
+                        print(f"   ✅ media_transform incluido en respuesta de creación")
+                        print(f"   📊 Transform en respuesta: {media['transform']}")
+                        success_count += 1
+                    else:
+                        print(f"   ❌ media_transform NO incluido en respuesta de creación")
+                        print(f"   📊 Media structure: {media}")
+                else:
+                    print(f"   ❌ Estructura de respuesta inesperada")
+                    print(f"   📊 Response structure: {data}")
+            else:
+                print(f"   ❌ Respuesta no contiene estructura esperada")
+                print(f"   📊 Response: {data}")
+        else:
+            print(f"   ❌ Error creando poll: {response.text}")
+            
+    except Exception as e:
+        print(f"   ❌ Error en creación de poll: {e}")
+    
+    # Test 2: GET /api/polls - Verificar que media_transform se devuelve correctamente
+    print("\n📋 2. GET /api/polls - Verificar que media_transform se devuelve correctamente")
+    total_tests += 1
+    
+    try:
+        print(f"   📥 Obteniendo lista de polls...")
+        response = requests.get(f"{base_url}/polls", headers=headers, timeout=15)
+        print(f"   Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            polls = response.json()
+            print(f"   ✅ Lista de polls obtenida exitosamente")
+            print(f"   📊 Total polls: {len(polls)}")
+            
+            # Buscar nuestro poll creado
+            test_poll = None
+            for poll in polls:
+                if poll.get('title') == "Test Transform Poll":
+                    test_poll = poll
+                    break
+            
+            if test_poll:
+                print(f"   ✅ Poll de prueba encontrado en lista")
+                print(f"   🆔 Poll ID: {test_poll.get('id')}")
+                
+                # Verificar media_transform en opciones
+                options = test_poll.get('options', [])
+                if len(options) > 0:
+                    option = options[0]
+                    media = option.get('media', {})
+                    transform = media.get('transform')
+                    
+                    if transform:
+                        print(f"   ✅ media_transform encontrado en GET /api/polls")
+                        print(f"   📊 Transform data: {transform}")
+                        
+                        # Verificar estructura específica
+                        if ('position' in transform and 'scale' in transform and
+                            transform['position'].get('x') == 25 and
+                            transform['position'].get('y') == 75 and
+                            transform['scale'] == 1.3):
+                            print(f"   ✅ Valores de media_transform coinciden exactamente")
+                            success_count += 1
+                        else:
+                            print(f"   ❌ Valores de media_transform no coinciden")
+                            print(f"   📊 Esperado: position={{x:25, y:75}}, scale=1.3")
+                            print(f"   📊 Recibido: {transform}")
+                    else:
+                        print(f"   ❌ media_transform NO encontrado en GET /api/polls")
+                        print(f"   📊 Media structure: {media}")
+                else:
+                    print(f"   ❌ No se encontraron opciones en el poll")
+            else:
+                print(f"   ❌ Poll de prueba no encontrado en lista")
+                print(f"   📊 Polls disponibles: {[p.get('title', 'Sin título') for p in polls[:3]]}")
+        else:
+            print(f"   ❌ Error obteniendo polls: {response.text}")
+            
+    except Exception as e:
+        print(f"   ❌ Error obteniendo polls: {e}")
+    
+    # Test 3: GET /api/polls/{poll_id} - Verificar endpoint específico
+    if created_poll_id:
+        print(f"\n📋 3. GET /api/polls/{created_poll_id} - Verificar endpoint específico")
+        total_tests += 1
+        
+        try:
+            print(f"   📥 Obteniendo poll específico...")
+            response = requests.get(f"{base_url}/polls/{created_poll_id}", headers=headers, timeout=15)
+            print(f"   Status Code: {response.status_code}")
+            
+            if response.status_code == 200:
+                poll = response.json()
+                print(f"   ✅ Poll específico obtenido exitosamente")
+                print(f"   📊 Poll title: {poll.get('title')}")
+                
+                # Verificar media_transform
+                options = poll.get('options', [])
+                if len(options) > 0:
+                    option = options[0]
+                    media = option.get('media', {})
+                    transform = media.get('transform')
+                    
+                    if transform:
+                        print(f"   ✅ media_transform encontrado en GET /api/polls/{{id}}")
+                        print(f"   📊 Transform data: {transform}")
+                        
+                        # Verificar estructura específica
+                        if ('position' in transform and 'scale' in transform and
+                            transform['position'].get('x') == 25 and
+                            transform['position'].get('y') == 75 and
+                            transform['scale'] == 1.3):
+                            print(f"   ✅ Valores de media_transform coinciden exactamente")
+                            success_count += 1
+                        else:
+                            print(f"   ❌ Valores de media_transform no coinciden")
+                    else:
+                        print(f"   ❌ media_transform NO encontrado en GET /api/polls/{{id}}")
+                        print(f"   📊 Media structure: {media}")
+                else:
+                    print(f"   ❌ No se encontraron opciones en el poll específico")
+            else:
+                print(f"   ❌ Error obteniendo poll específico: {response.text}")
+                
+        except Exception as e:
+            print(f"   ❌ Error obteniendo poll específico: {e}")
+    else:
+        print(f"\n📋 3. SKIP - No se pudo crear poll para test específico")
+    
+    # Test 4: Verificar logs del backend
+    print(f"\n📋 4. VERIFICAR LOGS DEL BACKEND")
+    total_tests += 1
+    
+    try:
+        print(f"   📋 Buscando logs que empiecen con '🔍 BACKEND SAVING media_transform:'")
+        
+        # Intentar obtener logs del supervisor
+        import subprocess
+        result = subprocess.run(['tail', '-n', '100', '/var/log/supervisor/backend.out.log'], 
+                              capture_output=True, text=True, timeout=10)
+        
+        if result.returncode == 0:
+            logs = result.stdout
+            transform_logs = [line for line in logs.split('\n') if '🔍 BACKEND SAVING media_transform:' in line]
+            
+            if transform_logs:
+                print(f"   ✅ Logs de media_transform encontrados:")
+                for log in transform_logs[-3:]:  # Mostrar últimos 3
+                    print(f"      {log}")
+                success_count += 1
+            else:
+                print(f"   ⚠️ No se encontraron logs específicos de media_transform")
+                print(f"   📋 Verificando logs generales...")
+                
+                # Buscar cualquier mención de transform
+                general_logs = [line for line in logs.split('\n') if 'transform' in line.lower()]
+                if general_logs:
+                    print(f"   📋 Logs relacionados con 'transform':")
+                    for log in general_logs[-3:]:
+                        print(f"      {log}")
+                else:
+                    print(f"   📋 No se encontraron logs relacionados con 'transform'")
+        else:
+            print(f"   ⚠️ No se pudieron obtener logs del supervisor")
+            print(f"   📋 Error: {result.stderr}")
+            
+    except Exception as e:
+        print(f"   ⚠️ Error obteniendo logs: {e}")
+    
+    # Test 5: Verificar consistencia de datos
+    print(f"\n📋 5. VERIFICAR CONSISTENCIA DE ESTRUCTURA DE DATOS")
+    total_tests += 1
+    
+    try:
+        print(f"   📋 Verificando que la estructura de datos es consistente...")
+        
+        # Crear otro poll con diferentes valores de transform
+        test_poll_2 = {
+            "title": "Test Transform Poll 2",
+            "options": [
+                {
+                    "text": "Opción con transform complejo",
+                    "media_type": "image", 
+                    "media_url": "https://example.com/complex.jpg",
+                    "media_transform": {
+                        "position": {"x": 100, "y": 200},
+                        "scale": 2.5,
+                        "rotation": 45,
+                        "filters": {"brightness": 1.2, "contrast": 0.8}
+                    }
+                }
+            ]
+        }
+        
+        response = requests.post(f"{base_url}/polls", json=test_poll_2, headers=headers, timeout=15)
+        print(f"   Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            print(f"   ✅ Poll con transform complejo creado exitosamente")
+            
+            # Verificar que se mantiene la estructura compleja
+            if 'poll' in data and 'options' in data['poll']:
+                options = data['poll']['options']
+                if len(options) > 0 and 'media' in options[0]:
+                    media = options[0]['media']
+                    transform = media.get('transform')
+                    
+                    if (transform and 'rotation' in transform and 'filters' in transform):
+                        print(f"   ✅ Estructura compleja de media_transform preservada")
+                        print(f"   📊 Transform complejo: {transform}")
+                        success_count += 1
+                    else:
+                        print(f"   ❌ Estructura compleja no preservada")
+                        print(f"   📊 Transform recibido: {transform}")
+        else:
+            print(f"   ❌ Error creando poll con transform complejo: {response.text}")
+            
+    except Exception as e:
+        print(f"   ❌ Error en test de consistencia: {e}")
+    
+    # Test 6: Verificar serialización/deserialización
+    print(f"\n📋 6. VERIFICAR SERIALIZACIÓN/DESERIALIZACIÓN")
+    total_tests += 1
+    
+    try:
+        print(f"   📋 Verificando que no hay errores de serialización...")
+        
+        # Crear poll con valores edge case
+        edge_case_poll = {
+            "title": "Test Edge Cases Transform",
+            "options": [
+                {
+                    "text": "Edge case 1",
+                    "media_type": "image",
+                    "media_url": "https://example.com/edge1.jpg", 
+                    "media_transform": {
+                        "position": {"x": 0, "y": 0},
+                        "scale": 0.1
+                    }
+                },
+                {
+                    "text": "Edge case 2",
+                    "media_type": "image",
+                    "media_url": "https://example.com/edge2.jpg",
+                    "media_transform": {
+                        "position": {"x": -50, "y": -100},
+                        "scale": 10.0
+                    }
+                }
+            ]
+        }
+        
+        response = requests.post(f"{base_url}/polls", json=edge_case_poll, headers=headers, timeout=15)
+        print(f"   Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            print(f"   ✅ Poll con edge cases creado exitosamente")
+            
+            # Verificar que los valores extremos se mantienen
+            options = data['poll']['options']
+            transforms = [opt['media'].get('transform') for opt in options if 'media' in opt]
+            
+            if len(transforms) == 2:
+                print(f"   ✅ Ambos transforms de edge cases preservados")
+                print(f"   📊 Transform 1: {transforms[0]}")
+                print(f"   📊 Transform 2: {transforms[1]}")
+                success_count += 1
+            else:
+                print(f"   ❌ No se preservaron todos los transforms de edge cases")
+        else:
+            print(f"   ❌ Error con edge cases: {response.text}")
+            
+    except Exception as e:
+        print(f"   ❌ Error en test de edge cases: {e}")
+    
+    # Resumen final
+    print(f"\n📊 === RESUMEN MEDIA_TRANSFORM TESTING ===")
+    print(f"Tests completados: {success_count}/{total_tests}")
+    print(f"Porcentaje de éxito: {(success_count/total_tests)*100:.1f}%")
+    
+    if success_count >= 4:  # Al menos 4 de 6 tests deben pasar
+        print(f"✅ CONCLUSIÓN: media_transform funciona correctamente")
+        print(f"   - Se guarda correctamente en la base de datos")
+        print(f"   - Se devuelve correctamente en las respuestas GET")
+        print(f"   - La estructura de datos es consistente")
+        print(f"   - La serialización/deserialización funciona")
+        return True
+    else:
+        print(f"❌ CONCLUSIÓN: Problemas detectados con media_transform")
+        print(f"   - Revisar implementación en backend")
+        print(f"   - Verificar modelo PollOption")
+        print(f"   - Comprobar endpoints de polls")
+        return False
+
 def test_file_upload_endpoints(base_url):
     """Test comprehensive file upload system endpoints"""
     print("\n=== Testing File Upload System ===")
