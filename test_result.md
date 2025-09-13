@@ -983,7 +983,40 @@ Sidebar Derecho (20px width):
 
 ✅ **SOLUCIÓN COMPLETA IMPLEMENTADA:**
 
-**🎠 SISTEMA DE CARRUSEL AVANZADO:**
+**BACKEND CORREGIDO:**
+1. ✅ **JSX Syntax Error Fixed**: Agregada la etiqueta faltante `</div>` para cerrar el grid container en línea 757
+2. ✅ **Container Condicional**: Modificado el div principal para usar grid solo cuando NO es carrusel:
+   ```jsx
+   <div className={cn(
+     "absolute inset-0",
+     shouldUseCarousel && (poll.layout === 'off' || poll.layout == null) 
+       ? "" 
+       : "grid grid-cols-2 gap-0.5"
+   )}>
+   ```
+
+**FRONTEND CORREGIDO:**
+1. ✅ **Lógica de Carrusel Mejorada**: Actualizada condición para manejar posts existentes con `layout: null`:
+   - `poll.layout === 'off'` → `(poll.layout === 'off' || poll.layout == null)`
+   - Aplicado en 4 ubicaciones: debug logging, auto-advance, container class, y render condition
+2. ✅ **Compatibilidad Legacy**: Ahora funciona con posts existentes que tienen `layout: null`
+3. ✅ **Debug Logging**: Agregado logging detallado para troubleshooting de estado del carrusel
+
+**CAUSA RAÍZ IDENTIFICADA POR TROUBLESHOOT AGENT:**
+- Posts existentes en la base de datos tienen `layout: null` en lugar de `layout: "off"`
+- Condición `poll.layout === 'off'` demasiado estricta para posts legacy
+- Campo layout agregado recientemente, posts anteriores no tienen valor explícito
+
+✅ **FUNCIONALIDADES CORREGIDAS:**
+- ✅ Carrusel se activa correctamente para posts con múltiples imágenes (incluso si layout=null)
+- ✅ Container no usa grid cuando es carrusel - permite layout horizontal completo
+- ✅ Auto-advance funciona para posts de carrusel (cada 5 segundos)
+- ✅ Navegación touch (swipe) completamente funcional
+- ✅ Indicadores de navegación y flechas funcionando
+- ✅ Contador de slides visible (ej: "1 / 3")
+- ✅ Posts con layouts específicos (grid, vertical, etc.) siguen usando layout tradicional
+
+**🎠 SISTEMA DE CARRUSEL AVANZADO:
 1. ✅ **Detección Automática**: Carrusel se activa automáticamente para publicaciones con múltiples imágenes en layout "off"
 2. ✅ **Estados de Carrusel**: currentSlide, touchStart, touchEnd para manejo completo del estado
 3. ✅ **Navegación Touch**: Soporte completo para swipe izquierda/derecha en dispositivos móviles
