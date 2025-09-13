@@ -113,7 +113,8 @@ const LayoutPreview = ({ layout, options = [], title, selectedMusic, onImageUplo
   const getLayoutStyle = () => {
     switch (layout.id) {
       case 'off':
-        return 'grid-cols-1 grid-rows-1';
+        // Show slots vertically in a scrollable list for better organization
+        return 'grid-cols-1 gap-2';
       case 'vertical': // "Lado a lado" - 2 elementos horizontalmente
         return 'grid-cols-2 grid-rows-1';
       case 'horizontal': // "Arriba y abajo" - 2 elementos verticalmente
