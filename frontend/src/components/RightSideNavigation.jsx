@@ -7,6 +7,42 @@ import { cn } from '../lib/utils';
 const RightSideNavigation = ({ onCreatePoll }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [isLongPressing, setIsLongPressing] = useState(false);
+  const longPressTimer = useRef(null);
+
+  // Long press handlers for home button
+  const handleTouchStart = useCallback(() => {
+    setIsLongPressing(false);
+    longPressTimer.current = setTimeout(() => {
+      setIsLongPressing(true);
+      // Vibration feedback if available
+      if (navigator.vibrate) {
+        navigator.vibrate(50);
+      }
+      // Navigate to Following page
+      navigate('/following');
+    }, 800); // 800ms for long press
+  }, [navigate]);
+
+  const handleTouchEnd = useCallback(() => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
+    setIsLongPressing(false);
+  }, []);
+
+  const handleMouseDown = useCallback(() => {
+    handleTouchStart();
+  }, [handleTouchStart]);
+
+  const handleMouseUp = useCallback(() => {
+    handleTouchEnd();
+  }, [handleTouchEnd]);
+
+  const handleMouseLeave = useCallback(() => {
+    handleTouchEnd();
+  }, [handleTouchEnd]);
 
   return (
     <div className="fixed right-4 top-1/2 transform -translate-y-1/2 flex flex-col gap-4 z-50"
