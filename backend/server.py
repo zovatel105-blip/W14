@@ -1766,7 +1766,7 @@ async def update_settings(
     settings_data: UserSettings,
     current_user: UserResponse = Depends(get_current_user)
 ):
-    """Update user settings (privacy, notifications, discovery, language, account)"""
+    """Update user settings (privacy, notifications, performance, language, account)"""
     update_fields = {}
     
     # Privacy settings
@@ -1791,19 +1791,25 @@ async def update_settings(
     if settings_data.notifications_mentions is not None:
         update_fields["notifications_mentions"] = settings_data.notifications_mentions
     
-    # Discovery & Interaction settings
-    if settings_data.discoverable is not None:
-        update_fields["discoverable"] = settings_data.discoverable
-    if settings_data.require_follow_approval is not None:
-        update_fields["require_follow_approval"] = settings_data.require_follow_approval
-    if settings_data.allow_comments is not None:
-        update_fields["allow_comments"] = settings_data.allow_comments
-    if settings_data.allow_shares is not None:
-        update_fields["allow_shares"] = settings_data.allow_shares
+    # Performance & Data settings (APK specific)
+    if settings_data.video_quality is not None:
+        # Validate video quality values
+        if settings_data.video_quality in ['auto', 'high', 'medium', 'low']:
+            update_fields["video_quality"] = settings_data.video_quality
+    if settings_data.wifi_only is not None:
+        update_fields["wifi_only"] = settings_data.wifi_only
+    if settings_data.battery_saver is not None:
+        update_fields["battery_saver"] = settings_data.battery_saver
+    if settings_data.auto_cache is not None:
+        update_fields["auto_cache"] = settings_data.auto_cache
+    if settings_data.background_sync is not None:
+        update_fields["background_sync"] = settings_data.background_sync
     
     # Language & Accessibility settings
     if settings_data.app_language is not None:
-        update_fields["app_language"] = settings_data.app_language
+        # Validate language codes
+        if settings_data.app_language in ['es', 'en', 'fr', 'pt']:
+            update_fields["app_language"] = settings_data.app_language
     if settings_data.dark_mode is not None:
         update_fields["dark_mode"] = settings_data.dark_mode
     if settings_data.large_text is not None:
