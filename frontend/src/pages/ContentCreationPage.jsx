@@ -747,7 +747,7 @@ const ContentCreationPage = () => {
       if (validOptions.length < 2) {
         toast({
           title: "Error",
-          description: "El modo Pantalla Completa requiere al menos 2 imágenes",
+          description: "Requiere al menos 2 imágenes",
           variant: "destructive"
         });
         return;
