@@ -488,7 +488,7 @@ const FollowingPage = () => {
               <Users className="w-16 h-16 text-purple-400" />
             </div>
             <h3 className="text-3xl font-bold text-white mb-4">Sin publicaciones</h3>
-            <p className="text-white/70 text-lg mb-6">Los usuarios que sigues no han publicado recientemente</p>
+            <p className="text-white/70 text-lg mb-6">No tienes publicaciones de usuarios que sigues. ¡Sigue a más personas para ver su contenido aquí!</p>
             <div className="space-y-3">
               <button
                 onClick={() => navigate('/explore')}
