@@ -938,6 +938,16 @@ const ContentCreationPage = () => {
               onChange={(e) => setTitle(e.target.value)}
               className="w-full bg-black/50 backdrop-blur-sm text-white px-3 py-2 rounded-lg border border-white/20 focus:border-white/50 focus:outline-none placeholder-gray-300 text-xs sm:text-sm"
             />
+            
+            {/* Layout Info - Show specific info for fullscreen layout */}
+            {selectedLayout.id === 'off' && (
+              <div className="mt-2 px-3 py-2 bg-blue-600/80 backdrop-blur-sm rounded-lg">
+                <p className="text-white text-xs sm:text-sm font-medium flex items-center gap-2">
+                  <span>📱</span>
+                  <span>Modo Pantalla Completa: Cada imagen se verá individualmente en pantalla completa (mínimo 2 imágenes)</span>
+                </p>
+              </div>
+            )}
           </div>
         </div>
       )}
