@@ -154,9 +154,16 @@ class UserSettings(BaseModel):
     notifications_follows: Optional[bool] = None
     notifications_mentions: Optional[bool] = None
     
-    # Content settings
-    auto_play_videos: Optional[bool] = None
-    show_mature_content: Optional[bool] = None
+    # Discovery & Interaction settings
+    discoverable: Optional[bool] = None
+    require_follow_approval: Optional[bool] = None
+    allow_comments: Optional[bool] = None
+    allow_shares: Optional[bool] = None
+    
+    # Language & Accessibility settings
+    app_language: Optional[str] = None
+    dark_mode: Optional[bool] = None
+    large_text: Optional[bool] = None
     
     # Account settings
     two_factor_enabled: Optional[bool] = None
