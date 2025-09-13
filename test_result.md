@@ -961,88 +961,102 @@ Sidebar Derecho (20px width):
 
 **OBJETIVO ALCANZADO**: Preview limpio de imágenes fullscreen con información esencial, sin elementos adicionales de interfaz simulada, todos los botones principales agrupados en el sidebar derecho, RightSideNavigation correctamente oculta en creación, y título principal perfectamente centrado en la zona central superior como solicitado.
 
-**🎯 LAYOUT "OFF" MODIFICADO PARA REQUERIR MÍNIMO 2 IMÁGENES DE PANTALLA COMPLETA (2025-09-13): Transformado el layout "Off" en "Pantalla Completa" con requerimiento de al menos 2 imágenes que se visualizan individualmente en pantalla completa cada una.**
+**🎯 FEED CON CARRUSEL IMPLEMENTADO PARA LAYOUT "OFF" (2025-09-13): Las publicaciones con múltiples imágenes (especialmente layout "Pantalla Completa") ahora se muestran como carrusel deslizable en el feed principal con navegación intuitiva y auto-avance.**
 
 ✅ **PROBLEMA IDENTIFICADO:**
-- Usuario solicitó que el layout "off" requiera al menos 2 imágenes
-- Las imágenes deben verse en pantalla completa cada una individualmente
-- Layout "off" anteriormente permitía solo 1 imagen sin restricciones específicas
+- Usuario solicitó que en el feed las publicaciones se muestren tipo carrusel
+- Especialmente importante para layout "off" que ahora requiere mínimo 2 imágenes
+- Necesidad de mejor visualización cuando hay múltiples opciones/imágenes en una publicación
 
 ✅ **SOLUCIÓN COMPLETA IMPLEMENTADA:**
 
-**📱 LAYOUT "OFF" TRANSFORMADO:**
-1. ✅ **Nombre Actualizado**: "Off" → "Pantalla Completa" para mayor claridad
-2. ✅ **Descripción Mejorada**: "Múltiples imágenes en pantalla completa (mínimo 2)"
-3. ✅ **Validación Específica**: Requiere mínimo 2 imágenes cuando se selecciona este layout
-4. ✅ **Recomendación Visual**: Toast sugiere usar solo imágenes (no videos) para mejor experiencia
-5. ✅ **Auto-inicialización**: Al seleccionar el layout, automáticamente crea 2 slots vacíos
+**🎠 SISTEMA DE CARRUSEL AVANZADO:**
+1. ✅ **Detección Automática**: Carrusel se activa automáticamente para publicaciones con múltiples imágenes en layout "off"
+2. ✅ **Estados de Carrusel**: currentSlide, touchStart, touchEnd para manejo completo del estado
+3. ✅ **Navegación Touch**: Soporte completo para swipe izquierda/derecha en dispositivos móviles
+4. ✅ **Auto-avance**: Carrusel avanza automáticamente cada 5 segundos cuando está activo
+5. ✅ **Reset Inteligente**: Se reinicia a slide 0 cuando cambia la publicación
 
-**🔧 VALIDACIÓN MEJORADA:**
+**📱 NAVEGACIÓN INTUITIVA:**
 ```javascript
-// Validación específica para layout "off"
-if (selectedLayout.id === 'off') {
-  if (validOptions.length < 2) {
-    toast({
-      title: "Error",
-      description: "El modo Pantalla Completa requiere al menos 2 imágenes",
-      variant: "destructive"
-    });
-    return;
-  }
+// Touch handlers para swipe navigation
+const handleTouchStart = (e) => setTouchStart(e.targetTouches[0].clientX);
+const handleTouchMove = (e) => setTouchEnd(e.targetTouches[0].clientX);
+const handleTouchEnd = () => {
+  const distance = touchStart - touchEnd;
+  const isLeftSwipe = distance > 50;
+  const isRightSwipe = distance < -50;
   
-  // Recomendación para mejor experiencia
-  const hasVideos = validOptions.some(opt => opt.media.type.startsWith('video/'));
-  if (hasVideos) {
-    toast({
-      title: "Recomendación",
-      description: "Para mejor experiencia en pantalla completa, se recomienda usar solo imágenes",
-      variant: "default"
-    });
-  }
-}
+  if (isLeftSwipe) nextSlide();
+  if (isRightSwipe) prevSlide();
+};
 ```
 
-**🎨 MEJORAS EN UI/UX:**
-1. ✅ **Layout Style Adaptado**: Grid con gap vertical para mejor organización de slots
-2. ✅ **Indicador Visual**: Badge "📱 Pantalla Completa" en cada slot del layout "off"
-3. ✅ **Auto-inicialización**: Función handleLayoutSelect crea automáticamente 2 slots vacíos
-4. ✅ **Slots Dinámicos**: getSlotsCount adapta automáticamente al número de imágenes cargadas
-5. ✅ **Mensaje Informativo**: Banner azul explicativo sobre el funcionamiento del modo
+**🎯 ELEMENTOS DE INTERFAZ:**
+1. ✅ **Indicadores de Navegación**: Barras horizontales en la parte superior que muestran slide actual
+2. ✅ **Flechas de Navegación**: Botones circulares izquierda/derecha para pantallas grandes
+3. ✅ **Contador de Slides**: Indicador "1 / 3" en esquina superior derecha
+4. ✅ **Transiciones Suaves**: Animaciones CSS con `transition-transform duration-300 ease-in-out`
+5. ✅ **Indicadores Interactivos**: Click en indicadores para saltar a slide específico
 
-**FLUJO DE USUARIO MEJORADO:**
-```
-1. Usuario selecciona "Pantalla Completa" layout
-2. Sistema automáticamente crea 2 slots vacíos
-3. Aparece mensaje informativo explicando el modo
-4. Usuario agrega mínimo 2 imágenes
-5. Cada slot muestra indicador "📱 Pantalla Completa"
-6. Al publicar, cada imagen se verá individualmente en pantalla completa
-```
+**⚡ FUNCIONALIDADES ESPECÍFICAS:**
+- **Auto-play Videos**: Solo el video del slide actual se reproduce automáticamente
+- **Preload Inteligente**: Carga diferida de medios para mejor rendimiento
+- **Touch Optimizado**: `touchAction: 'manipulation'` para mejor respuesta táctil
+- **Responsive**: Funciona perfectamente en móviles y escritorio
+- **Feedback Visual**: Overlays de selección y votación mantenidos
+- **Compatibilidad**: Funciona con imágenes, videos y gradientes por defecto
 
-**FUNCIONALIDADES ESPECÍFICAS:**
-- 🎯 **Requerimiento Mínimo**: 2 imágenes obligatorias para layout "off"
-- 📱 **Experiencia Fullscreen**: Cada imagen se renderiza individualmente en pantalla completa
-- 🔄 **Auto-inicialización**: Slots vacíos se crean automáticamente al seleccionar layout
-- 💡 **Feedback Visual**: Indicadores claros de que las imágenes serán fullscreen
-- 🎨 **UI Adaptada**: Layout grid optimizado para visualización vertical de slots
+**🔧 LÓGICA CONDICIONAL:**
+```jsx
+{shouldUseCarousel && poll.layout === 'off' ? (
+  // Carousel view for layout "off" with multiple images
+  <div className="carousel-container">
+    <div 
+      className="flex w-full h-full transition-transform duration-300"
+      style={{ transform: `translateX(-${currentSlide * 100}%)` }}
+    >
+      {poll.options.map((option, optionIndex) => (
+        // Carousel slide content
+      ))}
+    </div>
+    // Navigation indicators, arrows, counter
+  </div>
+) : (
+  // Traditional layout for other layouts (grid, split, etc.)
+  poll.options.map((option, optionIndex) => (
+    // Traditional option rendering
+  ))
+)}
+```
 
 **TESTING EXHAUSTIVO COMPLETADO:**
-- ✅ **Validación Funcional**: Layout "off" rechaza menos de 2 imágenes
-- ✅ **Auto-inicialización**: Al seleccionar layout se crean 2 slots automáticamente
-- ✅ **Indicadores Visuales**: Badge "Pantalla Completa" aparece en cada slot
-- ✅ **Mensaje Informativo**: Banner explicativo se muestra correctamente
-- ✅ **Recomendación Videos**: Toast aparece cuando se usan videos en lugar de imágenes
-- ✅ **Layout Responsivo**: Funciona correctamente en diferentes tamaños de pantalla
+- ✅ **Carrusel Activación**: Se activa automáticamente para layout "off" con múltiples imágenes
+- ✅ **Navegación Touch**: Swipe izquierda/derecha funciona correctamente
+- ✅ **Botones Navegación**: Flechas izquierda/derecha navegan correctamente
+- ✅ **Indicadores Clickeables**: Click en indicadores salta al slide correcto
+- ✅ **Auto-avance**: Carrusel avanza automáticamente cada 5 segundos
+- ✅ **Reset Automático**: Se reinicia cuando cambia la publicación
+- ✅ **Responsive**: Funciona en móviles y escritorio
+- ✅ **Votación Funcional**: Click en imagen sigue permitiendo votar
+
+**EXPERIENCIA DE USUARIO MEJORADA:**
+1. **📱 Mobile-First**: Navegación por swipe optimizada para móviles
+2. **🖱️ Desktop Ready**: Flechas de navegación para usuarios de escritorio  
+3. **⏰ Auto-avance**: Contenido se muestra automáticamente sin intervención
+4. **🎯 Indicadores Claros**: Usuario siempre sabe en qué slide está
+5. **🔄 Navegación Fluida**: Transiciones suaves y responsive
+6. **💡 Feedback Visual**: Mantenidos todos los indicadores de votación
 
 ✅ **RESULTADO FINAL:**
-🎯 **LAYOUT "PANTALLA COMPLETA" COMPLETAMENTE FUNCIONAL** - Los usuarios ahora:
-1. **Entienden claramente** qué hace el layout con nombre y descripción mejorados
-2. **Reciben slots automáticamente** cuando seleccionan el layout
-3. **Ven indicadores visuales** de que las imágenes serán fullscreen
-4. **Deben agregar mínimo 2 imágenes** para poder publicar
-5. **Obtienen experiencia fullscreen** donde cada imagen se ve individualmente
+🎯 **CARRUSEL COMPLETAMENTE FUNCIONAL EN FEED** - Los usuarios ahora:
+1. **Ven múltiples imágenes** como carrusel deslizable en publicaciones con layout "off"
+2. **Navegan intuitivamente** usando swipe en móvil o flechas en escritorio
+3. **Tienen control total** con indicadores clickeables y navegación manual
+4. **Disfrutan de auto-avance** que muestra todo el contenido automáticamente
+5. **Mantienen funcionalidad** de votación y todas las características existentes
 
-**PROBLEMA ORIGINAL RESUELTO**: El layout "off" ahora requiere obligatoriamente al menos 2 imágenes que se visualizarán individualmente en pantalla completa cada una, proporcionando una experiencia visual más rica y cumpliendo con los requerimientos específicos del usuario.
+**PROBLEMA ORIGINAL RESUELTO**: El feed ahora muestra las publicaciones con múltiples imágenes (especialmente layout "Pantalla Completa") como carrusel elegante y funcional, proporcionando una experiencia visual rica similar a Instagram Stories pero manteniendo la funcionalidad de votación de la aplicación.
 
 ✅ **MEJORAS IMPLEMENTADAS COMPLETAMENTE:**
 
