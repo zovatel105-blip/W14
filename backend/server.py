@@ -1766,13 +1766,40 @@ async def update_settings(
     settings_data: UserSettings,
     current_user: UserResponse = Depends(get_current_user)
 ):
-    """Update user privacy settings"""
+    """Update user settings (privacy, notifications, content, account)"""
     update_fields = {}
     
+    # Privacy settings
     if settings_data.is_public is not None:
         update_fields["is_public"] = settings_data.is_public
     if settings_data.allow_messages is not None:
         update_fields["allow_messages"] = settings_data.allow_messages
+    
+    # Notification settings
+    if settings_data.notifications_enabled is not None:
+        update_fields["notifications_enabled"] = settings_data.notifications_enabled
+    if settings_data.email_notifications is not None:
+        update_fields["email_notifications"] = settings_data.email_notifications
+    if settings_data.push_notifications is not None:
+        update_fields["push_notifications"] = settings_data.push_notifications
+    if settings_data.notifications_likes is not None:
+        update_fields["notifications_likes"] = settings_data.notifications_likes
+    if settings_data.notifications_comments is not None:
+        update_fields["notifications_comments"] = settings_data.notifications_comments
+    if settings_data.notifications_follows is not None:
+        update_fields["notifications_follows"] = settings_data.notifications_follows
+    if settings_data.notifications_mentions is not None:
+        update_fields["notifications_mentions"] = settings_data.notifications_mentions
+    
+    # Content settings
+    if settings_data.auto_play_videos is not None:
+        update_fields["auto_play_videos"] = settings_data.auto_play_videos
+    if settings_data.show_mature_content is not None:
+        update_fields["show_mature_content"] = settings_data.show_mature_content
+    
+    # Account settings
+    if settings_data.two_factor_enabled is not None:
+        update_fields["two_factor_enabled"] = settings_data.two_factor_enabled
     
     if not update_fields:
         raise HTTPException(status_code=400, detail="No settings to update")
