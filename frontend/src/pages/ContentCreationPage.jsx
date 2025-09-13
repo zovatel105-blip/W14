@@ -457,8 +457,19 @@ const ContentCreationPage = () => {
   const handleLayoutSelect = (layout) => {
     setSelectedLayout(layout);
     setShowLayoutMenu(false);
-    // Clear options when changing layout to avoid confusion
-    setOptions([]);
+    
+    // Initialize appropriate number of empty slots based on layout
+    if (layout.id === 'off') {
+      // For fullscreen layout, initialize with 2 empty slots minimum
+      setOptions([
+        { text: '', media: null, mentionedUsers: [] },
+        { text: '', media: null, mentionedUsers: [] }
+      ]);
+    } else {
+      // Clear options when changing layout to avoid confusion
+      setOptions([]);
+    }
+    
     toast({
       title: "📐 Layout seleccionado",
       description: layout.description,
