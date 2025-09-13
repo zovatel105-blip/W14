@@ -961,78 +961,88 @@ Sidebar Derecho (20px width):
 
 **OBJETIVO ALCANZADO**: Preview limpio de imágenes fullscreen con información esencial, sin elementos adicionales de interfaz simulada, todos los botones principales agrupados en el sidebar derecho, RightSideNavigation correctamente oculta en creación, y título principal perfectamente centrado en la zona central superior como solicitado.
 
-**🎯 FUNCIONALIDAD DE CAMBIO DE AVATAR MOVIDA A EDITAR PERFIL (2025-09-13): Reubicada la opción de agregar/cambiar foto de perfil desde el avatar del perfil principal al modal de "Editar Perfil" para mejor organización y UX.**
+**🎯 LAYOUT "OFF" MODIFICADO PARA REQUERIR MÍNIMO 2 IMÁGENES DE PANTALLA COMPLETA (2025-09-13): Transformado el layout "Off" en "Pantalla Completa" con requerimiento de al menos 2 imágenes que se visualizan individualmente en pantalla completa cada una.**
 
 ✅ **PROBLEMA IDENTIFICADO:**
-- Usuario solicitó que la opción de agregar foto de perfil esté ubicada en el modal de "Editar Perfil"
-- Anteriormente, la funcionalidad estaba directamente en el avatar del perfil principal
-- Necesidad de centralizar todas las opciones de edición de perfil en un solo lugar
+- Usuario solicitó que el layout "off" requiera al menos 2 imágenes
+- Las imágenes deben verse en pantalla completa cada una individualmente
+- Layout "off" anteriormente permitía solo 1 imagen sin restricciones específicas
 
 ✅ **SOLUCIÓN COMPLETA IMPLEMENTADA:**
 
-**📝 INTEGRACIÓN EN EDITPROFILEMODAL:**
-1. ✅ **Import Agregado**: AvatarUpload importado en EditProfileModal.jsx
-2. ✅ **Función Handler**: handleAvatarUpdate agregada para manejar cambios de avatar
-3. ✅ **UI Mejorada**: AvatarUpload integrado con tamaño XL y anillo decorativo
-4. ✅ **Feedback Visual**: Toast notification cuando el avatar se actualiza exitosamente
-5. ✅ **FormData Sync**: Avatar URL se actualiza automáticamente en el formulario
+**📱 LAYOUT "OFF" TRANSFORMADO:**
+1. ✅ **Nombre Actualizado**: "Off" → "Pantalla Completa" para mayor claridad
+2. ✅ **Descripción Mejorada**: "Múltiples imágenes en pantalla completa (mínimo 2)"
+3. ✅ **Validación Específica**: Requiere mínimo 2 imágenes cuando se selecciona este layout
+4. ✅ **Recomendación Visual**: Toast sugiere usar solo imágenes (no videos) para mejor experiencia
+5. ✅ **Auto-inicialización**: Al seleccionar el layout, automáticamente crea 2 slots vacíos
 
-**🔧 CAMBIOS EN ESTRUCTURA:**
-1. ✅ **Avatar Section Renovada**: Reemplazado avatar preview estático con AvatarUpload interactivo
-2. ✅ **Eliminado Input URL**: Removido campo manual de URL del avatar (ahora automático)
-3. ✅ **Instrucciones Claras**: Texto explicativo "Haz click en la imagen para cambiar tu avatar"
-4. ✅ **Tamaño Optimizado**: AvatarUpload configurado en tamaño XL para mejor visibilidad
-5. ✅ **Styling Consistente**: Ring púrpura mantiene consistencia visual con el diseño
+**🔧 VALIDACIÓN MEJORADA:**
+```javascript
+// Validación específica para layout "off"
+if (selectedLayout.id === 'off') {
+  if (validOptions.length < 2) {
+    toast({
+      title: "Error",
+      description: "El modo Pantalla Completa requiere al menos 2 imágenes",
+      variant: "destructive"
+    });
+    return;
+  }
+  
+  // Recomendación para mejor experiencia
+  const hasVideos = validOptions.some(opt => opt.media.type.startsWith('video/'));
+  if (hasVideos) {
+    toast({
+      title: "Recomendación",
+      description: "Para mejor experiencia en pantalla completa, se recomienda usar solo imágenes",
+      variant: "default"
+    });
+  }
+}
+```
 
-**📱 LIMPIEZA DE PROFILEPAGE:**
-1. ✅ **Import Removido**: AvatarUpload eliminado de imports en ProfilePage.jsx
-2. ✅ **Componentes Simplificados**: Reemplazados AvatarUpload con Avatar estándar
-3. ✅ **Lógica Reducida**: Eliminada lógica condicional compleja para isOwnProfile
-4. ✅ **UI Consistente**: Mismo Avatar para todos los usuarios (propio y ajenos)
-5. ✅ **Código Limpio**: Reducción significativa de líneas de código duplicado
+**🎨 MEJORAS EN UI/UX:**
+1. ✅ **Layout Style Adaptado**: Grid con gap vertical para mejor organización de slots
+2. ✅ **Indicador Visual**: Badge "📱 Pantalla Completa" en cada slot del layout "off"
+3. ✅ **Auto-inicialización**: Función handleLayoutSelect crea automáticamente 2 slots vacíos
+4. ✅ **Slots Dinámicos**: getSlotsCount adapta automáticamente al número de imágenes cargadas
+5. ✅ **Mensaje Informativo**: Banner azul explicativo sobre el funcionamiento del modo
 
 **FLUJO DE USUARIO MEJORADO:**
 ```
-ANTES:
-1. Usuario ve su perfil
-2. Hace click directamente en avatar
-3. Modal de crop aparece
-4. Avatar se actualiza
-
-DESPUÉS:
-1. Usuario ve su perfil
-2. Hace click en "Editar Perfil"
-3. Modal de edición se abre
-4. Hace click en avatar dentro del modal
-5. Modal de crop aparece
-6. Avatar se actualiza automáticamente en formulario
-7. Usuario puede hacer más cambios antes de guardar
+1. Usuario selecciona "Pantalla Completa" layout
+2. Sistema automáticamente crea 2 slots vacíos
+3. Aparece mensaje informativo explicando el modo
+4. Usuario agrega mínimo 2 imágenes
+5. Cada slot muestra indicador "📱 Pantalla Completa"
+6. Al publicar, cada imagen se verá individualmente en pantalla completa
 ```
 
-**TESTING EXHAUSTIVO COMPLETADO:**
-- ✅ **Modal de Edición**: AvatarUpload funciona correctamente en EditProfileModal
-- ✅ **Upload Funcional**: Cambio de avatar procesa y guarda exitosamente
-- ✅ **FormData Sync**: URL del avatar se actualiza automáticamente en formData
-- ✅ **Toast Feedback**: Confirmación visual cuando avatar se actualiza
-- ✅ **ProfilePage Limpio**: Avatar se muestra correctamente sin funcionalidad de upload
-- ✅ **Responsive**: Funciona correctamente en diferentes tamaños de pantalla
+**FUNCIONALIDADES ESPECÍFICAS:**
+- 🎯 **Requerimiento Mínimo**: 2 imágenes obligatorias para layout "off"
+- 📱 **Experiencia Fullscreen**: Cada imagen se renderiza individualmente en pantalla completa
+- 🔄 **Auto-inicialización**: Slots vacíos se crean automáticamente al seleccionar layout
+- 💡 **Feedback Visual**: Indicadores claros de que las imágenes serán fullscreen
+- 🎨 **UI Adaptada**: Layout grid optimizado para visualización vertical de slots
 
-**BENEFICIOS LOGRADOS:**
-1. **🎯 Centralización**: Todas las opciones de edición en un solo lugar
-2. **🧹 Código Limpio**: Eliminación de lógica duplicada y condicional compleja
-3. **🔄 Flujo Lógico**: Cambios de perfil agrupados en modal dedicado
-4. **💫 UX Mejorada**: Proceso más intuitivo y organizado
-5. **⚡ Mantenimiento**: Código más fácil de mantener y expandir
+**TESTING EXHAUSTIVO COMPLETADO:**
+- ✅ **Validación Funcional**: Layout "off" rechaza menos de 2 imágenes
+- ✅ **Auto-inicialización**: Al seleccionar layout se crean 2 slots automáticamente
+- ✅ **Indicadores Visuales**: Badge "Pantalla Completa" aparece en cada slot
+- ✅ **Mensaje Informativo**: Banner explicativo se muestra correctamente
+- ✅ **Recomendación Videos**: Toast aparece cuando se usan videos en lugar de imágenes
+- ✅ **Layout Responsivo**: Funciona correctamente en diferentes tamaños de pantalla
 
 ✅ **RESULTADO FINAL:**
-🎯 **AVATAR UPLOAD CENTRALIZADO EN EDITAR PERFIL** - Los usuarios ahora:
-1. **Acceden a cambio de avatar** desde el botón "Editar Perfil" 
-2. **Ven todas las opciones juntas** en un modal organizado
-3. **Pueden hacer múltiples cambios** antes de guardar
-4. **Reciben feedback inmediato** con preview actualizado
-5. **Siguen un flujo más lógico** para edición de perfil
+🎯 **LAYOUT "PANTALLA COMPLETA" COMPLETAMENTE FUNCIONAL** - Los usuarios ahora:
+1. **Entienden claramente** qué hace el layout con nombre y descripción mejorados
+2. **Reciben slots automáticamente** cuando seleccionan el layout
+3. **Ven indicadores visuales** de que las imágenes serán fullscreen
+4. **Deben agregar mínimo 2 imágenes** para poder publicar
+5. **Obtienen experiencia fullscreen** donde cada imagen se ve individualmente
 
-**PROBLEMA ORIGINAL RESUELTO**: La funcionalidad de cambio de avatar ahora está correctamente ubicada en el modal de "Editar Perfil", proporcionando una experiencia más organizada y coherente con las expectativas de UX de aplicaciones modernas.
+**PROBLEMA ORIGINAL RESUELTO**: El layout "off" ahora requiere obligatoriamente al menos 2 imágenes que se visualizarán individualmente en pantalla completa cada una, proporcionando una experiencia visual más rica y cumpliendo con los requerimientos específicos del usuario.
 
 ✅ **MEJORAS IMPLEMENTADAS COMPLETAMENTE:**
 
