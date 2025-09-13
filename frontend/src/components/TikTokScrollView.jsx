@@ -755,8 +755,7 @@ const TikTokPollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, onCr
           );
         })
         )}
-
-
+      </div>
 
       {/* Bottom info and actions - Enhanced with safe area */}
       <div className="absolute bottom-0 left-0 right-0 z-30 bg-gradient-to-t from-black/90 via-black/70 to-transparent px-4 pt-8"
