@@ -205,6 +205,14 @@ const LayoutPreview = ({ layout, options = [], title, selectedMusic, onImageUplo
                 {String.fromCharCode(65 + slotIndex)}
               </div>
               
+              {/* Fullscreen indicator for 'off' layout */}
+              {layout.id === 'off' && (
+                <div className="absolute top-2 right-2 bg-blue-600 text-white px-2 py-1 rounded-lg text-xs font-medium z-10 flex items-center gap-1">
+                  <span>📱</span>
+                  <span>Pantalla Completa</span>
+                </div>
+              )}
+              
               {/* Fullscreen Feed-style Preview */}
               <div 
                 className={`w-full h-full relative overflow-hidden ${
