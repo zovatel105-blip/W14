@@ -12,7 +12,6 @@ import ShareModal from '../components/ShareModal';
 import StatisticsModal from '../components/StatisticsModal';
 import TikTokProfileGrid from '../components/TikTokProfileGrid';
 import TikTokScrollView from '../components/TikTokScrollView';
-import AvatarUpload from '../components/AvatarUpload';
 import StoryViewer from '../components/StoryViewer';
 import CreateStoryModal from '../components/CreateStoryModal';
 import { 
