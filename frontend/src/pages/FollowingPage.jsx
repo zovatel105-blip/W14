@@ -571,14 +571,6 @@ const FollowingPage = () => {
       >
         <LogoWithQuickActions size={24} />
       </div>
-
-      {/* Back button */}
-      <button
-        onClick={() => navigate('/feed')}
-        className="fixed top-4 left-4 z-[9999] w-10 h-10 rounded-full bg-white/95 backdrop-blur-md border border-gray-200/60 shadow-lg flex items-center justify-center hover:bg-white transition-colors"
-      >
-        <ArrowLeft className="w-5 h-5 text-gray-700" />
-      </button>
       
       <div className="min-h-screen bg-gray-50 pt-6 relative">
         {/* Header */}
