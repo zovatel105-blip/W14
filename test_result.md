@@ -961,6 +961,58 @@ Sidebar Derecho (20px width):
 
 **OBJETIVO ALCANZADO**: Preview limpio de imágenes fullscreen con información esencial, sin elementos adicionales de interfaz simulada, todos los botones principales agrupados en el sidebar derecho, RightSideNavigation correctamente oculta en creación, y título principal perfectamente centrado en la zona central superior como solicitado.
 
+**🎯 PROBLEMA CRÍTICO FILTRADO FOLLOWING PAGE COMPLETAMENTE CORREGIDO (2025-09-13): La página de Following ahora muestra SOLO publicaciones de usuarios seguidos en lugar de funcionar como el feed principal - endpoint backend implementado y frontend actualizado exitosamente.**
+
+✅ **PROBLEMA IDENTIFICADO:**
+- Usuario reportaba que la página Following (accesible mediante long press en botón inicio) mostraba todas las publicaciones como el feed principal
+- El sistema no estaba filtrando correctamente para mostrar solo publicaciones de usuarios seguidos
+- FollowingPage funcionaba idéntico al FeedPage en lugar de mostrar contenido personalizado
+
+✅ **CAUSA RAÍZ ENCONTRADA:**
+1. **Backend**: No existía endpoint específico para publicaciones de usuarios seguidos
+2. **Frontend**: pollService.getFollowingPolls() usaba filtrado en frontend que era ineficiente y problemático
+3. **Lógica**: El filtrado se hacía después de obtener todas las publicaciones, no en la consulta de base de datos
+
+✅ **SOLUCIÓN COMPLETA IMPLEMENTADA:**
+
+**BACKEND - NUEVO ENDPOINT AGREGADO:**
+1. ✅ **Endpoint GET /api/polls/following**: Nuevo endpoint específico en server.py línea 3545
+2. ✅ **Filtrado en Base de Datos**: Consulta directa a colección `follows` para obtener IDs de usuarios seguidos
+3. ✅ **Query Optimizada**: `db.polls.find({"author_id": {"$in": following_user_ids}})` filtra en MongoDB
+4. ✅ **Mismo Formato de Respuesta**: Usa modelo PollResponse idéntico a /api/polls pero filtrado
+5. ✅ **Campo is_following**: Todos los posts tienen `is_following: true` automáticamente
+6. ✅ **Manejo de Casos Edge**: Retorna array vacío si usuario no sigue a nadie
+
+**FRONTEND - POLLSERVICE ACTUALIZADO:**
+1. ✅ **URL Corregida**: getFollowingPolls() ahora usa `${this.baseURL}/polls/following`
+2. ✅ **Eliminado Filtrado Frontend**: Removida lógica compleja de filtrado local
+3. ✅ **Configuración Actualizada**: Agregado `POLLS.FOLLOWING` en config.js
+4. ✅ **Manejo de Errores**: Mensajes específicos para problemas de autenticación y filtrado
+
+**TESTING EXHAUSTIVO COMPLETADO:**
+- ✅ **User1 sigue a User2**: Following feed muestra solo publicaciones de User2
+- ✅ **User3 no seguido**: Following feed NO muestra publicaciones de User3  
+- ✅ **Feed General**: Sigue mostrando todas las publicaciones (User2 + User3)
+- ✅ **Autenticación**: Endpoint requiere JWT válido como esperado
+- ✅ **Array Vacío**: Usuarios sin seguidos reciben array vacío correctamente
+- ✅ **Estructura Datos**: Formato idéntico entre /api/polls y /api/polls/following
+
+✅ **FUNCIONALIDADES CORREGIDAS:**
+- ✅ Long press en botón inicio → navega a /following con contenido filtrado
+- ✅ FollowingPage muestra solo publicaciones de usuarios seguidos
+- ✅ Feed principal (/feed) sigue mostrando todas las publicaciones
+- ✅ Rendimiento mejorado con filtrado en backend en lugar de frontend
+- ✅ Experiencia de usuario diferenciada entre Feed general vs Following personalizado
+
+✅ **RESULTADO FINAL:**
+🎯 **FOLLOWING PAGE COMPLETAMENTE FUNCIONAL** - Los usuarios ahora tienen:
+1. Feed principal con todas las publicaciones para descubrimiento
+2. Feed following personalizado con solo contenido de usuarios seguidos
+3. Experiencia diferenciada y filtrado correcto en ambas páginas
+4. Rendimiento optimizado con queries eficientes de base de datos
+
+**PROBLEMA ORIGINAL RESUELTO**: La página Following ya no funciona como feed principal - ahora muestra exclusivamente publicaciones de usuarios que el usuario actual sigue, proporcionando la experiencia personalizada esperada.
+
 ✅ **MEJORAS IMPLEMENTADAS COMPLETAMENTE:**
 
 **1. BOTÓN DE SEGUIR CON CAMPANA DE NOTIFICACIONES:**
