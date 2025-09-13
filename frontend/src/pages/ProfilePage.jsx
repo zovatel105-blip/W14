@@ -1654,6 +1654,15 @@ const ProfilePage = () => {
           onStoryEnd={() => setShowStoryViewer(false)}
         />
       )}
+
+      {/* Create Story Modal - Solo para perfil propio */}
+      {isOwnProfile && (
+        <CreateStoryModal
+          isOpen={showCreateStoryModal}
+          onClose={() => setShowCreateStoryModal(false)}
+          onStoryCreated={handleStoryCreated}
+        />
+      )}
         </div>
       )}
     </>
