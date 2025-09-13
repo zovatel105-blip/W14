@@ -67,11 +67,21 @@ const TikTokPollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, onCr
   const [isMusicPlaying, setIsMusicPlaying] = useState(false);
   const [showCommentsModal, setShowCommentsModal] = useState(false);
   const [audioContextActivated, setAudioContextActivated] = useState(false);
+  
+  // Carousel state for multiple options
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
+  
   const navigate = useNavigate();
   const { followUser, unfollowUser, isFollowing, getFollowStatus } = useFollow();
   const { user: currentUser } = useAuth();
   const { toast } = useToast();
   const { shareModal, sharePoll, closeShareModal } = useShare();
+
+  // Check if this poll should use carousel (multiple options, especially layout "off")
+  const shouldUseCarousel = poll.options && poll.options.length > 1;
+  const totalSlides = poll.options ? poll.options.length : 1;
 
   // Get user ID from poll author
   const getAuthorUserId = () => {
