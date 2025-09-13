@@ -91,8 +91,25 @@ class PasswordChange(BaseModel):
     new_password: str
 
 class UserSettings(BaseModel):
+    # Privacy settings
     is_public: Optional[bool] = None
     allow_messages: Optional[bool] = None
+    
+    # Notification settings
+    notifications_enabled: Optional[bool] = None
+    email_notifications: Optional[bool] = None
+    push_notifications: Optional[bool] = None
+    notifications_likes: Optional[bool] = None
+    notifications_comments: Optional[bool] = None
+    notifications_follows: Optional[bool] = None
+    notifications_mentions: Optional[bool] = None
+    
+    # Content settings
+    auto_play_videos: Optional[bool] = None
+    show_mature_content: Optional[bool] = None
+    
+    # Account settings
+    two_factor_enabled: Optional[bool] = None
 
 # =============  SECURITY MODELS =============
 
