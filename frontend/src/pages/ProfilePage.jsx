@@ -457,6 +457,21 @@ const ProfilePage = () => {
     }
   };
 
+  // Handle when a new story is created
+  const handleStoryCreated = async (newStory) => {
+    try {
+      // Add the new story to the user's stories
+      setUserStories(prev => [newStory, ...prev]);
+      setUserHasStories(true);
+      
+      // Optionally refresh stories to get updated data
+      const updatedStories = await storyService.getUserStories(viewedUser?.id || authUser?.id);
+      setUserStories(updatedStories);
+    } catch (error) {
+      console.error('Error updating stories after creation:', error);
+    }
+  };
+
   const copyToClipboard = (text) => {
     if (navigator.clipboard) {
       navigator.clipboard.writeText(text).then(() => {
