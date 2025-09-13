@@ -135,6 +135,60 @@ class PollService {
     }
   }
 
+  // Get polls from followed users only
+  async getFollowingPolls(params = {}) {
+    try {
+      const { limit = 20, offset = 0 } = params;
+      
+      // Get current user's following list first
+      const response = await fetch(`${this.baseURL}/users/following`, {
+        method: 'GET',
+        headers: this.getAuthHeaders(),
+      });
+
+      if (!response.ok) {
+        if (response.status === 401) {
+          throw new Error('No estás autenticado');
+        }
+        throw new Error('Error al obtener usuarios seguidos');
+      }
+
+      const followingData = await response.json();
+      
+      // If user doesn't follow anyone, return empty array
+      if (!followingData.following || followingData.following.length === 0) {
+        return [];
+      }
+
+      // Extract followed user IDs
+      const followedUserIds = followingData.following.map(user => user.id);
+      
+      // Get polls from followed users
+      const pollsResponse = await fetch(`${this.baseURL}/polls?limit=${limit}&offset=${offset}`, {
+        method: 'GET',
+        headers: this.getAuthHeaders(),
+      });
+
+      if (!pollsResponse.ok) {
+        throw new Error('Error al cargar publicaciones');
+      }
+
+      const allPolls = await pollsResponse.json();
+      
+      // Filter polls to only include those from followed users
+      const followingPolls = allPolls.filter(poll => 
+        followedUserIds.includes(poll.author_id || poll.author?.id)
+      );
+
+      // Transform and return the filtered polls
+      return followingPolls.map(poll => this.transformPollData(poll));
+      
+    } catch (error) {
+      console.error('Error loading following polls:', error);
+      throw error;
+    }
+  }
+
   // Transform backend poll data to frontend format
   transformPollData(backendPoll) {
     return {
