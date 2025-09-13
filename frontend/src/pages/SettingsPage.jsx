@@ -31,9 +31,16 @@ const SettingsPage = () => {
     notifications_follows: true,
     notifications_mentions: true,
     
-    // Content settings
-    auto_play_videos: true,
-    show_mature_content: false,
+    // Discovery & Interaction settings
+    discoverable: true,
+    require_follow_approval: false,
+    allow_comments: true,
+    allow_shares: true,
+    
+    // Language & Accessibility settings
+    app_language: 'es',
+    dark_mode: false,
+    large_text: false,
     
     // Account settings
     two_factor_enabled: false
