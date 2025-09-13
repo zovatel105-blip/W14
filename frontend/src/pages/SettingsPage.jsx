@@ -47,8 +47,25 @@ const SettingsPage = () => {
   useEffect(() => {
     if (user) {
       setSettings({
+        // Privacy settings
         is_public: user.is_public ?? true,
-        allow_messages: user.allow_messages ?? true
+        allow_messages: user.allow_messages ?? true,
+        
+        // Notification settings
+        notifications_enabled: user.notifications_enabled ?? true,
+        email_notifications: user.email_notifications ?? true,
+        push_notifications: user.push_notifications ?? true,
+        notifications_likes: user.notifications_likes ?? true,
+        notifications_comments: user.notifications_comments ?? true,
+        notifications_follows: user.notifications_follows ?? true,
+        notifications_mentions: user.notifications_mentions ?? true,
+        
+        // Content settings
+        auto_play_videos: user.auto_play_videos ?? true,
+        show_mature_content: user.show_mature_content ?? false,
+        
+        // Account settings
+        two_factor_enabled: user.two_factor_enabled ?? false
       });
     }
   }, [user]);
