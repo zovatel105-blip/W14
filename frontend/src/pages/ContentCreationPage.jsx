@@ -99,7 +99,7 @@ const LayoutIcon = ({ type }) => {
 };
 
 const LAYOUT_OPTIONS = [
-  { id: 'off', name: 'Off', description: 'Sin layout (solo una imagen)' },
+  { id: 'off', name: 'Pantalla Completa', description: 'Múltiples imágenes en pantalla completa (mínimo 2)' },
   { id: 'vertical', name: 'Lado a lado', description: 'Pantalla dividida en 2 partes lado a lado' },
   { id: 'horizontal', name: 'Arriba y abajo', description: 'Pantalla dividida en 2 partes arriba y abajo' },
   { id: 'triptych-vertical', name: 'Triptych lado a lado', description: 'Pantalla dividida en 3 partes lado a lado' },
