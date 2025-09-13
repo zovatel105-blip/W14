@@ -1090,27 +1090,16 @@ const ProfilePage = () => {
               ) : (
                 // Sin borde degradado si no hay historia
                 <div className="w-full h-full bg-white rounded-full overflow-hidden relative border-2 border-gray-200">
-                  {isOwnProfile ? (
-                    <AvatarUpload
-                      currentAvatar={displayUser?.avatar}
-                      onAvatarUpdate={(result, avatarUrl) => {
-                        setViewedUser(prev => ({ ...prev, avatar: avatarUrl }));
-                      }}
-                      className="w-full h-full"
-                      showUploadButton={false}
+                  <Avatar className="w-full h-full">
+                    <AvatarImage 
+                      src={displayUser?.avatar} 
+                      alt={displayUser?.username || 'Usuario'}
+                      className="w-full h-full object-cover object-center"
                     />
-                  ) : (
-                    <Avatar className="w-full h-full">
-                      <AvatarImage 
-                        src={displayUser?.avatar} 
-                        alt={displayUser?.username || 'Usuario'}
-                        className="w-full h-full object-cover object-center"
-                      />
-                      <AvatarFallback className="bg-gradient-to-br from-purple-500 to-pink-500 text-white text-lg sm:text-xl md:text-2xl font-bold w-full h-full flex items-center justify-center">
-                        {(displayUser?.displayName || displayUser?.username || 'U').charAt(0).toUpperCase()}
-                      </AvatarFallback>
-                    </Avatar>
-                  )}
+                    <AvatarFallback className="bg-gradient-to-br from-purple-500 to-pink-500 text-white text-lg sm:text-xl md:text-2xl font-bold w-full h-full flex items-center justify-center">
+                      {(displayUser?.displayName || displayUser?.username || 'U').charAt(0).toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
                 </div>
               )}
               
