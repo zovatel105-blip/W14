@@ -83,7 +83,7 @@ const SettingsPage = () => {
       setSettings(prev => ({ ...prev, [field]: value }));
       
       // Update user context with new data
-      setUser(updatedUser);
+      await refreshUser();
       
       toast({
         title: "Configuración actualizada",
