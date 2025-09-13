@@ -30,31 +30,31 @@ const TestSupabasePage = () => {
       }
       addResult('1', 'success', 'Supabase connection successful!');
 
-      // Step 2: Create Test User Profile
-      addResult('2', 'running', 'Creating test user profile...');
+      // Step 2: Test Supabase Authentication
+      addResult('2', 'running', 'Testing Supabase Authentication...');
       
-      const testUserId = crypto.randomUUID();
+      const testEmail = `testuser_${Date.now()}@test.com`;
+      const testPassword = 'TestPass123!';
       const testUsername = 'testuser_' + Date.now();
       
-      const { data: profileData, error: profileError } = await supabase
-        .from('profiles')
-        .upsert({
-          id: testUserId,
+      // Sign up test user
+      const { user: signUpUser, error: signUpError } = await supabaseAuthService.signUp(
+        testEmail, 
+        testPassword, 
+        {
           username: testUsername,
           display_name: 'Test User',
-          bio: 'Test user for Supabase migration testing',
-          avatar_url: 'https://via.placeholder.com/150'
-        })
-        .select()
-        .single();
+          bio: 'Test user for Supabase migration testing'
+        }
+      );
 
-      if (profileError) {
-        addResult('2', 'error', `Profile creation failed: ${profileError.message}`);
+      if (signUpError) {
+        addResult('2', 'error', `Authentication failed: ${signUpError.message}`);
         return;
       }
       
-      setTestUser(profileData);
-      addResult('2', 'success', `Test user created: ${profileData.username}`, profileData);
+      setTestUser({ id: signUpUser.id, username: testUsername });
+      addResult('2', 'success', `Test user authenticated: ${testUsername}`, signUpUser);
 
       // Step 3: Test Authentication (simulate login)
       addResult('3', 'running', 'Setting up test authentication...');
