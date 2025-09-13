@@ -146,6 +146,7 @@ class AppConfig {
       },
       POLLS: {
         LIST: `${baseUrl}/api/polls`,
+        FOLLOWING: `${baseUrl}/api/polls/following`,
         CREATE: `${baseUrl}/api/polls`,
         GET: (id) => `${baseUrl}/api/polls/${id}`,
         VOTE: (id) => `${baseUrl}/api/polls/${id}/vote`,
