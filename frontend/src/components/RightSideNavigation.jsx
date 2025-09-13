@@ -48,23 +48,39 @@ const RightSideNavigation = ({ onCreatePoll }) => {
     <div className="fixed right-4 top-1/2 transform -translate-y-1/2 flex flex-col gap-4 z-50"
          style={{ right: 'max(1rem, env(safe-area-inset-right))' }}>
       
-      {/* Home/Inicio */}
-      <button
-        onClick={() => navigate('/feed')}
-        className={cn(
-          "rounded-full transition-all duration-300 backdrop-blur-sm border border-white/10",
-          location.pathname === '/feed' 
-            ? "bg-blue-500 hover:bg-blue-600 w-5 h-12 shadow-xl"
-            : "bg-white/80 hover:bg-white hover:scale-110 w-5 h-12 shadow-lg",
-          "flex items-center justify-center"
+      {/* Home/Inicio with Long Press */}
+      <div className="relative">
+        <button
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+          onMouseDown={handleMouseDown}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={handleMouseLeave}
+          onClick={() => !isLongPressing && navigate('/feed')}
+          className={cn(
+            "rounded-full transition-all duration-300 backdrop-blur-sm border border-white/10",
+            location.pathname === '/feed' 
+              ? "bg-blue-500 hover:bg-blue-600 w-5 h-12 shadow-xl"
+              : "bg-white/80 hover:bg-white hover:scale-110 w-5 h-12 shadow-lg",
+            isLongPressing && "bg-purple-500 w-6 h-14 shadow-2xl scale-110",
+            "flex items-center justify-center"
+          )}
+          title={isLongPressing ? "Following" : "Inicio"}
+        >
+          <Home className={cn(
+            "w-4 h-4 transition-all duration-300",
+            location.pathname === '/feed' ? "text-white" : "text-gray-700",
+            isLongPressing && "text-white w-5 h-5"
+          )} />
+        </button>
+        
+        {/* Long press indicator */}
+        {isLongPressing && (
+          <div className="absolute -top-1 -right-1 w-3 h-3 bg-purple-400 rounded-full animate-pulse">
+            <div className="absolute inset-0 bg-purple-300 rounded-full animate-ping"></div>
+          </div>
         )}
-        title="Inicio"
-      >
-        <Home className={cn(
-          "w-4 h-4",
-          location.pathname === '/feed' ? "text-white" : "text-gray-700"
-        )} />
-      </button>
+      </div>
 
       {/* Battle Live */}
       <button
