@@ -195,7 +195,7 @@ const TestSupabasePage = () => {
         .insert({
           poll_id: pollData.id,
           option_id: firstOptionId,
-          user_id: testUserId
+          user_id: currentUser.id
         })
         .select();
 
@@ -212,7 +212,7 @@ const TestSupabasePage = () => {
         .from('poll_likes')
         .insert({
           poll_id: pollData.id,
-          user_id: testUserId
+          user_id: currentUser.id
         })
         .select();
 
