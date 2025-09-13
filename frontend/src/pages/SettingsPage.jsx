@@ -31,11 +31,12 @@ const SettingsPage = () => {
     notifications_follows: true,
     notifications_mentions: true,
     
-    // Discovery & Interaction settings
-    discoverable: true,
-    require_follow_approval: false,
-    allow_comments: true,
-    allow_shares: true,
+    // Performance & Data settings (APK specific)
+    video_quality: 'auto',
+    wifi_only: false,
+    battery_saver: false,
+    auto_cache: true,
+    background_sync: true,
     
     // Language & Accessibility settings
     app_language: 'es',
