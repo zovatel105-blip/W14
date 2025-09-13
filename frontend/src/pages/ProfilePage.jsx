@@ -1076,13 +1076,9 @@ const ProfilePage = () => {
                 >
                   <div className="w-full h-full bg-white rounded-full overflow-hidden relative">
                     <Avatar className="w-full h-full">
-                      <AvatarImage 
-                        src={displayUser?.avatar} 
-                        alt={displayUser?.username || 'Usuario'}
-                        className="w-full h-full object-cover object-center"
-                      />
-                      <AvatarFallback className="bg-gradient-to-br from-purple-500 to-pink-500 text-white text-lg sm:text-xl md:text-2xl font-bold w-full h-full flex items-center justify-center">
-                        {(displayUser?.displayName || displayUser?.username || 'U').charAt(0).toUpperCase()}
+                      <AvatarImage src={displayUser?.avatar} alt={displayUser?.displayName} />
+                      <AvatarFallback className="bg-gradient-to-br from-purple-100 to-blue-100 text-purple-600 text-lg font-bold">
+                        {displayUser?.displayName ? displayUser.displayName.charAt(0).toUpperCase() : 'U'}
                       </AvatarFallback>
                     </Avatar>
                   </div>
