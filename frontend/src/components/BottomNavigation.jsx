@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { Home, Compass, Plus, Bell, User, MessageCircle } from 'lucide-react';
 import { cn } from '../lib/utils';
