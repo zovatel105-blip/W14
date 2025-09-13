@@ -724,14 +724,36 @@ const ContentCreationPage = () => {
       return;
     }
 
-    // Validate minimum options (like CreatePollModal)
-    if (validOptions.length < 2) {
-      toast({
-        title: "Error",
-        description: "Necesitas al menos 2 opciones para crear una votación",
-        variant: "destructive"
-      });
-      return;
+    // Specific validation for "off" layout (full screen images)
+    if (selectedLayout.id === 'off') {
+      if (validOptions.length < 2) {
+        toast({
+          title: "Error",
+          description: "El modo Pantalla Completa requiere al menos 2 imágenes",
+          variant: "destructive"
+        });
+        return;
+      }
+      
+      // Validate that all options are images (not videos) for better fullscreen experience
+      const hasVideos = validOptions.some(opt => opt.media.type.startsWith('video/'));
+      if (hasVideos) {
+        toast({
+          title: "Recomendación",
+          description: "Para mejor experiencia en pantalla completa, se recomienda usar solo imágenes",
+          variant: "default"
+        });
+      }
+    } else {
+      // Validate minimum options for other layouts
+      if (validOptions.length < 2) {
+        toast({
+          title: "Error",
+          description: "Necesitas al menos 2 opciones para crear una votación",
+          variant: "destructive"
+        });
+        return;
+      }
     }
 
     setIsCreating(true);
