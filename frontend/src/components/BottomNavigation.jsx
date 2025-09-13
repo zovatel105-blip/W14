@@ -118,7 +118,7 @@ const BottomNavigation = ({ onCreatePoll }) => {
     <nav className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-gray-200/50 shadow-lg z-50">
       <div className="max-w-md mx-auto px-4">
         <div className="flex items-center justify-around py-2">
-          {/* Home Button with Long Press */}
+          {/* Home Button with Long Press - Dynamic Colors */}
           <div
             onTouchStart={handleTouchStart}
             onTouchEnd={handleTouchEnd}
@@ -128,40 +128,47 @@ const BottomNavigation = ({ onCreatePoll }) => {
             className="relative"
           >
             <NavLink
-              to="/feed"
-              className={({ isActive }) =>
+              to={currentMode === 'following' ? '/following' : '/feed'}
+              className={() =>
                 cn(
                   "flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-all duration-300 min-w-[60px]",
-                  isActive
-                    ? "text-blue-600 bg-blue-50 transform scale-105"
-                    : "text-gray-500 hover:text-gray-700 hover:bg-gray-50",
-                  isLongPressing && "transform scale-110 bg-purple-50 text-purple-600"
+                  // Usar los estilos del modo actual
+                  modeStyles.activeBg,
+                  modeStyles.activeText,
+                  "transform scale-105",
+                  isLongPressing && "transform scale-110 opacity-75"
                 )
               }
             >
-              {({ isActive }) => (
-                <>
-                  <Home 
-                    className={cn(
-                      "w-6 h-6 transition-all duration-300",
-                      (isActive || isLongPressing) && "fill-current",
-                      isLongPressing && "text-purple-600"
-                    )} 
-                  />
-                  <span className={cn(
-                    "text-xs font-medium",
-                    isLongPressing ? "text-purple-600" : ""
-                  )}>
-                    {isLongPressing ? "Following" : "Seguidos"}
-                  </span>
-                </>
-              )}
+              <Home 
+                className={cn(
+                  "w-6 h-6 transition-all duration-300 fill-current",
+                  modeStyles.iconColor,
+                  isLongPressing && "animate-pulse"
+                )} 
+              />
+              <span className={cn(
+                "text-xs font-medium transition-all duration-300",
+                modeStyles.textColor,
+                isLongPressing && "animate-pulse"
+              )}>
+                {isLongPressing 
+                  ? (currentMode === 'feed' ? 'Following...' : 'Feed...') 
+                  : modeStyles.label
+                }
+              </span>
             </NavLink>
             
             {/* Long press indicator */}
             {isLongPressing && (
-              <div className="absolute -top-1 -right-1 w-3 h-3 bg-purple-500 rounded-full animate-pulse">
-                <div className="absolute inset-0 bg-purple-400 rounded-full animate-ping"></div>
+              <div className={cn(
+                "absolute -top-1 -right-1 w-3 h-3 rounded-full animate-pulse",
+                currentMode === 'following' ? 'bg-blue-500' : 'bg-purple-500'
+              )}>
+                <div className={cn(
+                  "absolute inset-0 rounded-full animate-ping",
+                  currentMode === 'following' ? 'bg-blue-400' : 'bg-purple-400'
+                )}></div>
               </div>
             )}
           </div>
