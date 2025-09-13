@@ -753,8 +753,8 @@ const TikTokPollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, onCr
               )}
             </div>
           );
-        })}
-      </div>
+        })
+        )}
 
 
 
