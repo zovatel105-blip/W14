@@ -82,6 +82,14 @@ const TikTokPollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, onCr
   // Check if this poll should use carousel (multiple options, especially layout "off")
   const shouldUseCarousel = poll.options && poll.options.length > 1;
   const totalSlides = poll.options ? poll.options.length : 1;
+  
+  // Debug logging
+  console.log('🎠 Carousel Debug:', {
+    shouldUseCarousel,
+    layout: poll.layout,
+    willUseCarousel: shouldUseCarousel && poll.layout === 'off',
+    optionsCount: poll.options?.length || 0
+  });
 
   // Carousel navigation functions
   const nextSlide = () => {
