@@ -8,21 +8,39 @@ const RightSideNavigation = ({ onCreatePoll }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isLongPressing, setIsLongPressing] = useState(false);
+  const [currentMode, setCurrentMode] = useState('feed'); // 'feed' or 'following'
   const longPressTimer = useRef(null);
+
+  // Detectar el modo actual basado en la ruta
+  useEffect(() => {
+    if (location.pathname === '/following') {
+      setCurrentMode('following');
+    } else {
+      setCurrentMode('feed');
+    }
+  }, [location.pathname]);
 
   // Long press handlers for home button
   const handleTouchStart = useCallback(() => {
-    setIsLongPressing(false);
+    setIsLongPressing(true);
     longPressTimer.current = setTimeout(() => {
-      setIsLongPressing(true);
       // Vibration feedback if available
       if (navigator.vibrate) {
         navigator.vibrate(50);
       }
-      // Navigate to Following page
-      navigate('/following');
+      
+      // Alternar entre feed y following
+      if (currentMode === 'feed') {
+        setCurrentMode('following');
+        navigate('/following');
+      } else {
+        setCurrentMode('feed');
+        navigate('/feed');
+      }
+      
+      setIsLongPressing(false);
     }, 800); // 800ms for long press
-  }, [navigate]);
+  }, [navigate, currentMode]);
 
   const handleTouchEnd = useCallback(() => {
     if (longPressTimer.current) {
@@ -43,6 +61,27 @@ const RightSideNavigation = ({ onCreatePoll }) => {
   const handleMouseLeave = useCallback(() => {
     handleTouchEnd();
   }, [handleTouchEnd]);
+
+  // Función para obtener los estilos del modo actual
+  const getModeStyles = () => {
+    if (currentMode === 'following') {
+      return {
+        bgColor: 'bg-purple-500',
+        hoverColor: 'hover:bg-purple-600',
+        textColor: 'text-white',
+        shadowColor: 'shadow-purple-200'
+      };
+    } else {
+      return {
+        bgColor: 'bg-blue-500',
+        hoverColor: 'hover:bg-blue-600',
+        textColor: 'text-white',
+        shadowColor: 'shadow-blue-200'
+      };
+    }
+  };
+
+  const modeStyles = getModeStyles();
 
   return (
     <div className="fixed right-4 top-1/2 transform -translate-y-1/2 flex flex-col gap-4 z-50"
