@@ -19,10 +19,9 @@ const TestSupabasePage = () => {
       // Step 1: Test Supabase Connection
       addResult('1', 'running', 'Testing Supabase Connection...');
       
-      const { data: connectionTest, error: connectionError } = await supabase
+      const { count: connectionTest, error: connectionError } = await supabase
         .from('profiles')
-        .select('count(*)')
-        .limit(1);
+        .select('*', { count: 'exact', head: true });
       
       if (connectionError) {
         addResult('1', 'error', `Connection failed: ${connectionError.message}`);
