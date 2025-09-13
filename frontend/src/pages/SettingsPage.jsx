@@ -5,7 +5,7 @@ import { Button } from '../components/ui/button';
 import { Switch } from '../components/ui/switch';
 import { 
   ArrowLeft, Settings, User, Shield, Bell, Eye, MessageCircle, 
-  Lock, LogOut, Loader2, Save, Monitor, Key, Users, Share, Globe
+  Lock, LogOut, Loader2, Save, Monitor, Key, Globe
 } from 'lucide-react';
 import { useToast } from '../hooks/use-toast';
 import { useAuth } from '../contexts/AuthContext';
