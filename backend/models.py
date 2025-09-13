@@ -156,11 +156,12 @@ class UserSettings(BaseModel):
     notifications_follows: Optional[bool] = None
     notifications_mentions: Optional[bool] = None
     
-    # Discovery & Interaction settings
-    discoverable: Optional[bool] = None
-    require_follow_approval: Optional[bool] = None
-    allow_comments: Optional[bool] = None
-    allow_shares: Optional[bool] = None
+    # Performance & Data settings (APK specific)
+    video_quality: Optional[str] = None
+    wifi_only: Optional[bool] = None
+    battery_saver: Optional[bool] = None
+    auto_cache: Optional[bool] = None
+    background_sync: Optional[bool] = None
     
     # Language & Accessibility settings
     app_language: Optional[str] = None
