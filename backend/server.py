@@ -3541,6 +3541,148 @@ async def get_polls(
         result.append(poll_response)
     
     return result
+
+@api_router.get("/polls/following", response_model=List[PollResponse])
+async def get_following_polls(
+    limit: int = 20,
+    offset: int = 0,
+    current_user: UserResponse = Depends(get_current_user)
+):
+    """Get polls from users that the current user follows"""
+    
+    # Get users that current user follows
+    follow_relationships_cursor = db.follows.find({
+        "follower_id": current_user.id
+    })
+    follow_relationships = await follow_relationships_cursor.to_list(None)
+    
+    if not follow_relationships:
+        return []
+    
+    # Extract following user IDs
+    following_user_ids = [rel["following_id"] for rel in follow_relationships]
+    
+    # Build filter query to only include polls from followed users
+    filter_query = {
+        "is_active": True,
+        "author_id": {"$in": following_user_ids}
+    }
+    
+    # Get polls from followed users only
+    polls_cursor = db.polls.find(filter_query).sort("created_at", -1).skip(offset).limit(limit)
+    polls = await polls_cursor.to_list(limit)
+    
+    if not polls:
+        return []
+    
+    # Get all author IDs (should all be in following_user_ids but let's be safe)
+    author_ids = list(set(poll["author_id"] for poll in polls))
+    authors_cursor = db.users.find({"id": {"$in": author_ids}})
+    authors_list = await authors_cursor.to_list(len(author_ids))
+    authors_dict = {user["id"]: UserResponse(**user) for user in authors_list}
+    
+    # For following polls, we know user follows all authors already
+    following_dict = {user_id: {"following_id": user_id, "follower_id": current_user.id} 
+                     for user_id in following_user_ids}
+    
+    # Get user votes and likes
+    poll_ids = [poll["id"] for poll in polls]
+    
+    user_votes_cursor = db.votes.find({
+        "poll_id": {"$in": poll_ids},
+        "user_id": current_user.id
+    })
+    user_votes = await user_votes_cursor.to_list(len(poll_ids))
+    user_votes_dict = {vote["poll_id"]: vote["option_id"] for vote in user_votes}
+    
+    user_likes_cursor = db.poll_likes.find({
+        "poll_id": {"$in": poll_ids},
+        "user_id": current_user.id
+    })
+    user_likes = await user_likes_cursor.to_list(len(poll_ids))
+    liked_poll_ids = set(like["poll_id"] for like in user_likes)
+    
+    # Build response (same logic as get_polls but for followed users only)
+    result = []
+    for poll_data in polls:
+        # Get option users
+        option_user_ids = [option["user_id"] for option in poll_data.get("options", [])]
+        if option_user_ids:
+            option_users_cursor = db.users.find({"id": {"$in": option_user_ids}})
+            option_users_list = await option_users_cursor.to_list(len(option_user_ids))
+            option_users_dict = {user["id"]: user for user in option_users_list}
+        else:
+            option_users_dict = {}
+        
+        # Process options
+        options = []
+        for option in poll_data.get("options", []):
+            option_user = option_users_dict.get(option["user_id"])
+            if option_user:
+                # Keep media_url as relative path for frontend to handle
+                media_url = option.get("media_url")
+                
+                # Get thumbnail URL for videos
+                thumbnail_url = option.get("thumbnail_url")
+                if not thumbnail_url and media_url and option.get("media_type") == "video":
+                    thumbnail_url = await get_thumbnail_for_media_url(media_url)
+                
+                option_dict = {
+                    "id": option["id"],
+                    "text": option["text"],
+                    "votes": option["votes"],
+                    "user": {
+                        "username": option_user["username"],
+                        "displayName": option_user["display_name"],
+                        "avatar": option_user.get("avatar_url"),
+                        "verified": option_user.get("is_verified", False),
+                        "id": option_user["id"]
+                    },
+                    "media_type": option.get("media_type"),
+                    "media_url": media_url,
+                    "thumbnail_url": thumbnail_url,
+                    "media_transform": option.get("media_transform"),
+                    "mentioned_users": option.get("mentioned_users", [])
+                }
+                options.append(option_dict)
+        
+        # Get author information
+        author = authors_dict.get(poll_data["author_id"])
+        if not author:
+            continue
+        
+        # Calculate total votes
+        total_votes = sum(opt["votes"] for opt in poll_data.get("options", []))
+        
+        # Get music information
+        music_info = None
+        if poll_data.get("music_id"):
+            music_info = await get_music_info(poll_data["music_id"])
+        
+        poll_response = PollResponse(
+            id=poll_data["id"],
+            title=poll_data["title"],
+            description=poll_data.get("description"),
+            author=author,
+            options=options,
+            totalVotes=total_votes,
+            likes=poll_data.get("likes", 0),
+            shares=poll_data.get("shares", 0),
+            commentsCount=poll_data.get("comments_count", 0),
+            views=poll_data.get("views", 0),
+            is_following=True,  # We know all authors are followed
+            music=music_info,
+            user_vote=user_votes_dict.get(poll_data["id"]),
+            user_liked=poll_data["id"] in liked_poll_ids,
+            is_featured=poll_data["is_featured"],
+            tags=poll_data.get("tags", []),
+            category=poll_data.get("category"),
+            mentioned_users=poll_data.get("mentioned_users", []),
+            layout=poll_data.get("layout"),
+            created_at=poll_data["created_at"],
+            time_ago=calculate_time_ago(poll_data["created_at"])
+        )
+        result.append(poll_response)
     
     return result
 
