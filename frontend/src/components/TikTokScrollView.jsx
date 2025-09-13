@@ -132,7 +132,7 @@ const TikTokPollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, onCr
 
   // Auto-advance carousel every 5 seconds when active (only for layout "off")
   useEffect(() => {
-    if (!isActive || !shouldUseCarousel || poll.layout !== 'off') return;
+    if (!isActive || !shouldUseCarousel || (poll.layout !== 'off' && poll.layout != null)) return;
     
     const interval = setInterval(() => {
       nextSlide();
