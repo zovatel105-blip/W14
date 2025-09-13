@@ -1113,7 +1113,10 @@ const ProfilePage = () => {
               
               {/* Botón de acción "+" centrado en la parte inferior - Solo para perfil propio */}
               {isOwnProfile && (
-                <button className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 bg-blue-500 hover:bg-blue-600 rounded-full flex items-center justify-center shadow-lg transition-all duration-200 active:scale-90 z-10">
+                <button 
+                  onClick={() => setShowCreateStoryModal(true)}
+                  className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 bg-blue-500 hover:bg-blue-600 rounded-full flex items-center justify-center shadow-lg transition-all duration-200 active:scale-90 z-10"
+                >
                   <Plus className="w-4 h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5 text-white" />
                 </button>
               )}
