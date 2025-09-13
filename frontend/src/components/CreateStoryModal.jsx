@@ -88,7 +88,7 @@ const CreateStoryModal = ({ isOpen, onClose, onStoryCreated }) => {
         });
 
         storyData = {
-          story_type: 'IMAGE',
+          story_type: 'image',
           text_content: content || null,
           content_url: base64,
           background_color: backgroundColor,
@@ -98,7 +98,7 @@ const CreateStoryModal = ({ isOpen, onClose, onStoryCreated }) => {
         };
       } else if (storyType === 'text') {
         storyData = {
-          story_type: 'TEXT',
+          story_type: 'text',
           text_content: content,
           content_url: null,
           background_color: backgroundColor,
