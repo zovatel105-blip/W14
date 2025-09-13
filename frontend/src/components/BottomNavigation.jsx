@@ -10,23 +10,13 @@ const NavigationItem = ({ to, icon: Icon, label, isActive }) => {
       className={({ isActive }) =>
         cn(
           "flex flex-col items-center gap-1 px-3 py-2 rounded-lg transition-all duration-300 min-w-[60px]",
-          isActive
-            ? "text-blue-600 bg-blue-50 transform scale-105"
-            : "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
+          // Remover colores activos - solo hover gris sutil
+          "text-gray-500 hover:text-gray-700 hover:bg-gray-50"
         )
       }
     >
-      {({ isActive }) => (
-        <>
-          <Icon 
-            className={cn(
-              "w-6 h-6 transition-all duration-300",
-              isActive && "fill-current"
-            )} 
-          />
-          <span className="text-xs font-medium">{label}</span>
-        </>
-      )}
+      <Icon className="w-6 h-6 transition-all duration-300" />
+      <span className="text-xs font-medium">{label}</span>
     </NavLink>
   );
 };
