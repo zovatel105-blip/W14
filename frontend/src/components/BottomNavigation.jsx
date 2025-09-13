@@ -35,17 +35,15 @@ const BottomNavigation = ({ onCreatePoll }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const [isLongPressing, setIsLongPressing] = useState(false);
-  const [currentMode, setCurrentMode] = useState('feed'); // 'feed', 'following', 'explore'
+  const [currentMode, setCurrentMode] = useState('feed'); // 'feed' or 'following'
   const longPressTimer = useRef(null);
 
   // Detectar el modo actual basado en la ruta
   useEffect(() => {
-    if (location.pathname === '/feed') {
-      setCurrentMode('feed');
-    } else if (location.pathname === '/following') {
+    if (location.pathname === '/following') {
       setCurrentMode('following');
-    } else if (location.pathname === '/explore') {
-      setCurrentMode('explore');
+    } else {
+      setCurrentMode('feed');
     }
   }, [location.pathname]);
 
@@ -58,23 +56,15 @@ const BottomNavigation = ({ onCreatePoll }) => {
         navigator.vibrate(50);
       }
       
-      // Ciclo: feed → following → explore → feed
-      let nextMode = 'feed';
-      let nextPath = '/feed';
-      
+      // Alternar entre feed y following
       if (currentMode === 'feed') {
-        nextMode = 'following';
-        nextPath = '/following';
-      } else if (currentMode === 'following') {
-        nextMode = 'explore';
-        nextPath = '/explore';
-      } else if (currentMode === 'explore') {
-        nextMode = 'feed';
-        nextPath = '/feed';
+        setCurrentMode('following');
+        navigate('/following');
+      } else {
+        setCurrentMode('feed');
+        navigate('/feed');
       }
       
-      setCurrentMode(nextMode);
-      navigate(nextPath);
       setIsLongPressing(false);
     }, 800); // 800ms for long press
   }, [navigate, currentMode]);
@@ -101,28 +91,24 @@ const BottomNavigation = ({ onCreatePoll }) => {
 
   // Función para obtener el color y texto basado en el modo actual
   const getModeStyles = () => {
-    switch (currentMode) {
-      case 'following':
-        return {
-          bgColor: 'bg-purple-50',
-          textColor: 'text-purple-600',
-          iconColor: 'text-purple-600',
-          label: 'Following'
-        };
-      case 'explore':
-        return {
-          bgColor: 'bg-orange-50',
-          textColor: 'text-orange-600',
-          iconColor: 'text-orange-600',
-          label: 'Explorar'
-        };
-      default:
-        return {
-          bgColor: 'bg-blue-50',
-          textColor: 'text-blue-600',
-          iconColor: 'text-blue-600',
-          label: 'Seguidos'
-        };
+    if (currentMode === 'following') {
+      return {
+        bgColor: 'bg-purple-50',
+        textColor: 'text-purple-600',
+        iconColor: 'text-purple-600',
+        label: 'Following',
+        activeBg: 'bg-purple-50',
+        activeText: 'text-purple-600'
+      };
+    } else {
+      return {
+        bgColor: 'bg-blue-50',
+        textColor: 'text-blue-600',
+        iconColor: 'text-blue-600',
+        label: 'Seguidos',
+        activeBg: 'bg-blue-50',
+        activeText: 'text-blue-600'
+      };
     }
   };
 
