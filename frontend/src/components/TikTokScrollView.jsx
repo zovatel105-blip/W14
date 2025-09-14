@@ -639,7 +639,7 @@ const TikTokPollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, onCr
               ))}
             </div>
 
-            {/* Carousel navigation arrows (for larger screens) */}
+            {/* Carousel navigation arrows - VERTICAL (for larger screens) */}
             {totalSlides > 1 && (
               <>
                 <button
@@ -647,18 +647,18 @@ const TikTokPollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, onCr
                     e.stopPropagation();
                     prevSlide();
                   }}
-                  className="absolute left-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center text-white text-2xl z-20 transition-all duration-200 hover:scale-110"
+                  className="absolute top-4 left-1/2 transform -translate-x-1/2 w-12 h-12 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center text-white text-2xl z-20 transition-all duration-200 hover:scale-110"
                 >
-                  ‹
+                  ∧
                 </button>
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     nextSlide();
                   }}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 w-12 h-12 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center text-white text-2xl z-20 transition-all duration-200 hover:scale-110"
+                  className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-12 h-12 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center text-white text-2xl z-20 transition-all duration-200 hover:scale-110"
                 >
-                  ›
+                  ∨
                 </button>
               </>
             )}
