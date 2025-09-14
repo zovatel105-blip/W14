@@ -10,11 +10,20 @@ const CarouselLayout = ({ poll, onVote, isActive }) => {
 
   // Navigation functions
   const nextSlide = () => {
+    if (totalSlides <= 1) return;
     setCurrentSlide((prev) => (prev + 1) % totalSlides);
   };
 
   const prevSlide = () => {
+    if (totalSlides <= 1) return;
     setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
+  };
+
+  // Go to specific slide
+  const goToSlide = (index) => {
+    if (index >= 0 && index < totalSlides) {
+      setCurrentSlide(index);
+    }
   };
 
   // Touch handlers for HORIZONTAL swipe navigation
