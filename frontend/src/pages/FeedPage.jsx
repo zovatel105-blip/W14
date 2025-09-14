@@ -117,7 +117,7 @@ const FeedPage = () => {
           // Don't allow multiple votes
           if (poll.userVote) return poll;
           
-          const updatedPoll = {
+          return {
             ...poll,
             userVote: optionId,
             options: poll.options.map(opt => ({
@@ -126,16 +126,6 @@ const FeedPage = () => {
             })),
             totalVotes: poll.totalVotes + 1
           };
-          
-          // Debug: Check if layout is preserved in optimistic update
-          console.log('🗳️ Optimistic update:', {
-            pollId,
-            originalLayout: poll.layout,
-            updatedLayout: updatedPoll.layout,
-            layoutPreserved: poll.layout === updatedPoll.layout
-          });
-          
-          return updatedPoll;
         }
         return poll;
       }));
