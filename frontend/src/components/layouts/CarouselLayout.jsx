@@ -119,12 +119,19 @@ const CarouselLayout = ({ poll, onVote, isActive }) => {
                       muted
                       loop
                       playsInline
+                      onError={(e) => console.log('Video error:', e, option.media.url)}
                     />
                   ) : (
                     <img 
                       src={option.media.url} 
-                      alt={option.text}
+                      alt={option.text || `Slide ${optionIndex + 1}`}
                       className="w-full h-full object-cover object-center"
+                      loading="eager"
+                      onError={(e) => {
+                        console.log('Image error:', e, option.media.url);
+                        e.target.style.display = 'none';
+                      }}
+                      onLoad={() => console.log('Image loaded:', option.media.url)}
                     />
                   )
                 ) : (
