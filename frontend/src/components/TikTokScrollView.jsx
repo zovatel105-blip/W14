@@ -80,84 +80,12 @@ const TikTokPollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, onCr
   const { toast } = useToast();
   const { shareModal, sharePoll, closeShareModal } = useShare();
 
-  // Check if this poll should use carousel (multiple options, especially layout "off")
-  const shouldUseCarousel = poll.options && poll.options.length > 1;
-  const totalSlides = poll.options ? poll.options.length : 1;
-  
-  // Function to get grid classes based on layout
-  const getLayoutGridClasses = (layout) => {
-    switch (layout) {
-      case 'off':
-        return ''; // No grid - carousel pantalla completa
-      case 'vertical':
-        return 'grid grid-cols-2 gap-0.5'; // 2 partes de lado a lado
-      case 'horizontal': 
-        return 'grid grid-cols-1 grid-rows-2 gap-0.5'; // 2 partes arriba y abajo
-      case 'triptych-vertical':
-        return 'grid grid-cols-3 gap-0.5'; // 3 partes de lado a lado
-      case 'triptych-horizontal':
-        return 'grid grid-cols-1 grid-rows-3 gap-0.5'; // 3 partes arriba y abajo
-      case 'grid-2x2':
-        return 'grid grid-cols-2 grid-rows-2 gap-0.5'; // 4 partes (cuadrícula 2x2)
-      case 'grid-3x2':
-        return 'grid grid-cols-3 grid-rows-2 gap-0.5'; // 6 partes (cuadrícula 3x2)
-      case 'horizontal-3x2':
-        return 'grid grid-cols-2 grid-rows-3 gap-0.5'; // 6 partes (cuadrícula 2x3)
-      default:
-        return 'grid grid-cols-2 gap-0.5'; // Default fallback: 2 partes lado a lado
+  // Poll interaction handlers
+  const handleVote = (optionId) => {
+    if (onVote) {
+      onVote(optionId);
     }
   };
-
-
-
-  // Carousel navigation functions
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % totalSlides);
-  };
-
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
-  };
-
-  // Touch handlers for VERTICAL swipe navigation
-  const handleTouchStart = (e) => {
-    setTouchEnd(null);
-    setTouchStart(e.targetTouches[0].clientY); // Changed to clientY for vertical
-  };
-
-  const handleTouchMove = (e) => {
-    setTouchEnd(e.targetTouches[0].clientY); // Changed to clientY for vertical
-  };
-
-  const handleTouchEnd = () => {
-    if (!touchStart || !touchEnd) return;
-    const distance = touchStart - touchEnd;
-    const isUpSwipe = distance > 50;    // Swipe up = next slide
-    const isDownSwipe = distance < -50; // Swipe down = previous slide
-
-    if (isUpSwipe && shouldUseCarousel) {
-      nextSlide();
-    }
-    if (isDownSwipe && shouldUseCarousel) {
-      prevSlide();
-    }
-  };
-
-  // Reset carousel when poll changes
-  useEffect(() => {
-    setCurrentSlide(0);
-  }, [poll.id]);
-
-  // Auto-advance carousel every 5 seconds when active (only for layout "off")
-  useEffect(() => {
-    if (!isActive || !shouldUseCarousel || poll.layout !== 'off') return;
-    
-    const interval = setInterval(() => {
-      nextSlide();
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [isActive, shouldUseCarousel, currentSlide, poll.layout]);
 
   // Get user ID from poll author
   const getAuthorUserId = () => {
