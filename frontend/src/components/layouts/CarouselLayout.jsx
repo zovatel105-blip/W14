@@ -126,33 +126,22 @@ const CarouselLayout = ({ poll, onVote, isActive }) => {
                       muted
                       loop
                       playsInline
-                      onError={(e) => console.log('Video error:', e, option.media.url)}
                     />
                   ) : (
                     <img 
                       src={option.media.url} 
                       alt={option.text || `Slide ${optionIndex + 1}`}
                       className="w-full h-full object-cover object-center"
-                      loading="eager"
-                      onError={(e) => {
-                        console.log('Image error:', e, option.media.url);
-                        e.target.style.display = 'none';
-                      }}
-                      onLoad={() => console.log('Image loaded:', option.media.url)}
                     />
                   )
                 ) : (
                   <div className={cn(
-                    "w-full h-full flex items-center justify-center",
+                    "w-full h-full",
                     optionIndex === 0 ? "bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500" :
                     optionIndex === 1 ? "bg-gradient-to-br from-gray-300 via-gray-500 to-gray-700" :
                     optionIndex === 2 ? "bg-gradient-to-br from-yellow-500 via-red-500 to-pink-600" :
                     "bg-gradient-to-br from-amber-600 via-orange-700 to-red-800"
-                  )}>
-                    <div className="text-white text-lg font-bold">
-                      Slide {optionIndex + 1}
-                    </div>
-                  </div>
+                  )} />
                 )}
               </div>
 
@@ -162,30 +151,30 @@ const CarouselLayout = ({ poll, onVote, isActive }) => {
               {/* Progress overlay */}
               {poll.totalVotes > 0 && (
                 <div 
-                  className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-white/30 to-transparent transition-all duration-700 ease-out"
+                  className={cn(
+                    "absolute inset-x-0 bottom-0 transition-all duration-1000 ease-out",
+                    isSelected 
+                      ? "bg-gradient-to-t from-blue-500/30 via-blue-600/20 to-blue-400/10"
+                      : isWinner 
+                        ? "bg-gradient-to-t from-green-500/90 via-green-600/70 to-green-400/40"
+                        : "bg-gradient-to-t from-black/50 via-black/30 to-transparent"
+                  )}
                   style={{ 
-                    height: `${percentage}%`,
-                    backdropFilter: 'blur(2px)'
+                    height: `${Math.max(percentage, 5)}%`,
+                    transform: `translateY(${100 - Math.max(percentage, 5)}%)`,
+                    transition: 'all 1s cubic-bezier(0.4, 0, 0.2, 1)'
                   }}
-                >
-                  <div className="absolute inset-0 bg-gradient-to-t from-blue-500/20 to-transparent" />
-                </div>
+                />
               )}
 
               {/* Selection indicator */}
               {isSelected && (
-                <div className="absolute inset-0 bg-blue-500/20 backdrop-blur-[1px] border-2 border-blue-400/60">
-                  <div className="absolute top-4 left-4 bg-blue-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-lg">
-                    ✓ Votado
-                  </div>
-                </div>
+                <div className="absolute inset-0 ring-2 ring-blue-400/60 ring-inset"></div>
               )}
 
               {/* Winner indicator */}
               {isWinner && poll.totalVotes > 0 && (
-                <div className="absolute top-4 right-4 bg-yellow-500 text-black px-3 py-1 rounded-full text-sm font-bold shadow-lg animate-pulse">
-                  👑 Ganador
-                </div>
+                <div className="absolute inset-0 ring-2 ring-green-400 ring-inset"></div>
               )}
             </div>
           );
