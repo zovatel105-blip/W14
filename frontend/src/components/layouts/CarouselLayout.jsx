@@ -179,7 +179,7 @@ const CarouselLayout = ({ poll, onVote, isActive }) => {
             key={idx}
             onClick={(e) => {
               e.stopPropagation();
-              setCurrentSlide(idx);
+              goToSlide(idx);
             }}
             className={cn(
               "w-8 h-2 rounded-full transition-all duration-300",
