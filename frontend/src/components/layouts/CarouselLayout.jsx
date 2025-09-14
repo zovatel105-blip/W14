@@ -28,16 +28,18 @@ const CarouselLayout = ({ poll, onVote, isActive }) => {
 
   // Touch handlers for HORIZONTAL swipe navigation
   const handleTouchStart = (e) => {
+    if (totalSlides <= 1) return;
     setTouchEnd(null);
-    setTouchStart(e.targetTouches[0].clientX); // Changed to clientX for horizontal
+    setTouchStart(e.targetTouches[0].clientX);
   };
 
   const handleTouchMove = (e) => {
-    setTouchEnd(e.targetTouches[0].clientX); // Changed to clientX for horizontal
+    if (totalSlides <= 1) return;
+    setTouchEnd(e.targetTouches[0].clientX);
   };
 
   const handleTouchEnd = () => {
-    if (!touchStart || !touchEnd) return;
+    if (!touchStart || !touchEnd || totalSlides <= 1) return;
     const distance = touchStart - touchEnd;
     const isLeftSwipe = distance > 50;    // Swipe left = next slide
     const isRightSwipe = distance < -50; // Swipe right = previous slide
