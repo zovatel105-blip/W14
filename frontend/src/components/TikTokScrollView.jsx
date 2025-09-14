@@ -107,19 +107,7 @@ const TikTokPollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, onCr
     }
   };
 
-  // Debug logging
-  const gridClasses = getLayoutGridClasses(poll.layout);
-  console.log('🎠 Carousel Debug:', {
-    pollId: poll.id,
-    pollQuestion: poll.question || poll.title,
-    shouldUseCarousel,
-    layout: poll.layout,
-    layoutType: typeof poll.layout,
-    willUseCarousel: shouldUseCarousel && poll.layout === 'off',
-    optionsCount: poll.options?.length || 0,
-    gridClasses: gridClasses,
-    containerClasses: `absolute inset-0 ${gridClasses}`
-  });
+
 
   // Carousel navigation functions
   const nextSlide = () => {
