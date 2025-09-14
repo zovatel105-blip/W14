@@ -110,31 +110,6 @@ const GridLayout = ({ poll, onVote, gridType }) => {
             {isWinner && poll.totalVotes > 0 && (
               <div className="absolute inset-0 ring-2 ring-green-400 ring-inset"></div>
             )}
-
-            {/* Option letter indicator */}
-            <div className="absolute top-4 right-4 z-20">
-              <div className="w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-black font-bold text-lg shadow-lg">
-                {String.fromCharCode(65 + optionIndex)}
-              </div>
-            </div>
-
-            {/* Vote percentage display */}
-            {poll.totalVotes > 0 && (
-              <div className="absolute bottom-4 right-4 z-20">
-                <div className="bg-black/70 backdrop-blur-sm text-white px-3 py-2 rounded-xl font-bold text-lg shadow-lg">
-                  {percentage}%
-                </div>
-              </div>
-            )}
-
-            {/* Winner trophy indicator */}
-            {isWinner && poll.totalVotes > 0 && (
-              <div className="absolute z-30 bottom-16 right-4">
-                <div className="bg-green-600/95 text-white px-3 py-2 rounded-full text-sm font-semibold flex items-center justify-center shadow-2xl backdrop-blur-sm animate-pulse">
-                  <Trophy className="w-4 h-4" />
-                </div>
-              </div>
-            )}
           </div>
         );
       })}
