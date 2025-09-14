@@ -465,7 +465,7 @@ const TikTokPollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, onCr
 
       {/* Main content - Perfect full screen with safe areas */}
       <div className={cn(
-          "absolute inset-0",
+          "absolute inset-0 w-full h-full",
           getLayoutGridClasses(poll.layout)
         )}
            style={{
