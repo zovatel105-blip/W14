@@ -459,7 +459,7 @@ const TikTokPollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, onCr
              right: 'env(safe-area-inset-right, 0)'
            }}>
         {/* Render options as carousel or traditional layout */}
-        {shouldUseCarousel && (poll.layout === 'off' || poll.layout == null) ? (
+        {shouldUseCarousel && poll.layout === 'off' ? (
           // Carousel view for layout "off" with multiple images
           <div 
             className="relative w-full h-full overflow-hidden"
