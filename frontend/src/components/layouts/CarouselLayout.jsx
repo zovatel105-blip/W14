@@ -72,12 +72,12 @@ const CarouselLayout = ({ poll, onVote, isActive }) => {
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
-      {/* Carousel slides - VERTICAL carousel */}
+      {/* Carousel slides - HORIZONTAL carousel */}
       <div 
-        className="flex flex-col w-full transition-transform duration-300 ease-in-out"
+        className="flex w-full h-full transition-transform duration-300 ease-in-out"
         style={{ 
-          transform: `translateY(-${currentSlide * 100}%)`,
-          height: `${poll.options.length * 100}%`
+          transform: `translateX(-${currentSlide * 100}%)`,
+          width: `${poll.options.length * 100}%`  // Total width based on number of slides
         }}
       >
         {poll.options.map((option, optionIndex) => {
