@@ -17,26 +17,26 @@ const CarouselLayout = ({ poll, onVote, isActive }) => {
     setCurrentSlide((prev) => (prev - 1 + totalSlides) % totalSlides);
   };
 
-  // Touch handlers for VERTICAL swipe navigation
+  // Touch handlers for HORIZONTAL swipe navigation
   const handleTouchStart = (e) => {
     setTouchEnd(null);
-    setTouchStart(e.targetTouches[0].clientY);
+    setTouchStart(e.targetTouches[0].clientX); // Changed to clientX for horizontal
   };
 
   const handleTouchMove = (e) => {
-    setTouchEnd(e.targetTouches[0].clientY);
+    setTouchEnd(e.targetTouches[0].clientX); // Changed to clientX for horizontal
   };
 
   const handleTouchEnd = () => {
     if (!touchStart || !touchEnd) return;
     const distance = touchStart - touchEnd;
-    const isUpSwipe = distance > 50;
-    const isDownSwipe = distance < -50;
+    const isLeftSwipe = distance > 50;    // Swipe left = next slide
+    const isRightSwipe = distance < -50; // Swipe right = previous slide
 
-    if (isUpSwipe) {
+    if (isLeftSwipe) {
       nextSlide();
     }
-    if (isDownSwipe) {
+    if (isRightSwipe) {
       prevSlide();
     }
   };
