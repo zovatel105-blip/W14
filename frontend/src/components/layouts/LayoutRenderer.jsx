@@ -25,6 +25,14 @@ const LayoutRenderer = ({ poll, onVote, isActive }) => {
   // Obtener el layout type del poll, con fallback a 'vertical'
   const layoutType = poll.layout || 'vertical';
   
+  // Debug logging
+  console.log('🎨 LayoutRenderer Debug:', {
+    pollId: poll.id,
+    layoutType,
+    optionsCount: poll.options?.length || 0,
+    willUseCarousel: layoutType === 'off'
+  });
+  
   // SOLO layout "off" debe usar carrusel
   if (layoutType === 'off') {
     return (
