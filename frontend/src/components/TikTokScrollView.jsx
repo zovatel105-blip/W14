@@ -396,7 +396,7 @@ const TikTokPollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, onCr
            }}>
         <LayoutRenderer 
           poll={poll}
-          onVote={(optionId) => handleVote(poll.id, optionId)}
+          onVote={(optionId) => handleVote(optionId)}
           isActive={isActive}
         />
       </div>
