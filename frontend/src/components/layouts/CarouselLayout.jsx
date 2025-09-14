@@ -88,12 +88,12 @@ const CarouselLayout = ({ poll, onVote, isActive }) => {
           return (
             <div
               key={option.id}
-              className="relative flex-shrink-0 w-full cursor-pointer group overflow-hidden touch-manipulation"
+              className="relative flex-shrink-0 h-full cursor-pointer group overflow-hidden touch-manipulation"
               onClick={() => onVote(option.id)}
               style={{ 
                 WebkitTapHighlightColor: 'transparent',
                 touchAction: 'manipulation',
-                height: `${100 / poll.options.length}%`
+                width: `${100 / poll.options.length}%`  // Each slide takes equal width
               }}
             >
               {/* Background media */}
