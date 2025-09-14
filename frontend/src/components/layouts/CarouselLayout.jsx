@@ -77,7 +77,7 @@ const CarouselLayout = ({ poll, onVote, isActive }) => {
         className="flex w-full h-full transition-transform duration-300 ease-in-out"
         style={{ 
           transform: `translateX(-${currentSlide * 100}%)`,
-          width: `${poll.options.length * 100}%`  // Total width based on number of slides
+          width: `${totalSlides * 100}%`  // Total width based on number of slides
         }}
       >
         {poll.options.map((option, optionIndex) => {
@@ -93,7 +93,8 @@ const CarouselLayout = ({ poll, onVote, isActive }) => {
               style={{ 
                 WebkitTapHighlightColor: 'transparent',
                 touchAction: 'manipulation',
-                width: `${100 / poll.options.length}%`  // Each slide takes equal width
+                width: `${100 / totalSlides}%`,  // Each slide takes equal width
+                minWidth: `${100 / totalSlides}%` // Ensure minimum width
               }}
             >
               {/* Background media */}
