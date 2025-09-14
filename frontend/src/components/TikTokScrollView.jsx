@@ -83,6 +83,30 @@ const TikTokPollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, onCr
   const shouldUseCarousel = poll.options && poll.options.length > 1;
   const totalSlides = poll.options ? poll.options.length : 1;
   
+  // Function to get grid classes based on layout
+  const getLayoutGridClasses = (layout) => {
+    switch (layout) {
+      case 'off':
+        return ''; // No grid - carousel or fullscreen
+      case 'vertical':
+        return 'grid grid-cols-2 gap-0.5'; // 2 parts side by side
+      case 'horizontal': 
+        return 'grid grid-rows-2 gap-0.5'; // 2 parts top and bottom
+      case 'triptych-vertical':
+        return 'grid grid-cols-3 gap-0.5'; // 3 parts side by side
+      case 'triptych-horizontal':
+        return 'grid grid-rows-3 gap-0.5'; // 3 parts top and bottom
+      case 'grid-2x2':
+        return 'grid grid-cols-2 grid-rows-2 gap-0.5'; // 4 parts (2x2)
+      case 'grid-3x2':
+        return 'grid grid-cols-3 grid-rows-2 gap-0.5'; // 6 parts (3x2)
+      case 'horizontal-3x2':
+        return 'grid grid-cols-2 grid-rows-3 gap-0.5'; // 6 parts (2x3)
+      default:
+        return 'grid grid-cols-2 gap-0.5'; // Default fallback
+    }
+  };
+
   // Debug logging
   console.log('🎠 Carousel Debug:', {
     pollId: poll.id,
@@ -91,7 +115,7 @@ const TikTokPollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, onCr
     layoutType: typeof poll.layout,
     willUseCarousel: shouldUseCarousel && poll.layout === 'off',
     optionsCount: poll.options?.length || 0,
-    containerWillUseGrid: poll.layout !== 'off'
+    gridClasses: getLayoutGridClasses(poll.layout)
   });
 
   // Carousel navigation functions
