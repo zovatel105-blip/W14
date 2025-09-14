@@ -80,12 +80,7 @@ const TikTokPollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, onCr
   const { toast } = useToast();
   const { shareModal, sharePoll, closeShareModal } = useShare();
 
-  // Poll interaction handlers
-  const handleVote = (optionId) => {
-    if (onVote) {
-      onVote(optionId);
-    }
-  };
+
 
   // Get user ID from poll author
   const getAuthorUserId = () => {
