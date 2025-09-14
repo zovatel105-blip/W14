@@ -2,16 +2,16 @@ import React from 'react';
 import CarouselLayout from './CarouselLayout';
 import GridLayout from './GridLayout';
 
-// Mapeo dinámico de layoutType → componente
+// Mapeo dinámico de layoutType → componente para los 8 layouts soportados
 const layoutComponents = {
-  'off': CarouselLayout,
-  'vertical': (props) => <GridLayout {...props} gridType="vertical" />,
-  'horizontal': (props) => <GridLayout {...props} gridType="horizontal" />,
-  'triptych-vertical': (props) => <GridLayout {...props} gridType="triptych-vertical" />,
-  'triptych-horizontal': (props) => <GridLayout {...props} gridType="triptych-horizontal" />,
-  'grid-2x2': (props) => <GridLayout {...props} gridType="grid-2x2" />,
-  'grid-3x2': (props) => <GridLayout {...props} gridType="grid-3x2" />,
-  'horizontal-3x2': (props) => <GridLayout {...props} gridType="horizontal-3x2" />
+  'off': CarouselLayout,                    // Carrusel vertical
+  'vertical': (props) => <GridLayout {...props} gridType="vertical" />,           // Split Vertical (2 columnas)
+  'horizontal': (props) => <GridLayout {...props} gridType="horizontal" />,       // Split Horizontal (2 filas)
+  'triptych-vertical': (props) => <GridLayout {...props} gridType="triptych-vertical" />,   // Triptych Vertical (3 columnas)
+  'triptych-horizontal': (props) => <GridLayout {...props} gridType="triptych-horizontal" />, // Triptych Horizontal (3 filas)
+  'grid-2x2': (props) => <GridLayout {...props} gridType="grid-2x2" />,         // Grid 2x2 (4 partes)
+  'grid-3x2': (props) => <GridLayout {...props} gridType="grid-3x2" />,         // Grid 3x2 (6 partes: 3 columnas × 2 filas)
+  'horizontal-3x2': (props) => <GridLayout {...props} gridType="horizontal-3x2" /> // Grid 2x3 (6 partes: 2 columnas × 3 filas)
 };
 
 /**
