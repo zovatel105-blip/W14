@@ -3778,11 +3778,13 @@ async def get_following_polls(
                         "verified": option_user.get("is_verified", False),
                         "id": option_user["id"]
                     },
-                    "media_type": option.get("media_type"),
-                    "media_url": media_url,
-                    "thumbnail_url": thumbnail_url,
-                    "media_transform": option.get("media_transform"),
-                    "mentioned_users": option.get("mentioned_users", [])
+                    "mentioned_users": option.get("mentioned_users", []),
+                    "media": {
+                        "type": option.get("media_type"),
+                        "url": media_url,
+                        "thumbnail": thumbnail_url,
+                        "transform": option.get("media_transform")
+                    } if media_url else None
                 }
                 options.append(option_dict)
         
