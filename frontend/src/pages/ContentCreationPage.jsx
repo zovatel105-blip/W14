@@ -197,16 +197,16 @@ const LayoutPreview = ({ layout, options = [], title, selectedMusic, onImageUplo
   return (
     <div className="w-full h-full">
       {layout.id === 'off' ? (
-        /* Carousel layout - Fullscreen slots with scroll */
-        <div className="w-full h-full overflow-y-auto">
-          <div className="grid grid-cols-1 gap-4 min-h-full">
+        /* Carousel layout - Horizontal scroll */
+        <div className="w-full h-full overflow-x-auto overflow-y-hidden">
+          <div className="flex h-full" style={{ width: `${slots.length * 100}%` }}>
             {slots.map((slotIndex) => {
               const option = options[slotIndex] || { text: '', media: null, mentionedUsers: [] };
               return (
                 <div
                   key={slotIndex}
-                  className="relative bg-black overflow-hidden group w-full h-screen flex-shrink-0"
-                  style={{ minHeight: '100vh' }} // Force fullscreen height for each carousel item
+                  className="relative bg-black overflow-hidden group flex-shrink-0 h-full"
+                  style={{ width: `${100 / slots.length}%` }} // Each slot takes equal width
                 >
                   {/* Letter identifier */}
                   <div className="absolute top-4 left-4 w-8 h-8 bg-gray-900/80 backdrop-blur-sm rounded-full flex items-center justify-center text-white font-bold text-sm z-10">
@@ -219,7 +219,7 @@ const LayoutPreview = ({ layout, options = [], title, selectedMusic, onImageUplo
                     <span>Carrusel</span>
                   </div>
                   
-                  {/* Fullscreen carousel content */}
+                  {/* Horizontal carousel content */}
                   <div 
                     className={`w-full h-full relative overflow-hidden ${
                       cropActiveSlot === slotIndex ? '' : 'cursor-pointer'
@@ -301,47 +301,32 @@ const LayoutPreview = ({ layout, options = [], title, selectedMusic, onImageUplo
                         </div>
                       </>
                     ) : (
-                      /* Upload Area - Carousel style */
+                      /* Upload Area - Carousel style without + button */
                       <div className="w-full h-full flex items-center justify-center relative">
                         <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-800"></div>
                         
                         <div className="text-center z-10">
-                          <div className="w-28 h-28 sm:w-36 sm:h-36 bg-gradient-to-br from-blue-500 via-purple-600 to-pink-500 rounded-full flex items-center justify-center mb-6 mx-auto shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 border-4 border-white/20">
-                            <Plus className="w-12 h-12 sm:w-16 sm:h-16 text-white drop-shadow-lg" strokeWidth={2.5} />
+                          <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mb-4 mx-auto shadow-2xl">
+                            <ImageIcon className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
                           </div>
                           
-                          <h3 className="text-white text-2xl sm:text-3xl font-bold mb-2 drop-shadow-lg">
-                            {slotIndex < options.filter(opt => opt && opt.media).length 
-                              ? `Opción ${String.fromCharCode(65 + slotIndex)}`
-                              : '🎠 Añadir al carrusel'
-                            }
+                          <h3 className="text-white text-lg sm:text-xl font-bold mb-2">
+                            Opción {String.fromCharCode(65 + slotIndex)}
                           </h3>
-                          <p className="text-gray-200 text-base sm:text-lg font-medium drop-shadow-md">
-                            {slotIndex < options.filter(opt => opt && opt.media).length 
-                              ? 'Toca para subir imagen o video'
-                              : 'Añade más contenido a tu historia'
-                            }
+                          <p className="text-gray-300 text-sm">
+                            Toca para subir imagen o video
                           </p>
-                          
-                          {/* Additional carousel indication */}
-                          {slotIndex >= options.filter(opt => opt && opt.media).length && (
-                            <div className="mt-4 flex items-center justify-center gap-2 text-blue-300">
-                              <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
-                              <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse delay-75"></div>
-                              <div className="w-2 h-2 bg-pink-400 rounded-full animate-pulse delay-150"></div>
-                            </div>
-                          )}
                         </div>
                       </div>
                     )}
                   </div>
 
-                  {/* Option text input for carousel */}
+                  {/* Option text input for horizontal carousel */}
                   <div className="absolute bottom-4 left-4 right-4 z-20">
                     <input
                       data-option-index={slotIndex}
                       type="text"
-                      placeholder={`Descripción para ${String.fromCharCode(65 + slotIndex)}...`}
+                      placeholder={`Descripción ${String.fromCharCode(65 + slotIndex)}...`}
                       value={option.text || ''}
                       onChange={(e) => onOptionTextChange(slotIndex, e.target.value)}
                       className="w-full bg-black/50 backdrop-blur-sm text-white px-3 py-2 rounded-lg border border-white/20 focus:border-white/50 focus:outline-none placeholder-gray-400 text-sm"
@@ -351,7 +336,7 @@ const LayoutPreview = ({ layout, options = [], title, selectedMusic, onImageUplo
                     <div className="mt-2">
                       <UserMentionInput 
                         onUserSelect={(user) => onMentionSelect(slotIndex, user)}
-                        placeholder={`Mencionar usuarios en ${String.fromCharCode(65 + slotIndex)}...`}
+                        placeholder={`Mencionar usuarios...`}
                         size="sm"
                       />
                     </div>
@@ -359,14 +344,14 @@ const LayoutPreview = ({ layout, options = [], title, selectedMusic, onImageUplo
                     {/* Display mentioned users */}
                     {option.mentionedUsers && option.mentionedUsers.length > 0 && (
                       <div className="mt-2 flex flex-wrap gap-1">
-                        {option.mentionedUsers.slice(0, 4).map((user, idx) => (
+                        {option.mentionedUsers.slice(0, 2).map((user, idx) => (
                           <span key={user.id} className="inline-flex items-center gap-1 bg-blue-500/80 backdrop-blur-sm text-white px-2 py-1 rounded-full text-xs">
                             @{user.username}
                           </span>
                         ))}
-                        {option.mentionedUsers.length > 4 && (
+                        {option.mentionedUsers.length > 2 && (
                           <span className="inline-flex items-center bg-gray-500/80 backdrop-blur-sm text-white px-2 py-1 rounded-full text-xs">
-                            +{option.mentionedUsers.length - 4} más
+                            +{option.mentionedUsers.length - 2}
                           </span>
                         )}
                       </div>
