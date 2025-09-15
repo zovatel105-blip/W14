@@ -173,8 +173,8 @@ const CarouselLayout = ({ poll, onVote, isActive }) => {
         })}
       </div>
 
-      {/* Navigation indicators - Bottom center */}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-20">
+      {/* Navigation indicators - Bottom center positioned */}
+      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex items-center justify-center gap-2 z-20">
         {poll.options.map((_, idx) => (
           <button
             key={idx}
@@ -183,7 +183,7 @@ const CarouselLayout = ({ poll, onVote, isActive }) => {
               goToSlide(idx);
             }}
             className={cn(
-              "w-8 h-2 rounded-full transition-all duration-300",
+              "w-8 h-2 rounded-full transition-all duration-300 flex-shrink-0",
               idx === currentSlide 
                 ? "bg-white shadow-lg" 
                 : "bg-white/50 hover:bg-white/70"
