@@ -113,8 +113,8 @@ const LayoutPreview = ({ layout, options = [], title, selectedMusic, onImageUplo
   const getLayoutStyle = () => {
     switch (layout.id) {
       case 'off':
-        // Show slots vertically in a scrollable list for better organization
-        return 'grid-cols-1 gap-2';
+        // Carousel layout - show slots in a vertical scrollable list, each slot fullscreen height
+        return 'grid-cols-1 gap-4 auto-rows-fr'; // Each slot takes full height
       case 'vertical': // "Lado a lado" - 2 elementos horizontalmente
         return 'grid-cols-2 grid-rows-1';
       case 'horizontal': // "Arriba y abajo" - 2 elementos verticalmente
