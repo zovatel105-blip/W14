@@ -173,8 +173,8 @@ const CarouselLayout = ({ poll, onVote, isActive }) => {
         })}
       </div>
 
-      {/* Navigation indicators - Bottom center positioned */}
-      <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 flex items-center justify-center gap-2 z-20">
+      {/* Navigation indicators - Bottom center positioned at voting area height */}
+      <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 flex items-center justify-center gap-2 z-20">
         {poll.options.map((_, idx) => (
           <button
             key={idx}
