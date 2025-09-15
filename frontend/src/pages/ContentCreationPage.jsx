@@ -307,59 +307,56 @@ const LayoutPreview = ({ layout, options = [], title, selectedMusic, onImageUplo
                     </div>
                   </>
                 ) : (
-                  /* Fullscreen Upload Area - Exactly like the reference image */
+                  /* Upload Area - Different style for 'off' layout */
                   <div className="w-full h-full flex items-center justify-center relative">
-                    {/* Main gradient background - matches the reference */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900"></div>
-                    
-                    {/* TikTok-style right sidebar - HIDDEN */}
-                    {false && (
-                    <div className="absolute top-1/2 right-2 sm:right-4 transform -translate-y-1/2 z-20">
-                      <div className="flex flex-col gap-2 sm:gap-3 lg:gap-4">
-                        {/* Like Button */}
-                        <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                          <span className="text-white text-sm sm:text-base lg:text-xl">❤️</span>
-                        </div>
+                    {layout.id === 'off' ? (
+                      /* Fullscreen carousel-style slot */
+                      <>
+                        {/* Dark background for carousel */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-800"></div>
                         
-                        {/* Comment Button */}
-                        <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                          <span className="text-white text-sm sm:text-base lg:text-xl">💬</span>
+                        {/* Large + button for adding carousel item */}
+                        <div className="text-center z-10">
+                          <div className="w-24 h-24 sm:w-32 sm:h-32 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mb-6 mx-auto shadow-2xl hover:shadow-3xl hover:scale-105 transition-all duration-300">
+                            <Plus className="w-10 h-10 sm:w-12 sm:h-12 text-white" />
+                          </div>
+                          
+                          <h3 className="text-white text-2xl sm:text-3xl font-bold mb-2">
+                            {slotIndex < options.filter(opt => opt && opt.media).length 
+                              ? `Opción ${String.fromCharCode(65 + slotIndex)}`
+                              : 'Añadir al carrusel'
+                            }
+                          </h3>
+                          <p className="text-gray-300 text-sm sm:text-base">
+                            {slotIndex < options.filter(opt => opt && opt.media).length 
+                              ? 'Toca para subir imagen o video'
+                              : 'Añade más contenido al carrusel'
+                            }
+                          </p>
                         </div>
-                        
-                        {/* Share Button */}
-                        <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                          <span className="text-white text-sm sm:text-base lg:text-xl">📤</span>
-                        </div>
-                        
-                        {/* Plus Button (matches reference) */}
-                        <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full flex items-center justify-center shadow-lg">
-                          <Plus className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 text-white" />
-                        </div>
-                        
-                        {/* More options */}
-                        <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                          <span className="text-white text-sm sm:text-base lg:text-xl">💭</span>
-                        </div>
-                        
-                        <div className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-                          <span className="text-white text-sm sm:text-base lg:text-xl">👤</span>
-                        </div>
-                      </div>
-                    </div>
-                    )}
-                    
-                    {/* Central upload content - responsive for mobile */}
-                    <div className="text-center z-10 px-4">
-                      {/* Large circular button with gradient - responsive */}
-                      <div className="w-20 h-20 sm:w-28 sm:h-28 lg:w-32 lg:h-32 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full flex items-center justify-center mb-4 sm:mb-6 lg:mb-8 mx-auto shadow-2xl">
-                        <Plus className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 text-white" />
-                      </div>
-                      
-                      {/* Text responsive for mobile */}
-                      <h3 className="text-white text-xl sm:text-2xl lg:text-3xl font-bold mb-2 sm:mb-3 lg:mb-4">Opción {String.fromCharCode(65 + slotIndex)}</h3>
-                    </div>
 
-                    {/* Letter identifier - top left like TikTok - responsive */}
+                        {/* Carousel indicator for empty slots */}
+                        <div className="absolute top-4 right-4 bg-purple-600/80 text-white px-3 py-1 rounded-full text-xs font-medium z-10 flex items-center gap-1">
+                          <span>🎠</span>
+                          <span>Carrusel</span>
+                        </div>
+                      </>
+                    ) : (
+                      /* Grid layout style */
+                      <>
+                        <div className="absolute inset-0 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900"></div>
+                        
+                        <div className="text-center z-10 px-4">
+                          <div className="w-20 h-20 sm:w-28 sm:h-28 lg:w-32 lg:h-32 bg-gradient-to-r from-pink-500 to-purple-500 rounded-full flex items-center justify-center mb-4 sm:mb-6 lg:mb-8 mx-auto shadow-2xl">
+                            <Plus className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 text-white" />
+                          </div>
+                          
+                          <h3 className="text-white text-xl sm:text-2xl lg:text-3xl font-bold mb-2 sm:mb-3 lg:mb-4">Opción {String.fromCharCode(65 + slotIndex)}</h3>
+                        </div>
+                      </>
+                    )}
+
+                    {/* Letter identifier - top left */}
                     <div className="absolute top-3 left-3 sm:top-4 sm:left-4 lg:top-6 lg:left-6 w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white font-bold text-sm sm:text-base lg:text-lg z-20">
                       {String.fromCharCode(65 + slotIndex)}
                     </div>
