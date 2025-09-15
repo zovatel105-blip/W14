@@ -57,6 +57,31 @@ const TikTokProfileGrid = ({ polls, onPollClick }) => {
 
   // Function to create a composite thumbnail layout
   const renderCompositeThumbnail = (poll, images) => {
+    // For carousel layout ("off"), always show only the first image as cover
+    if (poll.layout === 'off' && images.length > 0) {
+      return (
+        <div className="relative w-full h-full">
+          <img
+            src={images[0]}
+            alt={poll.title}
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            onError={(e) => {
+              console.log('TikTokProfileGrid - Carousel cover image failed to load:', images[0]);
+              // Fallback to a solid color background
+              e.target.style.display = 'none';
+              e.target.parentElement.style.background = 'linear-gradient(135deg, #1f2937, #111827)';
+            }}
+          />
+          {/* Carousel indicator */}
+          <div className="absolute top-2 right-2 bg-blue-600/80 text-white px-2 py-1 rounded-lg text-xs font-medium flex items-center gap-1">
+            <span>🎠</span>
+            <span>{images.length}</span>
+          </div>
+        </div>
+      );
+    }
+    
+    // For other layouts, use the existing composite logic
     if (images.length === 1) {
       // Single image - full cover
       return (
