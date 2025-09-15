@@ -305,22 +305,31 @@ const LayoutPreview = ({ layout, options = [], title, selectedMusic, onImageUplo
                         <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-800"></div>
                         
                         <div className="text-center z-10">
-                          <div className="w-24 h-24 sm:w-32 sm:h-32 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mb-6 mx-auto shadow-2xl hover:shadow-3xl hover:scale-105 transition-all duration-300">
-                            <Plus className="w-10 h-10 sm:w-12 sm:h-12 text-white" />
+                          <div className="w-28 h-28 sm:w-36 sm:h-36 bg-gradient-to-br from-blue-500 via-purple-600 to-pink-500 rounded-full flex items-center justify-center mb-6 mx-auto shadow-2xl hover:shadow-3xl hover:scale-110 transition-all duration-300 border-4 border-white/20">
+                            <Plus className="w-12 h-12 sm:w-16 sm:h-16 text-white drop-shadow-lg" strokeWidth={2.5} />
                           </div>
                           
-                          <h3 className="text-white text-2xl sm:text-3xl font-bold mb-2">
+                          <h3 className="text-white text-2xl sm:text-3xl font-bold mb-2 drop-shadow-lg">
                             {slotIndex < options.filter(opt => opt && opt.media).length 
                               ? `Opción ${String.fromCharCode(65 + slotIndex)}`
-                              : 'Añadir al carrusel'
+                              : '🎠 Añadir al carrusel'
                             }
                           </h3>
-                          <p className="text-gray-300 text-sm sm:text-base">
+                          <p className="text-gray-200 text-base sm:text-lg font-medium drop-shadow-md">
                             {slotIndex < options.filter(opt => opt && opt.media).length 
                               ? 'Toca para subir imagen o video'
-                              : 'Añade más contenido al carrusel'
+                              : 'Añade más contenido a tu historia'
                             }
                           </p>
+                          
+                          {/* Additional carousel indication */}
+                          {slotIndex >= options.filter(opt => opt && opt.media).length && (
+                            <div className="mt-4 flex items-center justify-center gap-2 text-blue-300">
+                              <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse"></div>
+                              <div className="w-2 h-2 bg-purple-400 rounded-full animate-pulse delay-75"></div>
+                              <div className="w-2 h-2 bg-pink-400 rounded-full animate-pulse delay-150"></div>
+                            </div>
+                          )}
                         </div>
                       </div>
                     )}
