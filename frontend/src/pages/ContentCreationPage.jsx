@@ -764,6 +764,21 @@ const ContentCreationPage = () => {
     fileInputRef.current?.click();
   };
 
+  const handleAddSlot = () => {
+    // Only add slot if we're in "off" layout and haven't reached max capacity
+    if (selectedLayout.id === 'off' && options.filter(opt => opt && opt.media).length < 6) {
+      const newOptions = [...options];
+      // Add empty slot at the end
+      newOptions.push({ text: '', media: null, mentionedUsers: [] });
+      setOptions(newOptions);
+      
+      toast({
+        title: "Slot añadido",
+        description: `Slot ${String.fromCharCode(65 + newOptions.length - 1)} añadido al carrusel`,
+      });
+    }
+  };
+
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
