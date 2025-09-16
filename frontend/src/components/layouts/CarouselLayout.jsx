@@ -92,8 +92,8 @@ const CarouselLayout = ({ poll, onVote, isActive }) => {
         }}
       >
         {poll.options.map((option, optionIndex) => {
-          const percentage = getPercentage(option.votes, hasVotedAny);
-          const isWinner = option.id === winningOption.id && hasVotedAny;
+          const percentage = getPercentage(option.votes);
+          const isWinner = option.id === winningOption.id && poll.userVote;
           const isSelected = poll.userVote === option.id;
 
           return (
