@@ -19,232 +19,21 @@ const TikTokProfileGrid = ({ polls, onPollClick }) => {
     return poll.totalVotes || 0;
   };
 
-  // Function to get all option images for creating a composite thumbnail
-  const getOptionImages = (poll) => {
-    if (!poll.options || poll.options.length === 0) {
-      return [];
-    }
-
-    return poll.options.map(option => {
-      // Debug log to see what data we're getting
-      console.log('TikTokProfileGrid - Processing option:', {
-        hasMedia: !!option.media,
-        mediaType: option.media?.type,
-        hasUrl: !!option.media?.url,
-        hasThumbnail: !!option.media?.thumbnail,
-        thumbnailValue: option.media?.thumbnail,
-        urlValue: option.media?.url
-      });
-
-      if (option.media) {
-        // For videos, prefer thumbnail over the video URL
-        if (option.media.type === 'video') {
-          const thumbnail = option.media.thumbnail || option.media.url;
-          console.log('TikTokProfileGrid - Using video thumbnail:', thumbnail);
-          return thumbnail;
-        }
-        // For images, use thumbnail first, then URL
-        if (option.media.thumbnail) {
-          return option.media.thumbnail;
-        }
-        if (option.media.url) {
-          return option.media.url;
-        }
-      }
-      // Fallback image for options without media
-      return 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=400&h=600&fit=crop&crop=center';
-    });
-  };
-
-  // Function to create thumbnail based on actual layout
-  const renderLayoutThumbnail = (poll, images) => {
-    // For carousel layout ("off"), always show only the first image as cover
-    if (poll.layout === 'off' && images.length > 0) {
-      return (
-        <div className="relative w-full h-full">
-          <img
-            src={images[0]}
-            alt={poll.title}
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-            onError={(e) => {
-              console.log('TikTokProfileGrid - Carousel cover image failed to load:', images[0]);
-              e.target.style.display = 'none';
-              e.target.parentElement.style.background = 'linear-gradient(135deg, #1f2937, #111827)';
-            }}
-          />
-          {/* Carousel indicator */}
-          <div className="absolute top-2 right-2 bg-blue-600/80 text-white px-2 py-1 rounded-lg text-xs font-medium flex items-center gap-1">
-            <span>🎠</span>
-            <span>{images.length}</span>
-          </div>
-        </div>
-      );
-    }
-    
-    // For all other layouts, render exactly as they appear in the feed
-    const layout = poll.layout || 'vertical'; // Default to vertical if no layout specified
-    
-    switch (layout) {
-      case 'vertical': // 2 columns side by side
-        return (
-          <div className="w-full h-full flex gap-px">
-            {images.slice(0, 2).map((img, idx) => (
-              <img
-                key={idx}
-                src={img}
-                alt={`${poll.title} option ${idx + 1}`}
-                className="w-1/2 h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                onError={(e) => {
-                  console.log('TikTokProfileGrid - Image failed to load:', img);
-                  e.target.style.display = 'none';
-                  e.target.parentElement.style.background = 'linear-gradient(135deg, #1f2937, #111827)';
-                }}
-              />
-            ))}
-          </div>
-        );
-        
-      case 'horizontal': // 2 rows top and bottom
-        return (
-          <div className="w-full h-full flex flex-col gap-px">
-            {images.slice(0, 2).map((img, idx) => (
-              <img
-                key={idx}
-                src={img}
-                alt={`${poll.title} option ${idx + 1}`}
-                className="w-full h-1/2 object-cover transition-transform duration-300 group-hover:scale-105"
-                onError={(e) => {
-                  console.log('TikTokProfileGrid - Image failed to load:', img);
-                  e.target.style.display = 'none';
-                  e.target.parentElement.style.background = 'linear-gradient(135deg, #1f2937, #111827)';
-                }}
-              />
-            ))}
-          </div>
-        );
-        
-      case 'triptych-vertical': // 3 columns side by side
-        return (
-          <div className="w-full h-full flex gap-px">
-            {images.slice(0, 3).map((img, idx) => (
-              <img
-                key={idx}
-                src={img}
-                alt={`${poll.title} option ${idx + 1}`}
-                className="w-1/3 h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                onError={(e) => {
-                  console.log('TikTokProfileGrid - Image failed to load:', img);
-                  e.target.style.display = 'none';
-                  e.target.parentElement.style.background = 'linear-gradient(135deg, #1f2937, #111827)';
-                }}
-              />
-            ))}
-          </div>
-        );
-        
-      case 'triptych-horizontal': // 3 rows top to bottom
-        return (
-          <div className="w-full h-full flex flex-col gap-px">
-            {images.slice(0, 3).map((img, idx) => (
-              <img
-                key={idx}
-                src={img}
-                alt={`${poll.title} option ${idx + 1}`}
-                className="w-full h-1/3 object-cover transition-transform duration-300 group-hover:scale-105"
-                onError={(e) => {
-                  console.log('TikTokProfileGrid - Image failed to load:', img);
-                  e.target.style.display = 'none';
-                  e.target.parentElement.style.background = 'linear-gradient(135deg, #1f2937, #111827)';
-                }}
-              />
-            ))}
-          </div>
-        );
-        
-      case 'grid-2x2': // 2x2 grid (4 images)
-        return (
-          <div className="w-full h-full grid grid-cols-2 grid-rows-2 gap-px">
-            {images.slice(0, 4).map((img, idx) => (
-              <img
-                key={idx}
-                src={img}
-                alt={`${poll.title} option ${idx + 1}`}
-                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                onError={(e) => {
-                  console.log('TikTokProfileGrid - Image failed to load:', img);
-                  e.target.style.display = 'none';
-                  e.target.parentElement.style.background = 'linear-gradient(135deg, #1f2937, #111827)';
-                }}
-              />
-            ))}
-          </div>
-        );
-        
-      case 'grid-3x2': // 3x2 grid (6 images, 3 columns x 2 rows)
-        return (
-          <div className="w-full h-full grid grid-cols-3 grid-rows-2 gap-px">
-            {images.slice(0, 6).map((img, idx) => (
-              <img
-                key={idx}
-                src={img}
-                alt={`${poll.title} option ${idx + 1}`}
-                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                onError={(e) => {
-                  console.log('TikTokProfileGrid - Image failed to load:', img);
-                  e.target.style.display = 'none';
-                  e.target.parentElement.style.background = 'linear-gradient(135deg, #1f2937, #111827)';
-                }}
-              />
-            ))}
-          </div>
-        );
-        
-      case 'horizontal-3x2': // 2x3 grid (6 images, 2 columns x 3 rows)
-        return (
-          <div className="w-full h-full grid grid-cols-2 grid-rows-3 gap-px">
-            {images.slice(0, 6).map((img, idx) => (
-              <img
-                key={idx}
-                src={img}
-                alt={`${poll.title} option ${idx + 1}`}
-                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                onError={(e) => {
-                  console.log('TikTokProfileGrid - Image failed to load:', img);
-                  e.target.style.display = 'none';
-                  e.target.parentElement.style.background = 'linear-gradient(135deg, #1f2937, #111827)';
-                }}
-              />
-            ))}
-          </div>
-        );
-        
-      default:
-        // Fallback to single image
-        return (
-          <img
-            src={images[0]}
-            alt={poll.title}
-            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-            onError={(e) => {
-              console.log('TikTokProfileGrid - Image failed to load:', images[0]);
-              e.target.style.display = 'none';
-              e.target.parentElement.style.background = 'linear-gradient(135deg, #1f2937, #111827)';
-            }}
-          />
-        );
-    }
+  // Dummy vote function for profile grid (doesn't actually vote)
+  const handleDummyVote = (optionId) => {
+    // This is just for rendering purposes, actual voting happens in TikTokScrollView
+    console.log('Profile grid vote click (no action):', optionId);
   };
 
   return (
     <div className="tiktok-profile-grid">
       {polls.map((poll, index) => {
-        const optionImages = getOptionImages(poll);
         const voteCount = getVoteCount(poll);
 
         return (
           <motion.div
             key={poll.id}
-            className="tiktok-profile-grid-item group"
+            className="tiktok-profile-grid-item group relative overflow-hidden"
             onClick={() => onPollClick && onPollClick(poll)}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
@@ -252,33 +41,43 @@ const TikTokProfileGrid = ({ polls, onPollClick }) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: index * 0.05 }}
           >
-            {/* Layout-based Cover Images */}
-            {renderLayoutThumbnail(poll, optionImages)}
+            {/* Render the actual layout as it appears in the feed */}
+            <div className="w-full h-full">
+              <LayoutRenderer 
+                poll={poll} 
+                onVote={handleDummyVote} 
+                isActive={false} // Not active in profile grid
+              />
+            </div>
 
-            {/* Subtle dark overlay for better text visibility */}
-            <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors" />
+            {/* Dark overlay for better text visibility */}
+            <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors pointer-events-none" />
 
             {/* Play Button (responsive for touch) */}
-            <div className="absolute inset-0 flex items-center justify-center">
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
               <motion.div
-                className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center opacity-0 group-hover:opacity-100 md:group-hover:opacity-100 transition-opacity"
+                className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <Play className="w-5 h-5 sm:w-6 sm:h-6 text-white ml-0.5" />
+                <Play className="w-4 h-4 sm:w-5 sm:h-5 text-white fill-white ml-0.5" />
               </motion.div>
             </div>
 
-            {/* Vote Count with Vote icon - Bottom left corner (responsive) */}
-            <div className="absolute bottom-1 left-1 sm:bottom-2 sm:left-2 z-10">
-              <div className="flex items-center gap-1 text-white font-bold drop-shadow-lg">
-                <Vote className="w-3 h-3 sm:w-4 sm:h-4 fill-white" />
-                <span className="text-xs sm:text-sm font-bold">{formatViewCount(voteCount)}</span>
+            {/* Vote count overlay - bottom left */}
+            {voteCount > 0 && (
+              <div className="absolute bottom-2 left-2 flex items-center gap-1 bg-black/60 backdrop-blur-sm px-2 py-1 rounded-full text-white text-xs font-medium pointer-events-none">
+                <Vote className="w-3 h-3" />
+                <span>{formatViewCount(voteCount)}</span>
               </div>
-            </div>
+            )}
 
-            {/* Subtle gradient overlay for text readability */}
-            <div className="absolute bottom-0 left-0 right-0 h-8 sm:h-12 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
+            {/* Poll title overlay - bottom center/right */}
+            {poll.title && (
+              <div className="absolute bottom-2 right-2 max-w-[60%] bg-black/60 backdrop-blur-sm px-2 py-1 rounded-lg text-white text-xs font-medium truncate pointer-events-none">
+                {poll.title}
+              </div>
+            )}
           </motion.div>
         );
       })}
