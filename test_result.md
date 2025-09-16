@@ -1778,8 +1778,8 @@ const handleTouchEnd = () => {
 - **Antes de votar**: Sin indicadores visuales
 - **Después de votar**: La opción ganadora muestra:
   - Anillo verde alrededor de la imagen
-  - Trofeo 🏆 en la esquina superior derecha
-  - Barra de progreso verde
+  - Barra de progreso verde con trofeo 🏆 integrado en la parte superior
+  - Trofeo en color verde claro con sombra
 
 **RESULTADO**: El indicador visual de trofeo ahora aparece correctamente en la opción ganadora después de votar, restaurando la funcionalidad original.
 - **Icons Agregados**: Bell, BellOff importados de lucide-react
