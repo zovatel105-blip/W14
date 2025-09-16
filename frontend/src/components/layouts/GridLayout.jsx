@@ -4,6 +4,7 @@ import { Trophy } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 
 const GridLayout = ({ poll, onVote, gridType, isActive = true }) => {
+  const { hasVotedAny } = useAuth();
   const getGridClasses = () => {
     switch (gridType) {
       case 'vertical': // 2 columnas lado a lado
