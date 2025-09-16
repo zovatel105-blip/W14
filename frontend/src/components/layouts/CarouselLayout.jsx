@@ -146,10 +146,10 @@ const CarouselLayout = ({ poll, onVote, isActive }) => {
                 <div 
                   className={cn(
                     "absolute inset-x-0 bottom-0 transition-all duration-1000 ease-out",
-                    isSelected 
-                      ? "bg-gradient-to-t from-blue-500/30 via-blue-600/20 to-blue-400/10"
-                      : isWinner 
-                        ? "bg-gradient-to-t from-green-500/90 via-green-600/70 to-green-400/40"
+                    isWinner 
+                      ? "bg-gradient-to-t from-green-500/90 via-green-600/70 to-green-400/40"
+                      : isSelected 
+                        ? "bg-gradient-to-t from-blue-500/30 via-blue-600/20 to-blue-400/10"
                         : "bg-gradient-to-t from-black/50 via-black/30 to-transparent"
                   )}
                   style={{ 
