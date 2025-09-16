@@ -251,8 +251,8 @@ const TikTokProfileGrid = ({ polls, onPollClick }) => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: index * 0.05 }}
           >
-            {/* Composite Cover Images */}
-            {renderCompositeThumbnail(poll, optionImages)}
+            {/* Layout-based Cover Images */}
+            {renderLayoutThumbnail(poll, optionImages)}
 
             {/* Subtle dark overlay for better text visibility */}
             <div className="absolute inset-0 bg-black/10 group-hover:bg-black/20 transition-colors" />
