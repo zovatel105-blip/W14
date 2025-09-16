@@ -1813,6 +1813,41 @@ const handleTouchEnd = () => {
 - **Condicionales isOwnProfile**: Aplicados a ocupación, biografía, tabs y contenidos
 - **Grid Dinámico**: `grid-cols-${isOwnProfile ? '4' : '2'}` para layout responsive
 
+## ✅ **SINCRONIZACIÓN COMPLETA ENTRE CARRUSEL Y GRID**
+
+**OBJETIVO**: Asegurar que la lógica de barras de porcentaje y colores en el carrusel sea exactamente igual a las demás publicaciones.
+
+**ANÁLISIS Y CORRECCIONES REALIZADAS:**
+
+### **1. Funciones de Cálculo - ✅ Ya Sincronizadas:**
+- `getPercentage()`: Idéntica en ambos layouts
+- `winningOption`: Idéntica en ambos layouts  
+- Ambas usan `poll.userVote && poll.totalVotes > 0`
+
+### **2. Condiciones de Renderizado - ✅ Sincronizadas:**
+- **Barras de progreso**: `isActive && poll.userVote` en ambos
+- **Indicador de ganador**: `isActive && isWinner && poll.userVote` en ambos
+- **Indicador de selección**: **CORREGIDO** - Ahora `isActive && isSelected && poll.userVote` en ambos
+
+### **3. Colores y Gradientes - ✅ Idénticos:**
+- **Opción seleccionada**: `bg-gradient-to-t from-blue-500/30 via-blue-600/20 to-blue-400/10`
+- **Opción ganadora**: `bg-gradient-to-t from-green-500/90 via-green-600/70 to-green-400/40`
+- **Otras opciones**: `bg-gradient-to-t from-black/50 via-black/30 to-transparent`
+
+### **4. Indicadores Visuales - ✅ Idénticos:**
+- **Anillo de selección**: `ring-2 ring-blue-400/60 ring-inset`
+- **Anillo de ganador**: `ring-2 ring-green-400 ring-inset`
+- **Trofeo**: `w-4 h-4 text-green-300 drop-shadow-lg` en ambos
+
+### **5. Altura Mínima - ✅ Sincronizada:**
+- **Ambos layouts**: `Math.max(percentage, 15)%` para mejor visibilidad
+
+**RESULTADO FINAL:**
+- **Comportamiento idéntico** entre publicaciones grid y carrusel
+- **Mismas condiciones** para mostrar barras y indicadores  
+- **Mismos colores** y efectos visuales
+- **Misma altura mínima** para las barras de progreso
+- **Consistencia total** en la experiencia de votación
 ✅ **RESULTADO FINAL:**
 🎯 **PERFIL AJENO COMPLETAMENTE OPTIMIZADO** - Los perfiles ajenos ahora tienen:
 1. Botón de seguir con campana de notificaciones integrada
