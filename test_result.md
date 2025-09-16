@@ -1849,6 +1849,42 @@ const handleTouchEnd = () => {
 - **Misma altura mínima** para las barras de progreso
 - **Consistencia total** en la experiencia de votación
 ✅ **RESULTADO FINAL:**
+## ✅ **CORRECCIÓN DE PRIORIDAD DE COLORES EN BARRAS DE PROGRESO**
+
+**PROBLEMA IDENTIFICADO**: En el carrusel, la barra de porcentaje de la opción ganadora aparecía en azul (color de selección) en lugar de verde (color de ganador).
+
+**CAUSA DEL PROBLEMA:**
+- Cuando una opción era tanto seleccionada como ganadora, la lógica priorizaba el color azul (seleccionada) sobre el verde (ganadora)
+- Esto ocurría por el orden de la condición ternaria: `isSelected ? azul : isWinner ? verde : negro`
+
+**CORRECCIÓN IMPLEMENTADA:**
+
+### **Nueva Prioridad de Colores:**
+1. **🏆 Ganadora (Prioridad 1)**: Verde - `bg-gradient-to-t from-green-500/90 via-green-600/70 to-green-400/40`
+2. **✅ Seleccionada (Prioridad 2)**: Azul - `bg-gradient-to-t from-blue-500/30 via-blue-600/20 to-blue-400/10`
+3. **⚫ Otras opciones (Prioridad 3)**: Negro/Transparente - `bg-gradient-to-t from-black/50 via-black/30 to-transparent`
+
+### **Lógica Corregida:**
+```javascript
+// ANTES (Incorrecto):
+isSelected ? azul : isWinner ? verde : negro
+
+// AHORA (Correcto):
+isWinner ? verde : isSelected ? azul : negro
+```
+
+### **Resultado:**
+- **Opción ganadora**: Siempre verde, incluso si también fue seleccionada por el usuario
+- **Opción seleccionada (no ganadora)**: Azul
+- **Otras opciones**: Negro/transparente
+
+### **Consistencia:**
+- Aplicado tanto en GridLayout como en CarouselLayout
+- Misma lógica de prioridades en ambos tipos de publicación
+
+**EXPERIENCIA VISUAL CORREGIDA:**
+- El trofeo 🏆 verde y la barra verde ahora coinciden para la opción ganadora
+- Clara diferenciación visual entre opción ganadora (verde) y solo seleccionada (azul)
 🎯 **PERFIL AJENO COMPLETAMENTE OPTIMIZADO** - Los perfiles ajenos ahora tienen:
 1. Botón de seguir con campana de notificaciones integrada
 2. Campos vacíos (sin textos molestos) hasta que el usuario agregue información
