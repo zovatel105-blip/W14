@@ -1885,6 +1885,40 @@ isWinner ? verde : isSelected ? azul : negro
 **EXPERIENCIA VISUAL CORREGIDA:**
 - El trofeo 🏆 verde y la barra verde ahora coinciden para la opción ganadora
 - Clara diferenciación visual entre opción ganadora (verde) y solo seleccionada (azul)
+## ✅ **COMPORTAMIENTO DE BARRAS COMO YOUTUBE IMPLEMENTADO**
+
+**CORRECCIÓN APLICADA**: Las barras de porcentaje ahora funcionan exactamente como las encuestas de YouTube.
+
+**COMPORTAMIENTO CORREGIDO:**
+
+### **Lógica de Barras de Progreso:**
+- **Opciones con votos**: Muestran barra proporcional a su porcentaje real
+- **Opciones con 0 votos**: NO muestran barra (altura 0%)
+- **Sin altura mínima artificial**: Eliminada la altura mínima forzada
+
+### **Condición de Renderizado:**
+```javascript
+// Solo mostrar barra si tiene porcentaje > 0
+{isActive && poll.userVote && percentage > 0 && (
+  <div className="progress-bar">...</div>
+)}
+```
+
+### **Cálculo de Altura:**
+- **Antes**: `Math.max(percentage, 15)%` (altura mínima artificial)
+- **Ahora**: `${percentage}%` (altura real proporcional)
+
+### **Resultado Esperado:**
+1. **Después de votar**: Solo las opciones que recibieron votos muestran barras
+2. **Proporcionalidad**: Las barras reflejan exactamente el porcentaje real
+3. **Opciones sin votos**: Aparecen sin barra, como en YouTube
+4. **Ganadora**: Barra verde con trofeo (si tiene votos)
+5. **Seleccionada**: Barra azul (si tiene votos y no es ganadora)
+
+**EXPERIENCIA IGUAL A YOUTUBE:**
+- Barras solo para opciones con votos
+- Altura proporcional al porcentaje real
+- Sin barras artificiales para opciones sin votos
 🎯 **PERFIL AJENO COMPLETAMENTE OPTIMIZADO** - Los perfiles ajenos ahora tienen:
 1. Botón de seguir con campana de notificaciones integrada
 2. Campos vacíos (sin textos molestos) hasta que el usuario agregue información
