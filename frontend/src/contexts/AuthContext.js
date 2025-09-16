@@ -157,11 +157,23 @@ export const AuthProvider = ({ children }) => {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || 'Registration failed');
+        let errorMessage = 'Registration failed';
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.detail || errorMessage;
+        } catch (parseError) {
+          // If response is not JSON (e.g., HTML error page), use status text
+          errorMessage = response.statusText || `HTTP ${response.status}`;
+        }
+        throw new Error(errorMessage);
       }
 
-      const data = await response.json();
+      let data;
+      try {
+        data = await response.json();
+      } catch (parseError) {
+        throw new Error('El servidor devolvió una respuesta inválida. Verifica la conexión.');
+      }
       
       // Save auth data
       localStorage.setItem('authToken', data.access_token);
