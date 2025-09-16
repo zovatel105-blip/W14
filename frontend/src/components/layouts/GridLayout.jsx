@@ -106,8 +106,8 @@ const GridLayout = ({ poll, onVote, gridType, isActive = true }) => {
               <div className="absolute inset-0 ring-2 ring-blue-400/60 ring-inset"></div>
             )}
 
-            {/* Winner indicator */}
-            {isWinner && poll.totalVotes > 0 && (
+            {/* Winner indicator - Only show when active (not in profile grid) */}
+            {isActive && isWinner && poll.totalVotes > 0 && (
               <div className="absolute inset-0 ring-2 ring-green-400 ring-inset"></div>
             )}
           </div>
