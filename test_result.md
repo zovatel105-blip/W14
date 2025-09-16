@@ -1705,6 +1705,34 @@ const handleTouchEnd = () => {
 - ✅ **Solo Posts y Menciones**: Perfiles ajenos ahora muestran únicamente 2 tabs: "Publicaciones" y "Menciones"
 - ✅ **Tabs Ocultos**: "Me gusta" y "Guardados" solo aparecen en perfiles propios
 - ✅ **Grid Responsive**: Layout automático adapta de 4 columnas (perfil propio) a 2 columnas (perfil ajeno)
+## ✅ **CORRECCIÓN DE RESULTADOS DE VOTACIÓN PREMATUROS**
+
+**PROBLEMA CRÍTICO IDENTIFICADO**: Los resultados de votación (overlays de color, efectos visuales, indicadores de ganador) se mostraban ANTES de que el usuario votara, influyendo en la decisión de voto.
+
+**CORRECCIONES IMPLEMENTADAS:**
+
+### 1. **Overlays de Progreso**
+- **Antes**: Se mostraban cuando `poll.totalVotes > 0` (con cualquier voto de otros usuarios)
+- **Ahora**: Solo se muestran cuando `poll.userVote` existe (después de que el usuario vote)
+
+### 2. **Indicadores de Ganador**
+- **Antes**: Se calculaba ganador con `poll.totalVotes > 0`
+- **Ahora**: Solo se calcula ganador cuando `poll.userVote` existe
+
+### 3. **Cálculo de Porcentajes**
+- **Antes**: Se calculaba porcentaje aunque el usuario no hubiera votado
+- **Ahora**: Porcentaje siempre es 0 hasta que `poll.userVote` existe
+
+### 4. **Identificación de Opción Ganadora**
+- **Antes**: Se identificaba opción ganadora basándose en votos de otros usuarios
+- **Ahora**: Solo se identifica opción ganadora después de que el usuario vote
+
+**EXPERIENCIA DE USUARIO CORREGIDA:**
+1. **Antes de votar**: Las imágenes aparecen neutrales, sin efectos de color ni indicadores
+2. **Después de votar**: Se revelan todos los resultados, porcentajes, colores y ganador
+3. **Votación imparcial**: El usuario ya no puede ver resultados que influyan su decisión
+
+**OBJETIVO ALCANZADO**: Votación completamente imparcial donde los resultados solo se revelan después de emitir el voto.
 - ✅ **Contenido Condicional**: TabsContent de "liked" y "saved" envueltos en condicionales isOwnProfile
 
 **CAMBIOS TÉCNICOS ESPECÍFICOS:**
