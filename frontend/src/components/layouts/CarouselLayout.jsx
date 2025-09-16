@@ -173,24 +173,26 @@ const CarouselLayout = ({ poll, onVote, isActive }) => {
         })}
       </div>
 
-      {/* Navigation indicators - Bottom center positioned at voting area height */}
-      <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 flex items-center justify-center gap-2 z-20">
-        {poll.options.map((_, idx) => (
-          <button
-            key={idx}
-            onClick={(e) => {
-              e.stopPropagation();
-              goToSlide(idx);
-            }}
-            className={cn(
-              "w-8 h-2 rounded-full transition-all duration-300 flex-shrink-0",
-              idx === currentSlide 
-                ? "bg-white shadow-lg" 
-                : "bg-white/50 hover:bg-white/70"
-            )}
-          />
-        ))}
-      </div>
+      {/* Navigation indicators - Only show when active (not in profile grid) */}
+      {isActive && (
+        <div className="absolute bottom-16 left-1/2 transform -translate-x-1/2 flex items-center justify-center gap-2 z-20">
+          {poll.options.map((_, idx) => (
+            <button
+              key={idx}
+              onClick={(e) => {
+                e.stopPropagation();
+                goToSlide(idx);
+              }}
+              className={cn(
+                "w-8 h-2 rounded-full transition-all duration-300 flex-shrink-0",
+                idx === currentSlide 
+                  ? "bg-white shadow-lg" 
+                  : "bg-white/50 hover:bg-white/70"
+              )}
+            />
+          ))}
+        </div>
+      )}
 
       {/* Navigation arrows - HORIZONTAL */}
       {totalSlides > 1 && (
