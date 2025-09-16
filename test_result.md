@@ -1733,6 +1733,42 @@ const handleTouchEnd = () => {
 3. **Votación imparcial**: El usuario ya no puede ver resultados que influyan su decisión
 
 **OBJETIVO ALCANZADO**: Votación completamente imparcial donde los resultados solo se revelan después de emitir el voto.
+## ✅ **SISTEMA DE PORCENTAJES GLOBALES IMPLEMENTADO**
+
+**NUEVA FUNCIONALIDAD**: Ahora cuando votes en cualquier encuesta, se desbloquea la visualización de porcentajes reales en TODAS las encuestas de la aplicación.
+
+**COMPORTAMIENTO IMPLEMENTADO:**
+
+### 1. **Estado Global de Votación (`hasVotedAny`)**
+- Nuevo estado en `AuthContext` que trackea si el usuario ha votado en alguna encuesta
+- Se mantiene durante toda la sesión del usuario
+- Se actualiza automáticamente al votar en cualquier encuesta
+
+### 2. **Antes de Votar en Cualquier Encuesta:**
+- Todas las encuestas muestran porcentajes equilibrados (ej: 50%-50% para 2 opciones)
+- Barras de progreso grises y neutras
+- Sin indicadores de ganador
+- Sin colores que revelen resultados
+
+### 3. **Después de Votar en Cualquier Encuesta:**
+- TODAS las encuestas (no solo la votada) muestran porcentajes reales
+- Barras de progreso con colores diferenciados
+- Indicadores de opción ganadora visibles
+- Colores que reflejan resultados reales
+
+**ARCHIVOS MODIFICADOS:**
+- `AuthContext.js`: Agregado estado `hasVotedAny` y `setHasVotedAny`
+- `GridLayout.jsx`: Lógica actualizada para usar estado global
+- `CarouselLayout.jsx`: Lógica actualizada para usar estado global  
+- `TikTokScrollView.jsx`: Actualización de `hasVotedAny` al votar
+
+**EXPERIENCIA DE USUARIO:**
+1. **Primera visita**: Todas las encuestas muestran porcentajes equilibrados
+2. **Después del primer voto**: Se "desbloquea" la visualización real en toda la app
+3. **Navegación**: Los porcentajes reales se mantienen en todas las páginas y encuestas
+4. **Sesión**: El estado se mantiene hasta cerrar la aplicación
+
+**OBJETIVO ALCANZADO**: Sistema de "revelación global" donde un solo voto desbloquea la visualización de estadísticas en toda la aplicación.
 - ✅ **Contenido Condicional**: TabsContent de "liked" y "saved" envueltos en condicionales isOwnProfile
 
 **CAMBIOS TÉCNICOS ESPECÍFICOS:**
