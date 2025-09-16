@@ -43,7 +43,7 @@ const GridLayout = ({ poll, onVote, gridType, isActive = true }) => {
   return (
     <div className={cn("w-full h-full", getGridClasses())}>
       {poll.options.map((option, optionIndex) => {
-        const percentage = getPercentage(option.votes);
+        const percentage = getPercentage(option.votes, hasVotedAny);
         const isWinner = option.id === winningOption.id && poll.userVote;
         const isSelected = poll.userVote === option.id;
 
