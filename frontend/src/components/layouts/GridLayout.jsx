@@ -95,7 +95,7 @@ const GridLayout = ({ poll, onVote, gridType, isActive = true }) => {
               <div 
                 className={cn(
                   "absolute inset-x-0 bottom-0 transition-all duration-1000 ease-out",
-                  poll.userVote ? (
+                  hasVotedAny ? (
                     isSelected 
                       ? "bg-gradient-to-t from-blue-500/30 via-blue-600/20 to-blue-400/10"
                       : isWinner 
