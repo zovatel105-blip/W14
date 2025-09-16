@@ -55,8 +55,8 @@ const TikTokProfileGrid = ({ polls, onPollClick }) => {
     });
   };
 
-  // Function to create a composite thumbnail layout
-  const renderCompositeThumbnail = (poll, images) => {
+  // Function to create thumbnail based on actual layout
+  const renderLayoutThumbnail = (poll, images) => {
     // For carousel layout ("off"), always show only the first image as cover
     if (poll.layout === 'off' && images.length > 0) {
       return (
@@ -67,7 +67,6 @@ const TikTokProfileGrid = ({ polls, onPollClick }) => {
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
             onError={(e) => {
               console.log('TikTokProfileGrid - Carousel cover image failed to load:', images[0]);
-              // Fallback to a solid color background
               e.target.style.display = 'none';
               e.target.parentElement.style.background = 'linear-gradient(135deg, #1f2937, #111827)';
             }}
@@ -81,61 +80,37 @@ const TikTokProfileGrid = ({ polls, onPollClick }) => {
       );
     }
     
-    // For other layouts, use the existing composite logic
-    if (images.length === 1) {
-      // Single image - full cover
-      return (
-        <img
-          src={images[0]}
-          alt={poll.title}
-          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-          onError={(e) => {
-            console.log('TikTokProfileGrid - Image failed to load:', images[0]);
-            // Fallback to a solid color background
-            e.target.style.display = 'none';
-            e.target.parentElement.style.background = 'linear-gradient(135deg, #1f2937, #111827)';
-          }}
-        />
-      );
-    } else if (images.length === 2) {
-      // Two images - split vertically
-      return (
-        <div className="w-full h-full flex">
-          {images.slice(0, 2).map((img, idx) => (
-            <img
-              key={idx}
-              src={img}
-              alt={`${poll.title} option ${idx + 1}`}
-              className="w-1/2 h-full object-cover transition-transform duration-300 group-hover:scale-105"
-              onError={(e) => {
-                console.log('TikTokProfileGrid - Image failed to load:', img);
-                e.target.style.display = 'none';
-                e.target.parentElement.style.background = 'linear-gradient(135deg, #1f2937, #111827)';
-              }}
-            />
-          ))}
-        </div>
-      );
-    } else if (images.length === 3) {
-      // Three images - one large on left, two stacked on right
-      return (
-        <div className="w-full h-full flex">
-          <img
-            src={images[0]}
-            alt={`${poll.title} option 1`}
-            className="w-2/3 h-full object-cover transition-transform duration-300 group-hover:scale-105"
-            onError={(e) => {
-              console.log('TikTokProfileGrid - Image failed to load:', images[0]);
-              e.target.style.display = 'none';
-              e.target.parentElement.style.background = 'linear-gradient(135deg, #1f2937, #111827)';
-            }}
-          />
-          <div className="w-1/3 h-full flex flex-col">
-            {images.slice(1, 3).map((img, idx) => (
+    // For all other layouts, render exactly as they appear in the feed
+    const layout = poll.layout || 'vertical'; // Default to vertical if no layout specified
+    
+    switch (layout) {
+      case 'vertical': // 2 columns side by side
+        return (
+          <div className="w-full h-full flex gap-px">
+            {images.slice(0, 2).map((img, idx) => (
               <img
                 key={idx}
                 src={img}
-                alt={`${poll.title} option ${idx + 2}`}
+                alt={`${poll.title} option ${idx + 1}`}
+                className="w-1/2 h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                onError={(e) => {
+                  console.log('TikTokProfileGrid - Image failed to load:', img);
+                  e.target.style.display = 'none';
+                  e.target.parentElement.style.background = 'linear-gradient(135deg, #1f2937, #111827)';
+                }}
+              />
+            ))}
+          </div>
+        );
+        
+      case 'horizontal': // 2 rows top and bottom
+        return (
+          <div className="w-full h-full flex flex-col gap-px">
+            {images.slice(0, 2).map((img, idx) => (
+              <img
+                key={idx}
+                src={img}
+                alt={`${poll.title} option ${idx + 1}`}
                 className="w-full h-1/2 object-cover transition-transform duration-300 group-hover:scale-105"
                 onError={(e) => {
                   console.log('TikTokProfileGrid - Image failed to load:', img);
@@ -145,27 +120,117 @@ const TikTokProfileGrid = ({ polls, onPollClick }) => {
               />
             ))}
           </div>
-        </div>
-      );
-    } else {
-      // Four or more images - 2x2 grid
-      return (
-        <div className="w-full h-full grid grid-cols-2 grid-rows-2">
-          {images.slice(0, 4).map((img, idx) => (
-            <img
-              key={idx}
-              src={img}
-              alt={`${poll.title} option ${idx + 1}`}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-              onError={(e) => {
-                console.log('TikTokProfileGrid - Image failed to load:', img);
-                e.target.style.display = 'none';
-                e.target.parentElement.style.background = 'linear-gradient(135deg, #1f2937, #111827)';
-              }}
-            />
-          ))}
-        </div>
-      );
+        );
+        
+      case 'triptych-vertical': // 3 columns side by side
+        return (
+          <div className="w-full h-full flex gap-px">
+            {images.slice(0, 3).map((img, idx) => (
+              <img
+                key={idx}
+                src={img}
+                alt={`${poll.title} option ${idx + 1}`}
+                className="w-1/3 h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                onError={(e) => {
+                  console.log('TikTokProfileGrid - Image failed to load:', img);
+                  e.target.style.display = 'none';
+                  e.target.parentElement.style.background = 'linear-gradient(135deg, #1f2937, #111827)';
+                }}
+              />
+            ))}
+          </div>
+        );
+        
+      case 'triptych-horizontal': // 3 rows top to bottom
+        return (
+          <div className="w-full h-full flex flex-col gap-px">
+            {images.slice(0, 3).map((img, idx) => (
+              <img
+                key={idx}
+                src={img}
+                alt={`${poll.title} option ${idx + 1}`}
+                className="w-full h-1/3 object-cover transition-transform duration-300 group-hover:scale-105"
+                onError={(e) => {
+                  console.log('TikTokProfileGrid - Image failed to load:', img);
+                  e.target.style.display = 'none';
+                  e.target.parentElement.style.background = 'linear-gradient(135deg, #1f2937, #111827)';
+                }}
+              />
+            ))}
+          </div>
+        );
+        
+      case 'grid-2x2': // 2x2 grid (4 images)
+        return (
+          <div className="w-full h-full grid grid-cols-2 grid-rows-2 gap-px">
+            {images.slice(0, 4).map((img, idx) => (
+              <img
+                key={idx}
+                src={img}
+                alt={`${poll.title} option ${idx + 1}`}
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                onError={(e) => {
+                  console.log('TikTokProfileGrid - Image failed to load:', img);
+                  e.target.style.display = 'none';
+                  e.target.parentElement.style.background = 'linear-gradient(135deg, #1f2937, #111827)';
+                }}
+              />
+            ))}
+          </div>
+        );
+        
+      case 'grid-3x2': // 3x2 grid (6 images, 3 columns x 2 rows)
+        return (
+          <div className="w-full h-full grid grid-cols-3 grid-rows-2 gap-px">
+            {images.slice(0, 6).map((img, idx) => (
+              <img
+                key={idx}
+                src={img}
+                alt={`${poll.title} option ${idx + 1}`}
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                onError={(e) => {
+                  console.log('TikTokProfileGrid - Image failed to load:', img);
+                  e.target.style.display = 'none';
+                  e.target.parentElement.style.background = 'linear-gradient(135deg, #1f2937, #111827)';
+                }}
+              />
+            ))}
+          </div>
+        );
+        
+      case 'horizontal-3x2': // 2x3 grid (6 images, 2 columns x 3 rows)
+        return (
+          <div className="w-full h-full grid grid-cols-2 grid-rows-3 gap-px">
+            {images.slice(0, 6).map((img, idx) => (
+              <img
+                key={idx}
+                src={img}
+                alt={`${poll.title} option ${idx + 1}`}
+                className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                onError={(e) => {
+                  console.log('TikTokProfileGrid - Image failed to load:', img);
+                  e.target.style.display = 'none';
+                  e.target.parentElement.style.background = 'linear-gradient(135deg, #1f2937, #111827)';
+                }}
+              />
+            ))}
+          </div>
+        );
+        
+      default:
+        // Fallback to single image
+        return (
+          <img
+            src={images[0]}
+            alt={poll.title}
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            onError={(e) => {
+              console.log('TikTokProfileGrid - Image failed to load:', images[0]);
+              e.target.style.display = 'none';
+              e.target.parentElement.style.background = 'linear-gradient(135deg, #1f2937, #111827)';
+            }}
+          />
+        );
     }
   };
 
