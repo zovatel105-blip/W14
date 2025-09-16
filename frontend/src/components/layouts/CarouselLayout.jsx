@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { cn } from '../../lib/utils';
 
 const CarouselLayout = ({ poll, onVote, isActive }) => {
-  const { hasVotedAny } = useAuth();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [touchStart, setTouchStart] = useState(null);
   const [touchEnd, setTouchEnd] = useState(null);
