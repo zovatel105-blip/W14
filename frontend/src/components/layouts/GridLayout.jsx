@@ -24,12 +24,12 @@ const GridLayout = ({ poll, onVote, gridType, isActive = true }) => {
     }
   };
 
-  const getPercentage = (votes) => {
-    if (poll.userVote && poll.totalVotes > 0) {
-      // After voting: show real percentages
+  const getPercentage = (votes, hasVotedAny) => {
+    if (hasVotedAny && poll.totalVotes > 0) {
+      // After voting any poll: show real percentages
       return Math.round((votes / poll.totalVotes) * 100);
     } else {
-      // Before voting: show balanced percentages
+      // Before voting any poll: show balanced percentages
       return Math.round(100 / poll.options.length);
     }
   };
