@@ -97,8 +97,8 @@ const GridLayout = ({ poll, onVote, gridType, isActive = true }) => {
                       : "bg-gradient-to-t from-black/50 via-black/30 to-transparent"
                 )}
                 style={{ 
-                  height: `${Math.max(percentage, 15)}%`,
-                  transform: `translateY(${100 - Math.max(percentage, 15)}%)`,
+                  height: `${percentage}%`,
+                  transform: `translateY(${100 - percentage}%)`,
                   transition: 'all 1s cubic-bezier(0.4, 0, 0.2, 1)'
                 }}
               >
