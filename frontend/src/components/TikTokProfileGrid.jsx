@@ -1,6 +1,7 @@
 import React from 'react';
 import { Play, Vote, BarChart3 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import LayoutRenderer from './layouts/LayoutRenderer';
 
 const TikTokProfileGrid = ({ polls, onPollClick }) => {
   // Function to format vote count
