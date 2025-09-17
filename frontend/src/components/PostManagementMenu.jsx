@@ -182,9 +182,9 @@ const PostManagementMenu = ({ poll, onUpdate, onDelete, currentUser }) => {
           <Button
             variant="ghost"
             size="sm"
-            className="absolute top-2 right-2 z-50 bg-black/70 hover:bg-black/80 active:bg-black/90 text-white rounded-full w-10 h-10 p-0 shadow-lg border border-white/20 backdrop-blur-sm transition-all duration-200"
+            className="absolute top-2 right-2 z-50 bg-black/70 hover:bg-black/80 active:bg-black/90 text-white rounded-full w-10 h-10 p-0 shadow-lg border border-white/20 backdrop-blur-sm transition-all duration-200 hover:scale-110 active:scale-95 touch-manipulation"
           >
-            <MoreVertical className="w-5 h-5" />
+            <MoreVertical className="w-5 h-5 animate-pulse" />
           </Button>
         </DropdownMenuTrigger>
         
