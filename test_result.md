@@ -1929,11 +1929,11 @@ isWinner ? verde : isSelected ? azul : negro
 - **Bordes**: `rounded-full` para forma circular perfecta
 - **Sin fondo**: Eliminado contenedor blanco que causaba espacios
 ### **Ajustes para Círculo Perfecto:**
-- **Contenedor**: Div circular con fondo blanco y sombra sutil
-- **Tamaño del logo**: 75% del tamaño del contenedor para mejor proporción
-- **Centrado**: Perfect centering con flexbox
-- **Fondo**: Blanco circular para contraste
-- **Proporciones**: Mantiene aspect ratio del logo original
+- **Sin espacios blancos**: Logo ocupa completamente el área circular
+- **Object-fit cover**: Rellena todo el círculo sin distorsión
+- **Tamaño completo**: 100% del tamaño asignado
+- **Bordes circulares**: `rounded-full` para forma perfecta
+- **Sin contenedor**: Directo en `<img>` para mejor control
 
 ### **Ubicaciones donde aparece:**
 - Logo principal en la aplicación
