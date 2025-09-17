@@ -2237,6 +2237,38 @@ backend:
 - **Misma lógica**: Solo aparece en publicaciones propias (`isOwnProfile`)
 - **Coherencia**: Mismo diseño y comportamiento en ambas vistas
 
+## ✅ **ERROR DE SINTAXIS CORREGIDO**
+
+**PROBLEMA IDENTIFICADO**: Error de JavaScript - `Identifier 'currentUser' has already been declared` en TikTokScrollView.jsx línea 68.
+
+**CAUSA DEL ERROR**: 
+- El archivo TikTokScrollView.jsx ya tenía una variable `currentUser` declarada
+- Al agregar `currentUser` como parámetro a `TikTokPollCard`, se creó un conflicto de nombres
+- JavaScript no permite redeclarar la misma variable en el mismo scope
+
+**SOLUCIÓN IMPLEMENTADA:**
+
+### **🔧 Correcciones Realizadas:**
+1. **Renombrado de parámetro**: `currentUser` → `currentUser: authUser` en TikTokPollCard
+2. **Actualización de referencias**: Todas las referencias internas usan `authUser`
+3. **useAuth() agregado**: Se importó `const { user: currentUser } = useAuth()` en TikTokScrollView
+
+### **📝 Cambios de Código:**
+```javascript
+// ANTES (Error):
+const TikTokPollCard = ({ ..., currentUser }) => {
+
+// AHORA (Corregido):
+const TikTokPollCard = ({ ..., currentUser: authUser }) => {
+```
+
+### **🎯 Resultado:**
+- ✅ **Error eliminado**: La aplicación compila sin errores
+- ✅ **Funcionalidad intacta**: El menú de gestión sigue funcionando
+- ✅ **Nombres únicos**: No hay conflictos de variables
+- ✅ **useAuth() funcional**: Acceso correcto al usuario autenticado
+
+**ESTADO**: El error de sintaxis está completamente resuelto y la aplicación debería cargar normalmente.
 **RESULTADO FINAL**: El menú de gestión ahora está disponible tanto en la vista de grid del perfil como dentro de la publicación completa, proporcionando acceso completo a las funciones de gestión desde cualquier vista.
     stuck_count: 0
     priority: "high"
