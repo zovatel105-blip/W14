@@ -235,7 +235,7 @@ const PostManagementMenu = ({ poll, onUpdate, onDelete, currentUser }) => {
               </>
             ) : (
               <>
-                <Lock className="w-5 h-5 mr-3" />
+                <Lock className="post-management-item-icon w-5 h-5 mr-3" />
                 Hacer publicación privada
               </>
             )}
