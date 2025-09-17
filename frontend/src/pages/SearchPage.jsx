@@ -221,7 +221,7 @@ const SearchPage = () => {
           zIndex: 9999,
         }}
       >
-        <LogoWithQuickActions size={24} />
+        <LogoWithQuickActions size={32} />
       </div>
 
       {/* Modern Header with Glassmorphism */}
