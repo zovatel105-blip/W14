@@ -45,10 +45,10 @@ const PostManagementMenu = ({ poll, onUpdate, onDelete, currentUser }) => {
   console.log('PostManagementMenu - poll.author_id:', poll.author_id);
   console.log('PostManagementMenu - isOwnProfile:', currentUser && (poll.user_id === currentUser.id || poll.author_id === currentUser.id));
 
-  // Only show menu for post owner - check both user_id and author_id
-  if (!currentUser || (poll.user_id !== currentUser.id && poll.author_id !== currentUser.id)) {
-    return null;
-  }
+  // TEMPORARY: Show for all posts for debugging
+  // if (!currentUser || (poll.user_id !== currentUser.id && poll.author_id !== currentUser.id)) {
+  //   return null;
+  // }
 
   const handleEdit = async () => {
     if (!editTitle.trim()) {
