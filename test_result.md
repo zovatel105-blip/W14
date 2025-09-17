@@ -2014,6 +2014,60 @@ isWinner ? verde : isSelected ? azul : negro
 ✅ Modales de seguidores/siguiendo
 ✅ Vista TikTok de publicaciones
 ✅ Sistema de notificaciones toast
+## ✅ **MENÚ DE EDICIÓN Y GESTIÓN DE PUBLICACIONES IMPLEMENTADO**
+
+**NUEVA FUNCIONALIDAD**: Sistema completo de gestión de publicaciones en el perfil propio.
+
+### **Funcionalidades Implementadas:**
+
+#### **📝 Edición:**
+- **✏️ Editar título/descripción**: Modal con campos para modificar texto de la publicación
+- **Límites**: 200 caracteres para título, 500 para descripción
+- **Validación**: Título obligatorio, descripción opcional
+
+#### **📋 Organización:**
+- **📌 Fijar en perfil**: Coloca publicación en la parte superior
+- **📥 Archivar publicación**: Oculta del perfil y feed (solo creador la ve)
+
+#### **🔒 Privacidad:**
+- **🌍 Hacer pública**: Visible para todos los usuarios
+- **🔒 Hacer privada**: Solo visible para el creador
+
+#### **🗑️ Acciones Finales:**
+- **Eliminar permanentemente**: Borra publicación, votos y comentarios
+- **Confirmación**: Dialog de confirmación para evitar eliminaciones accidentales
+
+### **Componentes Creados:**
+
+#### **PostManagementMenu.jsx:**
+- Menú desplegable con ícono de tres puntos
+- Solo visible en publicaciones propias
+- Opciones organizadas por categorías
+- Estados loading para operaciones async
+
+#### **Backend - Nuevas Rutas:**
+- **PUT /api/polls/{poll_id}**: Actualizar publicación
+- **DELETE /api/polls/{poll_id}**: Eliminar publicación
+- **Validación**: Solo el propietario puede editar/eliminar
+
+#### **Frontend Integration:**
+- **pollService**: Funciones updatePoll() y deletePoll()
+- **ProfilePage**: Manejo de estados y actualizaciones optimistas
+- **TikTokProfileGrid**: Integración del menú en el grid
+
+### **Experiencia de Usuario:**
+1. **Menú accesible**: Botón de tres puntos en esquina superior derecha
+2. **Íconos descriptivos**: Cada acción tiene su ícono representativo
+3. **Feedback inmediato**: Toasts de confirmación para todas las acciones
+4. **Actualización optimista**: UI se actualiza inmediatamente
+5. **Confirmación de eliminación**: Dialog de confirmación para evitar errores
+
+### **Seguridad:**
+- ✅ **Autorización**: Solo el propietario puede gestionar sus publicaciones
+- ✅ **Validación backend**: Verificación de propiedad en servidor
+- ✅ **Cascada de eliminación**: Limpia votos, likes y comentarios
+
+**RESULTADO**: Sistema completo de gestión de publicaciones que permite a los usuarios editar, organizar, controlar privacidad y eliminar sus propias publicaciones desde el perfil.
 ✅ Compatibilidad completa entre perfiles propios y ajenos
 
 backend:
