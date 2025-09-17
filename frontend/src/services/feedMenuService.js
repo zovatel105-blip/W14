@@ -9,6 +9,12 @@ class FeedMenuService {
     const token = localStorage.getItem('token');
     const url = `${this.baseURL}${endpoint}`;
     
+    console.log('🌐 FeedMenuService: Making request:', {
+      url,
+      method: options.method || 'GET',
+      hasToken: !!token
+    });
+    
     const config = {
       headers: {
         'Content-Type': 'application/json',
@@ -21,14 +27,23 @@ class FeedMenuService {
     try {
       const response = await fetch(url, config);
       
+      console.log('📡 FeedMenuService: Response received:', {
+        status: response.status,
+        statusText: response.statusText,
+        ok: response.ok
+      });
+      
       if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
+        console.error('❌ FeedMenuService: API Error:', errorData);
         throw new Error(errorData.detail || `HTTP ${response.status}: ${response.statusText}`);
       }
 
-      return await response.json();
+      const responseData = await response.json();
+      console.log('✅ FeedMenuService: Success response:', responseData);
+      return responseData;
     } catch (error) {
-      console.error(`Feed Menu API Error [${endpoint}]:`, error);
+      console.error(`❌ FeedMenuService: Request failed [${endpoint}]:`, error);
       throw error;
     }
   }
