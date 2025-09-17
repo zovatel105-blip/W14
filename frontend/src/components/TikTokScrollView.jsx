@@ -502,6 +502,16 @@ const TikTokPollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, onCr
                 <Bookmark className="w-5 h-5" />
               </Button>
             )}
+
+            {/* Post Management Menu - Only shown for own posts */}
+            {isOwnProfile && onUpdatePoll && onDeletePoll && (
+              <PostManagementMenu
+                poll={poll}
+                onUpdate={onUpdatePoll}
+                onDelete={onDeletePoll}
+                className="flex items-center justify-center text-white hover:text-purple-400 hover:scale-105 transition-all duration-200 h-auto p-2 rounded-lg bg-black/20 backdrop-blur-sm"
+              />
+            )}
           </div>
           
           {/* Music Player - Right side, same height as buttons con autoplay */}
