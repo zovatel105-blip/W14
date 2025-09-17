@@ -840,6 +840,47 @@ const ProfilePage = () => {
       });
     }
   };
+  // Post management functions
+  const handleUpdatePoll = async (pollId, updatedData) => {
+    try {
+      const response = await pollService.updatePoll(pollId, updatedData);
+      
+      // Update polls in all relevant arrays
+      setPolls(prev => prev.map(poll => 
+        poll.id === pollId ? { ...poll, ...updatedData } : poll
+      ));
+      
+      setTikTokPolls(prev => prev.map(poll => 
+        poll.id === pollId ? { ...poll, ...updatedData } : poll
+      ));
+      
+      setUserPolls(prev => prev.map(poll => 
+        poll.id === pollId ? { ...poll, ...updatedData } : poll
+      ));
+      
+      return response;
+    } catch (error) {
+      console.error('Error updating poll:', error);
+      throw error;
+    }
+  };
+
+  const handleDeletePoll = async (pollId) => {
+    try {
+      await pollService.deletePoll(pollId);
+      
+      // Remove poll from all relevant arrays
+      setPolls(prev => prev.filter(poll => poll.id !== pollId));
+      setTikTokPolls(prev => prev.filter(poll => poll.id !== pollId));
+      setUserPolls(prev => prev.filter(poll => poll.id !== pollId));
+      setLikedPolls(prev => prev.filter(poll => poll.id !== pollId));
+      setSavedPolls(prev => prev.filter(poll => poll.id !== pollId));
+      
+    } catch (error) {
+      console.error('Error deleting poll:', error);
+      throw error;
+    }
+  };
 
   const handleShare = async (pollId) => {
     const shareUrl = `${window.location.origin}/poll/${pollId}`;
