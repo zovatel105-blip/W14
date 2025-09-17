@@ -230,7 +230,7 @@ const PostManagementMenu = ({ poll, onUpdate, onDelete, currentUser }) => {
           >
             {poll.is_private ? (
               <>
-                <Globe className="w-5 h-5 mr-3" />
+                <Globe className="post-management-item-icon w-5 h-5 mr-3" />
                 Hacer publicación pública
               </>
             ) : (
