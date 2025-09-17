@@ -187,11 +187,20 @@ const PostManagementMenu = ({ poll, onUpdate, onDelete, currentUser }) => {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
-            variant="ghost"
+            variant="outline"
             size="sm"
-            className="post-management-trigger absolute top-2 right-2 z-50 bg-black/70 hover:bg-black/80 active:bg-black/90 text-white rounded-full w-10 h-10 p-0 shadow-lg border border-white/20 backdrop-blur-sm transition-all duration-200 hover:scale-110 active:scale-95 touch-manipulation"
+            className="post-management-trigger absolute top-1 right-1 z-[9999] bg-red-500 hover:bg-red-600 active:bg-red-700 text-white rounded-full w-12 h-12 p-0 shadow-2xl border-2 border-white backdrop-blur-sm transition-all duration-200 hover:scale-110 active:scale-95 touch-manipulation"
+            style={{ 
+              position: 'absolute',
+              top: '4px',
+              right: '4px',
+              zIndex: 99999,
+              backgroundColor: '#ef4444',
+              borderColor: '#ffffff',
+              borderWidth: '2px'
+            }}
           >
-            <MoreVertical className="post-management-icon w-5 h-5 post-management-pulse" />
+            <MoreVertical className="post-management-icon w-6 h-6 text-white" />
           </Button>
         </DropdownMenuTrigger>
         
