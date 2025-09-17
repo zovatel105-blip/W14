@@ -39,9 +39,8 @@ const PostManagementMenu = ({ poll, onUpdate, onDelete, currentUser, isOwnProfil
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
 
-  // Show menu in own profile regardless of ID matching (temporary fix)
-  // TODO: Fix the ID matching logic once we identify the correct field
-  if (!currentUser) {
+  // Show menu only in own profile - more reliable than ID matching
+  if (!currentUser || !isOwnProfile) {
     return null;
   }
 
