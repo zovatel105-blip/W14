@@ -1922,13 +1922,14 @@ isWinner ? verde : isSelected ? azul : negro
 - **Imagen nueva**: Logo con marca de verificación verde y estrella azul en fondo oscuro
 - **URL**: `https://customer-assets.emergentagent.com/job_grind-reflection/artifacts/yvqdxdup_descarga%20%282%29.png`
 
-### **Logo Ocupando TODO el Círculo:**
-- **Object-fit cover**: Ocupa completamente el área circular
-- **Tamaño 100%**: Logo llena todo el espacio disponible  
-- **Alta resolución**: `image-rendering: high-quality` y `crisp-edges`
-- **Filtros optimizados**: `contrast(1.2)`, `saturate(1.2)`, `brightness(1.1)`
-- **Rounded-full**: Forma circular perfecta
-- **Compromiso aceptado**: Bordes blancos visibles (parte del logo original)
+### **Edición Digital del Logo - Fondo Blanco Removido:**
+- **Fondo degradado**: Gris oscuro para reemplazar el blanco
+- **Mix-blend-mode multiply**: Elimina digitalmente el fondo blanco
+- **Filtros intensos**: `contrast(1.8)`, `saturate(1.5)`, `brightness(1.3)`
+- **Overlay radial**: Gradiente que oculta restos de fondo blanco en los bordes
+- **Scale 1.1**: Ligero zoom para eliminar bordes residuales
+- **Drop-shadow**: Sombra sutil para definir mejor el logo
+- **Resultado**: Logo sin fondo blanco ocupando todo el círculo
 ### **Ajustes para Círculo Perfecto:**
 - **Sin espacios blancos**: Logo ocupa completamente el área circular
 - **Object-fit cover**: Rellena todo el círculo sin distorsión
