@@ -252,7 +252,7 @@ const FeedMenu = ({
           <div className="relative bg-gray-900 rounded-xl shadow-2xl border border-gray-600/50 w-full max-w-md max-h-[80vh] overflow-y-auto">
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-600/50">
-              <h2 className="text-xl font-bold text-white">🚩 Reportar contenido</h2>
+              <h2 className="text-xl font-bold text-white">Reportar contenido</h2>
               <button
                 onClick={() => setShowReportModal(false)}
                 className="text-gray-400 hover:text-white transition-colors duration-200 p-1"
