@@ -7,15 +7,16 @@
     height: 48px !important;
     min-width: 48px !important;
     min-height: 48px !important;
-    background: #ef4444 !important;
-    border: 3px solid #ffffff !important;
-    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.6) !important;
+    background: rgba(255, 255, 255, 0.95) !important;
+    border: 2px solid rgba(0, 0, 0, 0.2) !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
     backdrop-filter: blur(8px) !important;
     -webkit-backdrop-filter: blur(8px) !important;
     position: absolute !important;
-    top: 2px !important;
-    right: 2px !important;
+    top: 4px !important;
+    right: 4px !important;
     z-index: 99999 !important;
+    color: #374151 !important;
   }
   
   .post-management-trigger:active {
