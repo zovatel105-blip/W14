@@ -280,6 +280,41 @@ class PollService {
       return null;
     }
   }
+  // Update poll
+  async updatePoll(pollId, updateData) {
+    try {
+      const response = await fetch(`${this.baseURL}/polls/${pollId}`, {
+        method: 'PUT',
+        headers: this.getAuthHeaders(),
+        body: JSON.stringify(updateData)
+      });
+
+      return await this.handleResponse(response);
+    } catch (error) {
+      console.error('Error updating poll:', error);
+      throw error;
+    }
+  }
+
+  // Delete poll
+  async deletePoll(pollId) {
+    try {
+      const response = await fetch(`${this.baseURL}/polls/${pollId}`, {
+        method: 'DELETE',
+        headers: this.getAuthHeaders()
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
+      }
+
+      return true;
+    } catch (error) {
+      console.error('Error deleting poll:', error);
+      throw error;
+    }
+  }
 }
 
 // Export singleton instance
