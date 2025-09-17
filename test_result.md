@@ -2197,6 +2197,47 @@ backend:
     implemented: true
     working: true
     file: "/app/backend/server.py - GET /api/polls endpoint"
+## ✅ **MENÚ AGREGADO TAMBIÉN DENTRO DE LA PUBLICACIÓN**
+
+**PROBLEMA IDENTIFICADO**: El menú solo aparecía en la portada (grid del perfil) pero no dentro de la vista completa de la publicación.
+
+**SOLUCIÓN IMPLEMENTADA:**
+
+### **🎯 Componentes Actualizados:**
+
+#### **TikTokScrollView (Vista Completa):**
+- **Props agregados**: `onUpdatePoll`, `onDeletePoll`, `isOwnProfile`, `currentUser`
+- **Importación**: `PostManagementMenu` agregado
+- **Posición**: En el header junto al título de la publicación
+- **Estilo**: Posición absoluta en esquina superior derecha
+
+#### **TikTokPollCard (Tarjeta Individual):**
+- **Props extendidos**: Recibe todos los props de gestión
+- **Renderizado condicional**: Solo aparece si `isOwnProfile && onUpdatePoll && onDeletePoll && currentUser`
+- **Ubicación**: Junto al título, con padding derecho para evitar overlap
+
+#### **ProfilePage:**
+- **TikTokScrollView actualizado**: Pasa `onUpdatePoll`, `onDeletePoll`, `isOwnProfile`, `currentUser`
+- **Consistencia**: Mismas funciones que en el grid del perfil
+
+### **📱 Resultado:**
+
+**Ahora el menú aparece en:**
+1. ✅ **Grid del perfil** (portada) - Esquina superior derecha de cada miniatura
+2. ✅ **Vista completa** (dentro de la publicación) - Junto al título en la parte superior
+
+### **🎨 Posicionamiento:**
+- **En grid**: Botón flotante sobre la imagen
+- **En vista completa**: Integrado en el header junto al título
+- **Padding**: Título tiene `pr-16` para dar espacio al botón
+- **Z-index**: Alto para estar sobre todos los elementos
+
+### **🔧 Funcionamiento:**
+- **Mismas funciones**: Editar, archivar, fijar, privacidad, eliminar
+- **Misma lógica**: Solo aparece en publicaciones propias (`isOwnProfile`)
+- **Coherencia**: Mismo diseño y comportamiento en ambas vistas
+
+**RESULTADO FINAL**: El menú de gestión ahora está disponible tanto en la vista de grid del perfil como dentro de la publicación completa, proporcionando acceso completo a las funciones de gestión desde cualquier vista.
     stuck_count: 0
     priority: "high"
     needs_retesting: false
