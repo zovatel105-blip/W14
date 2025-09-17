@@ -73,6 +73,16 @@ const TikTokProfileGrid = ({ polls, onPollClick, onUpdatePoll, onDeletePoll, cur
               </div>
             )}
 
+            {/* Post Management Menu - only for own posts */}
+            {isOwnProfile && onUpdatePoll && onDeletePoll && (
+              <PostManagementMenu
+                poll={poll}
+                onUpdate={onUpdatePoll}
+                onDelete={onDeletePoll}
+                currentUser={currentUser}
+              />
+            )}
+
             {/* Poll title overlay removed from profile grid */}
           </motion.div>
         );
