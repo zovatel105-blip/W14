@@ -504,11 +504,13 @@ const TikTokPollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, onCr
             )}
 
             {/* Post Management Menu - Only shown for own posts */}
-            {isOwnProfile && onUpdatePoll && onDeletePoll && (
+            {onUpdatePoll && onDeletePoll && (
               <PostManagementMenu
                 poll={poll}
                 onUpdate={onUpdatePoll}
                 onDelete={onDeletePoll}
+                currentUser={authUser}
+                isOwnProfile={isOwnProfile}
                 className="flex items-center justify-center text-white hover:text-purple-400 hover:scale-105 transition-all duration-200 h-auto p-2 rounded-lg bg-black/20 backdrop-blur-sm"
               />
             )}
