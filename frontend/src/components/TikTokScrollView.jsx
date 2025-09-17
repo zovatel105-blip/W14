@@ -584,6 +584,7 @@ const TikTokScrollView = ({
   const containerRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(initialIndex);
   const [isScrolling, setIsScrolling] = useState(false);
+  const { user: currentUser } = useAuth();
 
   // DEBUG: Monitorear cambios de activeIndex para sincronización de audio
   useEffect(() => {
