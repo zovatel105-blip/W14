@@ -80,6 +80,7 @@ const TikTokProfileGrid = ({ polls, onPollClick, onUpdatePoll, onDeletePoll, cur
                 onUpdate={onUpdatePoll}
                 onDelete={onDeletePoll}
                 currentUser={currentUser}
+                isOwnProfile={isOwnProfile}
               />
             )}
             
