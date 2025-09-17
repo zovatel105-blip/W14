@@ -1010,6 +1010,10 @@ const ProfilePage = () => {
             initialIndex={initialPollIndex}
             onExitTikTok={exitTikTokMode}
             showLogo={false}
+            onUpdatePoll={handleUpdatePoll}
+            onDeletePoll={handleDeletePoll}
+            isOwnProfile={isOwnProfile}
+            currentUser={authUser}
           />
         </>
       )}
