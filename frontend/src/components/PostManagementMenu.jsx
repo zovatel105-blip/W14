@@ -245,9 +245,9 @@ const PostManagementMenu = ({ poll, onUpdate, onDelete, currentUser }) => {
           {/* Eliminar */}
           <DropdownMenuItem 
             onClick={() => setShowDeleteDialog(true)}
-            className="text-red-600 focus:text-red-600"
+            className="px-4 py-3 text-sm font-medium cursor-pointer hover:bg-red-50 rounded-lg transition-colors text-red-600 focus:text-red-600"
           >
-            <Trash2 className="w-4 h-4 mr-2" />
+            <Trash2 className="w-5 h-5 mr-3" />
             Eliminar publicación
           </DropdownMenuItem>
         </DropdownMenuContent>
