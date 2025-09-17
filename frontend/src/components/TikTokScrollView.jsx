@@ -76,11 +76,113 @@ const TikTokPollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, onCr
   const [touchStart, setTouchStart] = useState(null);
   const [touchEnd, setTouchEnd] = useState(null);
   
+  // Feed menu state
+  const [isNotificationEnabled, setIsNotificationEnabled] = useState(false);
+  
   const navigate = useNavigate();
   const { followUser, unfollowUser, isFollowing, getFollowStatus } = useFollow();
   const { user: currentUser } = useAuth();
   const { toast } = useToast();
   const { shareModal, sharePoll, closeShareModal } = useShare();
+
+  // Feed menu handlers
+  const handleNotInterested = async (pollId) => {
+    try {
+      const response = await fetch(`${import.meta.env.REACT_APP_BACKEND_URL}/api/feed/not-interested`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({ poll_id: pollId })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to mark as not interested');
+      }
+
+      // Optionally remove from local state or refresh feed
+      return { success: true };
+    } catch (error) {
+      console.error('Error marking as not interested:', error);
+      throw error;
+    }
+  };
+
+  const handleHideUser = async (authorId) => {
+    try {
+      const response = await fetch(`${import.meta.env.REACT_APP_BACKEND_URL}/api/feed/hide-user`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({ author_id: authorId })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to hide user');
+      }
+
+      return { success: true };
+    } catch (error) {
+      console.error('Error hiding user:', error);
+      throw error;
+    }
+  };
+
+  const handleToggleNotifications = async (authorId) => {
+    try {
+      const response = await fetch(`${import.meta.env.REACT_APP_BACKEND_URL}/api/feed/toggle-notifications`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({ author_id: authorId })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to toggle notifications');
+      }
+
+      const result = await response.json();
+      setIsNotificationEnabled(result.notifications_enabled);
+      return { success: true };
+    } catch (error) {
+      console.error('Error toggling notifications:', error);
+      throw error;
+    }
+  };
+
+  const handleReport = async (pollId, reportData) => {
+    try {
+      const response = await fetch(`${import.meta.env.REACT_APP_BACKEND_URL}/api/feed/report`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({
+          poll_id: pollId,
+          category: reportData.category,
+          comment: reportData.comment,
+          reportedBy: reportData.reportedBy,
+          pollAuthor: reportData.pollAuthor,
+          timestamp: reportData.timestamp
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit report');
+      }
+
+      return { success: true };
+    } catch (error) {
+      console.error('Error submitting report:', error);
+      throw error;
+    }
+  };
 
 
 
