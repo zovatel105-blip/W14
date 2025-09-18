@@ -550,16 +550,18 @@ const TikTokPollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, onCr
               </Button>
             )}
 
-            {/* Feed Menu - Available for all posts */}
-            <FeedMenu
-              poll={poll}
-              onNotInterested={handleNotInterested}
-              onHideUser={handleHideUser}
-              onToggleNotifications={handleToggleNotifications}
-              onReport={handleReport}
-              isNotificationEnabled={isNotificationEnabled}
-              className="flex items-center justify-center text-white hover:text-gray-300 hover:scale-105 transition-all duration-200 h-auto p-2 rounded-lg bg-black/20 backdrop-blur-sm"
-            />
+            {/* Feed Menu - Only shown for other users' posts */}
+            {currentUser && poll.author?.id !== currentUser.id && poll.authorUser?.id !== currentUser.id && (
+              <FeedMenu
+                poll={poll}
+                onNotInterested={handleNotInterested}
+                onHideUser={handleHideUser}
+                onToggleNotifications={handleToggleNotifications}
+                onReport={handleReport}
+                isNotificationEnabled={isNotificationEnabled}
+                className="flex items-center justify-center text-white hover:text-gray-300 hover:scale-105 transition-all duration-200 h-auto p-2 rounded-lg bg-black/20 backdrop-blur-sm"
+              />
+            )}
 
             {/* Post Management Menu - Only shown for own posts */}
             {onUpdatePoll && onDeletePoll && (
