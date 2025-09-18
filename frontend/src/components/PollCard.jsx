@@ -153,7 +153,7 @@ const MediaPreview = ({ media, isWinner, isSelected, onClick, percentage, option
         />
         
         {/* Enhanced Progress Bar - Always show after any vote cast */}
-        {poll.totalVotes > 0 && (
+        {totalVotes > 0 && (
           <motion.div 
             className={cn(
               "absolute inset-x-0 bottom-0 transition-all duration-700 ease-out",
