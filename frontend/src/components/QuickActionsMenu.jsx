@@ -211,8 +211,7 @@ const QuickActionsMenu = ({ isVisible, onClose, onActionSelect }) => {
                 group absolute rounded-full shadow-lg transition-all duration-500 transform
                 ${action.color} ${action.borderColor} ${action.shadowColor}
                 ${isSelected ? 'scale-125 ring-4 ring-white/50' : 'hover:scale-110 active:scale-95'}
-                flex flex-col items-center justify-center border-2
-                ${isLiveAction ? 'w-12 h-12' : 'w-10 h-10'}
+                flex flex-col items-center justify-center border-2 w-10 h-10
               `}
               style={{
                 left: `${action.position.x}px`,
