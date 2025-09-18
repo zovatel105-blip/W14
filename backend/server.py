@@ -6117,6 +6117,142 @@ async def filter_polls_by_preferences(polls: List[dict], user_id: str) -> List[d
         logger.error(f"Error filtering polls by preferences: {str(e)}")
         return polls  # Return original polls if filtering fails
 
+# =============  SAVED POLLS ENDPOINTS =============
+
+@api_router.post("/polls/{poll_id}/save")
+async def save_poll(
+    poll_id: str,
+    current_user: UserResponse = Depends(get_current_user)
+):
+    """Save a poll to user's saved collection"""
+    try:
+        # Check if poll exists
+        poll = await db.polls.find_one({"id": poll_id})
+        if not poll:
+            raise HTTPException(status_code=404, detail="Poll not found")
+        
+        # Check if already saved
+        existing_save = await db.saved_polls.find_one({
+            "user_id": current_user.id,
+            "poll_id": poll_id
+        })
+        
+        if existing_save:
+            return {"success": True, "message": "Poll already saved", "saved": True}
+        
+        # Save the poll
+        save_record = {
+            "id": str(uuid.uuid4()),
+            "user_id": current_user.id,
+            "poll_id": poll_id,
+            "saved_at": datetime.utcnow(),
+            "poll_title": poll.get("title", ""),
+            "poll_author": poll.get("author", {}).get("username", "")
+        }
+        
+        await db.saved_polls.insert_one(save_record)
+        
+        return {"success": True, "message": "Poll saved successfully", "saved": True}
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error saving poll: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+@api_router.delete("/polls/{poll_id}/save")
+async def unsave_poll(
+    poll_id: str,
+    current_user: UserResponse = Depends(get_current_user)
+):
+    """Remove a poll from user's saved collection"""
+    try:
+        # Check if poll is saved
+        existing_save = await db.saved_polls.find_one({
+            "user_id": current_user.id,
+            "poll_id": poll_id
+        })
+        
+        if not existing_save:
+            return {"success": True, "message": "Poll was not saved", "saved": False}
+        
+        # Remove from saved
+        await db.saved_polls.delete_one({
+            "user_id": current_user.id,
+            "poll_id": poll_id
+        })
+        
+        return {"success": True, "message": "Poll removed from saved", "saved": False}
+        
+    except Exception as e:
+        logger.error(f"Error unsaving poll: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+@api_router.get("/users/{user_id}/saved-polls")
+async def get_saved_polls(
+    user_id: str,
+    current_user: UserResponse = Depends(get_current_user),
+    skip: int = Query(0, ge=0),
+    limit: int = Query(20, ge=1, le=100)
+):
+    """Get user's saved polls"""
+    try:
+        # Only allow users to see their own saved polls or make it public if needed
+        if user_id != current_user.id:
+            raise HTTPException(status_code=403, detail="Cannot access other user's saved polls")
+        
+        # Get saved poll IDs
+        saved_records = await db.saved_polls.find({
+            "user_id": user_id
+        }).sort("saved_at", -1).skip(skip).limit(limit).to_list(limit)
+        
+        if not saved_records:
+            return {"saved_polls": [], "total": 0}
+        
+        # Get the actual polls
+        poll_ids = [record["poll_id"] for record in saved_records]
+        polls = await db.polls.find({"id": {"$in": poll_ids}}).to_list(len(poll_ids))
+        
+        # Create a mapping for easier lookup
+        polls_dict = {poll["id"]: poll for poll in polls}
+        
+        # Return polls in the order they were saved
+        ordered_polls = []
+        for record in saved_records:
+            if record["poll_id"] in polls_dict:
+                poll = polls_dict[record["poll_id"]]
+                poll["saved_at"] = record["saved_at"]
+                ordered_polls.append(poll)
+        
+        # Get total count
+        total = await db.saved_polls.count_documents({"user_id": user_id})
+        
+        return {"saved_polls": ordered_polls, "total": total}
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error getting saved polls: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+@api_router.get("/polls/{poll_id}/save-status")
+async def get_poll_save_status(
+    poll_id: str,
+    current_user: UserResponse = Depends(get_current_user)
+):
+    """Check if a poll is saved by the current user"""
+    try:
+        saved = await db.saved_polls.find_one({
+            "user_id": current_user.id,
+            "poll_id": poll_id
+        })
+        
+        return {"saved": bool(saved)}
+        
+    except Exception as e:
+        logger.error(f"Error checking save status: {str(e)}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
 # Agregar middleware CORS ANTES de incluir routers
 app.add_middleware(
     CORSMiddleware,
