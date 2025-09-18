@@ -141,7 +141,7 @@ Barra inferior de acciones:
 **RESULTADO:**
 🎯 **MENU CORRECTAMENTE POSICIONADO JUNTO AL BOTÓN SAVE** - El PostManagementMenu ahora aparece exactamente donde el usuario lo solicitó: directamente adyacente al botón de "save" en la vista completa de publicaciones (TikTokScrollView), manteniendo toda su funcionalidad y solo visible para el propietario de las publicaciones.
 
-**🍽️ SISTEMA DE MENÚ DEL FEED IMPLEMENTADO COMPLETAMENTE (2025-01-27): Sistema completo de menú contextual en el feed con todas las funcionalidades solicitadas implementado exitosamente.**
+**🍽️ SISTEMA DE MENÚ DEL FEED IMPLEMENTADO COMPLETAMENTE**: Sistema completo de menú contextual en el feed con todas las funcionalidades solicitadas implementado exitosamente.
 
 ✅ **FUNCIONALIDADES IMPLEMENTADAS:**
 
@@ -149,7 +149,8 @@ Barra inferior de acciones:
 - ✅ **Ubicación**: Posicionado junto al botón de guardar (bookmark) en TikTokScrollView como se solicitó
 - ✅ **Ícono**: Botón con ícono MoreHorizontal (tres puntos) estilo moderno
 - ✅ **Dropdown Modal**: Menú emergente con fondo blur y diseño moderno
-- ✅ **Integración**: Completamente integrado en TikTokScrollView y disponible en todos los feeds
+- ✅ **Integración**: Completamente integrado en TikTokScrollView
+- ✅ **Lógica condicional**: Solo aparece en perfiles AJENOS, no en el perfil propio del usuario
 
 **2. OPCIONES DEL MENÚ:**
 - 🚫 **"No me interesa"**: Oculta el contenido específico y mejora el algoritmo
@@ -169,65 +170,71 @@ Barra inferior de acciones:
   - Campo de comentario opcional (máx. 500 caracteres)
   - Sistema de moderación con estados (pending, reviewed, resolved)
 
-**3. BACKEND ENDPOINTS IMPLEMENTADOS:**
+**3. DISPONIBILIDAD DEL MENÚ:**
+- ✅ **Perfiles ajenos**: Menú disponible en todas las publicaciones de otros usuarios
+- ❌ **Perfil propio**: Menú NO disponible en las propias publicaciones (lógica correcta)
+- ✅ **Detección automática**: Compara poll.author.id y poll.authorUser.id con currentUser.id
+- ✅ **Todas las ubicaciones**: Funciona en feed principal, perfiles de otros usuarios, páginas de audio
+
+**4. BACKEND ENDPOINTS IMPLEMENTADOS:**
 - ✅ **POST /api/feed/not-interested**: Marca contenido como no interesante
 - ✅ **POST /api/feed/hide-user**: Oculta contenido de usuario específico
 - ✅ **POST /api/feed/toggle-notifications**: Controla notificaciones por usuario
 - ✅ **POST /api/feed/report**: Sistema de reportes con categorías
 - ✅ **GET /api/feed/user-preferences**: Obtiene preferencias del usuario
 
-**4. MODELOS DE BASE DE DATOS:**
+**5. MODELOS DE BASE DE DATOS:**
 - ✅ **UserPreference**: Almacena preferencias "no me interesa" y usuarios ocultos
 - ✅ **ContentReport**: Sistema de reportes con categorías y moderación
 - ✅ **UserNotificationPreference**: Control granular de notificaciones
 
-**5. CATEGORÍAS DE REPORTE IMPLEMENTADAS:**
-- 🚫 **Spam**: Contenido no deseado o repetitivo
-- ⚠️ **Acoso**: Comportamiento abusivo o intimidatorio
-- 💢 **Discurso de odio**: Contenido que promueve odio o discriminación
-- ⚔️ **Violencia**: Contenido violento o que incita a la violencia
-- 🔞 **Desnudez/Sexual**: Contenido sexual explícito o desnudez
-- ❌ **Información falsa**: Información incorrecta o engañosa
-- 📝 **Otro**: Categoría general para otros problemas
+**6. CATEGORÍAS DE REPORTE IMPLEMENTADAS:**
+- **Spam**: Contenido no deseado o repetitivo
+- **Acoso**: Comportamiento abusivo o intimidatorio
+- **Discurso de odio**: Contenido que promueve odio o discriminación
+- **Violencia**: Contenido violento o que incita a la violencia
+- **Desnudez/Sexual**: Contenido sexual explícito o desnudez
+- **Información falsa**: Información incorrecta o engañosa
+- **Otro**: Categoría general para otros problemas
 
-**6. SERVICIOS Y ARQUITECTURA:**
+**7. SERVICIOS Y ARQUITECTURA:**
 - ✅ **feedMenuService.js**: Servicio centralizado para todas las operaciones
 - ✅ **Error Handling**: Manejo robusto de errores con toast notifications
 - ✅ **Autenticación**: Integración completa con sistema de tokens JWT
 - ✅ **Configuración**: Uso del sistema centralizado AppConfig
 - ✅ **Responsive**: Diseño adaptable a móviles y desktop
 
-**7. TESTING Y VERIFICACIÓN:**
+**8. TESTING Y VERIFICACIÓN:**
 - ✅ **Backend Endpoints**: Todos los endpoints probados y funcionando (200 status)
 - ✅ **Database Operations**: Operaciones CRUD verificadas en colecciones
 - ✅ **Authentication**: Sistema de autenticación integrado correctamente
 - ✅ **Error Handling**: Manejo de casos edge (usuarios inexistentes, polls no encontrados)
 - ✅ **Data Persistence**: Preferencias guardadas y recuperadas correctamente
+- ✅ **URL Configuration**: Problema de configuración REACT_APP_BACKEND_URL solucionado
 
 **UBICACIÓN FINAL EN INTERFAZ:**
 ```
-Feed Post Layout:
+Feed Post Layout (Solo en posts de OTROS usuarios):
 [❤️ Like] [💬 Comment] [📤 Share] [🔖 Save] [⋮ FeedMenu] [🎵 Music Player]
                                              ↑ 
-                                    Menu implementado aquí
+                                    Menu solo aparece aquí para posts ajenos
+
+Feed Post Layout (Posts PROPIOS):
+[❤️ Like] [💬 Comment] [📤 Share] [🔖 Save] [🛠️ PostManagement] [🎵 Music Player]
+                                             ↑ 
+                                    Menu de gestión propia (editar/eliminar)
 ```
 
-**ESTRUCTURA TÉCNICA:**
-- **Frontend**: `/app/frontend/src/components/FeedMenu.jsx`
-- **Service**: `/app/frontend/src/services/feedMenuService.js`
-- **Backend**: Endpoints en `/app/backend/server.py` líneas 5850-6070
-- **Models**: Modelos agregados en `/app/backend/models.py`
-- **Integration**: TikTokScrollView actualizado con handlers completos
-
-**FUNCIONALIDAD COMPLETA:**
-✅ **Disponible en todas las ubicaciones**: Aplicado en feeds principales, perfiles, y páginas de audio
-✅ **Para todos los usuarios**: Funciona para usuarios autenticados en todas las publicaciones
-✅ **Persistencia completa**: Todas las acciones se guardan en base de datos
-✅ **UX optimizada**: Transiciones suaves, feedback visual, y mensajes informativos
-✅ **Sistema robusto**: Manejo de errores, validaciones, y casos edge cubiertos
+**LÓGICA CONDICIONAL IMPLEMENTADA:**
+```javascript
+// Solo mostrar FeedMenu si el autor del post NO es el usuario actual
+{currentUser && poll.author?.id !== currentUser.id && poll.authorUser?.id !== currentUser.id && (
+  <FeedMenu ... />
+)}
+```
 
 **RESULTADO FINAL:**
-🎯 **SISTEMA DE MENÚ DEL FEED 100% IMPLEMENTADO** - Los usuarios ahora tienen acceso completo a un menú contextual moderno junto al botón de guardar, con todas las funcionalidades solicitadas: "No me interesa", "Ocultar usuario", "Activar notificaciones", y "Reportar" con sistema completo de categorías y moderación. El sistema está completamente integrado con backend, base de datos, y funciona en todas las ubicaciones del feed.
+🎯 **SISTEMA DE MENÚ DEL FEED 100% IMPLEMENTADO CON LÓGICA CORRECTA** - Los usuarios ahora tienen acceso a un menú contextual moderno que aparece ÚNICAMENTE en publicaciones de otros usuarios, con todas las funcionalidades: "No me interesa", "Ocultar usuario", "Activar notificaciones", y "Reportar". El sistema está completamente integrado, funciona correctamente y respeta la lógica de negocio de no mostrar opciones innecesarias en el contenido propio.
 
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
