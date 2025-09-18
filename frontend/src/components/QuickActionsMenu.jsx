@@ -207,17 +207,18 @@ const QuickActionsMenu = ({ isVisible, onClose, onActionSelect }) => {
               key={action.id}
               onClick={() => handleActionClick(action.id)}
               className={`
-                group absolute w-12 h-12 rounded-full shadow-lg transition-all duration-300 transform
+                group absolute w-10 h-10 rounded-full shadow-lg transition-all duration-500 transform
                 ${action.color} ${action.borderColor} ${action.shadowColor}
-                ${isSelected ? 'scale-125 shadow-2xl' : 'hover:scale-110 active:scale-95'}
-                ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}
+                ${isSelected ? 'scale-125 ring-4 ring-white/50' : 'hover:scale-110 active:scale-95'}
                 flex items-center justify-center border-2
               `}
               style={{
-                left: `calc(50% + ${action.position.x}px)`,
-                top: `calc(50% + ${action.position.y}px)`,
-                transform: 'translate(-50%, -50%)',
-                transitionDelay: isVisible ? `${index * 100 + 400}ms` : '0ms',
+                left: `${action.position.x}px`,
+                top: `${action.position.y}px`,
+                transform: isVisible 
+                  ? `translate(${action.position.x}px, ${action.position.y}px) scale(${isSelected ? 1.25 : 1})` 
+                  : 'translate(0px, 0px) scale(0)',
+                transitionDelay: isVisible ? `${index * 100}ms` : '0ms',
               }}
             >
               <Icon 
