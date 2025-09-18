@@ -401,7 +401,8 @@ const PollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, fullScreen
 
   const getPercentage = (votes) => {
     if (poll.totalVotes === 0) return 0;
-    return Math.round((votes / poll.totalVotes) * 100);
+    // Usar decimales para mayor precisión en las barras
+    return (votes / poll.totalVotes) * 100;
   };
 
   const getPercentageDisplay = (votes) => {
