@@ -325,15 +325,19 @@ const FeedPage = () => {
 
   const handleSave = async (pollId) => {
     console.log('🔖 FeedPage: handleSave called with pollId:', pollId);
+    console.log('🔖 FeedPage: process.env.REACT_APP_BACKEND_URL:', process.env.REACT_APP_BACKEND_URL);
+    console.log('🔖 FeedPage: window.location.origin:', window.location.origin);
     
     try {
-      // Test with raw fetch first
+      // Test with raw fetch and explicit URL first
       const token = localStorage.getItem('token');
       console.log('🔖 FeedPage: Token exists:', !!token);
       console.log('🔖 FeedPage: Token length:', token ? token.length : 0);
       
-      const url = `http://localhost:8001/api/polls/${pollId}/save`;
+      const baseUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
+      const url = `${baseUrl}/api/polls/${pollId}/save`;
       console.log('🔖 FeedPage: Making request to:', url);
+      console.log('🔖 FeedPage: Base URL used:', baseUrl);
       
       const response = await fetch(url, {
         method: 'POST',
@@ -345,6 +349,7 @@ const FeedPage = () => {
       
       console.log('🔖 FeedPage: Response status:', response.status);
       console.log('🔖 FeedPage: Response ok:', response.ok);
+      console.log('🔖 FeedPage: Response URL:', response.url);
       
       if (!response.ok) {
         const errorText = await response.text();
@@ -364,12 +369,16 @@ const FeedPage = () => {
       await trackAction('save');
       
     } catch (error) {
-      console.error('❌ FeedPage: Complete error:', error);
+      console.error('❌ FeedPage: Complete error object:', error);
+      console.error('❌ FeedPage: Error name:', error.name);
+      console.error('❌ FeedPage: Error message:', error.message);
+      console.error('❌ FeedPage: Error stack:', error.stack);
+      
       toast({
         title: "Error",
         description: `No se pudo guardar: ${error.message}`,
         variant: "destructive",
-        duration: 3000,  
+        duration: 5000,  
       });
     }
   };
