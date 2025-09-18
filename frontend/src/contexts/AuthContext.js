@@ -80,8 +80,8 @@ export const AuthProvider = ({ children }) => {
             setIsAuthenticated(true);
           } else {
             // Token is invalid, clear storage
-            localStorage.removeItem('authToken');
-            localStorage.removeItem('authUser');
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
             localStorage.removeItem('userId');
           }
         } catch (error) {
