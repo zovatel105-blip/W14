@@ -12,7 +12,9 @@ class FeedMenuService {
     console.log('🌐 FeedMenuService: Making request:', {
       url,
       method: options.method || 'GET',
-      hasToken: !!token
+      hasToken: !!token,
+      tokenLength: token ? token.length : 0,
+      baseURL: this.baseURL
     });
     
     const config = {
@@ -25,17 +27,25 @@ class FeedMenuService {
     };
 
     try {
+      console.log('🚀 FeedMenuService: Sending fetch request...');
       const response = await fetch(url, config);
       
       console.log('📡 FeedMenuService: Response received:', {
         status: response.status,
         statusText: response.statusText,
-        ok: response.ok
+        ok: response.ok,
+        url: response.url
       });
       
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        console.error('❌ FeedMenuService: API Error:', errorData);
+        const errorText = await response.text();
+        console.error('❌ FeedMenuService: Error response body:', errorText);
+        let errorData;
+        try {
+          errorData = JSON.parse(errorText);
+        } catch {
+          errorData = { detail: errorText };
+        }
         throw new Error(errorData.detail || `HTTP ${response.status}: ${response.statusText}`);
       }
 
@@ -44,6 +54,12 @@ class FeedMenuService {
       return responseData;
     } catch (error) {
       console.error(`❌ FeedMenuService: Request failed [${endpoint}]:`, error);
+      console.error('❌ FeedMenuService: Error details:', {
+        message: error.message,
+        stack: error.stack,
+        url,
+        hasToken: !!token
+      });
       throw error;
     }
   }
