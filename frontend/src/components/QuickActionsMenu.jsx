@@ -135,12 +135,13 @@ const QuickActionsMenu = ({ isVisible, onClose, onActionSelect }) => {
 
   const handleLive = () => {
     toast({
-      title: "🔴 En vivo",
-      description: "Explorando contenido en vivo",
+      title: "🔴 LIVE Streaming",
+      description: "¡Próximamente! La mejor plataforma de retos y batallas en vivo",
+      duration: 4000,
     });
     
-    // Navegar a live o usar hash para filtrar
-    navigate('/live');
+    // Futuro: navegar a la página de live streaming
+    // navigate('/live');
     
     if (onActionSelect) {
       onActionSelect('live');
