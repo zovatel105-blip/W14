@@ -89,7 +89,7 @@ const MediaPreview = ({ media, isWinner, isSelected, onClick, percentage, option
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.5, duration: 0.4, ease: "easeOut" }}
             >
-              {formatNumber(option.votes)} {option.votes === 1 ? 'voto' : 'votos'}
+              {option.votes} {option.votes === 1 ? 'voto' : 'votos'}
             </motion.div>
           </>
         )}
