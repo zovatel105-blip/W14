@@ -59,8 +59,8 @@ export const AuthProvider = ({ children }) => {
         }
       }
       
-      const savedToken = localStorage.getItem('authToken');
-      const savedUser = localStorage.getItem('authUser');
+      const savedToken = localStorage.getItem('token');
+      const savedUser = localStorage.getItem('user');
       
       if (savedToken && savedUser) {
         try {
