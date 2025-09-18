@@ -20,7 +20,115 @@ const MediaPreview = ({ media, isWinner, isSelected, onClick, percentage, option
     onClick && onClick();
   };
 
-  if (!media) return null;
+  // If no media, render a text-based option with horizontal progress bar
+  if (!media) {
+    return (
+      <motion.div 
+        className={cn(
+          "relative w-full rounded-lg overflow-hidden cursor-pointer transition-all duration-300",
+          "bg-gradient-to-br from-gray-50 to-gray-100 border-2 hover:shadow-lg",
+          isSelected 
+            ? "border-blue-500 bg-gradient-to-br from-blue-50 to-blue-100"
+            : isWinner && totalVotes > 0
+              ? "border-green-500 bg-gradient-to-br from-green-50 to-green-100"
+              : "border-gray-200 hover:border-gray-300",
+          fullScreen ? "min-h-48 h-full" : "h-24"
+        )} 
+        onClick={handleClick}
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        transition={{ duration: 0.2 }}
+      >
+        {/* Background Progress Bar - Horizontal fill from left */}
+        {totalVotes > 0 && (
+          <motion.div 
+            className={cn(
+              "absolute inset-y-0 left-0 transition-all duration-700 ease-out",
+              isSelected 
+                ? "bg-gradient-to-r from-blue-400/30 to-blue-500/30"
+                : isWinner 
+                  ? "bg-gradient-to-r from-green-400/30 to-green-500/30"
+                  : "bg-gradient-to-r from-gray-400/20 to-gray-500/20"
+            )}
+            initial={{ width: 0 }}
+            animate={{ width: `${percentage}%` }}
+            transition={{ duration: 1, ease: "easeOut" }}
+          />
+        )}
+        
+        {/* Content Container */}
+        <div className="relative z-10 h-full flex flex-col justify-center items-center p-4">
+          {/* Option Text */}
+          <p className={cn(
+            "text-center font-semibold leading-tight",
+            fullScreen ? "text-lg" : "text-sm",
+            isSelected 
+              ? "text-blue-800"
+              : isWinner && totalVotes > 0
+                ? "text-green-800"
+                : "text-gray-800"
+          )}>
+            {option.text}
+          </p>
+          
+          {/* Stats Row */}
+          {totalVotes > 0 && (
+            <div className="mt-2 flex items-center gap-3">
+              {/* Percentage */}
+              <motion.span 
+                className={cn(
+                  "text-xs font-bold px-2 py-1 rounded-full",
+                  isSelected 
+                    ? "bg-blue-600 text-white"
+                    : isWinner 
+                      ? "bg-green-600 text-white"
+                      : "bg-gray-600 text-white"
+                )}
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ delay: 0.3, duration: 0.4 }}
+              >
+                {percentage}%
+              </motion.span>
+              
+              {/* Vote Count */}
+              <motion.span 
+                className="text-xs text-gray-600 font-medium"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5, duration: 0.4 }}
+              >
+                {option.votes} {option.votes === 1 ? 'voto' : 'votos'}
+              </motion.span>
+            </div>
+          )}
+        </div>
+        
+        {/* Winner Badge */}
+        {isWinner && totalVotes > 0 && (
+          <motion.div 
+            className="absolute top-2 right-2 bg-green-600 text-white p-1 rounded-full shadow-lg"
+            initial={{ scale: 0, rotate: -180 }}
+            animate={{ scale: 1, rotate: 0 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+          >
+            <Trophy className="w-3 h-3" />
+          </motion.div>
+        )}
+        
+        {/* Selection Ring */}
+        {isSelected && (
+          <motion.div 
+            className="absolute inset-0 ring-2 ring-blue-500 rounded-lg"
+            animate={{
+              ringOpacity: [0.6, 1, 0.6]
+            }}
+            transition={{ duration: 1, repeat: Infinity }}
+          />
+        )}
+      </motion.div>
+    );
+  }
 
   const heightClass = fullScreen ? "h-full min-h-48" : "h-40";
 
