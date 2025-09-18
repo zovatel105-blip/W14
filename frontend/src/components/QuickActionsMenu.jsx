@@ -54,8 +54,8 @@ const QuickActionsMenu = ({ isVisible, onClose, onActionSelect }) => {
         case 'settings':
           handleSettings();
           break;
-        case 'favorites':
-          handleFavorites();
+        case 'live':
+          handleLive();
           break;
         default:
           break;
