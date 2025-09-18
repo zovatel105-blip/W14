@@ -201,31 +201,54 @@ const QuickActionsMenu = ({ isVisible, onClose, onActionSelect }) => {
         {actions.map((action, index) => {
           const Icon = action.icon;
           const isSelected = selectedAction === action.id;
-          const delay = index * 100;
           
           return (
-            <button
+            <div
               key={action.id}
-              onClick={() => handleActionClick(action.id)}
-              className={`absolute w-10 h-10 rounded-full ${action.color} ${action.borderColor} border-2 shadow-lg ${action.shadowColor} flex items-center justify-center transition-all duration-500 hover:scale-110 active:scale-95 group ${
-                isSelected ? 'scale-125 ring-4 ring-white/50' : ''
-              }`}
-              style={{ 
-                left: `${action.position.x}px`,
-                top: `${action.position.y}px`,
-                transform: isVisible 
-                  ? `translate(${action.position.x}px, ${action.position.y}px) scale(${isSelected ? 1.25 : 1})` 
-                  : 'translate(0px, 0px) scale(0)',
-                transitionDelay: isVisible ? `${delay}ms` : '0ms',
+              className="absolute flex flex-col items-center"
+              style={{
+                left: `calc(50% + ${action.position.x}px)`,
+                top: `calc(50% + ${action.position.y}px)`,
+                transform: 'translate(-50%, -50%)',
+                transitionDelay: isVisible ? `${index * 100 + 400}ms` : '0ms',
               }}
             >
-              <Icon 
-                size={16} 
-                className={`text-white transition-all duration-200 ${
-                  isSelected ? 'scale-125' : 'group-hover:scale-110'
-                }`} 
-              />
-            </button>
+              <button
+                onClick={() => handleActionClick(action.id)}
+                className={`
+                  group relative w-12 h-12 rounded-full shadow-lg transition-all duration-300 transform
+                  ${action.color} ${action.borderColor} ${action.shadowColor}
+                  ${isSelected ? 'scale-125 shadow-2xl' : 'hover:scale-110 active:scale-95'}
+                  ${isVisible ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}
+                  flex items-center justify-center border-2
+                `}
+                style={{
+                  transitionDelay: isVisible ? `${index * 100 + 400}ms` : '0ms',
+                }}
+              >
+                <Icon 
+                  size={16} 
+                  className={`text-white transition-all duration-200 ${
+                    isSelected ? 'scale-125' : 'group-hover:scale-110'
+                  }`} 
+                />
+              </button>
+              
+              {/* Label text */}
+              <span 
+                className={`
+                  mt-1 text-xs font-medium text-white/90 text-center transition-all duration-300
+                  ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2'}
+                  whitespace-nowrap
+                `}
+                style={{
+                  transitionDelay: isVisible ? `${index * 100 + 500}ms` : '0ms',
+                  textShadow: '0 1px 2px rgba(0,0,0,0.5)'
+                }}
+              >
+                {action.label}
+              </span>
+            </div>
           );
         })}
 
