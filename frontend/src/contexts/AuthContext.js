@@ -188,9 +188,9 @@ export const AuthProvider = ({ children }) => {
         throw new Error('El servidor devolvió una respuesta inválida. Verifica la conexión.');
       }
       
-      // Save auth data
-      localStorage.setItem('authToken', data.access_token);
-      localStorage.setItem('authUser', JSON.stringify(data.user));
+      // Save auth data with consistent key names
+      localStorage.setItem('token', data.access_token);
+      localStorage.setItem('user', JSON.stringify(data.user));
       
       setToken(data.access_token);
       setUser(data.user);
