@@ -333,21 +333,20 @@ const FeedMenu = ({
 
               {/* Actions */}
               <div className="flex gap-3 pt-4">
-                <Button
+                <button
                   onClick={() => setShowReportModal(false)}
-                  variant="outline"
-                  className="flex-1 border-gray-600 text-gray-300 hover:bg-gray-700"
+                  className="flex-1 px-4 py-2 border border-gray-600 text-gray-300 hover:bg-gray-700 rounded-lg transition-colors duration-200 disabled:opacity-50"
                   disabled={isSubmittingReport}
                 >
                   Cancelar
-                </Button>
-                <Button
+                </button>
+                <button
                   onClick={handleSubmitReport}
-                  className="flex-1 bg-red-600 hover:bg-red-700 text-white"
+                  className="flex-1 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors duration-200 disabled:opacity-50"
                   disabled={!selectedReportCategory || isSubmittingReport}
                 >
                   {isSubmittingReport ? 'Enviando...' : 'Enviar reporte'}
-                </Button>
+                </button>
               </div>
             </div>
           </div>
