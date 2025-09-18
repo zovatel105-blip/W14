@@ -9,6 +9,14 @@ class SavedPollsService {
     const token = localStorage.getItem('token');
     const url = `${this.baseURL}${endpoint}`;
     
+    console.log('🔖 SavedPollsService: Making request:', {
+      url,
+      method: options.method || 'GET',
+      hasToken: !!token,
+      tokenLength: token ? token.length : 0,
+      baseURL: this.baseURL
+    });
+    
     const config = {
       headers: {
         'Content-Type': 'application/json',
@@ -19,16 +27,33 @@ class SavedPollsService {
     };
 
     try {
+      console.log('🚀 SavedPollsService: Sending request...');
       const response = await fetch(url, config);
       
+      console.log('📡 SavedPollsService: Response received:', {
+        status: response.status,
+        statusText: response.statusText,
+        ok: response.ok,
+        url: response.url
+      });
+      
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
+        const errorText = await response.text();
+        console.error('❌ SavedPollsService: Error response:', errorText);
+        let errorData;
+        try {
+          errorData = JSON.parse(errorText);
+        } catch {
+          errorData = { detail: errorText };
+        }
         throw new Error(errorData.detail || `HTTP ${response.status}: ${response.statusText}`);
       }
 
-      return await response.json();
+      const responseData = await response.json();
+      console.log('✅ SavedPollsService: Success response:', responseData);
+      return responseData;
     } catch (error) {
-      console.error(`SavedPolls API Error [${endpoint}]:`, error);
+      console.error(`❌ SavedPollsService: Request failed [${endpoint}]:`, error);
       throw error;
     }
   }
