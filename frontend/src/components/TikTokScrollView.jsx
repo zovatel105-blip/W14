@@ -551,10 +551,24 @@ const TikTokPollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, onCr
             )}
 
             {/* Feed Menu - Only shown for other users' posts */}
-            {currentUser && (
-              (poll.author?.id && poll.author.id !== currentUser.id) ||
-              (poll.authorUser?.id && poll.authorUser.id !== currentUser.id)
-            ) && (
+            {(() => {
+              const shouldShowMenu = currentUser && (
+                (poll.author?.id && poll.author.id !== currentUser.id) ||
+                (poll.authorUser?.id && poll.authorUser.id !== currentUser.id)
+              );
+              
+              // Debug logging (remove in production)
+              if (process.env.NODE_ENV !== 'production') {
+                console.log('FeedMenu visibility check:', {
+                  currentUser: currentUser?.id,
+                  pollAuthorId: poll.author?.id,
+                  pollAuthorUserId: poll.authorUser?.id,
+                  shouldShowMenu
+                });
+              }
+              
+              return shouldShowMenu;
+            })() && (
               <FeedMenu
                 poll={poll}
                 onNotInterested={handleNotInterested}
