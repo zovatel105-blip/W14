@@ -42,7 +42,7 @@ const UserButton = ({ user, percentage, isSelected, isWinner, onClick, onUserCli
             ? "ring-green-400 shadow-lg shadow-green-500/50"
             : "ring-white/30 shadow-lg"
       )}>
-        <AvatarImage src={user.avatar} />
+        <AvatarImage src={user.avatar} className="object-cover" />
         <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-600 text-white font-bold">
           {((user.displayName || user.username || 'U') + '').charAt(0).toUpperCase()}
         </AvatarFallback>
