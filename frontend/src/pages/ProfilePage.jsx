@@ -1350,11 +1350,11 @@ const ProfilePage = () => {
                 </TabsList>
               </div>
 
-              {/* Contenido de tabs */}
+              {/* Contenido de tabs - Sin padding lateral para ocupar todo el ancho */}
               <div className="mt-6">
                 <TabsContent value="polls" className="space-y-6">
                   {userPolls.length === 0 ? (
-                    <div className="text-center py-16 space-y-6">
+                    <div className="text-center py-16 space-y-6 px-3 sm:px-6">
                       <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto">
                         <LayoutDashboard className="w-8 h-8 text-gray-400" strokeWidth={1.5} />
                       </div>
@@ -1380,7 +1380,7 @@ const ProfilePage = () => {
                 {isOwnProfile && (
                   <TabsContent value="liked" className="space-y-6">
                     {likedPolls.length === 0 ? (
-                      <div className="text-center py-16 space-y-6">
+                      <div className="text-center py-16 space-y-6 px-3 sm:px-6">
                         <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto">
                           <Heart className="w-8 h-8 text-gray-400" strokeWidth={1.5} />
                         </div>
