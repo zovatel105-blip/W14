@@ -202,8 +202,8 @@ const MediaPreview = ({ media, isWinner, isSelected, onClick, percentage, option
         } : {}}
       />
       
-      {/* Progress Bar Background - FORCE SHOW on ALL options when ANY vote exists */}
-      {totalVotes > 0 && (
+      {/* Progress Bar Background - FORCE SHOW on ALL options with debug */}
+      {shouldShowBars && (
         <motion.div 
           className={cn(
             "absolute inset-x-0 bottom-0 transition-all duration-700 ease-out",
@@ -214,7 +214,7 @@ const MediaPreview = ({ media, isWinner, isSelected, onClick, percentage, option
                 : "bg-gradient-to-t from-gray-400/40 to-gray-500/40"
           )}
           initial={{ height: 0 }}
-          animate={{ height: `${Math.max(percentage || 0, 0)}%` }}
+          animate={{ height: `${displayPercentage}%` }}
           transition={{ duration: 1, ease: "easeOut" }}
           style={{ 
             transformOrigin: 'bottom'
@@ -222,15 +222,15 @@ const MediaPreview = ({ media, isWinner, isSelected, onClick, percentage, option
         />
       )}
       
-      {/* Percentage Display - FORCE SHOW on ALL options when ANY vote exists */}
-      {totalVotes > 0 && (
+      {/* Percentage Display - FORCE SHOW on ALL options with debug */}
+      {shouldShowBars && (
         <motion.div 
           className="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded-full text-xs font-bold z-10"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.5, duration: 0.3 }}
         >
-          {Math.round(percentage || 0)}%
+          {Math.round(displayPercentage)}%
         </motion.div>
       )}
 
