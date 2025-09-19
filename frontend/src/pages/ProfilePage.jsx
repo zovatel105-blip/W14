@@ -1337,7 +1337,7 @@ const ProfilePage = () => {
                     value="mentions" 
                     className="rounded-xl py-3 text-sm font-medium data-[state=active]:bg-white data-[state=active]:shadow-sm"
                   >
-                    <AtSign className="w-4 h-4" strokeWidth={1.5} />
+                    <UserCircle className="w-4 h-4" strokeWidth={1.5} />
                   </TabsTrigger>
                   {isOwnProfile && (
                     <TabsTrigger 
