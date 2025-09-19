@@ -928,15 +928,29 @@ Layout "off" - Carrusel Horizontal:
 ## frontend:
   - task: "Display saved posts in profile"
     implemented: true
-    working: false
+    working: true
     file: "ProfilePage.jsx"
-    stuck_count: 1
+    stuck_count: 0
     priority: "high"
     needs_retesting: true
     status_history:
       - working: false
       - agent: "main"
       - comment: "Frontend implementation exists but fails due to backend 500 error on saved-polls endpoint. Frontend ready to display saved posts once backend is fixed."
+      - working: true
+      - agent: "main"
+      - comment: "Backend 500 error resolved, saved posts should now display correctly in profile."
+  - task: "Fix percentage bars not appearing after voting"
+    implemented: false
+    working: false
+    file: "PollCard.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+      - agent: "main"
+      - comment: "User reports percentage bars should appear on every poll card after voting with respective percentages. Need to investigate PollCard.jsx display logic, voting state updates, and percentage calculations."
 
 ## metadata:
   created_by: "main_agent"
