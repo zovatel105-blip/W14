@@ -20,23 +20,6 @@ import AudioWaveform from '../components/AudioWaveform';
 import TikTokScrollView from '../components/TikTokScrollView';
 import TikTokProfileGrid from '../components/TikTokProfileGrid';
 
-
-
-import React, { useState, useEffect, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { 
-  ArrowLeft, Play, Pause, Music, Users, Heart, Share2, Plus, 
-  UserPlus, Mic, Volume2
-} from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useToast } from '../hooks/use-toast';
-import { useTranslation } from '../hooks/useTranslation';
-import audioManager from '../services/AudioManager';
-import pollService from '../services/pollService';
-import { Button } from '../components/ui/button';
-import CreatePollModal from '../components/CreatePollModal';
-import TikTokScrollView from '../components/TikTokScrollView';
-
 const AudioDetailPage = () => {
   const { audioId } = useParams();
   const navigate = useNavigate();
