@@ -663,7 +663,7 @@ const PollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, fullScreen
           <div className="flex items-center justify-between p-4 pb-2">
             <div className="flex items-center gap-3">
               <Avatar className="ring-2 ring-blue-500/20">
-                <AvatarImage src={poll.author?.avatar_url || "https://github.com/shadcn.png"} />
+                <AvatarImage src={poll.author?.avatar_url || "https://github.com/shadcn.png"} className="object-cover" />
                 <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-600 text-white font-semibold">
                   {(poll.author?.display_name || poll.author?.username || 'U').charAt(0).toUpperCase()}
                 </AvatarFallback>
