@@ -35,7 +35,7 @@ class AddictionAPI {
   }
 
   async trackUserBehavior(behaviorData) {
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem('token');
     if (!token) {
       throw new Error('Authentication required');
     }
