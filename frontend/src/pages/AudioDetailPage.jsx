@@ -972,7 +972,7 @@ const AudioDetailPage = () => {
   const handlePollLike = async (pollId) => {
     console.log('❤️ Like poll:', pollId);
     
-    if (!localStorage.getItem('authToken')) {
+    if (!localStorage.getItem('token')) {
       toast({
         title: "Inicia sesión",
         description: "Necesitas iniciar sesión para dar like",
