@@ -1,240 +1,93 @@
-import config from '../config/config';
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 class UserService {
   constructor() {
-    this.baseURL = config.API_ENDPOINTS.USERS.SEARCH.split('/search')[0]; // Get base users URL
-    this.followStatusCache = new Map();
-    this.CACHE_EXPIRY_MS = 5 * 60 * 1000; // 5 minutes cache
+    this.baseURL = `${BACKEND_URL}/api`;
   }
 
   // Get auth headers
   getAuthHeaders() {
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem('token');
     return {
       'Content-Type': 'application/json',
       ...(token && { Authorization: `Bearer ${token}` }),
     };
   }
 
-  // Handle API response
-  async handleResponse(response) {
-    if (!response.ok) {
-      const error = await response.text();
-      throw new Error(`API Error: ${response.status} - ${error}`);
-    }
-    return response.json();
-  }
-
-  // Get user profile by user ID or username (auto-detects format)
-  async getUserProfile(userIdOrUsername) {
+  // Auto-detect if parameter is ID vs username
+  async getUserProfile(userParam) {
     try {
-      // Auto-detect if it's a UUID/ID or username
-      // UUIDs are typically 36 characters with hyphens, usernames are typically shorter alphanumeric
-      const isId = userIdOrUsername.includes('-') && userIdOrUsername.length > 20;
+      let endpoint;
       
-      let response;
-      if (isId) {
-        // Use ID-based endpoint
-        response = await fetch(config.API_ENDPOINTS.USERS.PROFILE(userIdOrUsername), {
-          method: 'GET',
-          headers: this.getAuthHeaders(),
-        });
+      // Simple heuristic: if it's a long string with dashes, treat as ID
+      // Otherwise treat as username
+      if (userParam.includes('-') && userParam.length > 20) {
+        endpoint = `/user/profile/${userParam}`;
       } else {
-        // Use username-based endpoint
-        response = await fetch(config.API_ENDPOINTS.USERS.PROFILE_BY_USERNAME(userIdOrUsername), {
-          method: 'GET',
-          headers: this.getAuthHeaders(),
-        });
+        endpoint = `/user/profile/by-username/${userParam}`;
       }
-
-      return await this.handleResponse(response);
-    } catch (error) {
-      console.error(`Error fetching user profile for ${userIdOrUsername}:`, error);
-      throw error;
-    }
-  }
-
-  // Search users by query
-  async searchUsers(query) {
-    try {
-      const response = await fetch(`${config.API_ENDPOINTS.USERS.SEARCH}?q=${encodeURIComponent(query)}`, {
+      
+      const response = await fetch(`${this.baseURL}${endpoint}`, {
         method: 'GET',
-        headers: this.getAuthHeaders(),
+        headers: this.getAuthHeaders()
       });
 
-      return await this.handleResponse(response);
+      if (!response.ok) {
+        if (response.status === 404) {
+          throw new Error('Usuario no encontrado');
+        }
+        const errorData = await response.json();
+        throw new Error(errorData.detail || `Error ${response.status}`);
+      }
+
+      return await response.json();
     } catch (error) {
-      console.error('Error searching users:', error);
+      console.error('Error getting user profile:', error);
       throw error;
     }
   }
 
-  // Get follow status for a user
-  async getFollowStatus(userIdOrUsername) {
+  async updateProfile(profileData) {
     try {
-      let userId = userIdOrUsername;
-      
-      // If it looks like a username (no UUID format), resolve it to ID via search
-      if (!userIdOrUsername.includes('-') && userIdOrUsername.length > 5) {
-        const searchResult = await this.searchUsers(userIdOrUsername);
-        const user = searchResult.find(u => u.username === userIdOrUsername);
-        if (user) {
-          userId = user.id;
-        } else {
-          throw new Error('Usuario no encontrado');
-        }
+      const response = await fetch(`${this.baseURL}/user/profile`, {
+        method: 'PUT',
+        headers: this.getAuthHeaders(),
+        body: JSON.stringify(profileData)
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || `Error ${response.status}`);
       }
-      
-      // Check cache first
-      const cacheKey = userId;
-      const cached = this.followStatusCache.get(cacheKey);
-      if (cached && (Date.now() - cached.timestamp) < this.CACHE_EXPIRY_MS) {
-        return cached.data;
-      }
-      
-      const response = await fetch(config.API_ENDPOINTS.USERS.FOLLOW_STATUS(userId), {
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      throw error;
+    }
+  }
+
+  async getCurrentUserProfile() {
+    try {
+      const response = await fetch(`${this.baseURL}/user/profile`, {
         method: 'GET',
-        headers: this.getAuthHeaders(),
+        headers: this.getAuthHeaders()
       });
 
-      const result = await this.handleResponse(response);
-      
-      // Cache the result
-      this.followStatusCache.set(cacheKey, {
-        data: result,
-        timestamp: Date.now()
-      });
-      
-      return result;
-    } catch (error) {
-      console.error(`Error getting follow status for ${userIdOrUsername}:`, error);
-      throw error;
-    }
-  }
-
-  // Follow a user
-  async followUser(userIdOrUsername) {
-    try {
-      let userId = userIdOrUsername;
-      
-      // If it looks like a username (no UUID format), resolve it to ID via search
-      if (!userIdOrUsername.includes('-') && userIdOrUsername.length > 5) {
-        const searchResult = await this.searchUsers(userIdOrUsername);
-        const user = searchResult.find(u => u.username === userIdOrUsername);
-        if (user) {
-          userId = user.id;
-        } else {
-          throw new Error('Usuario no encontrado');
+      if (!response.ok) {
+        if (response.status === 404) {
+          throw new Error('Perfil no encontrado');
         }
+        const errorData = await response.json();
+        throw new Error(errorData.detail || `Error ${response.status}`);
       }
-      
-      const response = await fetch(config.API_ENDPOINTS.USERS.FOLLOW(userId), {
-        method: 'POST',
-        headers: this.getAuthHeaders(),
-      });
 
-      const result = await this.handleResponse(response);
-      
-      // Clear cache for this user after follow action
-      this.followStatusCache.delete(userId);
-      
-      return result;
+      return await response.json();
     } catch (error) {
-      console.error(`Error following user ${userIdOrUsername}:`, error);
-      throw error;
-    }
-  }
-
-  // Unfollow a user
-  async unfollowUser(userIdOrUsername) {
-    try {
-      let userId = userIdOrUsername;
-      
-      // If it looks like a username (no UUID format), resolve it to ID via search
-      if (!userIdOrUsername.includes('-') && userIdOrUsername.length > 5) {
-        const searchResult = await this.searchUsers(userIdOrUsername);
-        const user = searchResult.find(u => u.username === userIdOrUsername);
-        if (user) {
-          userId = user.id;
-        } else {
-          throw new Error('Usuario no encontrado');
-        }
-      }
-      
-      const response = await fetch(config.API_ENDPOINTS.USERS.FOLLOW(userId), {
-        method: 'DELETE',
-        headers: this.getAuthHeaders(),
-      });
-
-      const result = await this.handleResponse(response);
-      
-      // Clear cache for this user after unfollow action
-      this.followStatusCache.delete(userId);
-      
-      return result;
-    } catch (error) {
-      console.error(`Error unfollowing user ${userIdOrUsername}:`, error);
-      throw error;
-    }
-  }
-
-  // Get followers of a user
-  async getUserFollowers(userIdOrUsername) {
-    try {
-      let userId = userIdOrUsername;
-      
-      // If it looks like a username (no UUID format), resolve it to ID via search
-      if (!userIdOrUsername.includes('-') && userIdOrUsername.length > 5) {
-        const searchResult = await this.searchUsers(userIdOrUsername);
-        const user = searchResult.find(u => u.username === userIdOrUsername);
-        if (user) {
-          userId = user.id;
-        } else {
-          throw new Error('Usuario no encontrado');
-        }
-      }
-      
-      const response = await fetch(config.API_ENDPOINTS.USERS.FOLLOWERS(userId), {
-        method: 'GET',
-        headers: this.getAuthHeaders(),
-      });
-
-      return await this.handleResponse(response);
-    } catch (error) {
-      console.error(`Error getting followers for ${userIdOrUsername}:`, error);
-      throw error;
-    }
-  }
-
-  // Get users that a user is following
-  async getUserFollowing(userIdOrUsername) {
-    try {
-      let userId = userIdOrUsername;
-      
-      // If it looks like a username (no UUID format), resolve it to ID via search
-      if (!userIdOrUsername.includes('-') && userIdOrUsername.length > 5) {
-        const searchResult = await this.searchUsers(userIdOrUsername);
-        const user = searchResult.find(u => u.username === userIdOrUsername);
-        if (user) {
-          userId = user.id;
-        } else {
-          throw new Error('Usuario no encontrado');
-        }
-      }
-      
-      const response = await fetch(`${this.baseURL}/${userId}/following`, {
-        method: 'GET',
-        headers: this.getAuthHeaders(),
-      });
-
-      return await this.handleResponse(response);
-    } catch (error) {
-      console.error(`Error getting following for ${userIdOrUsername}:`, error);
+      console.error('Error getting current user profile:', error);
       throw error;
     }
   }
 }
 
-// Export a singleton instance
-const userService = new UserService();
-export default userService;
+export default new UserService();

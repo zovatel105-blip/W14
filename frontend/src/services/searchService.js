@@ -1,108 +1,150 @@
+/**
+ * Search Service - Handles all search-related API calls
+ */
+
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 class SearchService {
-  constructor() {
-    this.baseURL = `${BACKEND_URL}/api`;
-  }
-
   // Get auth headers
   getAuthHeaders() {
-    const token = localStorage.getItem('authToken');
+    const token = localStorage.getItem('token');
     return {
       'Content-Type': 'application/json',
       ...(token && { Authorization: `Bearer ${token}` }),
     };
   }
 
-  // Handle API response
-  async handleResponse(response) {
-    if (!response.ok) {
-      const error = await response.text();
-      throw new Error(`API Error: ${response.status} - ${error}`);
-    }
-    return await response.json();
+  constructor() {
+    this.baseURL = `${BACKEND_URL}/api`;
   }
 
-  // Universal search with filters and sorting
-  async universalSearch(query, filterType = 'all', sortBy = 'relevance', limit = 20) {
+  // Search polls/posts
+  async searchPosts(query, limit = 20, offset = 0) {
     try {
       const params = new URLSearchParams({
-        q: query,
-        filter_type: filterType,
-        sort_by: sortBy,
-        limit: limit.toString()
+        query,
+        limit: limit.toString(),
+        offset: offset.toString()
       });
-      
-      const response = await fetch(`${this.baseURL}/search/universal?${params}`, {
+
+      const response = await fetch(`${this.baseURL}/search/posts?${params}`, {
         method: 'GET',
-        headers: this.getAuthHeaders(),
+        headers: this.getAuthHeaders()
       });
-      
-      return await this.handleResponse(response);
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
+      }
+
+      return await response.json();
     } catch (error) {
-      console.error('Error in universal search:', error);
+      console.error('Search posts error:', error);
       throw error;
     }
   }
 
-  // Real-time autocomplete suggestions
-  async getAutocomplete(query) {
+  // Search users
+  async searchUsers(query, limit = 20, offset = 0) {
     try {
-      if (!query || query.length < 2) {
-        return { suggestions: [] };
+      const params = new URLSearchParams({
+        query,
+        limit: limit.toString(),
+        offset: offset.toString()
+      });
+
+      const response = await fetch(`${this.baseURL}/search/users?${params}`, {
+        method: 'GET',
+        headers: this.getAuthHeaders()
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
       }
-      
-      const params = new URLSearchParams({ q: query });
-      const response = await fetch(`${this.baseURL}/search/autocomplete?${params}`, {
-        method: 'GET',
-        headers: this.getAuthHeaders(),
-      });
-      
-      return await this.handleResponse(response);
+
+      return await response.json();
     } catch (error) {
-      console.error('Error in autocomplete:', error);
-      return { suggestions: [] };
+      console.error('Search users error:', error);
+      throw error;
     }
   }
 
-  // Get search suggestions and trending content
-  async getSearchSuggestions() {
+  // Search audio/music
+  async searchAudio(query, limit = 20, offset = 0) {
     try {
-      const response = await fetch(`${this.baseURL}/search/suggestions`, {
-        method: 'GET',
-        headers: this.getAuthHeaders(),
+      const params = new URLSearchParams({
+        query,
+        limit: limit.toString(),
+        offset: offset.toString()
       });
-      
-      return await this.handleResponse(response);
+
+      const response = await fetch(`${this.baseURL}/search/audio?${params}`, {
+        method: 'GET',
+        headers: this.getAuthHeaders()
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
+      }
+
+      return await response.json();
     } catch (error) {
-      console.error('Error getting search suggestions:', error);
-      return {
-        recent_searches: [],
-        popular_terms: [],
-        trending_hashtags: [],
-        suggested_users: []
-      };
+      console.error('Search audio error:', error);
+      throw error;
     }
   }
 
-  // Basic user search (legacy endpoint)
-  async searchUsers(query) {
+  // Get trending hashtags
+  async getTrendingHashtags(limit = 20) {
     try {
-      const params = new URLSearchParams({ q: query });
-      const response = await fetch(`${this.baseURL}/users/search?${params}`, {
-        method: 'GET',
-        headers: this.getAuthHeaders(),
+      const params = new URLSearchParams({
+        limit: limit.toString()
       });
-      
-      return await this.handleResponse(response);
+
+      const response = await fetch(`${this.baseURL}/search/trending-hashtags?${params}`, {
+        method: 'GET',
+        headers: this.getAuthHeaders()
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
+      }
+
+      return await response.json();
     } catch (error) {
-      console.error('Error in user search:', error);
-      return [];
+      console.error('Get trending hashtags error:', error);
+      throw error;
+    }
+  }
+
+  // Comprehensive search (all types)
+  async searchAll(query, limit = 20, offset = 0) {
+    try {
+      const params = new URLSearchParams({
+        query,
+        limit: limit.toString(),
+        offset: offset.toString()
+      });
+
+      const response = await fetch(`${this.baseURL}/search/all?${params}`, {
+        method: 'GET',
+        headers: this.getAuthHeaders()
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Search all error:', error);
+      throw error;
     }
   }
 }
 
-// Create and export a singleton instance
-const searchService = new SearchService();
-
-export default searchService;
+export default new SearchService();
