@@ -512,7 +512,7 @@ const AudioDetailPage = () => {
         setLoadingMorePosts(true);
       }
       
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('token');
       
       console.log(`🔍 INICIANDO FETCH POSTS:`, {
         audioId,
