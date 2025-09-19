@@ -143,7 +143,7 @@ div:hover {
   grid-template-columns: repeat(3, 1fr);
   gap: 2px;
   width: 100%;
-  padding: 0; /* Sin padding lateral para usar todo el espacio */
+  padding: 0 4px; /* Pequeño padding lateral */
   margin: 0;
 }
 
