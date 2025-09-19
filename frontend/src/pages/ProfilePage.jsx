@@ -1406,7 +1406,7 @@ const ProfilePage = () => {
 
                 <TabsContent value="mentions" className="space-y-6">
                   {mentionedPolls.length === 0 ? (
-                    <div className="text-center py-16 space-y-6">
+                    <div className="text-center py-16 space-y-6 px-3 sm:px-6">
                       <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto">
                         <AtSign className="w-8 h-8 text-gray-400" strokeWidth={1.5} />
                       </div>
@@ -1418,7 +1418,7 @@ const ProfilePage = () => {
                       </div>
                     </div>
                   ) : (
-                    <div className="space-y-4">
+                    <div className="space-y-4 px-3 sm:px-6">
                       {mentionedPolls.map((poll) => (
                         <PollCard
                           key={poll.id}
@@ -1441,7 +1441,7 @@ const ProfilePage = () => {
                 {isOwnProfile && (
                   <TabsContent value="saved" className="space-y-6">
                     {savedPolls.length === 0 ? (
-                      <div className="text-center py-16 space-y-6">
+                      <div className="text-center py-16 space-y-6 px-3 sm:px-6">
                         <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto">
                           <Bookmark className="w-8 h-8 text-gray-400" strokeWidth={1.5} />
                         </div>
