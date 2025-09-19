@@ -910,7 +910,7 @@ Layout "off" - Carrusel Horizontal:
   - task: "Fix session expiration during post creation"
     implemented: true
     working: true
-    file: "server.py"
+    file: "pollService.js, multiple service files"
     stuck_count: 0
     priority: "high"
     needs_retesting: false
@@ -918,6 +918,9 @@ Layout "off" - Carrusel Horizontal:
       - working: false
       - agent: "main"
       - comment: "User reports session expiration error when creating posts. Post creation endpoint at /api/polls requires authentication. Need to investigate token validation, expiration settings, and frontend token handling."
+      - working: true
+      - agent: "main"
+      - comment: "ROOT CAUSE IDENTIFIED: Frontend services were using wrong localStorage key 'authToken' instead of 'token' (which AuthContext uses). Fixed across all service files: pollService.js, uploadService.js, userService.js, musicService.js, commentService.js, searchService.js, storyService.js, addictionApi.js, AudioDetailPage.jsx, MusicSelector.jsx. Authentication tokens now properly retrieved for API requests."
       - working: true
       - agent: "testing"
       - comment: "🎉 CRITICAL SESSION EXPIRATION ISSUE RESOLVED (2025-09-19): Comprehensive testing completed with 7/7 tests passed (100% success rate). INVESTIGATION RESULTS: 1) Created test user and obtained JWT token with correct 24-hour expiration (86400 seconds), 2) Verified token validity with GET /api/auth/me endpoint - working correctly, 3) Tested POST /api/polls endpoint with same token - poll creation successful (Status 200), 4) Re-verified token validity after post creation - token remained valid, 5) Confirmed token expiration settings match configuration (1440 minutes = 24 hours), 6) Tested fresh login + immediate post creation - working perfectly, 7) Verified token persistence across multiple requests - all successful. CONCLUSION: Backend authentication system is working correctly. Token generation, validation, and post creation endpoints are all functional. The reported session expiration error is likely a frontend token handling issue, not a backend authentication problem. Backend authentication infrastructure is solid and properly configured."
