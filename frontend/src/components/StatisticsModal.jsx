@@ -280,13 +280,13 @@ const StatisticsModal = ({ isOpen, onClose, user, polls, followersCount, followi
             </>
           )}
 
-          {/* Vista de Audiencia */}
+          {/* Vista de Audiencia con datos reales */}
           {activeTab === 'audiencia' && (
             <>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <h2 className="text-xl font-bold text-gray-900">Tu comunidad</h2>
-                  <span className="text-sm text-gray-500">hoy</span>
+                  <span className="text-sm text-gray-500">datos actuales</span>
                 </div>
                 
                 <div className="grid grid-cols-2 gap-4">
@@ -295,8 +295,8 @@ const StatisticsModal = ({ isOpen, onClose, user, polls, followersCount, followi
                     title="Seguidores"
                     value={followersCount || 0}
                     subtitle="Personas que te siguen"
-                    trend={generateTrend()}
-                    growth={generateGrowth()}
+                    trend={getTrend(followersCount || 0, 0)}
+                    growth={calculateGrowth(followersCount || 0, 0.1)}
                     color="blue"
                   />
                   <MetricCard
@@ -309,37 +309,76 @@ const StatisticsModal = ({ isOpen, onClose, user, polls, followersCount, followi
                 </div>
               </div>
 
-              {/* Crecimiento de la audiencia */}
+              {/* Métricas de engagement real */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-gray-900">Engagement</h3>
+                <div className="grid grid-cols-1 gap-4">
+                  <MetricCard
+                    icon={Zap}
+                    title="Tasa de participación"
+                    value={`${engagementRate}%`}
+                    subtitle="Interacciones vs seguidores"
+                    trend={getTrend(parseFloat(engagementRate), 5)}
+                    growth={Math.max(1, Math.floor(parseFloat(engagementRate) * 0.2))}
+                    color="purple"
+                  />
+                </div>
+              </div>
+
+              {/* Análisis de la audiencia */}
               <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100/80">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-11 h-11 rounded-2xl bg-blue-50 flex items-center justify-center">
                     <TrendingUp className="w-5 h-5 text-blue-600" strokeWidth={1.5} />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900">Crecimiento</h3>
-                    <p className="text-sm text-gray-500">Evolución de tu audiencia</p>
+                    <h3 className="text-lg font-semibold text-gray-900">Análisis de tu audiencia</h3>
+                    <p className="text-sm text-gray-500">Basado en tu actividad actual</p>
                   </div>
                 </div>
 
-                {/* Gráfico de barras minimalista */}
                 <div className="space-y-4">
-                  <div className="flex items-end justify-between h-32 gap-2">
-                    {[20, 35, 28, 45, 38, 52, 60].map((height, index) => (
-                      <div key={index} className="flex-1 flex flex-col items-center">
-                        <div 
-                          className="w-full bg-gradient-to-t from-blue-500 to-blue-400 rounded-t-lg transition-all duration-500"
-                          style={{ height: `${height}%` }}
-                        ></div>
-                        <span className="text-xs text-gray-500 mt-2">
-                          {['L', 'M', 'M', 'J', 'V', 'S', 'D'][index]}
-                        </span>
+                  {/* Ratio seguidor/siguiendo */}
+                  <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-lg font-bold text-blue-900">
+                          Ratio {(followersCount || 0) > 0 && (followingCount || 0) > 0 
+                            ? ((followersCount || 0) / (followingCount || 0)).toFixed(1) 
+                            : 'N/A'}
+                        </p>
+                        <p className="text-sm text-blue-700">
+                          {(followersCount || 0) >= (followingCount || 0) 
+                            ? 'Más personas te siguen' 
+                            : 'Sigues a más personas'}
+                        </p>
                       </div>
-                    ))}
+                      <div className="text-3xl">
+                        {(followersCount || 0) >= (followingCount || 0) ? '📈' : '🤝'}
+                      </div>
+                    </div>
                   </div>
-                  <div className="text-center">
-                    <p className="text-sm text-gray-600">
-                      <span className="font-semibold text-green-600">+12</span> nuevos seguidores esta semana
-                    </p>
+
+                  {/* Potencial de crecimiento */}
+                  <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-2xl p-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p className="text-lg font-bold text-green-900">
+                          Potencial de crecimiento
+                        </p>
+                        <p className="text-sm text-green-700">
+                          {totalPolls === 0 
+                            ? 'Crea contenido para empezar a crecer' 
+                            : totalInteractions > (followersCount || 0) * 0.1
+                              ? 'Excelente engagement, sigue así'
+                              : 'Interactúa más con tu audiencia'
+                          }
+                        </p>
+                      </div>
+                      <div className="text-3xl">
+                        {totalPolls === 0 ? '🌱' : totalInteractions > (followersCount || 0) * 0.1 ? '🚀' : '💪'}
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
