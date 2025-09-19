@@ -40,7 +40,7 @@ const MediaPreview = ({ media, isWinner, isSelected, onClick, percentage, option
         transition={{ duration: 0.2 }}
       >
         {/* Background Progress Bar - Horizontal fill from left - Always show after any vote */}
-        {totalVotes > 0 && (
+        {(totalVotes > 0 || percentage > 0) && (
           <motion.div 
             className={cn(
               "absolute inset-y-0 left-0 transition-all duration-700 ease-out",
@@ -51,9 +51,21 @@ const MediaPreview = ({ media, isWinner, isSelected, onClick, percentage, option
                   : "bg-gradient-to-r from-gray-400/30 to-gray-500/30"
             )}
             initial={{ width: 0 }}
-            animate={{ width: `${percentage}%` }}
+            animate={{ width: `${Math.max(percentage, 0)}%` }}
             transition={{ duration: 1, ease: "easeOut" }}
           />
+        )}
+        
+        {/* Percentage Display - Show percentage number after voting */}
+        {(totalVotes > 0 || percentage > 0) && (
+          <motion.div 
+            className="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded-full text-xs font-bold"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.5, duration: 0.3 }}
+          >
+            {Math.round(percentage)}%
+          </motion.div>
         )}
         
         {/* Content Container */}
