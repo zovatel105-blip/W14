@@ -3,75 +3,47 @@ import React from 'react';
 const CustomLogo = ({ size = 24, className = "" }) => {
   return (
     <div
-      className={`${className} rounded-full overflow-hidden relative`}
+      className={`${className} relative flex items-center justify-center`}
       style={{ 
         width: `${size}px`, 
         height: `${size}px`,
         backgroundColor: 'black',
+        borderRadius: '50%',
         border: 'none',
         outline: 'none',
-        boxShadow: 'none'
+        boxShadow: 'none',
+        overflow: 'hidden'
       }}
     >
-      {/* Contenedor con clip-path muy agresivo para eliminar bordes blancos */}
-      <div 
-        className="absolute inset-0 rounded-full overflow-hidden"
-        style={{ 
-          backgroundColor: 'black',
-          // Clip-path muy agresivo que corta más hacia el interior
-          clipPath: 'circle(45% at 50% 50%)',
-          width: '100%',
-          height: '100%',
-          zIndex: 0
-        }}
-      />
-      
-      {/* Logo con escala aumentada y clip-path para cortar bordes blancos */}
-      <div
-        className="absolute inset-0 rounded-full overflow-hidden"
-        style={{
-          // Clip-path que corta los bordes blancos
-          clipPath: 'circle(47% at 50% 50%)',
-          zIndex: 1
-        }}
+      {/* SVG mask approach para eliminar completamente el borde blanco */}
+      <svg 
+        width={size} 
+        height={size} 
+        viewBox="0 0 100 100" 
+        className="absolute inset-0"
+        style={{ zIndex: 1 }}
       >
-        <img
-          src="https://customer-assets.emergentagent.com/job_feed-menu-options/artifacts/17e0koxw_IMG_2025_09_18_1241285351.png"
-          alt="Quick Actions Logo"
-          width={size}
-          height={size}
-          className="w-full h-full object-cover absolute inset-0"
-          style={{ 
-            width: `${Math.round(size * 1.2)}px`, 
-            height: `${Math.round(size * 1.2)}px`,
-            left: `${Math.round(-size * 0.1)}px`,
-            top: `${Math.round(-size * 0.1)}px`,
-            objectFit: 'cover',
-            objectPosition: 'center center',
-            filter: 'contrast(1.1) brightness(0.95)',
-            border: 'none',
-            outline: 'none',
-            boxShadow: 'none'
-          }}
+        <defs>
+          <mask id="circleMask">
+            <rect width="100" height="100" fill="black"/>
+            <circle cx="50" cy="50" r="45" fill="white"/>
+          </mask>
+        </defs>
+        <image 
+          href="https://customer-assets.emergentagent.com/job_feed-menu-options/artifacts/17e0koxw_IMG_2025_09_18_1241285351.png"
+          width="120" 
+          height="120" 
+          x="-10" 
+          y="-10"
+          mask="url(#circleMask)"
+          preserveAspectRatio="xMidYMid slice"
         />
-      </div>
+      </svg>
       
-      {/* Sombra interior negra muy agresiva para cubrir cualquier borde blanco */}
+      {/* Fondo negro absoluto como respaldo */}
       <div 
-        className="absolute inset-0 rounded-full pointer-events-none"
-        style={{
-          boxShadow: 'inset 0 0 0 8px black, inset 0 0 0 12px black',
-          zIndex: 2
-        }}
-      />
-      
-      {/* Máscara final negra para asegurar que no se vea nada blanco */}
-      <div 
-        className="absolute inset-0 rounded-full pointer-events-none"
-        style={{
-          background: 'radial-gradient(circle at center, transparent 35%, black 42%)',
-          zIndex: 3
-        }}
+        className="absolute inset-0 bg-black rounded-full"
+        style={{ zIndex: 0 }}
       />
     </div>
   );
