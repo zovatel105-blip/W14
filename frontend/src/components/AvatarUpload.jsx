@@ -198,9 +198,16 @@ const AvatarUpload = ({
             src={displayImage}
             alt="Avatar"
             className="w-full h-full object-cover object-center"
+            style={{
+              borderRadius: '50%',
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover'
+            }}
           />
         ) : (
-          <div className="w-full h-full bg-gradient-to-br from-gray-300 to-gray-400 flex items-center justify-center">
+          <div className="w-full h-full bg-gradient-to-br from-gray-300 to-gray-400 flex items-center justify-center"
+               style={{ borderRadius: '50%' }}>
             <Camera className={cn("text-gray-600", config.icon)} />
           </div>
         )}
