@@ -4,7 +4,7 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
-import { X, Save, User, Camera, Loader2 } from 'lucide-react';
+import { X, Save, User, Camera, Loader2, ArrowLeft } from 'lucide-react';
 import { useToast } from '../hooks/use-toast';
 import { useAuth } from '../contexts/AuthContext';
 import AvatarUpload from './AvatarUpload';
