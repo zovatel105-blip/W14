@@ -409,7 +409,7 @@ const AudioDetailPage = () => {
 
   const checkIfFavorited = async () => {
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('token');
       if (!token || !audio) return;
       
       const audioType = audio.is_system_music ? 'system' : 'user';
