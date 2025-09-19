@@ -897,7 +897,7 @@ const AudioDetailPage = () => {
   const handlePollVote = async (pollId, optionId) => {
     console.log('🗳️ Vote:', pollId, optionId);
     
-    if (!localStorage.getItem('authToken')) {
+    if (!localStorage.getItem('token')) {
       toast({
         title: "Inicia sesión",
         description: "Necesitas iniciar sesión para votar",
