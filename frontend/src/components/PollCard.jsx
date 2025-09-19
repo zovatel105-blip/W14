@@ -132,8 +132,8 @@ const MediaPreview = ({ media, isWinner, isSelected, onClick, percentage, option
           } : {}}
         />
         
-        {/* Enhanced Progress Bar - Show in ALL options after any vote cast */}
-        {totalVotes > 0 && (
+        {/* Enhanced Progress Bar - Force show if percentage exists */}
+        {(totalVotes > 0 || percentage > 0) && (
           <motion.div 
             className={cn(
               "absolute inset-x-0 bottom-0 transition-all duration-700 ease-out",
@@ -152,8 +152,8 @@ const MediaPreview = ({ media, isWinner, isSelected, onClick, percentage, option
           />
         )}
         
-        {/* Percentage Display for videos - Show on all options after voting */}
-        {totalVotes > 0 && (
+        {/* Percentage Display for videos - Force show if percentage exists */}
+        {(totalVotes > 0 || percentage > 0) && (
           <motion.div 
             className="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded-full text-xs font-bold z-10"
             initial={{ opacity: 0, scale: 0.8 }}
