@@ -1118,68 +1118,66 @@ const ProfilePage = () => {
               </div>
             </div>
 
-            {/* Métricas clave en dos filas limpias */}
-            <div className="space-y-6">
+            {/* Métricas clave en diseño 2x2 como en la imagen */}
+            <div className="grid grid-cols-2 gap-6">
               
-              {/* Primera fila - Métricas principales */}
-              <div className="grid grid-cols-2 gap-8">
-                <div className="text-center">
-                  <div className="flex flex-col items-center gap-2">
-                    <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center">
-                      <Vote className="w-6 h-6 text-blue-600" strokeWidth={1.5} />
-                    </div>
-                    <div>
-                      <p className="text-2xl font-bold text-gray-900">{isOwnProfile ? (displayUser?.totalVotes || 0) : (displayUser?.votes || 0)}</p>
-                      <p className="text-sm text-gray-600 mt-1">votos</p>
-                    </div>
+              {/* Votos - Esquina superior izquierda */}
+              <div className="text-center">
+                <div className="flex flex-col items-center gap-2">
+                  <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center">
+                    <Vote className="w-6 h-6 text-blue-600" strokeWidth={1.5} />
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold text-gray-900">{isOwnProfile ? (displayUser?.totalVotes || 0) : (displayUser?.votes || 0)}</p>
+                    <p className="text-sm text-gray-600 mt-1">Votos</p>
                   </div>
                 </div>
-                
-                <div className="text-center">
-                  <div className="flex flex-col items-center gap-2">
-                    <div className="w-12 h-12 rounded-full bg-pink-50 flex items-center justify-center">
-                      <Heart className="w-6 h-6 text-pink-600" strokeWidth={1.5} />
-                    </div>
-                    <div>
-                      <p className="text-2xl font-bold text-gray-900">{isOwnProfile ? (displayUser?.totalLikes || 0) : (displayUser?.likes || 0)}</p>
-                      <p className="text-sm text-gray-600 mt-1">me gusta</p>
-                    </div>
+              </div>
+              
+              {/* Me gusta - Esquina superior derecha */}
+              <div className="text-center">
+                <div className="flex flex-col items-center gap-2">
+                  <div className="w-12 h-12 rounded-full bg-pink-50 flex items-center justify-center">
+                    <Heart className="w-6 h-6 text-pink-600" strokeWidth={1.5} />
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold text-gray-900">{isOwnProfile ? (displayUser?.totalLikes || 0) : (displayUser?.likes || 0)}</p>
+                    <p className="text-sm text-gray-600 mt-1">Me gusta</p>
                   </div>
                 </div>
               </div>
 
-              {/* Segunda fila - Métricas sociales */}
-              <div className="grid grid-cols-2 gap-8">
-                <button 
-                  className="text-center hover:bg-gray-50 rounded-xl p-4 transition-colors"
-                  onClick={handleFollowersClick}
-                >
-                  <div className="flex flex-col items-center gap-2">
-                    <div className="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center">
-                      <Users className="w-6 h-6 text-green-600" strokeWidth={1.5} />
-                    </div>
-                    <div>
-                      <p className="text-2xl font-bold text-gray-900">{isOwnProfile ? followersCount : (displayUser?.followers || 0)}</p>
-                      <p className="text-sm text-gray-600 mt-1">seguidores</p>
-                    </div>
+              {/* Seguidores - Esquina inferior izquierda */}
+              <button 
+                className="text-center hover:bg-gray-50 rounded-xl p-4 transition-colors"
+                onClick={handleFollowersClick}
+              >
+                <div className="flex flex-col items-center gap-2">
+                  <div className="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center">
+                    <Users className="w-6 h-6 text-green-600" strokeWidth={1.5} />
                   </div>
-                </button>
-                
-                <button 
-                  className="text-center hover:bg-gray-50 rounded-xl p-4 transition-colors"
-                  onClick={handleFollowingClick}
-                >
-                  <div className="flex flex-col items-center gap-2">
-                    <div className="w-12 h-12 rounded-full bg-purple-50 flex items-center justify-center">
-                      <UserPlus className="w-6 h-6 text-purple-600" strokeWidth={1.5} />
-                    </div>
-                    <div>
-                      <p className="text-2xl font-bold text-gray-900">{isOwnProfile ? followingCount : (displayUser?.following || 0)}</p>
-                      <p className="text-sm text-gray-600 mt-1">siguiendo</p>
-                    </div>
+                  <div>
+                    <p className="text-2xl font-bold text-gray-900">{isOwnProfile ? followersCount : (displayUser?.followers || 0)}</p>
+                    <p className="text-sm text-gray-600 mt-1">Seguidores</p>
                   </div>
-                </button>
-              </div>
+                </div>
+              </button>
+              
+              {/* Seguidos - Esquina inferior derecha */}
+              <button 
+                className="text-center hover:bg-gray-50 rounded-xl p-4 transition-colors"
+                onClick={handleFollowingClick}
+              >
+                <div className="flex flex-col items-center gap-2">
+                  <div className="w-12 h-12 rounded-full bg-purple-50 flex items-center justify-center">
+                    <UserPlus className="w-6 h-6 text-purple-600" strokeWidth={1.5} />
+                  </div>
+                  <div>
+                    <p className="text-2xl font-bold text-gray-900">{isOwnProfile ? followingCount : (displayUser?.following || 0)}</p>
+                    <p className="text-sm text-gray-600 mt-1">Seguidos</p>
+                  </div>
+                </div>
+              </button>
             </div>
 
             {/* Nombre en negrita con línea fina */}
