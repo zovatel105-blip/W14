@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
 import { Switch } from '../components/ui/switch';
 import { 
-  ArrowLeft, Settings, User, Shield, Bell, Eye, MessageCircle, 
-  Lock, LogOut, Loader2, Save, Monitor, Key, Globe
+  ArrowLeft, ChevronRight, User, Shield, Bell, Eye, MessageCircle, 
+  Lock, LogOut, Save, Monitor, Key, Globe, Moon, Sun, Volume2, Smartphone,
+  Download, Wifi, BatteryLow, Languages, Type, HelpCircle, Info, Mail
 } from 'lucide-react';
 import { useToast } from '../hooks/use-toast';
 import { useAuth } from '../contexts/AuthContext';
