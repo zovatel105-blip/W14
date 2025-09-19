@@ -895,15 +895,18 @@ Layout "off" - Carrusel Horizontal:
 ## backend:
   - task: "Fix 500 error in saved-polls endpoint"
     implemented: true
-    working: false
+    working: true
     file: "server.py"
     stuck_count: 1
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: false
       - agent: "main"
       - comment: "Endpoint exists with debug logging at lines 6191-6250, but causing 500 Internal Server Error when called. Need to test with proper authentication to identify root cause."
+      - working: true
+      - agent: "testing"
+      - comment: "🎉 CRITICAL 500 ERROR FIXED SUCCESSFULLY (2025-09-19): Root cause identified and resolved. PROBLEM: MongoDB ObjectId fields in poll documents were causing JSON serialization error 'TypeError: ObjectId object is not iterable' when FastAPI tried to serialize response. SOLUTION: Added '_id' field removal from poll documents before returning response (line 6233). VERIFICATION: Endpoint now returns 200 OK with proper JSON response containing saved_polls array and total count. Tested with authentication, poll creation, saving, and retrieval - all working perfectly. Pagination parameters also functional."
 
 ## frontend:
   - task: "Display saved posts in profile"
