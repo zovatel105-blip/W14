@@ -980,8 +980,21 @@ const ProfilePage = () => {
 
   const handleProfileUpdate = async (updatedUserData) => {
     // The EditProfileModal already updates the user state via updateUser()
-    // This function can be used for any additional UI updates if needed
+    // This function refreshes the local viewedUser state for immediate UI update
     console.log('Profile updated successfully:', updatedUserData);
+    
+    // Update local viewed user data if this is own profile
+    if (isOwnProfile && updatedUserData) {
+      setViewedUser(prevUser => ({
+        ...prevUser,
+        ...updatedUserData
+      }));
+      
+      // Also refresh the user data from backend to ensure consistency
+      if (refreshUser) {
+        await refreshUser();
+      }
+    }
   };
 
   const handleSettingsClick = () => {
