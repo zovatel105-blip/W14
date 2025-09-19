@@ -97,6 +97,10 @@ const LogoWithQuickActions = ({ size = 32, className = "" }) => {
           WebkitUserSelect: 'none',
           WebkitTouchCallout: 'none',
           WebkitTapHighlightColor: 'transparent',
+          border: 'none',
+          outline: 'none',
+          boxShadow: 'none',
+          backgroundColor: 'black'
         }}
         title="Mantén presionado para acciones rápidas"
       >
