@@ -488,7 +488,7 @@ const PollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, fullScreen
                   }}
                 >
                   <Avatar className="ring-2 ring-blue-500/20 w-10 h-10 cursor-pointer">
-                    <AvatarImage src={poll.author?.avatar_url || "https://github.com/shadcn.png"} />
+                    <AvatarImage src={poll.author?.avatar_url || "https://github.com/shadcn.png"} className="object-cover" />
                     <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-600 text-white font-semibold text-sm">
                       {(poll.author?.display_name || poll.author?.username || 'U').charAt(0).toUpperCase()}
                     </AvatarFallback>
