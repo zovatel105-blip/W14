@@ -173,9 +173,16 @@ const AvatarUpload = ({
         className={cn(
           "relative w-full h-full rounded-full overflow-hidden bg-gray-200",
           "transition-all duration-200 cursor-pointer",
+          "aspect-square", // Forzar aspecto cuadrado para círculo perfecto
           dragOver && "shadow-lg scale-105",
           isUploading && "opacity-75"
         )}
+        style={{
+          width: config.container.split(' ')[0].replace('w-', '') + 'px',
+          height: config.container.split(' ')[1].replace('h-', '') + 'px',
+          borderRadius: '50%', // Forzar borde circular
+          overflow: 'hidden'
+        }}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
