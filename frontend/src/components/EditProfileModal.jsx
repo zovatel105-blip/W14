@@ -121,130 +121,167 @@ const EditProfileModal = ({ isOpen, onClose, onProfileUpdate }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <Card className="w-full max-w-md mx-auto bg-white">
-        <CardHeader className="flex flex-row items-center justify-between pb-2">
-          <CardTitle className="text-lg font-semibold flex items-center gap-2">
-            <User className="w-5 h-5" />
-            Editar Perfil
-          </CardTitle>
-          <Button
-            variant="ghost"
-            size="sm"
+    <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-50 p-4">
+      <div className="w-full max-w-md mx-auto bg-white rounded-3xl shadow-2xl overflow-hidden">
+        
+        {/* Header minimalista */}
+        <div className="relative px-6 pt-8 pb-6 text-center">
+          <button
             onClick={onClose}
-            className="h-8 w-8 p-0 hover:bg-gray-100"
+            className="absolute top-6 right-6 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-all duration-200"
           >
-            <X className="w-4 h-4" />
-          </Button>
-        </CardHeader>
+            <X className="w-4 h-4 text-gray-600" />
+          </button>
+          <h2 className="text-xl font-medium text-gray-900">Tu perfil</h2>
+          <p className="text-sm text-gray-500 mt-1">Cuenta tu historia</p>
+        </div>
 
-        <CardContent className="space-y-6">
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Avatar Upload Section */}
-            <div className="flex flex-col items-center gap-3">
-              <div className="relative">
-                <AvatarUpload
-                  currentAvatar={formData.avatar_url}
-                  onAvatarUpdate={handleAvatarUpdate}
-                  size="xl"
-                  showPreview={true}
-                  className="ring-2 ring-purple-200"
-                />
+        <form onSubmit={handleSubmit} className="px-6 pb-6">
+          
+          {/* Foto de perfil prominente */}
+          <div className="flex flex-col items-center mb-10">
+            <div className="relative group">
+              <div className="w-32 h-32 rounded-full overflow-hidden bg-gray-100 ring-4 ring-gray-50 shadow-lg transition-all duration-300 group-hover:shadow-xl">
+                {formData.avatar_url ? (
+                  <img
+                    src={formData.avatar_url}
+                    alt="Foto de perfil"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
+                    <User className="w-12 h-12 text-gray-400" />
+                  </div>
+                )}
               </div>
-              <div className="text-center">
-                <p className="text-sm font-medium text-gray-700">Foto de Perfil</p>
-                <p className="text-xs text-gray-500 mt-1">
-                  Haz click en la imagen para cambiar tu avatar
-                </p>
-              </div>
+              
+              {/* Botón circular flotante */}
+              <button
+                type="button"
+                onClick={() => document.getElementById('avatar-upload-input')?.click()}
+                className="absolute -bottom-2 -right-2 w-10 h-10 bg-blue-500 hover:bg-blue-600 rounded-full shadow-lg flex items-center justify-center transition-all duration-200 hover:scale-105 active:scale-95"
+              >
+                <Camera className="w-5 h-5 text-white" />
+              </button>
             </div>
+            
+            {/* Texto sutil */}
+            <p className="text-xs text-gray-400 mt-4 text-center leading-relaxed">
+              Tu primera impresión.<br />Hazla memorable.
+            </p>
+          </div>
 
-            {/* Display Name */}
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">
-                Nombre de Usuario
-              </label>
-              <Input
-                type="text"
-                value={formData.display_name}
-                onChange={(e) => handleChange('display_name', e.target.value)}
-                placeholder="Tu nombre de usuario"
-                maxLength={50}
-                className="w-full"
-              />
-              <p className="text-xs text-gray-500">
-                Máximo 50 caracteres
-              </p>
+          {/* Input oculto para avatar */}
+          <input
+            id="avatar-upload-input"
+            type="file"
+            accept="image/*"
+            onChange={(e) => {
+              const file = e.target.files[0];
+              if (file) {
+                // Aquí iría la lógica de upload
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                  setFormData(prev => ({
+                    ...prev,
+                    avatar_url: e.target.result
+                  }));
+                };
+                reader.readAsDataURL(file);
+              }
+            }}
+            className="hidden"
+          />
+
+          {/* Nombre - Minimalista */}
+          <div className="mb-8">
+            <label className="block text-sm font-medium text-gray-700 mb-3">
+              ¿Cómo te llamas?
+            </label>
+            <input
+              type="text"
+              value={formData.display_name}
+              onChange={(e) => handleChange('display_name', e.target.value)}
+              placeholder="Tu nombre aquí"
+              maxLength={50}
+              className="w-full text-lg font-medium text-gray-900 placeholder-gray-400 bg-transparent border-0 border-b-2 border-gray-100 focus:border-blue-500 focus:outline-none transition-colors duration-200 pb-3"
+            />
+            <div className="flex justify-between items-center mt-2">
+              <p className="text-xs text-gray-400">Como apareces para otros</p>
+              <p className="text-xs text-gray-400">{formData.display_name.length}/50</p>
             </div>
+          </div>
 
-            {/* Bio */}
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">
-                Biografía
-              </label>
-              <Textarea
+          {/* Biografía - Espacio amplio */}
+          <div className="mb-8">
+            <label className="block text-sm font-medium text-gray-700 mb-3">
+              Cuéntanos sobre ti
+            </label>
+            <div className="relative">
+              <textarea
                 value={formData.bio}
                 onChange={(e) => handleChange('bio', e.target.value)}
-                placeholder="Escribe algo sobre ti..."
+                placeholder="Comparte lo que te apasiona, lo que haces, o simplemente algo interesante sobre ti..."
                 maxLength={160}
-                rows={3}
-                className="w-full resize-none"
+                rows={4}
+                className="w-full text-gray-900 placeholder-gray-400 bg-gray-50 hover:bg-gray-100 focus:bg-white border-0 rounded-2xl p-4 focus:outline-none focus:ring-2 focus:ring-blue-500/20 transition-all duration-200 resize-none"
               />
-              <p className="text-xs text-gray-500">
-                {formData.bio.length}/160 caracteres
-              </p>
+              <div className="absolute bottom-3 right-4 text-xs text-gray-400">
+                {formData.bio.length}/160
+              </div>
             </div>
+            <p className="text-xs text-gray-400 mt-2">Exprésate sin límites</p>
+          </div>
 
-            {/* Occupation */}
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-700">
-                Ocupación
-              </label>
-              <Input
-                type="text"
-                value={formData.occupation}
-                onChange={(e) => handleChange('occupation', e.target.value)}
-                placeholder="Tu profesión o trabajo"
-                maxLength={100}
-                className="w-full"
-              />
-              <p className="text-xs text-gray-500">
-                Máximo 100 caracteres
-              </p>
+          {/* Ocupación - Simple */}
+          <div className="mb-12">
+            <label className="block text-sm font-medium text-gray-700 mb-3">
+              ¿A qué te dedicas?
+            </label>
+            <input
+              type="text"
+              value={formData.occupation}
+              onChange={(e) => handleChange('occupation', e.target.value)}
+              placeholder="Estudiante, Artista, Emprendedor..."
+              maxLength={100}
+              className="w-full text-lg text-gray-900 placeholder-gray-400 bg-transparent border-0 border-b-2 border-gray-100 focus:border-blue-500 focus:outline-none transition-colors duration-200 pb-3"
+            />
+            <div className="flex justify-between items-center mt-2">
+              <p className="text-xs text-gray-400">Opcional</p>
+              <p className="text-xs text-gray-400">{formData.occupation.length}/100</p>
             </div>
+          </div>
 
-            {/* Buttons */}
-            <div className="flex gap-3 pt-4">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={onClose}
-                disabled={loading}
-                className="flex-1"
-              >
-                Cancelar
-              </Button>
-              <Button
-                type="submit"
-                disabled={loading}
-                className="flex-1 bg-purple-600 hover:bg-purple-700"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Guardando...
-                  </>
-                ) : (
-                  <>
-                    <Save className="w-4 h-4 mr-2" />
-                    Guardar
-                  </>
-                )}
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+          {/* Línea separadora sutil */}
+          <div className="w-full h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent mb-8"></div>
+
+          {/* Botones de acción fijos - Tamaño generoso */}
+          <div className="flex gap-4">
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 h-14 rounded-2xl bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium transition-all duration-200 hover:scale-[0.98] active:scale-95"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              disabled={loading}
+              className="flex-1 h-14 rounded-2xl bg-blue-500 hover:bg-blue-600 text-white font-medium transition-all duration-200 hover:scale-[0.98] active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-blue-500/25"
+            >
+              {loading ? (
+                <div className="flex items-center justify-center">
+                  <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                  Guardando...
+                </div>
+              ) : (
+                'Guardar cambios'
+              )}
+            </button>
+          </div>
+          
+        </form>
+      </div>
     </div>
   );
 };
