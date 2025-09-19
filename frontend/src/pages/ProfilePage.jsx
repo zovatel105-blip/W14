@@ -530,9 +530,6 @@ const ProfilePage = () => {
     navigate(-1);
   };
 
-  // Determine which user to display and calculate dynamic stats
-  const isOwnProfile = !userId || (authUser && (userId === authUser?.username || userId === authUser?.id));
-  
   // Debug logging
   console.log('🔍 PROFILE DEBUG:', {
     userId,
