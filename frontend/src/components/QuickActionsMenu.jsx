@@ -257,7 +257,7 @@ const QuickActionsMenu = ({ isVisible, onClose, onActionSelect }) => {
               y1="0"
               x2={action.position.x}
               y2={action.position.y}
-              stroke="rgba(255,255,255,0.3)"
+              stroke="rgba(0,0,0,0.3)"
               strokeWidth="2"
               strokeDasharray="4,4"
               className={`transition-all duration-500 ${
