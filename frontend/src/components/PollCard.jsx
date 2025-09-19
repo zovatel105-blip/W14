@@ -133,7 +133,7 @@ const MediaPreview = ({ media, isWinner, isSelected, onClick, percentage, option
         />
         
         {/* Enhanced Progress Bar - Always show after any vote cast */}
-        {totalVotes > 0 && (
+        {(totalVotes > 0 || percentage > 0) && (
           <motion.div 
             className={cn(
               "absolute inset-x-0 bottom-0 transition-all duration-700 ease-out",
@@ -144,12 +144,24 @@ const MediaPreview = ({ media, isWinner, isSelected, onClick, percentage, option
                   : "bg-gradient-to-t from-gray-400/50 to-gray-500/50"
             )}
             initial={{ height: 0 }}
-            animate={{ height: `${percentage}%` }}
+            animate={{ height: `${Math.max(percentage, 0)}%` }}
             transition={{ duration: 1, ease: "easeOut" }}
             style={{ 
               transformOrigin: 'bottom'
             }}
           />
+        )}
+        
+        {/* Percentage Display for videos */}
+        {(totalVotes > 0 || percentage > 0) && (
+          <motion.div 
+            className="absolute top-2 right-2 bg-black/70 text-white px-2 py-1 rounded-full text-xs font-bold"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.5, duration: 0.3 }}
+          >
+            {Math.round(percentage)}%
+          </motion.div>
         )}
 
         {/* Selection Ring with pulse */}
