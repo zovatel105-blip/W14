@@ -223,7 +223,7 @@ const MusicSelector = ({ onSelectMusic, selectedMusic, pollTitle = '' }) => {
   const loadMyMusic = async () => {
     setIsLoadingMyMusic(true);
     try {
-      const token = localStorage.getItem('authToken');
+      const token = localStorage.getItem('token');
       if (!token) {
         toast({
           title: "Autenticación requerida",
