@@ -385,13 +385,13 @@ const StatisticsModal = ({ isOpen, onClose, user, polls, followersCount, followi
             </>
           )}
 
-          {/* Vista de Actividad */}
+          {/* Vista de Actividad con datos reales */}
           {activeTab === 'actividad' && (
             <>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <h2 className="text-xl font-bold text-gray-900">Tu actividad</h2>
-                  <span className="text-sm text-gray-500">esta semana</span>
+                  <span className="text-sm text-gray-500">resumen completo</span>
                 </div>
                 
                 <div className="grid grid-cols-1 gap-4">
@@ -399,52 +399,151 @@ const StatisticsModal = ({ isOpen, onClose, user, polls, followersCount, followi
                     icon={Activity}
                     title="Índice de actividad"
                     value={Math.min(100, Math.floor((totalPolls * 15 + totalInteractions * 0.3)))}
-                    subtitle="Basado en tu participación"
-                    trend={generateTrend()}
-                    growth={generateGrowth()}
+                    subtitle="Basado en tu participación real"
+                    trend={getTrend(totalInteractions, totalPolls * 2)}
+                    growth={calculateGrowth(totalInteractions, 0.1)}
                     color="purple"
                   />
                 </div>
               </div>
 
-              {/* Racha de actividad */}
+              {/* Métricas detalladas de actividad */}
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-gray-900">Desglose de actividad</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <MetricCard
+                    icon={Share2}
+                    title="Votos totales"
+                    value={totalVotes}
+                    subtitle="Participación en tus posts"
+                    color="green"
+                  />
+                  <MetricCard
+                    icon={BarChart3}
+                    title="Posts activos"
+                    value={totalPolls}
+                    subtitle="Publicaciones creadas"
+                    color="blue"
+                  />
+                </div>
+              </div>
+
+              {/* Racha de actividad real */}
               <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100/80">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-11 h-11 rounded-2xl bg-purple-50 flex items-center justify-center">
                     <Zap className="w-5 h-5 text-purple-600" strokeWidth={1.5} />
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900">Racha actual</h3>
-                    <p className="text-sm text-gray-500">Días consecutivos activo</p>
+                    <h3 className="text-lg font-semibold text-gray-900">Tu rendimiento actual</h3>
+                    <p className="text-sm text-gray-500">Estadísticas basadas en tus datos</p>
                   </div>
                 </div>
 
-                <div className="text-center bg-gradient-to-r from-purple-50 to-purple-100 rounded-2xl p-6">
-                  <div className="text-5xl mb-2">🔥</div>
-                  <p className="text-3xl font-bold text-purple-900 mb-1">
-                    {Math.floor(Math.random() * 15) + 3} días
-                  </p>
-                  <p className="text-sm text-purple-700">¡Sigue así!</p>
+                <div className="space-y-4">
+                  {/* Actividad general */}
+                  <div className="text-center bg-gradient-to-r from-purple-50 to-purple-100 rounded-2xl p-6">
+                    <div className="text-5xl mb-2">
+                      {totalPolls === 0 ? '🌟' : totalInteractions > 50 ? '🔥' : totalInteractions > 10 ? '⚡' : '🌱'}
+                    </div>
+                    <p className="text-2xl font-bold text-purple-900 mb-1">
+                      {totalPolls === 0 
+                        ? 'Empieza tu historia' 
+                        : totalInteractions > 50 
+                          ? '¡En racha!' 
+                          : totalInteractions > 10 
+                            ? 'Buen ritmo' 
+                            : 'Construyendo'}
+                    </p>
+                    <p className="text-sm text-purple-700">
+                      {totalPolls === 0 
+                        ? 'Crea tu primera publicación' 
+                        : `${totalInteractions} interacciones totales`}
+                    </p>
+                  </div>
+
+                  {/* Distribución de interacciones */}
+                  {totalInteractions > 0 && (
+                    <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-2xl p-4">
+                      <h4 className="text-sm font-semibold text-blue-900 mb-3">Distribución de interacciones</h4>
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-blue-800">Votos</span>
+                          <span className="text-sm font-medium text-blue-900">
+                            {totalVotes} ({totalInteractions > 0 ? Math.round((totalVotes / totalInteractions) * 100) : 0}%)
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-blue-800">Me gusta</span>
+                          <span className="text-sm font-medium text-blue-900">
+                            {totalLikes} ({totalInteractions > 0 ? Math.round((totalLikes / totalInteractions) * 100) : 0}%)
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm text-blue-800">Comentarios</span>
+                          <span className="text-sm font-medium text-blue-900">
+                            {totalComments} ({totalInteractions > 0 ? Math.round((totalComments / totalInteractions) * 100) : 0}%)
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
 
-              {/* Momentos destacados */}
+              {/* Logros reales basados en datos */}
               <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-100/80">
-                <h3 className="text-lg font-semibold text-gray-900 mb-4">Momentos destacados</h3>
+                <h3 className="text-lg font-semibold text-gray-900 mb-4">Tus logros</h3>
                 <div className="space-y-3">
-                  {[
-                    { icon: '🏆', text: 'Tu mejor publicación obtuvo 87 interacciones', time: 'hace 2 días' },
-                    { icon: '🎯', text: 'Alcanzaste 100 seguidores', time: 'hace 5 días' },
-                    { icon: '⭐', text: 'Primera publicación viral', time: 'hace 1 semana' }
-                  ].map((moment, index) => (
-                    <div key={index} className="flex items-center gap-3 p-3 bg-gray-50 rounded-2xl">
-                      <span className="text-2xl">{moment.icon}</span>
+                  {totalPolls > 0 && (
+                    <div className="flex items-center gap-3 p-3 bg-green-50 rounded-2xl">
+                      <span className="text-2xl">🎯</span>
                       <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-900">{moment.text}</p>
-                        <p className="text-xs text-gray-500">{moment.time}</p>
+                        <p className="text-sm font-medium text-gray-900">Primera publicación creada</p>
+                        <p className="text-xs text-gray-500">Has comenzado tu journey de contenido</p>
                       </div>
                     </div>
-                  ))}
+                  )}
+                  
+                  {totalVotes >= 10 && (
+                    <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-2xl">
+                      <span className="text-2xl">🗳️</span>
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-gray-900">10+ votos recibidos</p>
+                        <p className="text-xs text-gray-500">La gente está participando en tu contenido</p>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {totalLikes >= 5 && (
+                    <div className="flex items-center gap-3 p-3 bg-pink-50 rounded-2xl">
+                      <span className="text-2xl">❤️</span>
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-gray-900">5+ me gusta recibidos</p>
+                        <p className="text-xs text-gray-500">Tu contenido está gustando</p>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {(followersCount || 0) >= 5 && (
+                    <div className="flex items-center gap-3 p-3 bg-purple-50 rounded-2xl">
+                      <span className="text-2xl">👥</span>
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-gray-900">Primeros seguidores</p>
+                        <p className="text-xs text-gray-500">{followersCount} personas te siguen</p>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {totalPolls === 0 && totalVotes === 0 && totalLikes === 0 && (followersCount || 0) === 0 && (
+                    <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-2xl">
+                      <span className="text-2xl">🚀</span>
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-gray-900">¡Listo para empezar!</p>
+                        <p className="text-xs text-gray-500">Crea tu primera publicación para desbloquear logros</p>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </>
