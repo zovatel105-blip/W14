@@ -1020,184 +1020,388 @@ const ProfilePage = () => {
 
       {/* Normal profile view - only show when NOT in TikTok mode */}
       {!isTikTokMode && (
-        <div className="min-h-screen bg-gray-50">
-      {/* ENCABEZADO SUPERIOR OPTIMIZADO MÓVIL - ANCHO COMPLETO */}
-      <header className="bg-white border-b border-gray-200 sticky top-0 z-40">
-        <div className="px-2 py-3">
-          <div className="flex items-center justify-between">
-            {/* Menú hamburguesa (izquierda) - Solo en perfil propio */}
-            {isOwnProfile ? (
-              <Button variant="ghost" size="sm" className="hover:bg-gray-100 p-3 active:scale-95 transition-transform min-w-[44px] min-h-[44px]">
-                <Menu className="w-5 h-5 sm:w-6 sm:h-6" />
-              </Button>
-            ) : (
-              <div className="min-w-[44px] min-h-[44px]"></div>
-            )}
-            
-            {/* Nombre de usuario + switch de cuentas (centro) */}
-            <div className="flex items-center gap-1 sm:gap-2 max-w-[200px] sm:max-w-none">
-              <h1 className="text-base sm:text-lg font-semibold text-gray-900 truncate">@{displayUser?.username || 'usuario'}</h1>
-              {/* Flecha dropdown - Solo en perfil propio cuando hay múltiples cuentas */}
-              {isOwnProfile && hasMultipleAccounts && (
-                <Button variant="ghost" size="sm" className="hover:bg-gray-100 p-2 sm:p-2 active:scale-95 transition-transform min-w-[36px] min-h-[36px]">
-                  <ChevronDown className="w-3 h-3 sm:w-4 sm:h-4" />
-                </Button>
-              )}
-            </div>
-            
-            {/* Botón dinámico (derecha) - Ajustes para perfil propio, Compartir para perfil ajeno */}
-            {isOwnProfile ? (
-              <Button variant="ghost" size="sm" className="hover:bg-gray-100 p-3 active:scale-95 transition-transform min-w-[44px] min-h-[44px]" onClick={handleSettingsClick}>
-                <Settings className="w-5 h-5 sm:w-6 sm:h-6" />
-              </Button>
-            ) : (
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                className="hover:bg-gray-100 p-3 active:scale-95 transition-transform min-w-[44px] min-h-[44px]" 
-                onClick={() => shareProfile(displayUser)}
-              >
-                <img 
-                  src="https://customer-assets.emergentagent.com/job_white-tiktok-icon/artifacts/z274rovs_1000007682-removebg-preview.png" 
-                  alt="Compartir" 
-                  className="w-5 h-5 sm:w-6 sm:h-6" 
-                  style={{ 
-                    filter: 'brightness(0) drop-shadow(0 0 0.5px black)',
-                    imageRendering: 'crisp-edges'
-                  }}
-                />
-              </Button>
-            )}
-          </div>
-        </div>
-      </header>
-
-      {/* CONTENIDO PRINCIPAL ANCHO COMPLETO - SIN LIMITACIONES */}
-      <div className="px-0 sm:px-2 py-4 sm:py-6 space-y-2 sm:space-y-4">
-        
-        {/* AVATAR + MÉTRICAS EXPANDIDO - USANDO TODO EL ANCHO */}
-        <div className="bg-white rounded-none sm:rounded-lg p-2 sm:p-4 shadow-sm mx-0">
-          <div className="flex items-center justify-between gap-1 sm:gap-2">
-            
-            {/* LADO IZQUIERDO: Votos y Seguidores */}
-            <div className="flex flex-col gap-3 sm:gap-4 flex-1 min-w-0">
-              {/* Votos con ícono - perfectamente alineado */}
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 sm:w-9 sm:h-9 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Vote className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-blue-600" />
+        <div className="min-h-screen bg-white">
+          
+          {/* Header minimalista */}
+          <header className="bg-white border-b border-gray-100/50 sticky top-0 z-40">
+            <div className="px-6 py-4">
+              <div className="flex items-center justify-between">
+                {/* Botón atrás o menú (izquierda) */}
+                {isOwnProfile ? (
+                  <Button variant="ghost" size="sm" className="w-10 h-10 rounded-full hover:bg-gray-50 p-0">
+                    <Menu className="w-5 h-5 text-gray-700" strokeWidth={1.5} />
+                  </Button>
+                ) : (
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="w-10 h-10 rounded-full hover:bg-gray-50 p-0"
+                    onClick={() => navigate(-1)}
+                  >
+                    <ArrowLeft className="w-5 h-5 text-gray-700" strokeWidth={1.5} />
+                  </Button>
+                )}
+                
+                {/* Username centrado */}
+                <div className="flex items-center gap-2">
+                  <h1 className="text-lg font-semibold text-gray-900">@{displayUser?.username || 'usuario'}</h1>
+                  {displayUser?.verified && (
+                    <Check className="w-4 h-4 text-blue-500" strokeWidth={2} />
+                  )}
                 </div>
-                <div className="flex flex-col justify-center min-w-0">
-                  <p className="text-sm sm:text-base font-bold text-gray-900 leading-none">{isOwnProfile ? (displayUser?.totalVotes || 0) : (displayUser?.votes || 0)}</p>
-                  <p className="text-xs sm:text-sm text-gray-600 font-medium leading-none mt-0.5">Votos</p>
+                
+                {/* Acción contextual (derecha) */}
+                {isOwnProfile ? (
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="w-10 h-10 rounded-full hover:bg-gray-50 p-0" 
+                    onClick={handleSettingsClick}
+                  >
+                    <Settings className="w-5 h-5 text-gray-700" strokeWidth={1.5} />
+                  </Button>
+                ) : (
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    className="w-10 h-10 rounded-full hover:bg-gray-50 p-0" 
+                    onClick={() => shareProfile(displayUser)}
+                  >
+                    <Share2 className="w-5 h-5 text-gray-700" strokeWidth={1.5} />
+                  </Button>
+                )}
+              </div>
+            </div>
+          </header>
+
+          {/* Contenido principal con jerarquía silenciosa */}
+          <div className="px-6 py-8 space-y-8">
+            
+            {/* Foto redonda prominente como punto de partida */}
+            <div className="flex flex-col items-center">
+              <div className="relative">
+                {/* Avatar prominente */}
+                <div className="relative w-28 h-28">
+                  {displayUser?.hasStory ? (
+                    <button
+                      onClick={() => {
+                        if (userStories.length > 0) {
+                          setShowStoryViewer(true);
+                        }
+                      }}
+                      className="absolute inset-0 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 rounded-full p-1 hover:scale-105 transition-transform duration-200"
+                    >
+                      <div className="w-full h-full bg-white rounded-full overflow-hidden">
+                        <Avatar className="w-full h-full rounded-full">
+                          <AvatarImage src={displayUser?.avatar} alt={displayUser?.displayName} className="object-cover" />
+                          <AvatarFallback className="bg-gradient-to-br from-gray-100 to-gray-200 text-gray-600 text-2xl font-medium">
+                            {displayUser?.displayName ? displayUser.displayName.charAt(0).toUpperCase() : 'U'}
+                          </AvatarFallback>
+                        </Avatar>
+                      </div>
+                    </button>
+                  ) : (
+                    <div className="w-full h-full bg-white rounded-full overflow-hidden border-4 border-gray-100">
+                      <Avatar className="w-full h-full rounded-full">
+                        <AvatarImage src={displayUser?.avatar} alt={displayUser?.displayName} className="object-cover" />
+                        <AvatarFallback className="bg-gradient-to-br from-gray-100 to-gray-200 text-gray-600 text-2xl font-medium">
+                          {displayUser?.displayName ? displayUser.displayName.charAt(0).toUpperCase() : 'U'}
+                        </AvatarFallback>
+                      </Avatar>
+                    </div>
+                  )}
+                  
+                  {/* Botón sutil de editar - solo perfil propio */}
+                  {isOwnProfile && (
+                    <button 
+                      onClick={() => setShowCreateStoryModal(true)}
+                      className="absolute -bottom-1 -right-1 w-8 h-8 bg-blue-500 hover:bg-blue-600 rounded-full flex items-center justify-center shadow-lg transition-all duration-200 hover:scale-105"
+                    >
+                      <Plus className="w-4 h-4 text-white" strokeWidth={2} />
+                    </button>
+                  )}
                 </div>
               </div>
+            </div>
+
+            {/* Métricas clave en dos filas limpias */}
+            <div className="space-y-6">
               
-              {/* Seguidores con ícono - perfectamente alineado */}
-              <div 
-                className="flex items-center gap-2 cursor-pointer hover:bg-gray-50 rounded-lg p-1.5 transition-colors active:scale-95 -m-1.5"
-                onClick={handleFollowersClick}
-              >
-                <div className="w-8 h-8 sm:w-9 sm:h-9 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Users className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-green-600" />
+              {/* Primera fila - Métricas principales */}
+              <div className="grid grid-cols-2 gap-8">
+                <div className="text-center">
+                  <div className="flex flex-col items-center gap-2">
+                    <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center">
+                      <Vote className="w-6 h-6 text-blue-600" strokeWidth={1.5} />
+                    </div>
+                    <div>
+                      <p className="text-2xl font-bold text-gray-900">{isOwnProfile ? (displayUser?.totalVotes || 0) : (displayUser?.votes || 0)}</p>
+                      <p className="text-sm text-gray-600 mt-1">votos</p>
+                    </div>
+                  </div>
                 </div>
-                <div className="flex flex-col justify-center min-w-0">
-                  <p className="text-sm sm:text-base font-bold text-gray-900 leading-none">{isOwnProfile ? followersCount : (displayUser?.followers || 0)}</p>
-                  <p className="text-xs sm:text-sm text-gray-600 font-medium leading-none mt-0.5">Seguidores</p>
+                
+                <div className="text-center">
+                  <div className="flex flex-col items-center gap-2">
+                    <div className="w-12 h-12 rounded-full bg-pink-50 flex items-center justify-center">
+                      <Heart className="w-6 h-6 text-pink-600" strokeWidth={1.5} />
+                    </div>
+                    <div>
+                      <p className="text-2xl font-bold text-gray-900">{isOwnProfile ? (displayUser?.totalLikes || 0) : (displayUser?.likes || 0)}</p>
+                      <p className="text-sm text-gray-600 mt-1">me gusta</p>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* AVATAR EN EL CENTRO - PERFECTAMENTE CENTRADO */}
-            <div className="relative w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 flex-shrink-0">
-              {/* Borde degradado solo si hay historia */}
-              {displayUser?.hasStory ? (
-                <button
-                  onClick={() => {
-                    if (userStories.length > 0) {
-                      setShowStoryViewer(true);
-                    }
-                  }}
-                  className="absolute inset-0 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 rounded-full p-0.5 hover:scale-105 transition-transform duration-200 cursor-pointer"
+              {/* Segunda fila - Métricas sociales */}
+              <div className="grid grid-cols-2 gap-8">
+                <button 
+                  className="text-center hover:bg-gray-50 rounded-xl p-4 transition-colors"
+                  onClick={handleFollowersClick}
                 >
-                  <div className="w-full h-full bg-white rounded-full overflow-hidden relative">
-                    <Avatar className="w-full h-full">
-                      <AvatarImage src={displayUser?.avatar} alt={displayUser?.displayName} />
-                      <AvatarFallback className="bg-gradient-to-br from-purple-100 to-blue-100 text-purple-600 text-lg font-bold">
-                        {displayUser?.displayName ? displayUser.displayName.charAt(0).toUpperCase() : 'U'}
-                      </AvatarFallback>
-                    </Avatar>
+                  <div className="flex flex-col items-center gap-2">
+                    <div className="w-12 h-12 rounded-full bg-green-50 flex items-center justify-center">
+                      <Users className="w-6 h-6 text-green-600" strokeWidth={1.5} />
+                    </div>
+                    <div>
+                      <p className="text-2xl font-bold text-gray-900">{isOwnProfile ? followersCount : (displayUser?.followers || 0)}</p>
+                      <p className="text-sm text-gray-600 mt-1">seguidores</p>
+                    </div>
                   </div>
                 </button>
-              ) : (
-                // Sin borde degradado si no hay historia
-                <div className="w-full h-full bg-white rounded-full overflow-hidden relative border-2 border-gray-200">
-                  <Avatar className="w-full h-full">
-                    <AvatarImage src={displayUser?.avatar} alt={displayUser?.displayName} />
-                    <AvatarFallback className="bg-gradient-to-br from-purple-100 to-blue-100 text-purple-600 text-lg font-bold">
-                      {displayUser?.displayName ? displayUser.displayName.charAt(0).toUpperCase() : 'U'}
-                    </AvatarFallback>
-                  </Avatar>
-                </div>
-              )}
-              
-              {/* Botón de acción "+" centrado en la parte inferior - Solo para perfil propio */}
-              {isOwnProfile && (
+                
                 <button 
-                  onClick={() => setShowCreateStoryModal(true)}
-                  className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 bg-blue-500 hover:bg-blue-600 rounded-full flex items-center justify-center shadow-lg transition-all duration-200 active:scale-90 z-10"
+                  className="text-center hover:bg-gray-50 rounded-xl p-4 transition-colors"
+                  onClick={handleFollowingClick}
                 >
-                  <Plus className="w-4 h-4 sm:w-4.5 sm:h-4.5 md:w-5 md:h-5 text-white" />
+                  <div className="flex flex-col items-center gap-2">
+                    <div className="w-12 h-12 rounded-full bg-purple-50 flex items-center justify-center">
+                      <UserPlus className="w-6 h-6 text-purple-600" strokeWidth={1.5} />
+                    </div>
+                    <div>
+                      <p className="text-2xl font-bold text-gray-900">{isOwnProfile ? followingCount : (displayUser?.following || 0)}</p>
+                      <p className="text-sm text-gray-600 mt-1">siguiendo</p>
+                    </div>
+                  </div>
                 </button>
-              )}
+              </div>
             </div>
 
-            {/* LADO DERECHO: Me gusta y Seguidos - perfectamente alineado */}
-            <div className="flex flex-col gap-3 sm:gap-4 flex-1 min-w-0">
-              {/* Me gusta con ícono - alineación derecha perfecta */}
-              <div className="flex items-center gap-2 justify-end">
-                <div className="flex flex-col justify-center min-w-0 text-right">
-                  <p className="text-sm sm:text-base font-bold text-gray-900 leading-none">{isOwnProfile ? (displayUser?.totalLikes || 0) : (displayUser?.likes || 0)}</p>
-                  <p className="text-xs sm:text-sm text-gray-600 font-medium leading-none mt-0.5">Me gusta</p>
-                </div>
-                <div className="w-8 h-8 sm:w-9 sm:h-9 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
-                  <Heart className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-red-600" />
-                </div>
-              </div>
+            {/* Nombre en negrita con línea fina */}
+            <div className="text-center space-y-4">
+              <div className="w-16 h-px bg-gray-200 mx-auto"></div>
               
-              {/* Seguidos con ícono - alineación derecha perfecta */}
-              <div 
-                className="flex items-center gap-2 justify-end cursor-pointer hover:bg-gray-50 rounded-lg p-1.5 transition-colors active:scale-95 -m-1.5"
-                onClick={handleFollowingClick}
-              >
-                <div className="flex flex-col justify-center min-w-0 text-right">
-                  <p className="text-sm sm:text-base font-bold text-gray-900 leading-none">{isOwnProfile ? followingCount : (displayUser?.following || 0)}</p>
-                  <p className="text-xs sm:text-sm text-gray-600 font-medium leading-none mt-0.5">Seguidos</p>
-                </div>
-                <div className="w-8 h-8 sm:w-9 sm:h-9 bg-purple-100 rounded-full flex items-center justify-center flex-shrink-0">
-                  <UserPlus className="w-4 h-4 sm:w-4.5 sm:h-4.5 text-purple-600" />
-                </div>
+              <div className="space-y-2">
+                <h2 className="text-xl font-bold text-gray-900">
+                  {displayUser?.displayName || displayUser?.username || 'Usuario'}
+                </h2>
+                
+                {displayUser?.occupation && (
+                  <p className="text-sm text-gray-600 font-medium">
+                    {displayUser.occupation}
+                  </p>
+                )}
+                
+                {displayUser?.bio && (
+                  <p className="text-sm text-gray-600 leading-relaxed max-w-sm mx-auto">
+                    {displayUser.bio}
+                  </p>
+                )}
               </div>
             </div>
-          </div>
-        </div>
 
-        {/* NOMBRE + ROL EXPANDIDO */}
-        <div className="bg-white rounded-none sm:rounded-lg p-2 sm:p-4 shadow-sm mx-0">
-          <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
-            {/* Nombre principal */}
-            <div className="flex items-center gap-2">
-              <h2 className="text-base sm:text-xl font-bold text-gray-900 truncate flex-shrink-0">
-                {displayUser?.displayName || displayUser?.username || 'Usuario'}
-              </h2>
-              {displayUser?.verified && (
-                <Check className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500 flex-shrink-0" />
+            {/* Botones de acción con iconografía integrada */}
+            <div className="grid grid-cols-2 gap-4">
+              {isOwnProfile ? (
+                <>
+                  <Button 
+                    variant="outline" 
+                    className="h-12 rounded-2xl border-gray-200 hover:bg-gray-50 font-medium"
+                    onClick={() => setEditProfileModalOpen(true)}
+                  >
+                    <Settings className="w-4 h-4 mr-2" strokeWidth={1.5} />
+                    Editar perfil
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    className="h-12 rounded-2xl border-gray-200 hover:bg-gray-50 font-medium"
+                    onClick={() => setStatisticsModalOpen(true)}
+                  >
+                    <BarChart3 className="w-4 h-4 mr-2" strokeWidth={1.5} />
+                    Estadísticas
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button 
+                    className={`h-12 rounded-2xl font-medium transition-all ${
+                      isFollowing(viewedUser?.id || userId) 
+                        ? 'bg-gray-100 text-gray-900 hover:bg-gray-200' 
+                        : 'bg-blue-500 text-white hover:bg-blue-600'
+                    }`}
+                    onClick={async () => {
+                      const targetUserId = viewedUser?.id || userId;
+                      try {
+                        if (isFollowing(targetUserId)) {
+                          await unfollowUser(targetUserId);
+                          setNotificationsEnabled(false);
+                          toast({
+                            title: "Dejaste de seguir",
+                            description: `Ya no sigues a @${viewedUser?.username || userId}`,
+                          });
+                        } else {
+                          await followUser(targetUserId);
+                          toast({
+                            title: "Siguiendo",
+                            description: `Ahora sigues a @${viewedUser?.username || userId}`,
+                          });
+                        }
+                      } catch (error) {
+                        console.error('Error toggling follow status:', error);
+                        toast({
+                          title: "Error",
+                          description: "No se pudo actualizar el estado de seguimiento",
+                          variant: "destructive",
+                        });
+                      }
+                    }}
+                  >
+                    {isFollowing(viewedUser?.id || userId) ? (
+                      <>
+                        <UserCheck className="w-4 h-4 mr-2" strokeWidth={1.5} />
+                        Siguiendo
+                      </>
+                    ) : (
+                      <>
+                        <UserPlus className="w-4 h-4 mr-2" strokeWidth={1.5} />
+                        Seguir
+                      </>
+                    )}
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    className="h-12 rounded-2xl border-gray-200 hover:bg-gray-50 font-medium"
+                    onClick={() => navigate(`/messages?user=${viewedUser?.username || userId}`)}
+                  >
+                    <MessageCircle className="w-4 h-4 mr-2" strokeWidth={1.5} />
+                    Mensaje
+                  </Button>
+                </>
               )}
             </div>
-            
-            {/* Separador y rol - Solo mostrar si hay ocupación */}
-            {displayUser?.occupation && (
-              <div className="flex items-center gap-2 sm:gap-3">
-                <div className="w-px h-4 sm:h-6 bg-gray-300 hidden sm:block"></div>
+
+            {/* Línea separadora sutil */}
+            <div className="w-full h-px bg-gray-100"></div>
+
+          </div>
+
+          {/* Contenido de tabs con diseño limpio */}
+          <div className="px-6 pb-24">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+              
+              {/* Navegación de tabs minimalista */}
+              <TabsList className="grid w-full grid-cols-4 bg-gray-50 rounded-2xl p-1 h-auto">
+                <TabsTrigger 
+                  value="polls" 
+                  className="rounded-xl py-3 text-sm font-medium data-[state=active]:bg-white data-[state=active]:shadow-sm"
+                >
+                  <LayoutDashboard className="w-4 h-4 mr-2" strokeWidth={1.5} />
+                  Posts
+                </TabsTrigger>
+                {isOwnProfile && (
+                  <TabsTrigger 
+                    value="liked" 
+                    className="rounded-xl py-3 text-sm font-medium data-[state=active]:bg-white data-[state=active]:shadow-sm"
+                  >
+                    <Heart className="w-4 h-4" strokeWidth={1.5} />
+                  </TabsTrigger>
+                )}
+                <TabsTrigger 
+                  value="mentions" 
+                  className="rounded-xl py-3 text-sm font-medium data-[state=active]:bg-white data-[state=active]:shadow-sm"
+                >
+                  <AtSign className="w-4 h-4" strokeWidth={1.5} />
+                </TabsTrigger>
+                {isOwnProfile && (
+                  <TabsTrigger 
+                    value="saved" 
+                    className="rounded-xl py-3 text-sm font-medium data-[state=active]:bg-white data-[state=active]:shadow-sm"
+                  >
+                    <Bookmark className="w-4 h-4" strokeWidth={1.5} />
+                  </TabsTrigger>
+                )}
+              </TabsList>
+
+              {/* Contenido de tabs */}
+              <div className="mt-6">
+                <TabsContent value="polls" className="space-y-6">
+                  {userPolls.length === 0 ? (
+                    <div className="text-center py-16 space-y-6">
+                      <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto">
+                        <LayoutDashboard className="w-8 h-8 text-gray-400" strokeWidth={1.5} />
+                      </div>
+                      <div className="space-y-2">
+                        <h3 className="text-lg font-semibold text-gray-900">Tu lienzo está en blanco</h3>
+                        <p className="text-gray-600 text-sm leading-relaxed max-w-sm mx-auto">
+                          El momento perfecto para compartir tu primera historia
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <TikTokProfileGrid 
+                      polls={userPolls} 
+                      onPollClick={handlePollClick}
+                      onUpdatePoll={handleUpdatePoll}
+                      onDeletePoll={handleDeletePoll}
+                      currentUser={authUser}
+                      isOwnProfile={isOwnProfile}
+                    />
+                  )}
+                </TabsContent>
+
+                {isOwnProfile && (
+                  <TabsContent value="liked" className="space-y-6">
+                    {likedPolls.length === 0 ? (
+                      <div className="text-center py-16 space-y-6">
+                        <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto">
+                          <Heart className="w-8 h-8 text-gray-400" strokeWidth={1.5} />
+                        </div>
+                        <div className="space-y-2">
+                          <h3 className="text-lg font-semibold text-gray-900">Sin favoritos aún</h3>
+                          <p className="text-gray-600 text-sm leading-relaxed max-w-sm mx-auto">
+                            Las publicaciones que ames aparecerán aquí
+                          </p>
+                        </div>
+                      </div>
+                    ) : (
+                      <TikTokProfileGrid 
+                        polls={likedPolls} 
+                        onPollClick={handlePollClick}
+                        onUpdatePoll={handleUpdatePoll}
+                        onDeletePoll={handleDeletePoll}
+                        currentUser={authUser}
+                        isOwnProfile={false}
+                      />
+                    )}
+                  </TabsContent>
+                )}
+
+                <TabsContent value="mentions" className="space-y-6">
+                  {mentionedPolls.length === 0 ? (
+                    <div className="text-center py-16 space-y-6">
+                      <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto">
+                        <AtSign className="w-8 h-8 text-gray-400" strokeWidth={1.5} />
+                      </div>
+                      <div className="space-y-2">
+                        <h3 className="text-lg font-semibold text-gray-900">Esperando menciones</h3>
+                        <p className="text-gray-600 text-sm leading-relaxed max-w-sm mx-auto">
+                          Cuando otros hablen de ti, lo verás aquí
+                        </p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
                 <span className="text-gray-400 sm:hidden">•</span>
                 <p className="text-xs sm:text-base font-semibold text-gray-600 sm:text-gray-700">
                   {displayUser.occupation}
