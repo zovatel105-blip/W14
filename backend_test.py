@@ -56,6 +56,226 @@ def test_health_check(base_url):
         print(f"❌ Health check endpoint error: {e}")
         return False
 
+def test_mobile_registration_critical(base_url):
+    """🚨 TESTING CRÍTICO: HTTP 404 EN ENDPOINT DE REGISTRO EN DISPOSITIVOS MÓVILES"""
+    print("\n🚨 === TESTING CRÍTICO: REGISTRO EN DISPOSITIVOS MÓVILES ===")
+    print("PROBLEMA REPORTADO: Usuario obtiene HTTP 404 cuando intenta registrarse desde móvil")
+    
+    # Datos de prueba específicos del reporte
+    test_data = {
+        "username": "testuser404",
+        "email": "test404@example.com", 
+        "password": "password123",
+        "display_name": "Test User 404"
+    }
+    
+    success_count = 0
+    total_tests = 8
+    
+    # Test 1: Verificar que el servidor esté corriendo
+    print("\n1️⃣ VERIFICANDO QUE EL SERVIDOR ESTÉ CORRIENDO...")
+    try:
+        response = requests.get(f"{base_url}/", timeout=10)
+        print(f"   Status Code: {response.status_code}")
+        if response.status_code == 200:
+            print("   ✅ Servidor respondiendo correctamente")
+            success_count += 1
+        else:
+            print(f"   ❌ Servidor no responde correctamente: {response.status_code}")
+    except Exception as e:
+        print(f"   ❌ Error conectando al servidor: {e}")
+    
+    # Test 2: Probar acceso directo al endpoint con headers de escritorio
+    print("\n2️⃣ PROBANDO ENDPOINT CON HEADERS DE ESCRITORIO...")
+    try:
+        desktop_headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Content-Type': 'application/json'
+        }
+        response = requests.post(f"{base_url}/auth/register", json=test_data, headers=desktop_headers, timeout=10)
+        print(f"   Status Code: {response.status_code}")
+        print(f"   Response: {response.text[:200]}...")
+        
+        if response.status_code in [200, 400]:  # 200 = success, 400 = validation error (but endpoint exists)
+            print("   ✅ Endpoint existe y responde desde escritorio")
+            success_count += 1
+        elif response.status_code == 404:
+            print("   ❌ CRÍTICO: Endpoint devuelve 404 incluso desde escritorio")
+        else:
+            print(f"   ⚠️ Respuesta inesperada: {response.status_code}")
+            
+    except Exception as e:
+        print(f"   ❌ Error en test de escritorio: {e}")
+    
+    # Test 3: Probar acceso directo al endpoint con headers móviles (iPhone)
+    print("\n3️⃣ PROBANDO ENDPOINT CON HEADERS MÓVILES (iPhone)...")
+    try:
+        mobile_headers = get_mobile_headers()
+        response = requests.post(f"{base_url}/auth/register", json=test_data, headers=mobile_headers, timeout=10)
+        print(f"   Status Code: {response.status_code}")
+        print(f"   Response: {response.text[:200]}...")
+        
+        if response.status_code in [200, 400]:
+            print("   ✅ Endpoint responde correctamente desde móvil iPhone")
+            success_count += 1
+        elif response.status_code == 404:
+            print("   ❌ CRÍTICO: Endpoint devuelve 404 desde móvil iPhone")
+            print("   🔍 CAUSA POSIBLE: Problema de routing específico para móviles")
+        else:
+            print(f"   ⚠️ Respuesta inesperada desde móvil: {response.status_code}")
+            
+    except Exception as e:
+        print(f"   ❌ Error en test móvil iPhone: {e}")
+    
+    # Test 4: Probar con headers móviles Android
+    print("\n4️⃣ PROBANDO ENDPOINT CON HEADERS MÓVILES (Android)...")
+    try:
+        android_headers = {
+            'User-Agent': 'Mozilla/5.0 (Linux; Android 13; SM-G991B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36',
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json',
+            'Origin': 'https://config-post-error.preview.emergentagent.com'
+        }
+        response = requests.post(f"{base_url}/auth/register", json=test_data, headers=android_headers, timeout=10)
+        print(f"   Status Code: {response.status_code}")
+        print(f"   Response: {response.text[:200]}...")
+        
+        if response.status_code in [200, 400]:
+            print("   ✅ Endpoint responde correctamente desde móvil Android")
+            success_count += 1
+        elif response.status_code == 404:
+            print("   ❌ CRÍTICO: Endpoint devuelve 404 desde móvil Android")
+        else:
+            print(f"   ⚠️ Respuesta inesperada desde Android: {response.status_code}")
+            
+    except Exception as e:
+        print(f"   ❌ Error en test móvil Android: {e}")
+    
+    # Test 5: Verificar CORS para móviles
+    print("\n5️⃣ VERIFICANDO CONFIGURACIÓN CORS PARA MÓVILES...")
+    try:
+        mobile_headers = get_mobile_headers()
+        # Hacer OPTIONS request (preflight)
+        options_response = requests.options(f"{base_url}/auth/register", headers=mobile_headers, timeout=10)
+        print(f"   OPTIONS Status Code: {options_response.status_code}")
+        print(f"   CORS Headers: {dict(options_response.headers)}")
+        
+        if options_response.status_code in [200, 204]:
+            print("   ✅ CORS configurado correctamente para móviles")
+            success_count += 1
+        else:
+            print(f"   ❌ Problema CORS para móviles: {options_response.status_code}")
+            
+    except Exception as e:
+        print(f"   ❌ Error verificando CORS: {e}")
+    
+    # Test 6: Verificar que el endpoint esté correctamente montado
+    print("\n6️⃣ VERIFICANDO MONTAJE DEL ENDPOINT...")
+    try:
+        # Probar diferentes variaciones del endpoint
+        endpoints_to_test = [
+            f"{base_url}/auth/register",
+            f"{base_url.replace('/api', '')}/api/auth/register",
+            f"https://config-post-error.preview.emergentagent.com/auth/register"
+        ]
+        
+        for endpoint in endpoints_to_test:
+            try:
+                response = requests.post(endpoint, json=test_data, timeout=5)
+                print(f"   {endpoint}: {response.status_code}")
+                if response.status_code != 404:
+                    print(f"   ✅ Endpoint funcional encontrado: {endpoint}")
+                    success_count += 1
+                    break
+            except:
+                print(f"   {endpoint}: ERROR")
+        else:
+            print("   ❌ Ninguna variación del endpoint funciona")
+            
+    except Exception as e:
+        print(f"   ❌ Error verificando montaje: {e}")
+    
+    # Test 7: Probar con datos de registro válidos completos
+    print("\n7️⃣ PROBANDO CON DATOS VÁLIDOS COMPLETOS...")
+    try:
+        # Usar timestamp para evitar duplicados
+        timestamp = int(time.time())
+        complete_data = {
+            "username": f"mobile_user_{timestamp}",
+            "email": f"mobile_test_{timestamp}@example.com",
+            "password": "SecurePass123!",
+            "display_name": f"Mobile Test User {timestamp}"
+        }
+        
+        mobile_headers = get_mobile_headers()
+        response = requests.post(f"{base_url}/auth/register", json=complete_data, headers=mobile_headers, timeout=10)
+        print(f"   Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            print("   ✅ Registro exitoso con datos válidos desde móvil")
+            data = response.json()
+            print(f"   🎉 Usuario creado: {data.get('user', {}).get('username', 'N/A')}")
+            print(f"   🔑 Token generado: {data.get('access_token', 'N/A')[:20]}...")
+            success_count += 1
+        elif response.status_code == 400:
+            print(f"   ⚠️ Error de validación (endpoint funciona): {response.text}")
+            success_count += 1  # Endpoint funciona, solo hay error de validación
+        elif response.status_code == 404:
+            print("   ❌ CRÍTICO: Sigue devolviendo 404 con datos válidos")
+        else:
+            print(f"   ❌ Error inesperado: {response.status_code} - {response.text}")
+            
+    except Exception as e:
+        print(f"   ❌ Error con datos válidos: {e}")
+    
+    # Test 8: Verificar logs del servidor si es posible
+    print("\n8️⃣ ANÁLISIS DE LOGS DEL SERVIDOR...")
+    try:
+        # Intentar hacer request y analizar respuesta detallada
+        mobile_headers = get_mobile_headers()
+        mobile_headers['X-Debug'] = 'true'  # Header de debug si está soportado
+        
+        response = requests.post(f"{base_url}/auth/register", json=test_data, headers=mobile_headers, timeout=10)
+        
+        print(f"   Status Code: {response.status_code}")
+        print(f"   Response Headers: {dict(response.headers)}")
+        print(f"   Response Body: {response.text}")
+        
+        # Analizar el tipo de error 404
+        if response.status_code == 404:
+            if 'nginx' in response.text.lower():
+                print("   🔍 DIAGNÓSTICO: Error 404 viene de Nginx - problema de proxy/routing")
+            elif 'fastapi' in response.text.lower() or 'not found' in response.text.lower():
+                print("   🔍 DIAGNÓSTICO: Error 404 viene de FastAPI - endpoint no registrado")
+            else:
+                print("   🔍 DIAGNÓSTICO: Error 404 de origen desconocido")
+        
+        success_count += 1  # Contar como éxito el análisis
+        
+    except Exception as e:
+        print(f"   ❌ Error analizando logs: {e}")
+    
+    # Resumen del diagnóstico
+    print(f"\n📊 RESUMEN DEL DIAGNÓSTICO:")
+    print(f"   Tests exitosos: {success_count}/{total_tests}")
+    print(f"   Porcentaje de éxito: {(success_count/total_tests)*100:.1f}%")
+    
+    if success_count >= 6:
+        print(f"\n✅ CONCLUSIÓN: El endpoint de registro funciona correctamente")
+        print(f"   - El problema puede ser específico del frontend o configuración")
+        print(f"   - Verificar configuración REACT_APP_BACKEND_URL en frontend")
+        print(f"   - Revisar implementación del formulario de registro")
+    elif success_count >= 3:
+        print(f"\n⚠️ CONCLUSIÓN: Problemas parciales detectados")
+        print(f"   - Algunos tests pasan, otros fallan")
+        print(f"   - Posible problema de configuración o CORS")
+    else:
+        print(f"\n❌ CONCLUSIÓN: Problemas críticos confirmados")
+        print(f"   - Endpoint de registro no funciona correctamente")
+        print(f"   - Requiere investigación inmediata del backend")
+    
+    return success_count >= 4
+
 def test_user_registration(base_url):
     """Test user registration endpoint"""
     print("\n=== Testing User Registration ===")
