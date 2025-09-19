@@ -854,10 +854,6 @@ const ProfilePage = () => {
         poll.id === pollId ? { ...poll, ...updatedData } : poll
       ));
       
-      setUserPolls(prev => prev.map(poll => 
-        poll.id === pollId ? { ...poll, ...updatedData } : poll
-      ));
-      
       return response;
     } catch (error) {
       console.error('Error updating poll:', error);
