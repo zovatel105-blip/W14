@@ -13,6 +13,11 @@ import ShareModal from './ShareModal';
 import { useShare } from '../hooks/useShare';
 
 const MediaPreview = ({ media, isWinner, isSelected, onClick, percentage, option, totalVotes, userVote, fullScreen = false }) => {
+  // Debug: Force percentage bars when totalVotes > 0
+  const shouldShowBars = totalVotes > 0;
+  const displayPercentage = Math.max(percentage || 0, 0);
+  
+  console.log(`MediaPreview Debug - Option ${option?.id}: totalVotes=${totalVotes}, percentage=${percentage}, shouldShowBars=${shouldShowBars}, displayPercentage=${displayPercentage}`);
   const [isPlaying, setIsPlaying] = useState(false);
   const navigate = useNavigate();
 
