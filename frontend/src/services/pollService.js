@@ -315,6 +315,66 @@ class PollService {
       throw error;
     }
   }
+
+  // Save a poll to user's saved collection
+  async savePoll(pollId) {
+    try {
+      const response = await fetch(`${this.baseURL}/polls/${pollId}/save`, {
+        method: 'POST',
+        headers: this.getAuthHeaders()
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error saving poll:', error);
+      throw error;
+    }
+  }
+
+  // Remove a poll from user's saved collection
+  async unsavePoll(pollId) {
+    try {
+      const response = await fetch(`${this.baseURL}/polls/${pollId}/save`, {
+        method: 'DELETE',
+        headers: this.getAuthHeaders()
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error unsaving poll:', error);
+      throw error;
+    }
+  }
+
+  // Get user's saved polls
+  async getSavedPolls() {
+    try {
+      const response = await fetch(`${this.baseURL}/polls/saved`, {
+        method: 'GET',
+        headers: this.getAuthHeaders()
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error getting saved polls:', error);
+      throw error;
+    }
+  }
 }
 
 // Export singleton instance
