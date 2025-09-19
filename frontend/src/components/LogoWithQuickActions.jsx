@@ -100,7 +100,27 @@ const LogoWithQuickActions = ({ size = 32, className = "" }) => {
           border: 'none',
           outline: 'none',
           boxShadow: 'none',
-          backgroundColor: 'black'
+          backgroundColor: 'black',
+          // Forzar eliminación de cualquier outline o ring del navegador
+          WebkitAppearance: 'none',
+          MozAppearance: 'none',
+          appearance: 'none',
+          // Eliminar cualquier ring o outline en todos los estados
+          '&:focus': {
+            outline: 'none !important',
+            boxShadow: 'none !important',
+            border: 'none !important'
+          },
+          '&:active': {
+            outline: 'none !important',
+            boxShadow: 'none !important',
+            border: 'none !important'
+          },
+          '&:hover': {
+            outline: 'none !important',
+            boxShadow: 'none !important',
+            border: 'none !important'
+          }
         }}
         title="Mantén presionado para acciones rápidas"
       >
