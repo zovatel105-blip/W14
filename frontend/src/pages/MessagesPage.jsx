@@ -450,27 +450,20 @@ const MessagesPage = () => {
   const votaTokEmojis = ['🔥', '💯', '⚡', '🎯', '💎', '🚀', '✨', '🏆'];
 
   return (
-    <div className="h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-indigo-50 flex relative overflow-hidden">
-      {/* Animated Background Pattern */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-20 left-20 w-32 h-32 bg-purple-300 rounded-full blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-40 right-32 w-40 h-40 bg-pink-300 rounded-full blur-3xl animate-pulse delay-1000"></div>
-        <div className="absolute top-1/2 left-1/3 w-24 h-24 bg-indigo-300 rounded-full blur-2xl animate-pulse delay-2000"></div>
-      </div>
-
-      {/* VotaTok Conversations Sidebar */}
+    <div className="h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex relative overflow-hidden">
+      {/* VotaTok Conversations Sidebar - Inspired by Profile design */}
       {showList && (
         <motion.div 
           initial={{ x: -30, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
-          className="w-full md:w-96 bg-white/90 backdrop-blur-xl border-r border-purple-100 flex flex-col shadow-2xl relative z-10"
+          className="w-full md:w-96 bg-white border-r border-gray-200 flex flex-col shadow-lg relative z-10"
         >
-          {/* VotaTok Header */}
-          <div className="p-6 border-b border-gradient-to-r from-purple-100 to-pink-100 bg-gradient-to-br from-white via-purple-50 to-pink-50 sticky top-0 z-20">
+          {/* VotaTok Header - Clean like Profile */}
+          <div className="p-6 border-b border-gray-100 bg-white sticky top-0 z-20">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center space-x-4">
                 <motion.div 
-                  whileHover={{ scale: 1.05, rotate: 5 }}
+                  whileHover={{ scale: 1.05 }}
                   className={`w-12 h-12 bg-gradient-to-br ${getVotaTokColors(user?.display_name || user?.username || 'User')} rounded-2xl flex items-center justify-center shadow-lg`}
                 >
                   <span className="text-white text-lg font-bold">
@@ -478,23 +471,23 @@ const MessagesPage = () => {
                   </span>
                 </motion.div>
                 <div>
-                  <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                  <h1 className="text-2xl font-bold text-gray-900">
                     VoteChat
                   </h1>
-                  <p className="text-sm text-purple-500 font-medium">@{user?.username || 'usuario'}</p>
+                  <p className="text-sm text-purple-600 font-medium">@{user?.username || 'usuario'}</p>
                 </div>
               </div>
               
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-3">
                 {/* Chat Requests Bell */}
                 {chatRequests.length > 0 && (
                   <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                     onClick={() => setShowRequests(!showRequests)}
-                    className="relative p-3 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl shadow-lg"
+                    className="relative p-3 bg-blue-500 rounded-2xl shadow-lg hover:bg-blue-600 transition-colors"
                   >
-                    <Bell className="w-5 h-5 text-white" />
+                    <Bell className="w-5 h-5 text-white" strokeWidth={1.5} />
                     <motion.span 
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
@@ -507,17 +500,17 @@ const MessagesPage = () => {
                 
                 {/* New Chat Button */}
                 <motion.button
-                  whileHover={{ scale: 1.1, rotate: 90 }}
-                  whileTap={{ scale: 0.9 }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={() => setShowNewChat(!showNewChat)}
-                  className="p-3 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-2xl shadow-lg hover:shadow-xl transition-all"
+                  className="p-3 bg-purple-500 rounded-2xl shadow-lg hover:bg-purple-600 transition-colors"
                 >
-                  <Plus className="w-5 h-5 text-white" />
+                  <Plus className="w-5 h-5 text-white" strokeWidth={1.5} />
                 </motion.button>
               </div>
             </div>
 
-            {/* Enhanced Chat Requests */}
+            {/* Enhanced Chat Requests - Profile Modal Style */}
             <AnimatePresence>
               {showRequests && chatRequests.length > 0 && (
                 <motion.div
@@ -526,9 +519,9 @@ const MessagesPage = () => {
                   exit={{ height: 0, opacity: 0, y: -20 }}
                   className="mb-6 overflow-hidden"
                 >
-                  <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-3xl p-4 border border-purple-200 shadow-inner">
+                  <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-4 border border-blue-200">
                     <h3 className="text-sm font-bold text-purple-900 mb-4 flex items-center">
-                      <Sparkles className="w-4 h-4 mr-2" />
+                      <Bell className="w-4 h-4 mr-2" strokeWidth={1.5} />
                       Nuevas Conexiones ({chatRequests.length})
                     </h3>
                     <div className="space-y-3">
@@ -537,22 +530,19 @@ const MessagesPage = () => {
                           key={request.id} 
                           initial={{ x: -20, opacity: 0 }}
                           animate={{ x: 0, opacity: 1 }}
-                          className="flex items-center justify-between bg-white/80 backdrop-blur-sm rounded-2xl p-4 shadow-md border border-white/50"
+                          className="flex items-center justify-between bg-white rounded-2xl p-4 shadow-md border border-gray-100"
                         >
                           <div className="flex items-center space-x-3">
-                            <motion.div 
-                              whileHover={{ scale: 1.1 }}
-                              className={`w-12 h-12 bg-gradient-to-br ${getVotaTokColors(request.sender.display_name)} rounded-2xl flex items-center justify-center shadow-lg`}
-                            >
+                            <div className={`w-12 h-12 bg-gradient-to-br ${getVotaTokColors(request.sender.display_name)} rounded-2xl flex items-center justify-center shadow-lg`}>
                               <span className="text-white font-bold text-sm">
                                 {getInitials(request.sender.display_name)}
                               </span>
-                            </motion.div>
+                            </div>
                             <div>
                               <p className="font-bold text-gray-900 text-sm">{request.sender.display_name}</p>
                               <p className="text-xs text-purple-600 font-medium">@{request.sender.username}</p>
                               {request.message && (
-                                <p className="text-xs text-gray-600 mt-1 bg-gray-100 rounded-lg px-2 py-1 max-w-32 truncate">
+                                <p className="text-xs text-gray-600 mt-1 bg-gray-50 rounded-xl px-3 py-1 max-w-32 truncate">
                                   "{request.message}"
                                 </p>
                               )}
@@ -560,22 +550,22 @@ const MessagesPage = () => {
                           </div>
                           <div className="flex space-x-2">
                             <motion.button
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.9 }}
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
                               onClick={() => handleChatRequest(request.id, 'accept')}
-                              className="bg-gradient-to-br from-green-400 to-green-600 text-white rounded-2xl p-3 shadow-lg"
+                              className="bg-green-500 text-white rounded-2xl p-3 shadow-lg hover:bg-green-600 transition-colors"
                               title="Aceptar"
                             >
-                              <Check className="w-4 h-4" />
+                              <Check className="w-4 h-4" strokeWidth={1.5} />
                             </motion.button>
                             <motion.button
-                              whileHover={{ scale: 1.1 }}
-                              whileTap={{ scale: 0.9 }}
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
                               onClick={() => handleChatRequest(request.id, 'reject')}
-                              className="bg-gradient-to-br from-gray-400 to-gray-600 text-white rounded-2xl p-3 shadow-lg"
+                              className="bg-gray-400 text-white rounded-2xl p-3 shadow-lg hover:bg-gray-500 transition-colors"
                               title="Rechazar"
                             >
-                              <X className="w-4 h-4" />
+                              <X className="w-4 h-4" strokeWidth={1.5} />
                             </motion.button>
                           </div>
                         </motion.div>
@@ -586,7 +576,7 @@ const MessagesPage = () => {
               )}
             </AnimatePresence>
 
-            {/* VotaTok User Search */}
+            {/* VotaTok User Search - Profile Input Style */}
             <AnimatePresence>
               {showNewChat && (
                 <motion.div
@@ -597,7 +587,7 @@ const MessagesPage = () => {
                 >
                   <div className="relative mb-4">
                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center">
-                      <Search className="w-5 h-5 text-purple-400" />
+                      <Search className="w-5 h-5 text-gray-400" strokeWidth={1.5} />
                     </div>
                     <input
                       type="text"
@@ -607,7 +597,7 @@ const MessagesPage = () => {
                         setSearchQuery(e.target.value);
                         searchUsers(e.target.value);
                       }}
-                      className="w-full pl-12 pr-4 py-4 bg-gradient-to-br from-white to-purple-50 rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-300 focus:bg-white text-sm border border-purple-100 shadow-inner transition-all placeholder-purple-400"
+                      className="w-full pl-12 pr-4 py-4 bg-gray-50 rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-300 focus:bg-white text-sm border border-gray-200 transition-all placeholder-gray-400"
                     />
                     {loading && (
                       <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
@@ -620,14 +610,14 @@ const MessagesPage = () => {
                     )}
                   </div>
                   
-                  {/* Enhanced Search Results */}
+                  {/* Enhanced Search Results - Profile Modal Style */}
                   <AnimatePresence>
                     {searchResults.length > 0 && (
                       <motion.div
                         initial={{ y: -10, opacity: 0, scale: 0.95 }}
                         animate={{ y: 0, opacity: 1, scale: 1 }}
                         exit={{ y: -10, opacity: 0, scale: 0.95 }}
-                        className="bg-white/95 backdrop-blur-xl border border-purple-200 rounded-3xl shadow-2xl max-h-80 overflow-y-auto"
+                        className="bg-white border border-gray-200 rounded-2xl shadow-xl max-h-80 overflow-y-auto"
                       >
                         {searchResults.map((searchUser, index) => (
                           <motion.button
@@ -636,16 +626,13 @@ const MessagesPage = () => {
                             animate={{ x: 0, opacity: 1 }}
                             transition={{ delay: index * 0.05 }}
                             onClick={() => startConversation(searchUser)}
-                            className="w-full px-5 py-4 text-left flex items-center hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 transition-all border-b border-purple-100 last:border-b-0 group"
+                            className="w-full px-5 py-4 text-left flex items-center hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-b-0 group"
                           >
-                            <motion.div 
-                              whileHover={{ scale: 1.1, rotate: 5 }}
-                              className={`w-14 h-14 bg-gradient-to-br ${getVotaTokColors(searchUser.display_name)} rounded-2xl flex items-center justify-center mr-4 shadow-lg group-hover:shadow-xl transition-shadow`}
-                            >
+                            <div className={`w-14 h-14 bg-gradient-to-br ${getVotaTokColors(searchUser.display_name)} rounded-2xl flex items-center justify-center mr-4 shadow-lg group-hover:scale-105 transition-transform`}>
                               <span className="text-white font-bold text-lg">
                                 {getInitials(searchUser.display_name)}
                               </span>
-                            </motion.div>
+                            </div>
                             <div className="flex-1 min-w-0">
                               <div className="font-bold text-gray-900 text-sm truncate">{searchUser.display_name}</div>
                               <div className="text-xs text-purple-600 truncate font-medium">@{searchUser.username}</div>
@@ -655,10 +642,10 @@ const MessagesPage = () => {
                                 <motion.div 
                                   initial={{ scale: 0 }}
                                   animate={{ scale: 1 }}
-                                  className="w-3 h-3 bg-green-400 rounded-full shadow-sm"
+                                  className="w-3 h-3 bg-green-500 rounded-full shadow-sm"
                                 />
                               )}
-                              <MessageCircle className="w-4 h-4 text-purple-400 group-hover:text-purple-600 transition-colors" />
+                              <MessageCircle className="w-4 h-4 text-gray-400 group-hover:text-purple-500 transition-colors" strokeWidth={1.5} />
                             </div>
                           </motion.button>
                         ))}
@@ -676,28 +663,19 @@ const MessagesPage = () => {
               <motion.div 
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="p-8 text-center"
+                className="p-8 text-center space-y-6"
               >
-                <motion.div 
-                  animate={{ 
-                    scale: [1, 1.05, 1],
-                    rotate: [0, 5, -5, 0]
-                  }}
-                  transition={{ 
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                  className="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-purple-400 via-pink-400 to-indigo-400 rounded-3xl flex items-center justify-center shadow-2xl"
-                >
-                  <Users className="w-10 h-10 text-white" />
-                </motion.div>
-                <h3 className="text-xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent mb-3">
-                  ¡Conecta con VoTokkers!
-                </h3>
-                <p className="text-sm text-gray-600 mb-6 leading-relaxed">
-                  Inicia conversaciones sobre tus votaciones favoritas
-                </p>
+                <div className="w-20 h-20 mx-auto bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-xl">
+                  <Users className="w-10 h-10 text-white" strokeWidth={1.5} />
+                </div>
+                <div className="space-y-2">
+                  <h3 className="text-xl font-bold text-gray-900">
+                    ¡Conecta con VoTokkers!
+                  </h3>
+                  <p className="text-sm text-gray-600 leading-relaxed max-w-sm mx-auto">
+                    Inicia conversaciones sobre tus votaciones favoritas
+                  </p>
+                </div>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -708,7 +686,7 @@ const MessagesPage = () => {
                 </motion.button>
               </motion.div>
             ) : (
-              <div className="py-3">
+              <div className="py-2">
                 {conversations.map((conversation, index) => {
                   const otherUser = conversation.participants[0];
                   const isOnline = isUserOnline(otherUser.id);
@@ -722,26 +700,23 @@ const MessagesPage = () => {
                       transition={{ delay: index * 0.1 }}
                       onClick={() => setSelectedConversation(conversation)}
                       className={cn(
-                        "w-full p-5 text-left hover:bg-gradient-to-r hover:from-purple-50 hover:to-pink-50 transition-all duration-300 relative group border-l-4 border-transparent",
-                        selectedConversation?.id === conversation.id && "bg-gradient-to-r from-purple-100 to-pink-100 border-l-purple-500 shadow-inner"
+                        "w-full p-5 text-left hover:bg-gray-50 transition-all duration-200 relative group",
+                        selectedConversation?.id === conversation.id && "bg-purple-50 border-r-4 border-purple-500"
                       )}
                     >
                       <div className="flex items-center">
                         <div className="relative">
-                          <motion.div 
-                            whileHover={{ scale: 1.1, rotate: 5 }}
-                            className={`w-16 h-16 bg-gradient-to-br ${getVotaTokColors(otherUser.display_name)} rounded-3xl flex items-center justify-center shadow-lg mr-4 group-hover:shadow-xl transition-shadow`}
-                          >
+                          <div className={`w-16 h-16 bg-gradient-to-br ${getVotaTokColors(otherUser.display_name)} rounded-2xl flex items-center justify-center shadow-lg mr-4 group-hover:scale-105 transition-transform`}>
                             <span className="text-white font-bold text-xl">
                               {getInitials(otherUser.display_name)}
                             </span>
-                          </motion.div>
+                          </div>
                           {/* Online Status */}
                           {isOnline && (
                             <motion.div 
                               initial={{ scale: 0 }}
                               animate={{ scale: 1 }}
-                              className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-400 border-3 border-white rounded-full shadow-md"
+                              className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 border-3 border-white rounded-full shadow-md"
                             />
                           )}
                         </div>
@@ -792,36 +767,33 @@ const MessagesPage = () => {
         <motion.div 
           initial={{ x: 30, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
-          className="flex-1 flex flex-col bg-white/80 backdrop-blur-xl relative z-10"
+          className="flex-1 flex flex-col bg-white relative z-10"
         >
-          {/* VotaTok Chat Header */}
-          <div className="bg-gradient-to-r from-white via-purple-50 to-pink-50 border-b border-purple-200 px-6 py-4 shadow-lg">
+          {/* VotaTok Chat Header - Profile Style */}
+          <div className="bg-white border-b border-gray-200 px-6 py-4 shadow-sm">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
                 {isMobile && (
                   <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                     onClick={() => setSelectedConversation(null)}
-                    className="mr-4 p-2 bg-white rounded-2xl shadow-md hover:shadow-lg transition-all"
+                    className="mr-4 p-2 hover:bg-gray-100 rounded-2xl transition-colors"
                   >
-                    <ArrowLeft className="w-5 h-5 text-purple-600" />
+                    <ArrowLeft className="w-5 h-5 text-purple-600" strokeWidth={1.5} />
                   </motion.button>
                 )}
                 <div className="relative">
-                  <motion.div 
-                    whileHover={{ scale: 1.05 }}
-                    className={`w-12 h-12 bg-gradient-to-br ${getVotaTokColors(selectedConversation.participants[0].display_name)} rounded-2xl flex items-center justify-center mr-4 shadow-lg`}
-                  >
+                  <div className={`w-12 h-12 bg-gradient-to-br ${getVotaTokColors(selectedConversation.participants[0].display_name)} rounded-2xl flex items-center justify-center mr-4 shadow-lg`}>
                     <span className="text-white font-bold">
                       {getInitials(selectedConversation.participants[0].display_name)}
                     </span>
-                  </motion.div>
+                  </div>
                   {isUserOnline(selectedConversation.participants[0].id) && (
                     <motion.div 
                       animate={{ scale: [1, 1.2, 1] }}
                       transition={{ duration: 2, repeat: Infinity }}
-                      className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-400 border-2 border-white rounded-full shadow-md"
+                      className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full shadow-md"
                     />
                   )}
                 </div>
@@ -842,71 +814,62 @@ const MessagesPage = () => {
               
               <div className="flex items-center space-x-3">
                 <motion.button 
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  className="p-3 bg-white rounded-2xl shadow-md hover:shadow-lg transition-all"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="p-3 hover:bg-gray-100 rounded-2xl transition-colors"
                   title="Llamada de voz"
                 >
-                  <Phone className="w-5 h-5 text-purple-600" />
+                  <Phone className="w-5 h-5 text-purple-600" strokeWidth={1.5} />
                 </motion.button>
                 <motion.button 
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  className="p-3 bg-white rounded-2xl shadow-md hover:shadow-lg transition-all"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="p-3 hover:bg-gray-100 rounded-2xl transition-colors"
                   title="Videollamada"
                 >
-                  <Video className="w-5 h-5 text-purple-600" />
+                  <Video className="w-5 h-5 text-purple-600" strokeWidth={1.5} />
                 </motion.button>
                 <motion.button 
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  className="p-3 bg-white rounded-2xl shadow-md hover:shadow-lg transition-all"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="p-3 hover:bg-gray-100 rounded-2xl transition-colors"
                   title="Información del chat"
                 >
-                  <Info className="w-5 h-5 text-purple-600" />
+                  <Info className="w-5 h-5 text-purple-600" strokeWidth={1.5} />
                 </motion.button>
               </div>
             </div>
           </div>
 
           {/* VotaTok Messages Area */}
-          <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-gradient-to-br from-gray-50 via-purple-25 to-pink-25">
+          <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-gradient-to-br from-gray-50 to-purple-25">
             {messages.length === 0 ? (
               <motion.div 
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="text-center py-20"
+                className="text-center py-20 space-y-6"
               >
-                <motion.div 
-                  animate={{ 
-                    scale: [1, 1.1, 1],
-                    rotate: [0, 10, -10, 0]
-                  }}
-                  transition={{ 
-                    duration: 5,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                  className={`w-32 h-32 bg-gradient-to-br ${getVotaTokColors(selectedConversation.participants[0].display_name)} rounded-3xl flex items-center justify-center mx-auto mb-8 shadow-2xl`}
-                >
+                <div className={`w-32 h-32 bg-gradient-to-br ${getVotaTokColors(selectedConversation.participants[0].display_name)} rounded-3xl flex items-center justify-center mx-auto shadow-2xl`}>
                   <span className="text-white font-bold text-4xl">
                     {getInitials(selectedConversation.participants[0].display_name)}
                   </span>
-                </motion.div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-3">
-                  {selectedConversation.participants[0].display_name}
-                </h3>
-                <p className="text-sm text-purple-600 mb-2 font-medium">
-                  @{selectedConversation.participants[0].username}
-                </p>
-                <p className="text-sm text-gray-600 mb-8">
-                  {isUserOnline(selectedConversation.participants[0].id) ? "🟢 Activo ahora" : "🎯 VoTokker Activo"}
-                </p>
+                </div>
+                <div className="space-y-2">
+                  <h3 className="text-2xl font-bold text-gray-900">
+                    {selectedConversation.participants[0].display_name}
+                  </h3>
+                  <p className="text-sm text-purple-600 font-medium">
+                    @{selectedConversation.participants[0].username}
+                  </p>
+                  <p className="text-sm text-gray-600">
+                    {isUserOnline(selectedConversation.participants[0].id) ? "🟢 Activo ahora" : "🎯 VoTokker Activo"}
+                  </p>
+                </div>
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.5 }}
-                  className="bg-white/80 backdrop-blur-sm rounded-3xl p-6 max-w-md mx-auto shadow-xl border border-purple-100"
+                  className="bg-white rounded-3xl p-6 max-w-md mx-auto shadow-xl border border-gray-100"
                 >
                   <p className="text-sm text-gray-700 leading-relaxed">
                     🚀 ¡Inicia una conversación con {selectedConversation.participants[0].display_name.split(' ')[0]}! 
@@ -927,7 +890,7 @@ const MessagesPage = () => {
                       {/* Timestamp */}
                       {showTimestamp && (
                         <div className="text-center mb-6">
-                          <span className="bg-white/80 backdrop-blur-sm px-4 py-2 rounded-full text-xs text-purple-600 shadow-md border border-purple-100 font-medium">
+                          <span className="bg-white px-4 py-2 rounded-full text-xs text-purple-600 shadow-md border border-gray-100 font-medium">
                             {formatMessageTime(message.created_at)}
                           </span>
                         </div>
@@ -949,14 +912,11 @@ const MessagesPage = () => {
                       >
                         {/* Avatar for other user */}
                         {!isOwnMessage && (
-                          <motion.div 
-                            whileHover={{ scale: 1.1 }}
-                            className={`w-8 h-8 bg-gradient-to-br ${getVotaTokColors(selectedConversation.participants[0].display_name)} rounded-2xl flex items-center justify-center shadow-md flex-shrink-0`}
-                          >
+                          <div className={`w-8 h-8 bg-gradient-to-br ${getVotaTokColors(selectedConversation.participants[0].display_name)} rounded-2xl flex items-center justify-center shadow-md flex-shrink-0`}>
                             <span className="text-white font-bold text-xs">
                               {getInitials(selectedConversation.participants[0].display_name)}
                             </span>
-                          </motion.div>
+                          </div>
                         )}
                         
                         {/* Message Bubble */}
@@ -965,8 +925,8 @@ const MessagesPage = () => {
                           className={cn(
                             "max-w-sm lg:max-w-md px-6 py-4 rounded-3xl relative group cursor-pointer shadow-lg border",
                             isOwnMessage
-                              ? "bg-gradient-to-br from-purple-500 to-pink-500 text-white border-purple-300 rounded-br-lg shadow-purple-200"
-                              : "bg-white text-gray-800 border-gray-200 rounded-bl-lg shadow-gray-200"
+                              ? "bg-gradient-to-br from-purple-500 to-pink-500 text-white border-purple-300 rounded-br-xl shadow-purple-200"
+                              : "bg-white text-gray-800 border-gray-200 rounded-bl-xl shadow-gray-200"
                           )}
                         >
                           <p className="text-sm leading-relaxed font-medium">{message.content}</p>
@@ -980,7 +940,7 @@ const MessagesPage = () => {
                                   initial={{ scale: 0 }}
                                   animate={{ scale: 1 }}
                                   whileHover={{ scale: 1.2 }}
-                                  className="text-lg bg-white shadow-lg rounded-full px-3 py-1 border border-purple-100"
+                                  className="text-lg bg-white shadow-lg rounded-full px-3 py-1 border border-gray-100"
                                 >
                                   {reaction.emoji}
                                 </motion.span>
@@ -998,28 +958,28 @@ const MessagesPage = () => {
           </div>
 
           {/* VotaTok Message Input */}
-          <div className="bg-gradient-to-r from-white via-purple-50 to-pink-50 border-t border-purple-200 p-6">
+          <div className="bg-white border-t border-gray-200 p-6">
             <form onSubmit={sendMessage} className="flex items-center space-x-4">
               {/* Media Actions */}
               <div className="flex items-center space-x-2">
                 <motion.button
                   type="button"
-                  whileHover={{ scale: 1.1, rotate: 5 }}
-                  whileTap={{ scale: 0.9 }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={() => setShowMediaPicker(!showMediaPicker)}
-                  className="p-3 bg-gradient-to-br from-purple-400 to-pink-400 rounded-2xl shadow-lg hover:shadow-xl transition-all"
+                  className="p-3 bg-purple-500 rounded-2xl shadow-lg hover:bg-purple-600 transition-colors"
                   title="Cámara"
                 >
-                  <Camera className="w-5 h-5 text-white" />
+                  <Camera className="w-5 h-5 text-white" strokeWidth={1.5} />
                 </motion.button>
                 <motion.button
                   type="button"
-                  whileHover={{ scale: 1.1, rotate: -5 }}
-                  whileTap={{ scale: 0.9 }}
-                  className="p-3 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-2xl shadow-lg hover:shadow-xl transition-all"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="p-3 bg-blue-500 rounded-2xl shadow-lg hover:bg-blue-600 transition-colors"
                   title="Galería"
                 >
-                  <Image className="w-5 h-5 text-white" />
+                  <Image className="w-5 h-5 text-white" strokeWidth={1.5} />
                 </motion.button>
               </div>
               
@@ -1031,18 +991,18 @@ const MessagesPage = () => {
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
                   placeholder="Escribe tu mensaje..."
-                  className="w-full px-6 py-4 bg-white/80 backdrop-blur-sm border border-purple-200 rounded-3xl focus:outline-none focus:ring-2 focus:ring-purple-300 focus:bg-white text-sm transition-all placeholder-purple-400 shadow-inner"
+                  className="w-full px-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-300 focus:bg-white text-sm transition-all placeholder-gray-400"
                   disabled={sendingMessage}
                 />
                 <motion.button
                   type="button"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={() => setShowEmojiPicker(true)}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 p-2 hover:bg-purple-100 rounded-full transition-colors"
+                  className="absolute right-4 top-1/2 transform -translate-y-1/2 p-2 hover:bg-gray-100 rounded-full transition-colors"
                   title="Emojis VotaTok"
                 >
-                  <Smile className="w-5 h-5 text-purple-500" />
+                  <Smile className="w-5 h-5 text-gray-500" strokeWidth={1.5} />
                 </motion.button>
               </div>
               
@@ -1062,18 +1022,18 @@ const MessagesPage = () => {
                       className="w-5 h-5 border-2 border-white border-t-transparent rounded-full" 
                     />
                   ) : (
-                    <Send className="w-5 h-5" />
+                    <Send className="w-5 h-5" strokeWidth={1.5} />
                   )}
                 </motion.button>
               ) : (
                 <motion.button
                   type="button"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.9 }}
-                  className="p-4 bg-gradient-to-br from-indigo-400 to-purple-500 rounded-2xl shadow-lg hover:shadow-xl transition-all"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="p-4 bg-pink-500 rounded-2xl shadow-lg hover:bg-pink-600 transition-colors"
                   title="Mensaje de voz"
                 >
-                  <Mic className="w-5 h-5 text-white" />
+                  <Mic className="w-5 h-5 text-white" strokeWidth={1.5} />
                 </motion.button>
               )}
             </form>
@@ -1081,14 +1041,14 @@ const MessagesPage = () => {
         </motion.div>
       )}
 
-      {/* VotaTok Empty State */}
+      {/* VotaTok Empty State - Profile Style */}
       {!selectedConversation && !isMobile && (
         <motion.div 
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="flex-1 flex items-center justify-center bg-white/80 backdrop-blur-xl relative z-10"
+          className="flex-1 flex items-center justify-center bg-white relative z-10"
         >
-          <div className="text-center max-w-lg">
+          <div className="text-center max-w-lg space-y-6">
             <motion.div
               animate={{ 
                 scale: [1, 1.1, 1],
@@ -1100,17 +1060,19 @@ const MessagesPage = () => {
                 repeat: Infinity,
                 ease: "easeInOut"
               }}
-              className="w-32 h-32 mx-auto mb-10 bg-gradient-to-br from-purple-400 via-pink-400 to-indigo-500 rounded-3xl flex items-center justify-center shadow-2xl"
+              className="w-32 h-32 mx-auto bg-gradient-to-br from-purple-500 via-pink-500 to-indigo-500 rounded-3xl flex items-center justify-center shadow-2xl"
             >
-              <MessageCircle className="w-16 h-16 text-white" />
+              <MessageCircle className="w-16 h-16 text-white" strokeWidth={1.5} />
             </motion.div>
-            <h3 className="text-3xl font-bold mb-4 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-              VoteChat
-            </h3>
-            <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-              Conecta con otros VoTokkers y comparte tus<br />
-              <span className="font-semibold text-purple-600">opiniones favoritas</span>
-            </p>
+            <div className="space-y-3">
+              <h3 className="text-3xl font-bold text-gray-900">
+                VoteChat
+              </h3>
+              <p className="text-lg text-gray-600 leading-relaxed">
+                Conecta con otros VoTokkers y comparte tus<br />
+                <span className="font-semibold text-purple-600">opiniones favoritas</span>
+              </p>
+            </div>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
@@ -1123,68 +1085,68 @@ const MessagesPage = () => {
         </motion.div>
       )}
 
-      {/* Enhanced Media Picker */}
+      {/* Enhanced Media Picker - Profile Modal Style */}
       <AnimatePresence>
         {showMediaPicker && (
           <motion.div
             initial={{ opacity: 0, y: 20, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.9 }}
-            className="absolute bottom-32 left-6 bg-white/95 backdrop-blur-xl border border-purple-200 rounded-3xl shadow-2xl p-4"
+            className="absolute bottom-32 left-6 bg-white border border-gray-200 rounded-2xl shadow-2xl p-4"
           >
             <div className="flex space-x-3">
               <motion.button 
-                whileHover={{ scale: 1.1, rotate: 5 }}
-                whileTap={{ scale: 0.9 }}
-                className="p-4 bg-gradient-to-br from-purple-400 to-pink-400 rounded-2xl shadow-lg hover:shadow-xl transition-all"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="p-4 bg-purple-500 rounded-2xl shadow-lg hover:bg-purple-600 transition-colors"
                 title="Foto"
               >
-                <Camera className="w-6 h-6 text-white" />
+                <Camera className="w-6 h-6 text-white" strokeWidth={1.5} />
               </motion.button>
               <motion.button 
-                whileHover={{ scale: 1.1, rotate: -5 }}
-                whileTap={{ scale: 0.9 }}
-                className="p-4 bg-gradient-to-br from-indigo-400 to-purple-400 rounded-2xl shadow-lg hover:shadow-xl transition-all"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="p-4 bg-blue-500 rounded-2xl shadow-lg hover:bg-blue-600 transition-colors"
                 title="Galería"
               >
-                <Image className="w-6 h-6 text-white" />
+                <Image className="w-6 h-6 text-white" strokeWidth={1.5} />
               </motion.button>
               <motion.button 
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                className="p-4 bg-gradient-to-br from-pink-400 to-red-400 rounded-2xl shadow-lg hover:shadow-xl transition-all"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="p-4 bg-pink-500 rounded-2xl shadow-lg hover:bg-pink-600 transition-colors"
                 title="Audio"
               >
-                <Mic className="w-6 h-6 text-white" />
+                <Mic className="w-6 h-6 text-white" strokeWidth={1.5} />
               </motion.button>
               <motion.button 
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 onClick={() => setShowMediaPicker(false)}
-                className="p-4 bg-gradient-to-br from-gray-400 to-gray-600 rounded-2xl shadow-lg hover:shadow-xl transition-all"
+                className="p-4 bg-gray-400 rounded-2xl shadow-lg hover:bg-gray-500 transition-colors"
               >
-                <X className="w-6 h-6 text-white" />
+                <X className="w-6 h-6 text-white" strokeWidth={1.5} />
               </motion.button>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* VotaTok Emoji Picker */}
+      {/* VotaTok Emoji Picker - Profile Modal Style */}
       <AnimatePresence>
         {showEmojiPicker && (
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
-            className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50 p-6"
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-6"
             onClick={() => setShowEmojiPicker(false)}
           >
             <motion.div
               onClick={(e) => e.stopPropagation()}
-              className="bg-white/95 backdrop-blur-xl rounded-3xl p-8 shadow-2xl max-w-sm w-full border border-purple-200"
+              className="bg-white rounded-3xl p-8 shadow-2xl max-w-sm w-full border border-gray-200"
             >
-              <h3 className="text-xl font-bold text-center mb-6 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+              <h3 className="text-xl font-bold text-center mb-6 text-gray-900">
                 VotaTok Reacciones
               </h3>
               <div className="grid grid-cols-4 gap-4">
@@ -1194,7 +1156,7 @@ const MessagesPage = () => {
                     whileHover={{ scale: 1.3, rotate: 10 }}
                     whileTap={{ scale: 0.8 }}
                     onClick={() => addReaction(reactionTarget, emoji)}
-                    className="w-16 h-16 bg-gradient-to-br from-purple-50 to-pink-50 hover:from-purple-100 hover:to-pink-100 rounded-3xl flex items-center justify-center text-3xl transition-all hover:shadow-lg border border-purple-100"
+                    className="w-16 h-16 bg-gray-50 hover:bg-gray-100 rounded-2xl flex items-center justify-center text-3xl transition-all hover:shadow-lg border border-gray-100"
                   >
                     {emoji}
                   </motion.button>
