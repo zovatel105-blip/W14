@@ -169,12 +169,11 @@ const AudioDetailPage = () => {
       is_system_music: audio.is_system_music
     };
     
-    setPreSelectedAudio(audioForCreation);
-    setShowCreateModal(true);
-    
-    toast({
-      title: "Audio seleccionado",
-      description: `${audio.title} listo para crear contenido`
+    // Navigate to ContentCreationPage with preselected audio
+    navigate('/content-creation', {
+      state: {
+        preSelectedAudio: audioForCreation
+      }
     });
   };
 
