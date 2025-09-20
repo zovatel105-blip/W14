@@ -459,7 +459,7 @@ const MessagesPage = () => {
           className="w-full md:w-96 bg-white border-r border-gray-200 flex flex-col shadow-lg relative z-10"
         >
           {/* VotaTok Header - Clean like Profile */}
-          <div className="p-6 border-b border-gray-100 bg-white sticky top-0 z-20">
+          <div className="p-6 border-b border-gray-100 bg-white sticky top-0 z-20 shadow-sm">
             <div className="flex items-center justify-between mb-6">
               <div className="flex items-center space-x-4">
                 <motion.div 
