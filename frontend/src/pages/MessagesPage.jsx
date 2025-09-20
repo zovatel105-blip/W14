@@ -842,7 +842,7 @@ const MessagesPage = () => {
           </div>
 
           {/* VotaTok Messages Area */}
-          <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-gradient-to-br from-gray-50 to-purple-25">
+          <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-50">
             {messages.length === 0 ? (
               <motion.div 
                 initial={{ opacity: 0, y: 30 }}
