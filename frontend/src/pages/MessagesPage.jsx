@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { ArrowLeft, Send, Mic, Image, Smile, Eye, EyeOff, Music, Link, Gift, X, Bell, Check, UserX } from 'lucide-react';
+import { ArrowLeft, Send, Camera, Mic, Smile, Heart, Info, Phone, Video, Plus, Image, X, Bell, Check, UserX } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useToast } from '../hooks/use-toast';
 import { cn } from '../lib/utils';
@@ -22,7 +22,7 @@ const MessagesPage = () => {
   const [ephemeralMode, setEphemeralMode] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [recordingAudio, setRecordingAudio] = useState(false);
-  const [showShareMenu, setShowShareMenu] = useState(false);
+  const [showMediaPicker, setShowMediaPicker] = useState(false);
   const [chatRequests, setChatRequests] = useState([]);
   const [showRequests, setShowRequests] = useState(false);
   const { user, apiRequest } = useAuth();
@@ -291,7 +291,7 @@ const MessagesPage = () => {
     }
   };
 
-  // 🎯 Funciones del Susurro Inteligente
+  // 🎯 Funciones del chat
   const handleLongPress = (messageId) => {
     setReactionTarget(messageId);
     setShowEmojiPicker(true);
@@ -326,34 +326,6 @@ const MessagesPage = () => {
         description: "No se pudo agregar la reacción",
         variant: "destructive"
       });
-    }
-  };
-
-  const sendEphemeralMessage = async (content) => {
-    if (!selectedConversation || !content.trim()) return;
-
-    try {
-      setSendingMessage(true);
-      await apiRequest('/api/messages', {
-        method: 'POST',
-        body: {
-          conversation_id: selectedConversation.id,
-          content,
-          is_ephemeral: true,
-          expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
-        }
-      });
-      
-      setNewMessage('');
-      loadMessages(selectedConversation.id);
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "No se pudo enviar el mensaje efímero",
-        variant: "destructive"
-      });
-    } finally {
-      setSendingMessage(false);
     }
   };
 
@@ -427,12 +399,12 @@ const MessagesPage = () => {
       
       await apiRequest('/api/messages', {
         method: 'POST',
-        body: JSON.stringify({
+        body: {
           recipient_id: recipientId,
           content: messageText,
           message_type: 'text',
           is_ephemeral: ephemeralMode
-        })
+        }
       });
 
       loadConversations();
@@ -471,63 +443,53 @@ const MessagesPage = () => {
     }
   };
 
-  // 5 emojis sutiles para reacciones
-  const quickEmojis = ['❤️', '😊', '👍', '😮', '🤔'];
+  // Instagram-style emoji reactions
+  const quickEmojis = ['❤️', '😂', '😮', '😢', '😡', '👍'];
 
   return (
-    <div className="h-screen bg-gradient-to-br from-stone-50 via-stone-25 to-white flex relative">
-      {/* Safe area bottom para móviles */}
-      <div className="fixed inset-x-0 bottom-0 h-6 bg-white/90 backdrop-blur-xl z-0 md:hidden"></div>
-      {/* Lista de Conversaciones - Optimizada Móvil */}
+    <div className="h-screen bg-white flex relative">
+      {/* Lista de Conversaciones - Instagram Style */}
       {showList && (
         <motion.div 
           initial={{ x: -20, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
-          className="w-full md:w-80 bg-white/80 backdrop-blur-xl border-r border-gray-200/50 flex flex-col"
+          className="w-full md:w-80 bg-white border-r border-gray-200 flex flex-col"
         >
-          {/* Header Minimalista - Móvil */}
-          <div className="p-4 md:p-6 border-b border-gray-100/50">
-            <div className="flex items-center justify-between mb-4 md:mb-6">
-              <motion.h1 
-                initial={{ y: -10, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                className="text-xl md:text-2xl font-light text-gray-800 tracking-wide"
-              >
-                Mensajes
-              </motion.h1>
-              <div className="flex items-center space-x-2">
-                {/* Botón de solicitudes */}
+          {/* Header estilo Instagram */}
+          <div className="p-4 border-b border-gray-200">
+            <div className="flex items-center justify-between mb-4">
+              <h1 className="text-2xl font-bold text-gray-900">
+                {user?.username || 'Mensajes'}
+              </h1>
+              <div className="flex items-center space-x-3">
+                {/* Notificaciones */}
                 {chatRequests.length > 0 && (
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={() => setShowRequests(!showRequests)}
-                    className="relative w-9 md:w-10 h-9 md:h-10 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center hover:bg-amber-200 active:bg-amber-300 transition-all duration-200 touch-manipulation"
+                    className="relative p-2"
                   >
-                    <Bell className="w-4 h-4" />
-                    <motion.span
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 md:w-5 h-4 md:h-5 flex items-center justify-center"
-                    >
+                    <Bell className="w-6 h-6 text-gray-700" />
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                       {chatRequests.length}
-                    </motion.span>
+                    </span>
                   </motion.button>
                 )}
                 
-                {/* Botón de nuevo chat */}
+                {/* Nuevo mensaje */}
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setShowNewChat(!showNewChat)}
-                  className="w-9 md:w-10 h-9 md:h-10 bg-gray-900 text-white rounded-full flex items-center justify-center hover:bg-gray-800 active:bg-gray-700 transition-all duration-200 touch-manipulation"
+                  className="p-2"
                 >
-                  <Send className="w-4 h-4" />
+                  <Plus className="w-6 h-6 text-gray-700" />
                 </motion.button>
               </div>
             </div>
 
-            {/* Solicitudes de Chat - Optimizado Móvil */}
+            {/* Solicitudes de Chat */}
             <AnimatePresence>
               {showRequests && chatRequests.length > 0 && (
                 <motion.div
@@ -536,66 +498,47 @@ const MessagesPage = () => {
                   exit={{ height: 0, opacity: 0 }}
                   className="mb-4 overflow-hidden"
                 >
-                  <h3 className="text-sm font-medium text-gray-700 mb-3 px-1">
-                    Solicitudes de Chat ({chatRequests.length})
-                  </h3>
-                  <div className="space-y-2">
-                    {chatRequests.map((request) => (
-                      <motion.div
-                        key={request.id}
-                        initial={{ x: -20, opacity: 0 }}
-                        animate={{ x: 0, opacity: 1 }}
-                        className="bg-white/80 backdrop-blur-sm border border-amber-200 rounded-2xl p-3 md:p-4"
-                      >
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-3 min-w-0 flex-1">
-                            <div className="w-9 md:w-10 h-9 md:h-10 bg-gradient-to-br from-amber-100 to-amber-200 rounded-full flex items-center justify-center flex-shrink-0">
-                              <span className="text-amber-700 font-medium text-xs md:text-sm">
+                  <div className="bg-gray-50 rounded-lg p-3">
+                    <h3 className="text-sm font-semibold text-gray-700 mb-2">
+                      Solicitudes ({chatRequests.length})
+                    </h3>
+                    <div className="space-y-2">
+                      {chatRequests.map((request) => (
+                        <div key={request.id} className="flex items-center justify-between bg-white rounded-lg p-2">
+                          <div className="flex items-center space-x-2">
+                            <div className="w-8 h-8 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center">
+                              <span className="text-white font-medium text-xs">
                                 {request.sender.display_name[0].toUpperCase()}
                               </span>
                             </div>
-                            <div className="min-w-0 flex-1">
-                              <p className="font-medium text-gray-900 text-sm truncate">
-                                {request.sender.display_name}
-                              </p>
-                              <p className="text-xs text-gray-500 truncate">
-                                @{request.sender.username}
-                              </p>
-                              {request.message && (
-                                <p className="text-xs text-gray-600 mt-1 italic line-clamp-2">
-                                  "{request.message}"
-                                </p>
-                              )}
+                            <div>
+                              <p className="font-medium text-gray-900 text-sm">{request.sender.display_name}</p>
+                              <p className="text-xs text-gray-500">@{request.sender.username}</p>
                             </div>
                           </div>
-                          
-                          <div className="flex space-x-2 flex-shrink-0">
-                            <motion.button
-                              whileHover={{ scale: 1.05 }}
-                              whileTap={{ scale: 0.95 }}
+                          <div className="flex space-x-1">
+                            <button
                               onClick={() => handleChatRequest(request.id, 'accept')}
-                              className="w-8 h-8 bg-green-100 text-green-600 rounded-full flex items-center justify-center hover:bg-green-200 active:bg-green-300 transition-colors touch-manipulation"
+                              className="bg-blue-500 text-white rounded-full p-1 hover:bg-blue-600 transition-colors"
                             >
-                              <Check className="w-4 h-4" />
-                            </motion.button>
-                            <motion.button
-                              whileHover={{ scale: 1.05 }}
-                              whileTap={{ scale: 0.95 }}
+                              <Check className="w-3 h-3" />
+                            </button>
+                            <button
                               onClick={() => handleChatRequest(request.id, 'reject')}
-                              className="w-8 h-8 bg-red-100 text-red-600 rounded-full flex items-center justify-center hover:bg-red-200 active:bg-red-300 transition-colors touch-manipulation"
+                              className="bg-gray-300 text-gray-600 rounded-full p-1 hover:bg-gray-400 transition-colors"
                             >
-                              <UserX className="w-4 h-4" />
-                            </motion.button>
+                              <X className="w-3 h-3" />
+                            </button>
                           </div>
                         </div>
-                      </motion.div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
                 </motion.div>
               )}
             </AnimatePresence>
 
-            {/* Búsqueda Elegante */}
+            {/* Búsqueda Instagram Style */}
             <AnimatePresence>
               {showNewChat && (
                 <motion.div
@@ -604,16 +547,16 @@ const MessagesPage = () => {
                   exit={{ height: 0, opacity: 0 }}
                   className="overflow-hidden"
                 >
-                  <div className="relative mb-4">
+                  <div className="relative mb-3">
                     <input
                       type="text"
-                      placeholder="Buscar una presencia..."
+                      placeholder="Buscar..."
                       value={searchQuery}
                       onChange={(e) => {
                         setSearchQuery(e.target.value);
                         searchUsers(e.target.value);
                       }}
-                      className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200/50 rounded-2xl focus:outline-none focus:ring-1 focus:ring-gray-300 focus:border-transparent text-sm placeholder-gray-400 transition-all"
+                      className="w-full px-4 py-2 bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                     />
                   </div>
                   
@@ -624,17 +567,16 @@ const MessagesPage = () => {
                         initial={{ y: -10, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         exit={{ y: -10, opacity: 0 }}
-                        className="bg-white border border-gray-100 rounded-2xl shadow-sm max-h-48 overflow-y-auto"
+                        className="bg-white border border-gray-200 rounded-lg shadow-sm max-h-48 overflow-y-auto"
                       >
                         {searchResults.map(user => (
-                          <motion.button
+                          <button
                             key={user.id}
-                            whileHover={{ backgroundColor: "rgba(0,0,0,0.02)" }}
                             onClick={() => startConversation(user)}
-                            className="w-full px-4 py-3 text-left flex items-center transition-colors"
+                            className="w-full px-3 py-2 text-left flex items-center hover:bg-gray-50 transition-colors"
                           >
-                            <div className="w-10 h-10 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mr-3">
-                              <span className="text-gray-600 text-sm font-medium">
+                            <div className="w-10 h-10 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center mr-3">
+                              <span className="text-white font-medium">
                                 {user.display_name[0].toUpperCase()}
                               </span>
                             </div>
@@ -642,7 +584,7 @@ const MessagesPage = () => {
                               <div className="font-medium text-gray-900 text-sm">{user.display_name}</div>
                               <div className="text-xs text-gray-500">@{user.username}</div>
                             </div>
-                          </motion.button>
+                          </button>
                         ))}
                       </motion.div>
                     )}
@@ -652,163 +594,148 @@ const MessagesPage = () => {
             </AnimatePresence>
           </div>
 
-          {/* Lista de Conversaciones */}
+          {/* Lista de Conversaciones Instagram Style */}
           <div className="flex-1 overflow-y-auto">
             {conversations.length === 0 ? (
-              <motion.div 
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="p-8 text-center text-gray-400"
-              >
+              <div className="p-8 text-center text-gray-500">
                 <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
-                  <Send className="w-6 h-6 text-gray-300" />
+                  <Send className="w-6 h-6 text-gray-400" />
                 </div>
-                <p className="text-sm mb-1">Silencio total</p>
-                <p className="text-xs">Busca alguien para conversar</p>
-              </motion.div>
+                <p className="text-sm mb-1">Tu bandeja de entrada</p>
+                <p className="text-xs text-gray-400">Envía un mensaje para comenzar</p>
+              </div>
             ) : (
-              <div className="py-2">
-                {conversations.map((conversation, index) => {
-                  const otherUser = conversation.participants[0];
-                  return (
-                    <motion.button
-                      key={conversation.id}
-                      initial={{ x: -20, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      transition={{ delay: index * 0.05 }}
-                      onClick={() => setSelectedConversation(conversation)}
-                      className={cn(
-                        "w-full p-4 text-left hover:bg-gray-50/50 transition-all duration-200 group",
-                        selectedConversation?.id === conversation.id && "bg-gray-50/80"
-                      )}
-                    >
-                      <div className="flex items-center">
-                        <div className="w-12 h-12 bg-gradient-to-br from-gray-200 to-gray-300 rounded-full flex items-center justify-center mr-3 group-hover:scale-105 transition-transform">
-                          <span className="text-gray-600 font-medium">
-                            {otherUser.display_name[0].toUpperCase()}
+              conversations.map((conversation, index) => {
+                const otherUser = conversation.participants[0];
+                return (
+                  <motion.button
+                    key={conversation.id}
+                    initial={{ x: -20, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ delay: index * 0.05 }}
+                    onClick={() => setSelectedConversation(conversation)}
+                    className={cn(
+                      "w-full p-4 text-left hover:bg-gray-50 transition-colors",
+                      selectedConversation?.id === conversation.id && "bg-blue-50"
+                    )}
+                  >
+                    <div className="flex items-center">
+                      <div className="w-14 h-14 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center mr-3 relative">
+                        <span className="text-white font-medium text-lg">
+                          {otherUser.display_name[0].toUpperCase()}
+                        </span>
+                        {/* Online indicator */}
+                        <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between">
+                          <span className="font-medium text-gray-900 truncate">
+                            {otherUser.display_name}
                           </span>
+                          {conversation.last_message_at && (
+                            <span className="text-xs text-gray-500">
+                              {formatTime(conversation.last_message_at)}
+                            </span>
+                          )}
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between mb-1">
-                            <span className="font-medium text-gray-900 text-sm truncate">
-                              {otherUser.display_name}
+                        <div className="flex items-center justify-between mt-1">
+                          <span className="text-sm text-gray-500 truncate">
+                            {conversation.last_message || 'Di hola 👋'}
+                          </span>
+                          {conversation.unread_count > 0 && (
+                            <span className="bg-blue-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                              {conversation.unread_count}
                             </span>
-                            {conversation.last_message_at && (
-                              <span className="text-xs text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity">
-                                {formatTime(conversation.last_message_at)}
-                              </span>
-                            )}
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <span className="text-xs text-gray-500 truncate">
-                              {conversation.last_message || 'Nuevo susurro...'}
-                            </span>
-                            {conversation.unread_count > 0 && (
-                              <motion.span
-                                initial={{ scale: 0 }}
-                                animate={{ scale: 1 }}
-                                className="bg-gray-800 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center"
-                              >
-                                {conversation.unread_count}
-                              </motion.span>
-                            )}
-                          </div>
+                          )}
                         </div>
                       </div>
-                    </motion.button>
-                  );
-                })}
-              </div>
+                    </div>
+                  </motion.button>
+                );
+              })
             )}
           </div>
         </motion.div>
       )}
 
-      {/* Chat Area - La Conversación que Respira */}
+      {/* Chat Area - Instagram Style */}
       {showChat && (
         <motion.div 
           initial={{ x: 20, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
-          className="flex-1 flex flex-col bg-stone-50/30 backdrop-blur-xl"
+          className="flex-1 flex flex-col bg-white"
         >
-          {/* Header del Chat - Optimizado Móvil */}
-          <div className="bg-white/60 backdrop-blur-xl border-b border-stone-100 px-4 md:px-8 py-4 md:py-6">
-            <div className="flex items-center justify-between max-w-2xl mx-auto">
-              {isMobile && (
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setSelectedConversation(null)}
-                  className="mr-3 md:mr-4 p-2 text-stone-400 hover:text-stone-600 rounded-full transition-colors active:bg-stone-100 touch-manipulation"
-                >
-                  <ArrowLeft className="w-5 h-5" />
-                </motion.button>
-              )}
-              
-              <div className="flex items-center space-x-3 md:space-x-4 flex-1">
-                <div className="w-10 md:w-11 h-10 md:h-11 bg-gradient-to-br from-stone-100 to-stone-200 rounded-full flex items-center justify-center flex-shrink-0">
-                  <span className="text-stone-600 font-medium text-base md:text-lg">
+          {/* Header del Chat Instagram Style */}
+          <div className="bg-white border-b border-gray-200 px-4 py-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center">
+                {isMobile && (
+                  <button
+                    onClick={() => setSelectedConversation(null)}
+                    className="mr-3 p-1"
+                  >
+                    <ArrowLeft className="w-6 h-6" />
+                  </button>
+                )}
+                <div className="w-10 h-10 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center mr-3">
+                  <span className="text-white font-medium">
                     {selectedConversation.participants[0].display_name[0].toUpperCase()}
                   </span>
                 </div>
-                <div className="min-w-0 flex-1">
-                  <h2 className="font-medium text-stone-800 text-base md:text-lg tracking-wide truncate">
+                <div>
+                  <h2 className="font-semibold text-gray-900">
                     {selectedConversation.participants[0].display_name}
                   </h2>
-                  <p className="text-xs md:text-sm text-stone-500 font-light">
-                    presente en el momento
-                  </p>
+                  <p className="text-sm text-green-500">Activo</p>
                 </div>
               </div>
               
-              {/* Solo modo efímero - sin más distracciones */}
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setEphemeralMode(!ephemeralMode)}
-                className={cn(
-                  "p-2 md:p-2 rounded-full transition-all text-sm font-light touch-manipulation flex-shrink-0",
-                  ephemeralMode 
-                    ? "bg-amber-50 text-amber-600" 
-                    : "text-stone-400 hover:text-stone-600 hover:bg-stone-50 active:bg-stone-100"
-                )}
-              >
-                {ephemeralMode ? <EyeOff className="w-4 md:w-5 h-4 md:h-5" /> : <Eye className="w-4 md:w-5 h-4 md:h-5" />}
-              </motion.button>
+              <div className="flex items-center space-x-3">
+                <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                  <Phone className="w-5 h-5 text-gray-600" />
+                </button>
+                <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                  <Video className="w-5 h-5 text-gray-600" />
+                </button>
+                <button className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+                  <Info className="w-5 h-5 text-gray-600" />
+                </button>
+              </div>
             </div>
           </div>
 
-          {/* Mensajes - Las Burbujas que Respiran (Optimizado Móvil) */}
-          <div className="flex-1 overflow-y-auto px-4 md:px-8 py-6 md:py-12">
+          {/* Mensajes Instagram Style */}
+          <div className="flex-1 overflow-y-auto p-4 bg-white">
             {messages.length === 0 ? (
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-center text-stone-400 py-16 md:py-24"
-              >
-                <div className="w-16 md:w-20 h-16 md:h-20 mx-auto mb-6 md:mb-8 bg-stone-50 rounded-full flex items-center justify-center">
-                  <div className="w-2.5 md:w-3 h-2.5 md:h-3 bg-stone-300 rounded-full animate-pulse"></div>
+              <div className="text-center py-12">
+                <div className="w-20 h-20 bg-gradient-to-br from-purple-400 to-pink-400 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <span className="text-white font-bold text-2xl">
+                    {selectedConversation.participants[0].display_name[0].toUpperCase()}
+                  </span>
                 </div>
-                <p className="text-base md:text-lg font-light mb-2">El silencio es oro</p>
-                <p className="text-xs md:text-sm opacity-70 px-4">Un espacio para estar presente</p>
-              </motion.div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                  {selectedConversation.participants[0].display_name}
+                </h3>
+                <p className="text-sm text-gray-500 mb-4">
+                  @{selectedConversation.participants[0].username} • Instagram
+                </p>
+                <p className="text-sm text-gray-500">
+                  Di hola para comenzar la conversación
+                </p>
+              </div>
             ) : (
-              <div className="space-y-6 md:space-y-8 max-w-2xl mx-auto">
+              <div className="space-y-3">
                 {messages.map((message, index) => {
                   const isOwnMessage = message.sender_id === user.id;
-                  const isEphemeral = message.is_ephemeral;
                   
                   return (
                     <motion.div
                       key={message.id}
-                      initial={{ opacity: 0, y: 15 }}
-                      animate={{ 
-                        opacity: isEphemeral ? 0.6 : 1, 
-                        y: 0
-                      }}
-                      transition={{ delay: index * 0.1, duration: 0.4 }}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.05 }}
                       className={cn(
-                        "flex mb-6 md:mb-8",
+                        "flex",
                         isOwnMessage ? "justify-end" : "justify-start"
                       )}
                       onTouchStart={() => startLongPress(message.id)}
@@ -817,56 +744,35 @@ const MessagesPage = () => {
                       onMouseUp={endLongPress}
                       onMouseLeave={endLongPress}
                     >
-                      <motion.div
-                        whileHover={{ scale: 1.01 }}
-                        whileTap={{ scale: 0.98 }}
+                      <div
                         className={cn(
-                          "relative max-w-[280px] md:max-w-md px-4 md:px-6 py-3 md:py-4 rounded-3xl cursor-pointer group active:scale-95 transition-transform",
+                          "max-w-xs lg:max-w-md px-4 py-2 rounded-3xl relative group cursor-pointer",
                           isOwnMessage
-                            ? "bg-stone-800 text-stone-50 rounded-br-lg"
-                            : "bg-stone-50 text-stone-800 border border-stone-100 rounded-bl-lg",
-                          isEphemeral && "opacity-60 border-dashed"
+                            ? "bg-blue-500 text-white rounded-br-lg"
+                            : "bg-gray-100 text-gray-900 rounded-bl-lg"
                         )}
                       >
-                        <p className="text-sm md:text-base leading-relaxed font-light tracking-wide">
-                          {message.content}
-                        </p>
+                        <p className="text-sm">{message.content}</p>
                         
-                        {/* Timestamp sutil */}
-                        <p
-                          className={cn(
-                            "text-xs mt-2 md:mt-3 font-light tracking-wider",
-                            isOwnMessage ? "text-stone-400" : "text-stone-500"
-                          )}
-                        >
+                        {/* Timestamp */}
+                        <p className={cn(
+                          "text-xs mt-1 opacity-70",
+                          isOwnMessage ? "text-blue-100" : "text-gray-500"
+                        )}>
                           {formatTime(message.created_at)}
-                          {isEphemeral && " • se desvanece"}
                         </p>
                         
-                        {/* Reacciones sutiles */}
+                        {/* Reacciones */}
                         {message.reactions && message.reactions.length > 0 && (
-                          <div className="flex mt-2 md:mt-3 space-x-1 md:space-x-2">
+                          <div className="absolute -bottom-2 left-2 flex space-x-1">
                             {message.reactions.map((reaction, i) => (
-                              <motion.span
-                                key={i}
-                                initial={{ scale: 0 }}
-                                animate={{ scale: 1 }}
-                                className="text-xs md:text-sm bg-white/10 backdrop-blur-sm rounded-full px-2 md:px-3 py-1"
-                              >
+                              <span key={i} className="text-xs bg-white shadow-sm rounded-full px-2 py-1">
                                 {reaction.emoji}
-                              </motion.span>
+                              </span>
                             ))}
                           </div>
                         )}
-                        
-                        {/* Indicador sutil de grupo */}
-                        <div className={cn(
-                          "absolute -bottom-1 w-1.5 md:w-2 h-1.5 md:h-2 rounded-full",
-                          isOwnMessage 
-                            ? "-right-1 bg-stone-800" 
-                            : "-left-1 bg-stone-50 border border-stone-100"
-                        )} />
-                      </motion.div>
+                      </div>
                     </motion.div>
                   );
                 })}
@@ -875,147 +781,146 @@ const MessagesPage = () => {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Campo de Entrada - Optimizado para Táctil */}
-          <div className="bg-white/90 backdrop-blur-xl border-t border-stone-100 px-4 md:px-8 py-4 md:py-6 pb-safe">
-            <form onSubmit={sendMessage} className="max-w-2xl mx-auto">
-              <div className="relative">
-                {/* Input principal - Adaptado para móvil */}
+          {/* Input Instagram Style */}
+          <div className="bg-white border-t border-gray-200 p-4">
+            <form onSubmit={sendMessage} className="flex items-center space-x-3">
+              {/* Media buttons */}
+              <div className="flex items-center space-x-2">
+                <button
+                  type="button"
+                  onClick={() => setShowMediaPicker(!showMediaPicker)}
+                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                >
+                  <Camera className="w-5 h-5 text-gray-600" />
+                </button>
+                <button
+                  type="button"
+                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                >
+                  <Image className="w-5 h-5 text-gray-600" />
+                </button>
+              </div>
+              
+              {/* Input field */}
+              <div className="flex-1 relative">
                 <input
                   ref={inputRef}
                   type="text"
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
-                  placeholder={ephemeralMode ? "Un pensamiento que se desvanece..." : "Escribe con intención..."}
-                  className={cn(
-                    "w-full px-4 md:px-6 py-3 md:py-4 bg-stone-50/80 border-0 rounded-full focus:outline-none focus:ring-1 text-sm md:text-base font-light tracking-wide placeholder-stone-400 transition-all duration-300",
-                    ephemeralMode 
-                      ? "focus:ring-amber-200 focus:bg-amber-50/50" 
-                      : "focus:ring-stone-200 focus:bg-white/80",
-                    newMessage.trim() ? "pr-14 md:pr-16" : "pr-4 md:pr-6"
-                  )}
+                  placeholder="Mensaje..."
+                  className="w-full px-4 py-2 bg-gray-100 border-0 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                   disabled={sendingMessage}
                 />
-                
-                {/* Botón de envío - Táctil optimizado */}
-                <AnimatePresence>
-                  {newMessage.trim() && (
-                    <motion.button
-                      type="submit"
-                      initial={{ scale: 0, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      exit={{ scale: 0, opacity: 0 }}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.9 }}
-                      disabled={sendingMessage}
-                      className="absolute right-1.5 md:right-2 top-1.5 md:top-2 w-9 md:w-10 h-9 md:h-10 bg-stone-800 text-white rounded-full flex items-center justify-center hover:bg-stone-700 active:scale-90 transition-all duration-200 focus:outline-none touch-manipulation"
-                    >
-                      {sendingMessage ? (
-                        <motion.div
-                          animate={{ rotate: 360 }}
-                          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                          className="w-3.5 md:w-4 h-3.5 md:h-4 border-2 border-white/30 border-t-white rounded-full"
-                        />
-                      ) : (
-                        <Send className="w-3.5 md:w-4 h-3.5 md:h-4 ml-0.5" />
-                      )}
-                    </motion.button>
-                  )}
-                </AnimatePresence>
-
-                {/* Indicador de modo efímero */}
-                {ephemeralMode && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="absolute -top-6 md:-top-8 left-4 md:left-6 text-xs text-amber-600 font-light"
-                  >
-                    ✨ Se desvanece en 24h
-                  </motion.div>
-                )}
+                <button
+                  type="button"
+                  onClick={() => setShowEmojiPicker(true)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2"
+                >
+                  <Smile className="w-5 h-5 text-gray-500" />
+                </button>
               </div>
               
-              {/* Opciones minimalistas - Móvil */}
-              <div className="flex justify-center mt-3 md:mt-4 space-x-4 md:space-x-6">
-                <motion.button
-                  type="button"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setEphemeralMode(!ephemeralMode)}
-                  className={cn(
-                    "text-xs font-light tracking-wider transition-all duration-200 py-2 px-3 rounded-full touch-manipulation",
-                    ephemeralMode 
-                      ? "text-amber-600 bg-amber-50" 
-                      : "text-stone-400 hover:text-stone-600 active:bg-stone-50"
-                  )}
+              {/* Send/Mic button */}
+              {newMessage.trim() ? (
+                <button
+                  type="submit"
+                  disabled={sendingMessage}
+                  className="text-blue-500 font-semibold hover:text-blue-600 transition-colors px-2"
                 >
-                  {ephemeralMode ? "∞ Permanente" : "○ Efímero"}
-                </motion.button>
-              </div>
+                  {sendingMessage ? (
+                    <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    "Enviar"
+                  )}
+                </button>
+              ) : (
+                <button
+                  type="button"
+                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                >
+                  <Mic className="w-5 h-5 text-gray-600" />
+                </button>
+              )}
             </form>
           </div>
         </motion.div>
       )}
 
-      {/* Empty State - Espacio para Respirar */}
+      {/* Empty State Instagram Style */}
       {!selectedConversation && !isMobile && (
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="flex-1 flex items-center justify-center bg-stone-50/20"
-        >
-          <div className="text-center text-stone-400 max-w-md px-8">
-            <motion.div
-              animate={{ 
-                scale: [1, 1.02, 1],
-                opacity: [0.4, 0.6, 0.4]
-              }}
-              transition={{ 
-                duration: 4,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-              className="w-24 h-24 mx-auto mb-8 bg-stone-100/50 rounded-full flex items-center justify-center"
-            >
-              <div className="w-4 h-4 bg-stone-300 rounded-full"></div>
-            </motion.div>
-            <h3 className="text-xl font-light mb-4 text-stone-600 tracking-wide">La Conversación que Respira</h3>
-            <p className="text-sm leading-relaxed font-light opacity-80">
-              Un espacio de calma intencional, donde la comunicación no se mide por la cantidad de funciones, 
-              sino por la calidad de la conexión.
+        <div className="flex-1 flex items-center justify-center bg-white">
+          <div className="text-center">
+            <div className="w-24 h-24 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
+              <Send className="w-10 h-10 text-gray-400" />
+            </div>
+            <h3 className="text-xl font-light mb-2 text-gray-600">Tus mensajes</h3>
+            <p className="text-sm text-gray-500 mb-6">
+              Envía mensajes privados a un amigo o grupo
             </p>
-            <p className="text-xs mt-6 opacity-60 tracking-wider">Selecciona una presencia para comenzar</p>
+            <button
+              onClick={() => setShowNewChat(true)}
+              className="bg-blue-500 text-white px-6 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+            >
+              Enviar mensaje
+            </button>
           </div>
-        </motion.div>
+        </div>
       )}
 
-      {/* Selector de Emojis - Optimizado para Táctil */}
+      {/* Media Picker */}
+      <AnimatePresence>
+        {showMediaPicker && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            className="absolute bottom-20 left-4 bg-white border border-gray-200 rounded-2xl shadow-lg p-2"
+          >
+            <div className="flex space-x-2">
+              <button className="p-3 hover:bg-gray-100 rounded-xl transition-colors">
+                <Camera className="w-5 h-5 text-gray-600" />
+              </button>
+              <button className="p-3 hover:bg-gray-100 rounded-xl transition-colors">
+                <Image className="w-5 h-5 text-gray-600" />
+              </button>
+              <button className="p-3 hover:bg-gray-100 rounded-xl transition-colors">
+                <Mic className="w-5 h-5 text-gray-600" />
+              </button>
+              <button 
+                onClick={() => setShowMediaPicker(false)}
+                className="p-3 hover:bg-gray-100 rounded-xl transition-colors"
+              >
+                <X className="w-5 h-5 text-gray-400" />
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Emoji Picker Instagram Style */}
       <AnimatePresence>
         {showEmojiPicker && (
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
-            className="fixed inset-0 bg-stone-800/10 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+            className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50 p-4"
             onClick={() => setShowEmojiPicker(false)}
           >
             <motion.div
               onClick={(e) => e.stopPropagation()}
-              className="bg-white/95 backdrop-blur-xl rounded-3xl p-6 md:p-8 shadow-2xl border border-stone-200/50 max-w-sm w-full"
+              className="bg-white rounded-2xl p-6 shadow-xl max-w-sm w-full"
             >
-              <p className="text-sm text-stone-600 mb-4 md:mb-6 text-center font-light tracking-wide">
-                Reacciona con un pensamiento sutil
-              </p>
-              <div className="flex justify-center space-x-3 md:space-x-4">
+              <div className="grid grid-cols-6 gap-3">
                 {quickEmojis.map((emoji) => (
-                  <motion.button
+                  <button
                     key={emoji}
-                    whileHover={{ scale: 1.15 }}
-                    whileTap={{ scale: 0.9 }}
                     onClick={() => addReaction(reactionTarget, emoji)}
-                    className="w-12 md:w-14 h-12 md:h-14 bg-stone-50 hover:bg-stone-100 active:bg-stone-200 rounded-2xl flex items-center justify-center text-xl md:text-2xl transition-all duration-200 hover:shadow-sm touch-manipulation"
+                    className="w-12 h-12 bg-gray-50 hover:bg-gray-100 rounded-2xl flex items-center justify-center text-2xl transition-colors"
                   >
                     {emoji}
-                  </motion.button>
+                  </button>
                 ))}
               </div>
             </motion.div>
