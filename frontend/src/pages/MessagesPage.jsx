@@ -36,20 +36,20 @@ const MessagesPage = () => {
   const showList = !selectedConversation || !isMobile;
   const showChat = selectedConversation && (isMobile || !isMobile);
 
-  // Función para generar colores de avatar únicos basados en el nombre
-  const getAvatarColors = (name) => {
-    const colors = [
-      'from-purple-400 to-pink-400',
-      'from-blue-400 to-indigo-500',
-      'from-green-400 to-teal-500',
-      'from-yellow-400 to-orange-500',
-      'from-red-400 to-pink-500',
-      'from-indigo-400 to-purple-500',
-      'from-teal-400 to-cyan-500',
-      'from-orange-400 to-red-500'
+  // VotaTok-specific color schemes
+  const getVotaTokColors = (name) => {
+    const votaTokGradients = [
+      'from-purple-500 via-pink-500 to-red-500',
+      'from-blue-500 via-purple-500 to-pink-500',
+      'from-indigo-500 via-purple-500 to-pink-500',
+      'from-cyan-500 via-blue-500 to-purple-500',
+      'from-pink-500 via-purple-500 to-indigo-500',
+      'from-violet-500 via-purple-500 to-pink-500',
+      'from-fuchsia-500 via-purple-500 to-blue-500',
+      'from-rose-500 via-pink-500 to-purple-500'
     ];
     const hash = name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-    return colors[hash % colors.length];
+    return votaTokGradients[hash % votaTokGradients.length];
   };
 
   // Función para obtener iniciales del nombre
