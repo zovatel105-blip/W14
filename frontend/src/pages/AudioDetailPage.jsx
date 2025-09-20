@@ -417,6 +417,7 @@ const AudioDetailPage = () => {
             showLogo={false}
             currentAudio={audio}
             onUseSound={handleUseThisSound}
+            onSave={handleSave}
             fromAudioDetailPage={true}
           />
         </div>
