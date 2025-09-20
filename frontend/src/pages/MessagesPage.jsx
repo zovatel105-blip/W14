@@ -36,17 +36,17 @@ const MessagesPage = () => {
   const showList = !selectedConversation || !isMobile;
   const showChat = selectedConversation && (isMobile || !isMobile);
 
-  // VotaTok-specific color schemes
+  // VotaTok-specific color schemes inspired by ProfilePage
   const getVotaTokColors = (name) => {
     const votaTokGradients = [
-      'from-purple-500 via-pink-500 to-red-500',
-      'from-blue-500 via-purple-500 to-pink-500',
-      'from-indigo-500 via-purple-500 to-pink-500',
-      'from-cyan-500 via-blue-500 to-purple-500',
-      'from-pink-500 via-purple-500 to-indigo-500',
-      'from-violet-500 via-purple-500 to-pink-500',
-      'from-fuchsia-500 via-purple-500 to-blue-500',
-      'from-rose-500 via-pink-500 to-purple-500'
+      'from-purple-500 via-pink-500 to-red-500',      // Profile story gradient
+      'from-blue-500 via-purple-500 to-pink-500',     // VotaTok brand
+      'from-indigo-500 via-purple-500 to-pink-500',   // Deep purple
+      'from-cyan-500 via-blue-500 to-purple-500',     // Cool blues
+      'from-pink-500 via-purple-500 to-indigo-500',   // Warm pinks
+      'from-violet-500 via-purple-500 to-pink-500',   // Violet mix
+      'from-fuchsia-500 via-purple-500 to-blue-500',  // Fuchsia blend
+      'from-rose-500 via-pink-500 to-purple-500'      // Rose gradient
     ];
     const hash = name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
     return votaTokGradients[hash % votaTokGradients.length];
