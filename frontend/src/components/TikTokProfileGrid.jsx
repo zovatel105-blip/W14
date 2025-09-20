@@ -1,9 +1,8 @@
 import React from 'react';
-import { Play, Vote, BarChart3, Music } from 'lucide-react';
+import { Play, Vote, BarChart3 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import LayoutRenderer from './layouts/LayoutRenderer';
 import PostManagementMenu from './PostManagementMenu';
-import { Button } from './ui/button';
 
 const TikTokProfileGrid = ({ 
   polls, 
