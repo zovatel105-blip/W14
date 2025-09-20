@@ -802,31 +802,34 @@ const MessagesPage = () => {
         </motion.div>
       )}
 
-      {/* Empty State para Desktop */}
+      {/* Empty State - Espacio para Respirar */}
       {!selectedConversation && !isMobile && (
         <motion.div 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="flex-1 flex items-center justify-center bg-gradient-to-br from-gray-50/50 to-white/50"
+          className="flex-1 flex items-center justify-center bg-stone-50/20"
         >
-          <div className="text-center text-gray-400 max-w-sm">
+          <div className="text-center text-stone-400 max-w-md px-8">
             <motion.div
               animate={{ 
-                scale: [1, 1.05, 1],
-                opacity: [0.5, 0.8, 0.5]
+                scale: [1, 1.02, 1],
+                opacity: [0.4, 0.6, 0.4]
               }}
               transition={{ 
-                duration: 3,
+                duration: 4,
                 repeat: Infinity,
                 ease: "easeInOut"
               }}
-              className="w-20 h-20 mx-auto mb-6 bg-gray-100/50 rounded-full flex items-center justify-center"
+              className="w-24 h-24 mx-auto mb-8 bg-stone-100/50 rounded-full flex items-center justify-center"
             >
-              <Send className="w-8 h-8 text-gray-300" />
+              <div className="w-4 h-4 bg-stone-300 rounded-full"></div>
             </motion.div>
-            <h3 className="text-lg font-light mb-2 text-gray-600">El Susurro Inteligente</h3>
-            <p className="text-sm leading-relaxed">Una conversación que se adapta a ti —no al revés</p>
-            <p className="text-xs mt-4 opacity-60">Selecciona una presencia para comenzar</p>
+            <h3 className="text-xl font-light mb-4 text-stone-600 tracking-wide">La Conversación que Respira</h3>
+            <p className="text-sm leading-relaxed font-light opacity-80">
+              Un espacio de calma intencional, donde la comunicación no se mide por la cantidad de funciones, 
+              sino por la calidad de la conexión.
+            </p>
+            <p className="text-xs mt-6 opacity-60 tracking-wider">Selecciona una presencia para comenzar</p>
           </div>
         </motion.div>
       )}
