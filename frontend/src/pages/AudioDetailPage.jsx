@@ -206,8 +206,7 @@ const AudioDetailPage = () => {
   };
 
   const handleCreatePoll = async (newPoll) => {
-    setShowCreateModal(false);
-    setPreSelectedAudio(null);
+    // This function is no longer needed since we navigate to ContentCreationPage
     await fetchPostsUsingAudio();
   };
 
