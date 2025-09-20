@@ -341,47 +341,14 @@ const AudioDetailPage = () => {
               <p className="text-gray-500">Cargando videos...</p>
             </div>
           ) : posts.length > 0 ? (
-            <div className="space-y-3">
-              {posts.map((post, index) => (
-                <div
-                  key={post.id}
-                  className="bg-gray-50 rounded-lg p-4 cursor-pointer hover:bg-gray-100 transition-colors"
-                  onClick={() => handleVideoClick(post, index)}
-                >
-                  <div className="flex items-center space-x-3">
-                    <div className="w-12 h-12 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
-                      {post.media_url ? (
-                        <img 
-                          src={post.media_url} 
-                          alt={post.title}
-                          className="w-full h-full object-cover"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center">
-                          <Music className="w-4 h-4 text-gray-400" />
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="flex-1 min-w-0">
-                      <h4 className="font-medium text-gray-900 truncate">
-                        {post.title || 'Video sin título'}
-                      </h4>
-                      <p className="text-sm text-gray-600 truncate">
-                        @{post.author?.username || post.author?.display_name || 'usuario'}
-                      </p>
-                    </div>
-
-                    <div className="flex items-center space-x-2">
-                      <Heart className="w-4 h-4 text-gray-400" />
-                      <span className="text-sm text-gray-600">
-                        {post.totalVotes || 0}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <TikTokProfileGrid 
+              polls={posts} 
+              onPollClick={handleVideoClick}
+              onUpdatePoll={() => {}} // No update functionality needed here
+              onDeletePoll={() => {}} // No delete functionality needed here
+              currentUser={null} // Not needed for this view
+              isOwnProfile={false}
+            />
           ) : (
             <div className="text-center py-12">
               <Users className="w-12 h-12 text-gray-300 mx-auto mb-4" />
