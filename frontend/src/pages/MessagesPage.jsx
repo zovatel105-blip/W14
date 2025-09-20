@@ -323,7 +323,7 @@ const MessagesPage = () => {
   const quickEmojis = ['❤️', '😊', '👍', '😮', '🤔'];
 
   return (
-    <div className="h-screen bg-gradient-to-br from-slate-50 via-gray-50 to-stone-50 flex">
+    <div className="h-screen bg-gradient-to-br from-stone-50 via-stone-25 to-white flex">
       {/* Lista de Conversaciones - El Susurro */}
       {showList && (
         <motion.div 
