@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ArrowLeft, Send, Mic, Image, Smile, Eye, EyeOff, Music, Link, Gift, X } from 'lucide-react';
+import { ArrowLeft, Send, Mic, Image, Smile, Eye, EyeOff, Music, Link, Gift, X, Bell, Check, UserX } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { useToast } from '../hooks/use-toast';
 import { cn } from '../lib/utils';
