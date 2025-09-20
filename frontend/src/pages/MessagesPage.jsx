@@ -373,7 +373,7 @@ const MessagesPage = () => {
               </div>
             </div>
 
-            {/* Solicitudes de Chat */}
+            {/* Solicitudes de Chat - Optimizado Móvil */}
             <AnimatePresence>
               {showRequests && chatRequests.length > 0 && (
                 <motion.div
@@ -391,36 +391,36 @@ const MessagesPage = () => {
                         key={request.id}
                         initial={{ x: -20, opacity: 0 }}
                         animate={{ x: 0, opacity: 1 }}
-                        className="bg-white/80 backdrop-blur-sm border border-amber-200 rounded-2xl p-4"
+                        className="bg-white/80 backdrop-blur-sm border border-amber-200 rounded-2xl p-3 md:p-4"
                       >
                         <div className="flex items-center justify-between">
-                          <div className="flex items-center space-x-3">
-                            <div className="w-10 h-10 bg-gradient-to-br from-amber-100 to-amber-200 rounded-full flex items-center justify-center">
-                              <span className="text-amber-700 font-medium text-sm">
+                          <div className="flex items-center space-x-3 min-w-0 flex-1">
+                            <div className="w-9 md:w-10 h-9 md:h-10 bg-gradient-to-br from-amber-100 to-amber-200 rounded-full flex items-center justify-center flex-shrink-0">
+                              <span className="text-amber-700 font-medium text-xs md:text-sm">
                                 {request.sender.display_name[0].toUpperCase()}
                               </span>
                             </div>
-                            <div>
-                              <p className="font-medium text-gray-900 text-sm">
+                            <div className="min-w-0 flex-1">
+                              <p className="font-medium text-gray-900 text-sm truncate">
                                 {request.sender.display_name}
                               </p>
-                              <p className="text-xs text-gray-500">
+                              <p className="text-xs text-gray-500 truncate">
                                 @{request.sender.username}
                               </p>
                               {request.message && (
-                                <p className="text-xs text-gray-600 mt-1 italic">
+                                <p className="text-xs text-gray-600 mt-1 italic line-clamp-2">
                                   "{request.message}"
                                 </p>
                               )}
                             </div>
                           </div>
                           
-                          <div className="flex space-x-2">
+                          <div className="flex space-x-2 flex-shrink-0">
                             <motion.button
                               whileHover={{ scale: 1.05 }}
                               whileTap={{ scale: 0.95 }}
                               onClick={() => handleChatRequest(request.id, 'accept')}
-                              className="w-8 h-8 bg-green-100 text-green-600 rounded-full flex items-center justify-center hover:bg-green-200 transition-colors"
+                              className="w-8 h-8 bg-green-100 text-green-600 rounded-full flex items-center justify-center hover:bg-green-200 active:bg-green-300 transition-colors touch-manipulation"
                             >
                               <Check className="w-4 h-4" />
                             </motion.button>
@@ -428,7 +428,7 @@ const MessagesPage = () => {
                               whileHover={{ scale: 1.05 }}
                               whileTap={{ scale: 0.95 }}
                               onClick={() => handleChatRequest(request.id, 'reject')}
-                              className="w-8 h-8 bg-red-100 text-red-600 rounded-full flex items-center justify-center hover:bg-red-200 transition-colors"
+                              className="w-8 h-8 bg-red-100 text-red-600 rounded-full flex items-center justify-center hover:bg-red-200 active:bg-red-300 transition-colors touch-manipulation"
                             >
                               <UserX className="w-4 h-4" />
                             </motion.button>
