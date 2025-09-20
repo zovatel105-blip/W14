@@ -1019,7 +1019,7 @@ Layout "off" - Carrusel Horizontal:
 
 ## test_plan:
   current_focus:
-    - "Fix HTTP 404 error in registration endpoint for mobile devices - COMPLETED"
+    - "Demo login functionality for El Susurro Inteligente access - COMPLETED"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
