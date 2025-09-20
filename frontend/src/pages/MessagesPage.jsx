@@ -700,24 +700,24 @@ const MessagesPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 className="p-8 text-center space-y-6"
               >
-                <div className="w-20 h-20 mx-auto bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-xl">
-                  <Users className="w-10 h-10 text-white" strokeWidth={1.5} />
+                <div className="w-24 h-24 mx-auto bg-gradient-to-br from-purple-500 to-pink-500 rounded-3xl flex items-center justify-center shadow-xl border-4 border-white">
+                  <Users className="w-12 h-12 text-white" strokeWidth={1.5} />
                 </div>
-                <div className="space-y-2">
-                  <h3 className="text-xl font-bold text-gray-900">
+                <div className="space-y-3">
+                  <h3 className="text-2xl font-bold text-gray-900">
                     ¡Conecta con VoTokkers!
                   </h3>
                   <p className="text-sm text-gray-600 leading-relaxed max-w-sm mx-auto">
-                    Inicia conversaciones sobre tus votaciones favoritas
+                    Inicia conversaciones sobre tus votaciones favoritas y conecta con la comunidad
                   </p>
                 </div>
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setShowNewChat(true)}
-                  className="bg-gradient-to-br from-purple-500 to-pink-500 text-white px-8 py-3 rounded-2xl hover:shadow-xl transition-all font-bold shadow-lg"
+                  className="bg-gradient-to-br from-purple-500 to-pink-500 text-white px-10 py-4 rounded-2xl hover:shadow-xl transition-all font-bold shadow-lg text-base"
                 >
-                  Empezar Chat
+                  ✨ Empezar Chat
                 </motion.button>
               </motion.div>
             ) : (
