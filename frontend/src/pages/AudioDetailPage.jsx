@@ -342,10 +342,10 @@ const AudioDetailPage = () => {
         <div className="max-w-md mx-auto grid grid-cols-2 gap-3">
           <Button
             onClick={handleUseThisSound}
-            className="bg-black hover:bg-gray-800 text-white backdrop-blur-md border-none px-4 py-2.5 h-10 rounded-full transition-all duration-200 hover:scale-105 shadow-xl flex items-center gap-2"
+            className="flex items-center justify-center space-x-2"
           >
-            <Music className="w-4 h-4" />
-            <span className="font-semibold text-sm">Use Sound</span>
+            <Plus className="w-4 h-4" />
+            <span>Usar</span>
           </Button>
           
           <Button
