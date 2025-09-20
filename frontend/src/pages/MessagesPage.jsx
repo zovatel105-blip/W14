@@ -624,22 +624,22 @@ const MessagesPage = () => {
             </div>
           </div>
 
-          {/* Mensajes - Las Burbujas que Respiran */}
-          <div className="flex-1 overflow-y-auto px-8 py-12">
+          {/* Mensajes - Las Burbujas que Respiran (Optimizado Móvil) */}
+          <div className="flex-1 overflow-y-auto px-4 md:px-8 py-6 md:py-12">
             {messages.length === 0 ? (
               <motion.div 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="text-center text-stone-400 py-24"
+                className="text-center text-stone-400 py-16 md:py-24"
               >
-                <div className="w-20 h-20 mx-auto mb-8 bg-stone-50 rounded-full flex items-center justify-center">
-                  <div className="w-3 h-3 bg-stone-300 rounded-full animate-pulse"></div>
+                <div className="w-16 md:w-20 h-16 md:h-20 mx-auto mb-6 md:mb-8 bg-stone-50 rounded-full flex items-center justify-center">
+                  <div className="w-2.5 md:w-3 h-2.5 md:h-3 bg-stone-300 rounded-full animate-pulse"></div>
                 </div>
-                <p className="text-lg font-light mb-2">El silencio es oro</p>
-                <p className="text-sm opacity-70">Un espacio para estar presente</p>
+                <p className="text-base md:text-lg font-light mb-2">El silencio es oro</p>
+                <p className="text-xs md:text-sm opacity-70 px-4">Un espacio para estar presente</p>
               </motion.div>
             ) : (
-              <div className="space-y-8 max-w-2xl mx-auto">
+              <div className="space-y-6 md:space-y-8 max-w-2xl mx-auto">
                 {messages.map((message, index) => {
                   const isOwnMessage = message.sender_id === user.id;
                   const isEphemeral = message.is_ephemeral;
@@ -654,33 +654,34 @@ const MessagesPage = () => {
                       }}
                       transition={{ delay: index * 0.1, duration: 0.4 }}
                       className={cn(
-                        "flex mb-8",
+                        "flex mb-6 md:mb-8",
                         isOwnMessage ? "justify-end" : "justify-start"
                       )}
+                      onTouchStart={() => startLongPress(message.id)}
+                      onTouchEnd={endLongPress}
                       onMouseDown={() => startLongPress(message.id)}
                       onMouseUp={endLongPress}
                       onMouseLeave={endLongPress}
-                      onTouchStart={() => startLongPress(message.id)}
-                      onTouchEnd={endLongPress}
                     >
                       <motion.div
                         whileHover={{ scale: 1.01 }}
+                        whileTap={{ scale: 0.98 }}
                         className={cn(
-                          "relative max-w-md px-6 py-4 rounded-3xl cursor-pointer group",
+                          "relative max-w-[280px] md:max-w-md px-4 md:px-6 py-3 md:py-4 rounded-3xl cursor-pointer group active:scale-95 transition-transform",
                           isOwnMessage
                             ? "bg-stone-800 text-stone-50 rounded-br-lg"
                             : "bg-stone-50 text-stone-800 border border-stone-100 rounded-bl-lg",
                           isEphemeral && "opacity-60 border-dashed"
                         )}
                       >
-                        <p className="text-base leading-relaxed font-light tracking-wide">
+                        <p className="text-sm md:text-base leading-relaxed font-light tracking-wide">
                           {message.content}
                         </p>
                         
                         {/* Timestamp sutil */}
                         <p
                           className={cn(
-                            "text-xs mt-3 font-light tracking-wider",
+                            "text-xs mt-2 md:mt-3 font-light tracking-wider",
                             isOwnMessage ? "text-stone-400" : "text-stone-500"
                           )}
                         >
@@ -690,13 +691,13 @@ const MessagesPage = () => {
                         
                         {/* Reacciones sutiles */}
                         {message.reactions && message.reactions.length > 0 && (
-                          <div className="flex mt-3 space-x-2">
+                          <div className="flex mt-2 md:mt-3 space-x-1 md:space-x-2">
                             {message.reactions.map((reaction, i) => (
                               <motion.span
                                 key={i}
                                 initial={{ scale: 0 }}
                                 animate={{ scale: 1 }}
-                                className="text-sm bg-white/10 backdrop-blur-sm rounded-full px-3 py-1"
+                                className="text-xs md:text-sm bg-white/10 backdrop-blur-sm rounded-full px-2 md:px-3 py-1"
                               >
                                 {reaction.emoji}
                               </motion.span>
@@ -706,7 +707,7 @@ const MessagesPage = () => {
                         
                         {/* Indicador sutil de grupo */}
                         <div className={cn(
-                          "absolute -bottom-1 w-2 h-2 rounded-full",
+                          "absolute -bottom-1 w-1.5 md:w-2 h-1.5 md:h-2 rounded-full",
                           isOwnMessage 
                             ? "-right-1 bg-stone-800" 
                             : "-left-1 bg-stone-50 border border-stone-100"
@@ -720,11 +721,11 @@ const MessagesPage = () => {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Campo de Entrada - Sin Ruido, Solo Intención */}
-          <div className="bg-white/90 backdrop-blur-xl border-t border-stone-100 px-8 py-6">
+          {/* Campo de Entrada - Optimizado para Táctil */}
+          <div className="bg-white/90 backdrop-blur-xl border-t border-stone-100 px-4 md:px-8 py-4 md:py-6 pb-safe">
             <form onSubmit={sendMessage} className="max-w-2xl mx-auto">
               <div className="relative">
-                {/* Input principal - Limpio y centrado */}
+                {/* Input principal - Adaptado para móvil */}
                 <input
                   ref={inputRef}
                   type="text"
@@ -732,16 +733,16 @@ const MessagesPage = () => {
                   onChange={(e) => setNewMessage(e.target.value)}
                   placeholder={ephemeralMode ? "Un pensamiento que se desvanece..." : "Escribe con intención..."}
                   className={cn(
-                    "w-full px-6 py-4 bg-stone-50/80 border-0 rounded-full focus:outline-none focus:ring-1 text-base font-light tracking-wide placeholder-stone-400 transition-all duration-300",
+                    "w-full px-4 md:px-6 py-3 md:py-4 bg-stone-50/80 border-0 rounded-full focus:outline-none focus:ring-1 text-sm md:text-base font-light tracking-wide placeholder-stone-400 transition-all duration-300",
                     ephemeralMode 
                       ? "focus:ring-amber-200 focus:bg-amber-50/50" 
                       : "focus:ring-stone-200 focus:bg-white/80",
-                    newMessage.trim() ? "pr-16" : "pr-6"
+                    newMessage.trim() ? "pr-14 md:pr-16" : "pr-4 md:pr-6"
                   )}
                   disabled={sendingMessage}
                 />
                 
-                {/* Botón de envío - Único, Redondo, Centrado */}
+                {/* Botón de envío - Táctil optimizado */}
                 <AnimatePresence>
                   {newMessage.trim() && (
                     <motion.button
@@ -750,18 +751,18 @@ const MessagesPage = () => {
                       animate={{ scale: 1, opacity: 1 }}
                       exit={{ scale: 0, opacity: 0 }}
                       whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
+                      whileTap={{ scale: 0.9 }}
                       disabled={sendingMessage}
-                      className="absolute right-2 top-2 w-10 h-10 bg-stone-800 text-white rounded-full flex items-center justify-center hover:bg-stone-700 transition-all duration-200 focus:outline-none"
+                      className="absolute right-1.5 md:right-2 top-1.5 md:top-2 w-9 md:w-10 h-9 md:h-10 bg-stone-800 text-white rounded-full flex items-center justify-center hover:bg-stone-700 active:scale-90 transition-all duration-200 focus:outline-none touch-manipulation"
                     >
                       {sendingMessage ? (
                         <motion.div
                           animate={{ rotate: 360 }}
                           transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                          className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full"
+                          className="w-3.5 md:w-4 h-3.5 md:h-4 border-2 border-white/30 border-t-white rounded-full"
                         />
                       ) : (
-                        <Send className="w-4 h-4 ml-0.5" />
+                        <Send className="w-3.5 md:w-4 h-3.5 md:h-4 ml-0.5" />
                       )}
                     </motion.button>
                   )}
@@ -772,26 +773,25 @@ const MessagesPage = () => {
                   <motion.div
                     initial={{ opacity: 0, y: -10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="absolute -top-8 left-6 text-xs text-amber-600 font-light"
+                    className="absolute -top-6 md:-top-8 left-4 md:left-6 text-xs text-amber-600 font-light"
                   >
                     ✨ Se desvanece en 24h
                   </motion.div>
                 )}
               </div>
               
-              {/* Opciones minimalistas */}
-              <div className="flex justify-center mt-4 space-x-6">
-                {/* Modo efímero */}
+              {/* Opciones minimalistas - Móvil */}
+              <div className="flex justify-center mt-3 md:mt-4 space-x-4 md:space-x-6">
                 <motion.button
                   type="button"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setEphemeralMode(!ephemeralMode)}
                   className={cn(
-                    "text-xs font-light tracking-wider transition-all duration-200",
+                    "text-xs font-light tracking-wider transition-all duration-200 py-2 px-3 rounded-full touch-manipulation",
                     ephemeralMode 
-                      ? "text-amber-600" 
-                      : "text-stone-400 hover:text-stone-600"
+                      ? "text-amber-600 bg-amber-50" 
+                      : "text-stone-400 hover:text-stone-600 active:bg-stone-50"
                   )}
                 >
                   {ephemeralMode ? "∞ Permanente" : "○ Efímero"}
