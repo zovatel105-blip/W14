@@ -570,12 +570,12 @@ const MessagesPage = () => {
         </motion.div>
       )}
 
-      {/* Chat Area - La Conversación */}
+      {/* Chat Area - La Conversación que Respira */}
       {showChat && (
         <motion.div 
           initial={{ x: 20, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
-          className="flex-1 flex flex-col bg-white/60 backdrop-blur-xl"
+          className="flex-1 flex flex-col bg-stone-50/30 backdrop-blur-xl"
         >
           {/* Header del Chat - Limpio y Esencial */}
           <div className="bg-white/60 backdrop-blur-xl border-b border-stone-100 px-8 py-6">
