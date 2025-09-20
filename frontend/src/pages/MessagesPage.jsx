@@ -341,14 +341,36 @@ const MessagesPage = () => {
               >
                 Mensajes
               </motion.h1>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setShowNewChat(!showNewChat)}
-                className="w-10 h-10 bg-gray-900 text-white rounded-full flex items-center justify-center hover:bg-gray-800 transition-all duration-200"
-              >
-                <Send className="w-4 h-4" />
-              </motion.button>
+              <div className="flex items-center space-x-2">
+                {/* Botón de solicitudes */}
+                {chatRequests.length > 0 && (
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setShowRequests(!showRequests)}
+                    className="relative w-10 h-10 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center hover:bg-amber-200 transition-all duration-200"
+                  >
+                    <Bell className="w-4 h-4" />
+                    <motion.span
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center"
+                    >
+                      {chatRequests.length}
+                    </motion.span>
+                  </motion.button>
+                )}
+                
+                {/* Botón de nuevo chat */}
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setShowNewChat(!showNewChat)}
+                  className="w-10 h-10 bg-gray-900 text-white rounded-full flex items-center justify-center hover:bg-gray-800 transition-all duration-200"
+                >
+                  <Send className="w-4 h-4" />
+                </motion.button>
+              </div>
             </div>
 
             {/* Búsqueda Elegante */}
