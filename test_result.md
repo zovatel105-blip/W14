@@ -893,6 +893,20 @@ Layout "off" - Carrusel Horizontal:
 ## user_problem_statement: "Debug and fix the 500 Internal Server Error occurring on the backend endpoint /api/users/{user_id}/saved-polls which prevents saved posts from appearing in the user's profile."
 
 ## backend:
+  - task: "Demo login functionality for El Susurro Inteligente access"
+    implemented: true
+    working: true
+    file: "server.py"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: "NA"
+      - agent: "user"
+      - comment: "Usuario reporta que login con demo@example.com / demo123 no funciona para acceder a MessagesPage y nuevo diseño de chat 'El Susurro Inteligente'. Página sigue mostrando login en lugar de redireccionar al dashboard."
+      - working: true
+      - agent: "testing"
+      - comment: "🎉 PROBLEMA RESUELTO COMPLETAMENTE (2025-01-27): Testing crítico completado con 8/8 tests exitosos (100% éxito). PROBLEMA IDENTIFICADO: Usuario demo@example.com no existía en base de datos. SOLUCIÓN: Creado usuario demo exitosamente. VERIFICACIONES COMPLETADAS: ✅ POST /api/auth/login funciona con credenciales demo, ✅ Token JWT válido generado (24h duración), ✅ GET /api/auth/me confirma autenticación, ✅ GET /api/conversations acceso exitoso, ✅ GET /api/messages/unread acceso exitoso, ✅ Token persiste correctamente, ✅ Estructura JWT válida, ✅ Todos los endpoints protegidos accesibles. CONCLUSIÓN: Backend completamente funcional para acceso a recursos de mensajes. Sistema listo para 'El Susurro Inteligente'. RECOMENDACIÓN: Problema NO es del backend - verificar implementación frontend (uso de token, redirección post-login, autenticación en MessagesPage)."
   - task: "Fix HTTP 404 error in registration endpoint for mobile devices"
     implemented: true
     working: true
