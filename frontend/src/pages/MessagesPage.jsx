@@ -55,28 +55,70 @@ const MessagesPage = () => {
     }
   }, [searchParams, user, conversations]);
 
-  const handleChatFromProfile = async (username) => {
+  const handleChatFromProfile = async (targetParam) => {
     try {
+      console.log('🔍 CHAT FROM PROFILE DEBUG:', {
+        targetParam,
+        userParam: searchParams.get('user'),
+        conversations: conversations.length
+      });
+      
       // Limpiar el parámetro de la URL
       setSearchParams({});
       
-      // Buscar si ya existe una conversación con este usuario
+      // Buscar si ya existe una conversación con este usuario (por username o ID)
       const existingConv = conversations.find(conv => 
-        conv.participants.some(p => p.username === username)
+        conv.participants.some(p => 
+          p.username === targetParam || 
+          p.id === targetParam
+        )
       );
 
+      console.log('🔍 Existing conversation search:', {
+        found: !!existingConv,
+        conversationsChecked: conversations.length,
+        searchingFor: targetParam
+      });
+
       if (existingConv) {
-        // Si existe conversación, abrirla directamente
+        console.log('✅ Found existing conversation, opening:', existingConv.id);
         setSelectedConversation(existingConv);
         return;
       }
 
-      // Si no existe conversación, buscar el usuario y enviar solicitud
-      const searchResults = await apiRequest(`/api/users/search?q=${encodeURIComponent(username)}`);
-      const targetUser = searchResults.find(u => u.username === username);
+      // Si no existe conversación, buscar el usuario
+      console.log('🔍 Searching for user:', targetParam);
+      
+      // Intentar buscar por username primero
+      let searchResults = await apiRequest(`/api/users/search?q=${encodeURIComponent(targetParam)}`);
+      let targetUser = searchResults.find(u => u.username === targetParam);
+      
+      // Si no se encuentra por username, intentar buscar por ID
+      if (!targetUser && targetParam) {
+        try {
+          const profileResponse = await apiRequest(`/api/user/profile/${targetParam}`);
+          if (profileResponse) {
+            targetUser = {
+              id: profileResponse.id,
+              username: profileResponse.username,
+              display_name: profileResponse.display_name
+            };
+          }
+        } catch (profileError) {
+          console.log('⚠️ Could not find user by ID:', profileError.message);
+        }
+      }
+      
+      console.log('🔍 User search result:', {
+        searchResults: searchResults.length,
+        targetUser: targetUser ? `${targetUser.username}(${targetUser.id})` : 'not found',
+        searchParam: targetParam
+      });
       
       if (targetUser) {
-        // Verificar si hay solicitud pendiente
+        console.log('📤 Sending chat request to:', targetUser.display_name);
+        
+        // Enviar solicitud de chat
         try {
           const response = await apiRequest('/api/chat-requests', {
             method: 'POST',
@@ -91,17 +133,28 @@ const MessagesPage = () => {
               title: "Solicitud enviada",
               description: `Se ha enviado una solicitud de chat a ${targetUser.display_name}`,
             });
+            
+            // Recargar solicitudes para mostrar la nueva solicitud
+            await loadChatRequests();
           }
         } catch (error) {
           if (error.message.includes("Chat already exists")) {
-            // Si ya existe el chat, recargar conversaciones
+            console.log('✅ Chat already exists, reloading conversations...');
+            
+            // Si ya existe el chat, recargar conversaciones y abrir
             await loadConversations();
-            const newConv = conversations.find(conv => 
-              conv.participants.some(p => p.username === username)
-            );
-            if (newConv) {
-              setSelectedConversation(newConv);
-            }
+            
+            // Buscar la conversación recién cargada
+            setTimeout(() => {
+              const newConv = conversations.find(conv => 
+                conv.participants.some(p => p.id === targetUser.id)
+              );
+              if (newConv) {
+                console.log('✅ Opening existing conversation:', newConv.id);
+                setSelectedConversation(newConv);
+              }
+            }, 1000);
+            
           } else if (error.message.includes("Chat request already pending")) {
             toast({
               title: "Solicitud pendiente",
@@ -109,7 +162,7 @@ const MessagesPage = () => {
               variant: "default"
             });
           } else {
-            console.error('Error enviando solicitud desde perfil:', error);
+            console.error('❌ Error enviando solicitud desde perfil:', error);
             toast({
               title: "Error",
               description: "No se pudo iniciar el chat desde el perfil",
@@ -118,6 +171,7 @@ const MessagesPage = () => {
           }
         }
       } else {
+        console.error('❌ Usuario no encontrado:', targetParam);
         toast({
           title: "Usuario no encontrado",
           description: "No se pudo encontrar el usuario especificado",
@@ -125,7 +179,7 @@ const MessagesPage = () => {
         });
       }
     } catch (error) {
-      console.error('Error manejando chat desde perfil:', error);
+      console.error('❌ Error manejando chat desde perfil:', error);
       toast({
         title: "Error",
         description: "No se pudo iniciar el chat desde el perfil",
