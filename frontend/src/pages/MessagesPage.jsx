@@ -1086,35 +1086,39 @@ const MessagesPage = () => {
           <div className="text-center max-w-lg space-y-6">
             <motion.div
               animate={{ 
-                scale: [1, 1.1, 1],
-                rotate: [0, 10, -10, 0],
-                y: [0, -10, 0]
+                scale: [1, 1.05, 1],
+                y: [0, -5, 0]
               }}
               transition={{ 
-                duration: 6,
+                duration: 4,
                 repeat: Infinity,
                 ease: "easeInOut"
               }}
-              className="w-32 h-32 mx-auto bg-gradient-to-br from-purple-500 via-pink-500 to-indigo-500 rounded-3xl flex items-center justify-center shadow-2xl"
+              className="w-40 h-40 mx-auto bg-gradient-to-br from-purple-500 via-pink-500 to-indigo-500 rounded-3xl flex items-center justify-center shadow-2xl border-4 border-white"
             >
-              <MessageCircle className="w-16 h-16 text-white" strokeWidth={1.5} />
+              <MessageCircle className="w-20 h-20 text-white" strokeWidth={1.5} />
             </motion.div>
-            <div className="space-y-3">
-              <h3 className="text-3xl font-bold text-gray-900">
+            <div className="space-y-4">
+              <h3 className="text-4xl font-bold text-gray-900">
                 VoteChat
               </h3>
-              <p className="text-lg text-gray-600 leading-relaxed">
-                Conecta con otros VoTokkers y comparte tus<br />
-                <span className="font-semibold text-purple-600">opiniones favoritas</span>
-              </p>
+              <div className="space-y-2">
+                <p className="text-xl text-gray-700 leading-relaxed font-medium">
+                  Conecta con otros VoTokkers
+                </p>
+                <p className="text-lg text-gray-600 leading-relaxed">
+                  Comparte opiniones, vota juntos y crea <br />
+                  <span className="font-semibold text-purple-600 bg-purple-50 px-2 py-1 rounded-lg">conexiones auténticas</span>
+                </p>
+              </div>
             </div>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setShowNewChat(true)}
-              className="bg-gradient-to-br from-purple-500 to-pink-500 text-white px-10 py-4 rounded-3xl hover:shadow-2xl transition-all font-bold text-lg shadow-xl"
+              className="bg-gradient-to-br from-purple-500 to-pink-500 text-white px-12 py-5 rounded-3xl hover:shadow-2xl transition-all font-bold text-xl shadow-xl border border-purple-400"
             >
-              Iniciar Conversación
+              🚀 Iniciar Conversación
             </motion.button>
           </div>
         </motion.div>
