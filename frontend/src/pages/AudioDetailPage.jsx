@@ -255,10 +255,10 @@ const AudioDetailPage = () => {
         </div>
       </header>
 
-      <div className="w-full px-4 py-6 space-y-6">
+      <div className="w-full py-6 space-y-6">
         
         {/* Audio Info */}
-        <div className="max-w-md mx-auto bg-white rounded-lg border border-gray-200 p-6">
+        <div className="max-w-md mx-auto bg-white rounded-lg border border-gray-200 p-6 mx-4">
           <div className="flex items-center space-x-4">
             <div className="w-16 h-16 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
               {audio.cover_url ? (
@@ -299,7 +299,7 @@ const AudioDetailPage = () => {
         </div>
 
         {/* Action Buttons */}
-        <div className="max-w-md mx-auto grid grid-cols-2 gap-3">
+        <div className="max-w-md mx-auto grid grid-cols-2 gap-3 px-4">
           <Button
             onClick={handleUseThisSound}
             className="flex items-center justify-center space-x-2"
@@ -320,7 +320,7 @@ const AudioDetailPage = () => {
 
         {/* Posts using this audio - Con padding lateral mínimo como ProfilePage */}
         <div className="space-y-4">
-          <div className="px-1 sm:px-2">
+          <div className="px-4">
             <div className="flex items-center justify-between">
               <h3 className="text-lg font-semibold text-gray-900">
                 Videos con este audio
@@ -347,7 +347,7 @@ const AudioDetailPage = () => {
               isOwnProfile={false}
             />
           ) : (
-            <div className="text-center py-16 space-y-6 px-1 sm:px-2">
+            <div className="text-center py-16 space-y-6 px-4">
               <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto">
                 <Users className="w-8 h-8 text-gray-400" strokeWidth={1.5} />
               </div>
