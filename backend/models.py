@@ -218,6 +218,38 @@ class SecurityNotification(BaseModel):
 
 # =============  MESSAGING MODELS =============
 
+class ChatRequestStatus(str, Enum):
+    PENDING = "pending"
+    ACCEPTED = "accepted"
+    REJECTED = "rejected"
+    CANCELLED = "cancelled"
+
+class ChatRequest(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    sender_id: str
+    receiver_id: str
+    status: ChatRequestStatus = ChatRequestStatus.PENDING
+    message: Optional[str] = None  # Optional message with the request
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+    expires_at: Optional[datetime] = None  # Auto-expire after 30 days
+
+class ChatRequestCreate(BaseModel):
+    receiver_id: str
+    message: Optional[str] = None
+
+class ChatRequestResponse(BaseModel):
+    id: str
+    sender: UserResponse
+    receiver: UserResponse
+    status: ChatRequestStatus
+    message: Optional[str] = None
+    created_at: datetime
+    updated_at: datetime
+
+class ChatRequestAction(BaseModel):
+    action: str  # "accept" or "reject"
+
 class Message(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     conversation_id: str
