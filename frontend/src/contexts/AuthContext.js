@@ -161,7 +161,14 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (userData) => {
     try {
-      const response = await fetch(`${BACKEND_URL}/api/auth/register`, {
+      const registerUrl = `${BACKEND_URL}/api/auth/register`;
+      console.log('🔍 REGISTER DEBUG:', {
+        BACKEND_URL,
+        registerUrl,
+        userData: { ...userData, password: '[HIDDEN]' }
+      });
+      
+      const response = await fetch(registerUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
