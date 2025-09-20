@@ -255,10 +255,10 @@ const AudioDetailPage = () => {
         </div>
       </header>
 
-      <div className="max-w-md mx-auto p-4 space-y-6">
+      <div className="w-full px-4 py-6 space-y-6">
         
         {/* Audio Info */}
-        <div className="bg-white rounded-lg border border-gray-200 p-6">
+        <div className="max-w-md mx-auto bg-white rounded-lg border border-gray-200 p-6">
           <div className="flex items-center space-x-4">
             <div className="w-16 h-16 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
               {audio.cover_url ? (
@@ -299,7 +299,7 @@ const AudioDetailPage = () => {
         </div>
 
         {/* Action Buttons */}
-        <div className="grid grid-cols-2 gap-3">
+        <div className="max-w-md mx-auto grid grid-cols-2 gap-3">
           <Button
             onClick={handleUseThisSound}
             className="flex items-center justify-center space-x-2"
@@ -320,7 +320,7 @@ const AudioDetailPage = () => {
 
         {/* Posts using this audio */}
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
+          <div className="max-w-md mx-auto flex items-center justify-between px-2">
             <h3 className="text-lg font-semibold text-gray-900">
               Videos con este audio
             </h3>
@@ -336,14 +336,16 @@ const AudioDetailPage = () => {
               <p className="text-gray-500">Cargando videos...</p>
             </div>
           ) : posts.length > 0 ? (
-            <TikTokProfileGrid 
-              polls={posts} 
-              onPollClick={handleVideoClick}
-              onUpdatePoll={() => {}} // No update functionality needed here
-              onDeletePoll={() => {}} // No delete functionality needed here
-              currentUser={null} // Not needed for this view
-              isOwnProfile={false}
-            />
+            <div className="w-full">
+              <TikTokProfileGrid 
+                polls={posts} 
+                onPollClick={handleVideoClick}
+                onUpdatePoll={() => {}} // No update functionality needed here
+                onDeletePoll={() => {}} // No delete functionality needed here
+                currentUser={null} // Not needed for this view
+                isOwnProfile={false}
+              />
+            </div>
           ) : (
             <div className="text-center py-12">
               <Users className="w-12 h-12 text-gray-300 mx-auto mb-4" />
