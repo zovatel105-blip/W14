@@ -84,6 +84,75 @@ const MessagesPage = () => {
     }
   };
 
+  // 🎯 Funciones del Susurro Inteligente
+  const handleLongPress = (messageId, event) => {
+    event.preventDefault();
+    setReactionTarget(messageId);
+    setShowEmojiPicker(true);
+  };
+
+  const startLongPress = (messageId) => {
+    longPressTimer.current = setTimeout(() => {
+      setReactionTarget(messageId);
+      setShowEmojiPicker(true);
+    }, 500);
+  };
+
+  const endLongPress = () => {
+    if (longPressTimer.current) {
+      clearTimeout(longPressTimer.current);
+    }
+  };
+
+  const addReaction = async (messageId, emoji) => {
+    try {
+      await apiRequest(`/api/messages/${messageId}/reaction`, {
+        method: 'POST',
+        body: { emoji }
+      });
+      setShowEmojiPicker(false);
+      setReactionTarget(null);
+      // Reload messages to show reaction
+      if (selectedConversation) {
+        loadMessages(selectedConversation.id);
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "No se pudo agregar la reacción",
+        variant: "destructive"
+      });
+    }
+  };
+
+  const sendEphemeralMessage = async (content) => {
+    if (!selectedConversation || !content.trim()) return;
+
+    try {
+      setSendingMessage(true);
+      await apiRequest('/api/messages', {
+        method: 'POST',
+        body: {
+          conversation_id: selectedConversation.id,
+          content,
+          is_ephemeral: true,
+          expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString() // 24 horas
+        }
+      });
+      
+      setNewMessage('');
+      loadMessages(selectedConversation.id);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "No se pudo enviar el mensaje efímero",
+        variant: "destructive"
+      });
+    } finally {
+      setSendingMessage(false);
+    }
+  };
+
   const startConversation = (selectedUser) => {
     // Check if conversation already exists
     const existingConv = conversations.find(conv => 
