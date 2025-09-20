@@ -2729,6 +2729,217 @@ async def get_unread_count(current_user: UserResponse = Depends(get_current_user
     
     return {"unread_count": total_unread}
 
+# =============  CHAT REQUEST ENDPOINTS =============
+
+@api_router.post("/chat-requests")
+async def send_chat_request(
+    request_data: ChatRequestCreate,
+    current_user: UserResponse = Depends(get_current_user)
+):
+    """Send a chat request to another user"""
+    # Check if recipient exists
+    recipient = await db.users.find_one({"id": request_data.receiver_id})
+    if not recipient:
+        raise HTTPException(status_code=404, detail="User not found")
+    
+    # Check if user is trying to send request to themselves
+    if request_data.receiver_id == current_user.id:
+        raise HTTPException(status_code=400, detail="Cannot send chat request to yourself")
+    
+    # Check if there's already a pending or accepted request between these users
+    existing_request = await db.chat_requests.find_one({
+        "$or": [
+            {
+                "sender_id": current_user.id,
+                "receiver_id": request_data.receiver_id,
+                "status": {"$in": ["pending", "accepted"]}
+            },
+            {
+                "sender_id": request_data.receiver_id,
+                "receiver_id": current_user.id,
+                "status": {"$in": ["pending", "accepted"]}
+            }
+        ]
+    })
+    
+    if existing_request:
+        if existing_request["status"] == "accepted":
+            raise HTTPException(status_code=400, detail="Chat already exists between these users")
+        else:
+            raise HTTPException(status_code=400, detail="Chat request already pending")
+    
+    # Check if recipient allows messages
+    if not recipient.get("allow_messages", True):
+        raise HTTPException(status_code=403, detail="User does not accept chat requests")
+    
+    # Create chat request
+    chat_request = ChatRequest(
+        sender_id=current_user.id,
+        receiver_id=request_data.receiver_id,
+        message=request_data.message,
+        expires_at=datetime.utcnow() + timedelta(days=30)
+    )
+    
+    await db.chat_requests.insert_one(chat_request.dict())
+    
+    return {
+        "success": True,
+        "request_id": chat_request.id,
+        "message": "Chat request sent successfully"
+    }
+
+@api_router.get("/chat-requests/received")
+async def get_received_chat_requests(current_user: UserResponse = Depends(get_current_user)):
+    """Get chat requests received by the current user"""
+    requests = await db.chat_requests.find({
+        "receiver_id": current_user.id,
+        "status": "pending"
+    }).sort("created_at", -1).to_list(50)
+    
+    result = []
+    for req in requests:
+        # Get sender info
+        sender = await db.users.find_one({"id": req["sender_id"]})
+        if sender:
+            result.append(ChatRequestResponse(
+                id=req["id"],
+                sender=UserResponse(**sender),
+                receiver=current_user,
+                status=req["status"],
+                message=req.get("message"),
+                created_at=req["created_at"],
+                updated_at=req["updated_at"]
+            ))
+    
+    return result
+
+@api_router.get("/chat-requests/sent")
+async def get_sent_chat_requests(current_user: UserResponse = Depends(get_current_user)):
+    """Get chat requests sent by the current user"""
+    requests = await db.chat_requests.find({
+        "sender_id": current_user.id,
+        "status": "pending"
+    }).sort("created_at", -1).to_list(50)
+    
+    result = []
+    for req in requests:
+        # Get receiver info
+        receiver = await db.users.find_one({"id": req["receiver_id"]})
+        if receiver:
+            result.append(ChatRequestResponse(
+                id=req["id"],
+                sender=current_user,
+                receiver=UserResponse(**receiver),
+                status=req["status"],
+                message=req.get("message"),
+                created_at=req["created_at"],
+                updated_at=req["updated_at"]
+            ))
+    
+    return result
+
+@api_router.put("/chat-requests/{request_id}")
+async def respond_to_chat_request(
+    request_id: str,
+    action_data: ChatRequestAction,
+    current_user: UserResponse = Depends(get_current_user)
+):
+    """Accept or reject a chat request"""
+    # Find the chat request
+    chat_request = await db.chat_requests.find_one({"id": request_id})
+    if not chat_request:
+        raise HTTPException(status_code=404, detail="Chat request not found")
+    
+    # Check if current user is the receiver
+    if chat_request["receiver_id"] != current_user.id:
+        raise HTTPException(status_code=403, detail="You can only respond to requests sent to you")
+    
+    # Check if request is still pending
+    if chat_request["status"] != "pending":
+        raise HTTPException(status_code=400, detail="Chat request is no longer pending")
+    
+    if action_data.action not in ["accept", "reject"]:
+        raise HTTPException(status_code=400, detail="Action must be 'accept' or 'reject'")
+    
+    # Update request status
+    new_status = "accepted" if action_data.action == "accept" else "rejected"
+    await db.chat_requests.update_one(
+        {"id": request_id},
+        {
+            "$set": {
+                "status": new_status,
+                "updated_at": datetime.utcnow()
+            }
+        }
+    )
+    
+    # If accepted, create conversation
+    if action_data.action == "accept":
+        # Check if conversation already exists
+        existing_conversation = await db.conversations.find_one({
+            "participants": {"$all": [current_user.id, chat_request["sender_id"]]},
+            "is_active": True
+        })
+        
+        if not existing_conversation:
+            conversation = Conversation(
+                participants=[current_user.id, chat_request["sender_id"]],
+                unread_count={
+                    current_user.id: 0,
+                    chat_request["sender_id"]: 0
+                }
+            )
+            await db.conversations.insert_one(conversation.dict())
+            conversation_id = conversation.id
+        else:
+            conversation_id = existing_conversation["id"]
+        
+        return {
+            "success": True,
+            "message": "Chat request accepted",
+            "conversation_id": conversation_id
+        }
+    else:
+        return {
+            "success": True,
+            "message": "Chat request rejected"
+        }
+
+@api_router.delete("/chat-requests/{request_id}")
+async def cancel_chat_request(
+    request_id: str,
+    current_user: UserResponse = Depends(get_current_user)
+):
+    """Cancel a sent chat request"""
+    # Find the chat request
+    chat_request = await db.chat_requests.find_one({"id": request_id})
+    if not chat_request:
+        raise HTTPException(status_code=404, detail="Chat request not found")
+    
+    # Check if current user is the sender
+    if chat_request["sender_id"] != current_user.id:
+        raise HTTPException(status_code=403, detail="You can only cancel requests you sent")
+    
+    # Check if request is still pending
+    if chat_request["status"] != "pending":
+        raise HTTPException(status_code=400, detail="Can only cancel pending requests")
+    
+    # Update request status to cancelled
+    await db.chat_requests.update_one(
+        {"id": request_id},
+        {
+            "$set": {
+                "status": "cancelled",
+                "updated_at": datetime.utcnow()
+            }
+        }
+    )
+    
+    return {
+        "success": True,
+        "message": "Chat request cancelled"
+    }
+
 # =============  COMMENT ENDPOINTS =============
 
 @api_router.post("/polls/{poll_id}/comments", response_model=CommentResponse)
