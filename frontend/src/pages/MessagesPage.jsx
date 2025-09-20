@@ -577,43 +577,46 @@ const MessagesPage = () => {
           animate={{ x: 0, opacity: 1 }}
           className="flex-1 flex flex-col bg-white/60 backdrop-blur-xl"
         >
-          {/* Header del Chat */}
-          <div className="bg-white/80 backdrop-blur-xl border-b border-gray-100/50 p-4">
-            <div className="flex items-center">
+          {/* Header del Chat - Limpio y Esencial */}
+          <div className="bg-white/60 backdrop-blur-xl border-b border-stone-100 px-8 py-6">
+            <div className="flex items-center justify-between max-w-2xl mx-auto">
               {isMobile && (
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => setSelectedConversation(null)}
-                  className="mr-3 p-2 hover:bg-gray-100/50 rounded-full transition-colors"
+                  className="mr-4 p-2 text-stone-400 hover:text-stone-600 rounded-full transition-colors"
                 >
                   <ArrowLeft className="w-5 h-5" />
                 </motion.button>
               )}
-              <div className="w-10 h-10 bg-gradient-to-br from-gray-200 to-gray-300 rounded-full flex items-center justify-center mr-3">
-                <span className="text-gray-600 font-medium">
-                  {selectedConversation.participants[0].display_name[0].toUpperCase()}
-                </span>
-              </div>
-              <div className="flex-1">
-                <h2 className="font-medium text-gray-900">
-                  {selectedConversation.participants[0].display_name}
-                </h2>
-                <p className="text-sm text-gray-500">
-                  presente
-                </p>
+              
+              <div className="flex items-center space-x-4">
+                <div className="w-11 h-11 bg-gradient-to-br from-stone-100 to-stone-200 rounded-full flex items-center justify-center">
+                  <span className="text-stone-600 font-medium text-lg">
+                    {selectedConversation.participants[0].display_name[0].toUpperCase()}
+                  </span>
+                </div>
+                <div>
+                  <h2 className="font-medium text-stone-800 text-lg tracking-wide">
+                    {selectedConversation.participants[0].display_name}
+                  </h2>
+                  <p className="text-sm text-stone-500 font-light">
+                    presente en el momento
+                  </p>
+                </div>
               </div>
               
-              {/* Botón Modo Efímero */}
+              {/* Solo modo efímero - sin más distracciones */}
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setEphemeralMode(!ephemeralMode)}
                 className={cn(
-                  "p-2 rounded-full transition-all mr-2",
+                  "p-2 rounded-full transition-all text-sm font-light",
                   ephemeralMode 
-                    ? "bg-amber-100 text-amber-600" 
-                    : "hover:bg-gray-100/50 text-gray-400"
+                    ? "bg-amber-50 text-amber-600" 
+                    : "text-stone-400 hover:text-stone-600 hover:bg-stone-50"
                 )}
               >
                 {ephemeralMode ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
