@@ -212,6 +212,19 @@ const AudioDetailPage = () => {
   const handleSaveAudio = async () => {
     try {
       const token = localStorage.getItem('token');
+      console.log('🔍 SAVE AUDIO DEBUG:', {
+        audioId,
+        audio: audio,
+        token: token ? `${token.substring(0, 20)}...` : 'NO TOKEN',
+        backend_url: process.env.REACT_APP_BACKEND_URL
+      });
+      
+      const requestData = {
+        audio_id: audioId,
+        audio_type: audio.is_system_music ? "system" : "user"
+      };
+      
+      console.log('📡 REQUEST DATA:', requestData);
       
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/audio/favorites`, {
         method: 'POST',
@@ -219,23 +232,26 @@ const AudioDetailPage = () => {
           'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-          audio_id: audioId,
-          audio_type: audio.is_system_music ? "system" : "user"
-        })
+        body: JSON.stringify(requestData)
       });
 
+      console.log('📡 RESPONSE STATUS:', response.status);
+      console.log('📡 RESPONSE OK:', response.ok);
+
       if (response.ok) {
+        const data = await response.json();
+        console.log('✅ SUCCESS DATA:', data);
         toast({
           title: "Audio guardado",
           description: "El audio se ha guardado en tus favoritos",
         });
       } else {
         const errorData = await response.json();
+        console.error('❌ ERROR DATA:', errorData);
         throw new Error(errorData.detail || 'Error al guardar el audio');
       }
     } catch (error) {
-      console.error('Error saving audio:', error);
+      console.error('❌ CATCH ERROR:', error);
       toast({
         title: "Error",
         description: error.message || "No se pudo guardar el audio",
