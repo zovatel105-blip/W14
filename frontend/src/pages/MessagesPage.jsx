@@ -19,6 +19,10 @@ const MessagesPage = () => {
   const [sendingMessage, setSendingMessage] = useState(false);
   const [chatRequests, setChatRequests] = useState([]);
   const [storyUsers, setStoryUsers] = useState([]);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [reactionTarget, setReactionTarget] = useState(null);
+  const [ephemeralMode, setEphemeralMode] = useState(false);
+  const longPressTimer = useRef(null);
   const { user, apiRequest } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
