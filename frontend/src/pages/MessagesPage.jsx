@@ -23,8 +23,8 @@ const MessagesPage = () => {
   const [reactionTarget, setReactionTarget] = useState(null);
   const [ephemeralMode, setEphemeralMode] = useState(false);
   
-  // Control segmentado - comenzar con "followers" por defecto
-  const [selectedSegment, setSelectedSegment] = useState('followers');
+  // Control segmentado - comenzar con chats/conversaciones por defecto
+  const [selectedSegment, setSelectedSegment] = useState(null);
   const [segmentData, setSegmentData] = useState({
     followers: { count: 0, loading: true },
     activity: { count: 0, loading: true },
