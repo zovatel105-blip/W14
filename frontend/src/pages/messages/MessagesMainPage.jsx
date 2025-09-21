@@ -303,15 +303,15 @@ const MessagesMainPage = () => {
                       
                       {/* Content */}
                       <div className="flex-1 min-w-0 text-left">
-                        <div className="flex items-center justify-between mb-1">
-                          <span className="text-base font-semibold truncate text-black">
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-lg font-semibold truncate text-gray-900">
                             {otherUser.display_name || otherUser.username || 'Usuario'}
                           </span>
-                          <span className="text-xs text-gray-500 ml-2 flex-shrink-0">
+                          <span className="text-sm text-gray-500 ml-2 flex-shrink-0">
                             {formatTimeForInbox(conversation.last_message_at || conversation.created_at)}
                           </span>
                         </div>
-                        <p className="text-sm text-gray-600 truncate mt-1 leading-relaxed">
+                        <p className="text-sm text-gray-600 truncate leading-relaxed">
                           {conversation.last_message || 'Iniciar conversación'}
                         </p>
                       </div>
