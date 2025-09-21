@@ -139,6 +139,11 @@ const MessagesPage = () => {
     loadChatRequests();
   }, []);
 
+  // Force inbox to show by clearing selected conversation
+  useEffect(() => {
+    setSelectedConversation(null);
+  }, []);
+
   // Procesar parámetro 'user' de la URL para iniciar chat desde perfil
   useEffect(() => {
     const targetParam = searchParams.get('user');
