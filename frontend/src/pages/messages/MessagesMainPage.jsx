@@ -201,12 +201,6 @@ const MessagesMainPage = () => {
           {/* Navigation Segments */}
           <div className="flex-shrink-0 bg-white border-b border-gray-200 px-4 py-3">
             <div className="flex items-center space-x-1">
-              {/* Chats - Current Page Indicator */}
-              <div className="bg-blue-50 px-4 py-2 rounded-full flex items-center space-x-2">
-                <MessageCircle className="w-4 h-4 text-blue-600" />
-                <span className="text-sm font-medium text-blue-800">Chats</span>
-              </div>
-
               {/* Navigation to other pages */}
               <button
                 onClick={() => navigate('/messages/followers')}
