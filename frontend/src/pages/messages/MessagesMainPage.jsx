@@ -8,7 +8,7 @@ import AppConfig from '../../config/config.js';
 const MessagesMainPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
   const [conversations, setConversations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedConversation, setSelectedConversation] = useState(null);
