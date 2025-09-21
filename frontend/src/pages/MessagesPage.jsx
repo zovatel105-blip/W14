@@ -716,11 +716,11 @@ const MessagesPage = () => {
 
   const getIconComponent = (iconName) => {
     const icons = {
-      'Users': () => <span className="text-white">👥</span>,
-      'Bell': () => <span className="text-white">🔔</span>, 
-      'MessageCircle': () => <span className="text-white">💬</span>
+      'Users': Users,
+      'Bell': Bell, 
+      'MessageCircle': MessageCircle
     };
-    return icons[iconName] || (() => <span>📱</span>);
+    return icons[iconName] || Users;
   };
 
   // Funciones de utilidad optimizadas para móvil
