@@ -13128,6 +13128,10 @@ def main():
     print("\n🎯 TESTING: New Chat Endpoints Replacing Hardcoded Data")
     test_results["new_chat_endpoints"] = test_new_chat_endpoints_replacing_hardcoded_data(base_url)
     
+    # Run chat avatar system test with real URLs
+    print("\n🎨 TESTING: Chat Avatar System with Real URLs")
+    test_results["chat_avatar_system"] = test_chat_avatar_system_with_real_urls(base_url)
+    
     # Final summary
     print("\n" + "=" * 80)
     print("📊 FINAL TEST RESULTS SUMMARY")
