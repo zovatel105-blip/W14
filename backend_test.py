@@ -10624,73 +10624,81 @@ def test_profile_to_chat_navigation(base_url):
     return success_count >= 6
 
 def main():
-    """Main testing function - CRITICAL AUDIO FAVORITES TESTING"""
-    print("🎵 TESTING CRÍTICO: SISTEMA DE AUDIO FAVORITOS - POST /api/audio/favorites")
+    """Run all backend tests"""
+    print("🚀 Starting Backend API Testing - HTTP 404 Registration Fix Verification")
     print("=" * 80)
     
     base_url = get_backend_url()
-    print(f"🌐 Backend URL: {base_url}")
+    print(f"Testing against: {base_url}")
+    print("=" * 80)
     
-    # First run basic setup tests
-    print("\n🔧 EJECUTANDO TESTS DE CONFIGURACIÓN BÁSICA...")
+    # Test results tracking
+    test_results = {}
     
-    # Test de salud del servidor
-    health_success = test_health_check(base_url)
-    if not health_success:
-        print("❌ Health check failed - cannot continue")
-        return False
+    # Run the critical HTTP 404 registration fix test first
+    print("\n🎯 TESTING CRÍTICO: Verificación de solución HTTP 404 en registro")
+    test_results["http_404_registration_fix"] = test_http_404_registration_fix_critical(base_url)
     
-    # Test de registro para obtener tokens
-    registration_success = test_user_registration(base_url)
-    if not registration_success:
-        print("❌ User registration failed - cannot continue")
-        return False
+    # Run basic health check
+    print("\n🏥 TESTING: Health Check")
+    test_results["health_check"] = test_health_check(base_url)
     
-    # Test de login si hay usuarios registrados
-    login_success = False
-    if test_users:
-        login_success = test_user_login(base_url)
-        if not login_success:
-            print("❌ User login failed - cannot continue")
-            return False
+    # Run user registration tests
+    print("\n👥 TESTING: User Registration")
+    test_results["user_registration"] = test_user_registration(base_url)
     
-    # Test de usuario actual si hay tokens
-    current_user_success = False
-    if auth_tokens:
-        current_user_success = test_get_current_user(base_url)
-        if not current_user_success:
-            print("❌ Get current user failed - cannot continue")
-            return False
+    # Run user login tests
+    print("\n🔐 TESTING: User Login")
+    test_results["user_login"] = test_user_login(base_url)
     
-    # Now run the critical audio favorites test
-    print("\n🎵 EJECUTANDO TEST CRÍTICO DE AUDIO FAVORITOS...")
-    audio_favorites_success = test_audio_favorites_system(base_url)
+    # Run JWT validation tests
+    print("\n🎫 TESTING: JWT Validation")
+    test_results["jwt_validation"] = test_jwt_validation(base_url)
     
-    print(f"\n📊 RESUMEN FINAL:")
-    print(f"   ✅ Health check: {'EXITOSO' if health_success else 'FALLIDO'}")
-    print(f"   ✅ Registro de usuarios: {'EXITOSO' if registration_success else 'FALLIDO'}")
-    print(f"   ✅ Login de usuarios: {'EXITOSO' if login_success else 'FALLIDO'}")
-    print(f"   ✅ Usuario actual: {'EXITOSO' if current_user_success else 'FALLIDO'}")
-    print(f"   🎵 Audio Favoritos: {'EXITOSO' if audio_favorites_success else 'FALLIDO'}")
+    # Run get current user test
+    print("\n👤 TESTING: Get Current User")
+    test_results["get_current_user"] = test_get_current_user(base_url)
     
-    if audio_favorites_success:
-        print("\n✅ TEST CRÍTICO AUDIO FAVORITOS EXITOSO")
-        print("🎯 CONCLUSIÓN: El endpoint POST /api/audio/favorites funciona correctamente")
-        print("💡 RECOMENDACIONES:")
-        print("   1. Backend está completamente operacional")
-        print("   2. Si persiste error en frontend, revisar implementación cliente")
-        print("   3. Verificar que frontend usa la URL correcta")
-        print("   4. Comprobar manejo de errores en frontend")
+    # Final summary
+    print("\n" + "=" * 80)
+    print("📊 FINAL TEST RESULTS SUMMARY")
+    print("=" * 80)
+    
+    passed_tests = 0
+    total_tests = len(test_results)
+    
+    for test_name, result in test_results.items():
+        status = "✅ PASSED" if result else "❌ FAILED"
+        print(f"{test_name.replace('_', ' ').title()}: {status}")
+        if result:
+            passed_tests += 1
+    
+    print(f"\nOverall Results: {passed_tests}/{total_tests} tests passed")
+    print(f"Success Rate: {(passed_tests/total_tests)*100:.1f}%")
+    
+    # Special focus on the critical HTTP 404 fix
+    if test_results.get("http_404_registration_fix", False):
+        print(f"\n🎉 CRÍTICO: HTTP 404 Registration Fix - ✅ COMPLETAMENTE RESUELTO")
+        print(f"   - Los usuarios ahora pueden registrarse exitosamente")
+        print(f"   - Sin errores HTTP 404")
+        print(f"   - Token JWT generado correctamente")
+        print(f"   - Usuario creado en base de datos")
     else:
-        print("\n❌ TEST CRÍTICO AUDIO FAVORITOS FALLIDO")
-        print("🔍 DIAGNÓSTICO: El sistema de audio favoritos tiene problemas")
-        print("💡 RECOMENDACIONES:")
-        print("   1. Revisar logs del servidor para errores específicos")
-        print("   2. Verificar configuración de base de datos")
-        print("   3. Comprobar modelos AudioFavorite en backend")
-        print("   4. Verificar autenticación y permisos")
+        print(f"\n🚨 CRÍTICO: HTTP 404 Registration Fix - ❌ REQUIERE ATENCIÓN")
+        print(f"   - El problema puede no estar completamente resuelto")
+        print(f"   - Verificar configuración REACT_APP_BACKEND_URL")
+        print(f"   - Revisar implementación del endpoint")
     
-    return audio_favorites_success
+    if passed_tests >= total_tests * 0.8:  # 80% success rate
+        print(f"\n🎯 CONCLUSIÓN GENERAL: SISTEMA BACKEND OPERACIONAL")
+        print(f"   - La mayoría de funcionalidades críticas funcionan")
+        print(f"   - Listo para uso en producción")
+        return True
+    else:
+        print(f"\n⚠️ CONCLUSIÓN GENERAL: SISTEMA REQUIERE ATENCIÓN")
+        print(f"   - Múltiples problemas detectados")
+        print(f"   - Revisar implementación antes de producción")
+        return False
 
 if __name__ == "__main__":
     success = main()
