@@ -1102,26 +1102,6 @@ const MessagesPage = () => {
             )}
             
             <div className="bg-gray-100 rounded-full p-1 flex">
-              {/* Botón para volver a Chats cuando estés en un segmento */}
-              {selectedSegment !== null && (
-                <motion.button
-                  key="chats"
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => handleSegmentClick(null)}
-                  className="flex-1 flex items-center justify-center space-x-2 py-3 px-2 rounded-full transition-all duration-200 min-h-[44px] hover:bg-gray-50 active:bg-gray-100"
-                  style={{ touchAction: 'manipulation' }}
-                >
-                  <div 
-                    className="w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-bold"
-                    style={{ backgroundColor: '#4F46E5' }}
-                  >
-                    <MessageCircle className="w-4 h-4" />
-                  </div>
-                  <span className="text-xs font-medium text-gray-700 truncate">Chats</span>
-                </motion.button>
-              )}
-              
               {[
                 {
                   id: 'followers',
