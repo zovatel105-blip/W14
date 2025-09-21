@@ -831,20 +831,23 @@ const MessagesPage = () => {
                 {
                   id: 'followers',
                   icon: 'Users',
-                  iconBg: '#4ECDC4',
-                  title: 'New followers',
+                  iconBg: '#87CEEB', // Azul claro para nuevos seguidores
+                  title: 'Nuevos seguidores',
+                  description: 'Personas que te siguen recientemente'
                 },
                 {
                   id: 'activity', 
                   icon: 'Bell',
-                  iconBg: '#FF4B8D',
-                  title: 'Activity',
+                  iconBg: '#DC2626', // Rojo para actividad (campana roja)
+                  title: 'Actividad',
+                  description: 'Comentarios, me gusta y reacciones'
                 },
                 {
                   id: 'messages',
                   icon: 'MessageCircle',
-                  iconBg: '#4A4A4A',
-                  title: 'Message requests',
+                  iconBg: '#1E40AF', // Azul oscuro para solicitudes de mensajes
+                  title: 'Solicitudes de mensajes',
+                  description: 'Mensajes de personas que no sigues'
                 }
               ].map((segment) => {
                 const isSelected = selectedSegment === segment.id;
