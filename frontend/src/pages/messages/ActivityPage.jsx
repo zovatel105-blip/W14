@@ -78,6 +78,8 @@ const ActivityPage = () => {
         return `A ${activity.user.display_name || activity.user.username} le gustó tu publicación`;
       case 'comment':
         return `${activity.user.display_name || activity.user.username} comentó tu publicación`;
+      case 'vote':
+        return `${activity.user.display_name || activity.user.username} votó en tu encuesta`;
       case 'mention':
         return `${activity.user.display_name || activity.user.username} te mencionó`;
       default:
@@ -91,6 +93,8 @@ const ActivityPage = () => {
         return `Le gustó: "${activity.content_preview || 'tu publicación'}"`;
       case 'comment':
         return activity.comment_preview || 'Dejó un comentario en tu publicación';
+      case 'vote':
+        return `Votó por: "${activity.vote_option}" en "${activity.content_preview}"`;
       case 'mention':
         return `Te mencionó en: "${activity.content_preview || 'una publicación'}"`;
       default:
