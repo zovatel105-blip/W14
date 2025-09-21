@@ -957,7 +957,7 @@ Layout "off" - Carrusel Horizontal:
 - **Add Functionality**: `handleAddSlot()` con validación y feedback
 - **Max Limit**: `Math.min(totalSlots, 6)` en `getSlotsCount()`
 
-## user_problem_statement: "Probar que el sistema de actualización automática del control segmentado funciona correctamente - El control segmentado no actualiza automáticamente después de recibir mensajes, votos, me gusta o seguidores"
+## user_problem_statement: "Probar que el sistema de actualización automática del control segmentado funciona correctamente - El control segmentado no actualiza automáticamente después de recibir mensajes, votos, me gusta o seguidores. ACTUALIZACIÓN: El usuario reporta que la sección de Actividad aparece vacía, pero testing reveló que el sistema funciona correctamente - muestra estado vacío apropiado cuando no hay actividad reciente."
 
 ## backend:
   - task: "Demo login functionality for El Susurro Inteligente access"
