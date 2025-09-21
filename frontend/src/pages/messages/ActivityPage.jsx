@@ -7,7 +7,7 @@ import AppConfig from '../../config/config.js';
 
 const ActivityPage = () => {
   const navigate = useNavigate();
-  const { user } = useContext(AuthContext);
+  const { user } = useAuth();
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activityCount, setActivityCount] = useState(0);
