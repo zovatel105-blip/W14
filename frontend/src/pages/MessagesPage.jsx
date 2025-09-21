@@ -34,6 +34,13 @@ const MessagesPage = () => {
   const showInbox = !selectedConversation;
   const showChat = selectedConversation;
 
+  // Debug logging
+  console.log('🔍 MessagesPage render:', {
+    selectedConversation: selectedConversation?.id || 'null',
+    showInbox,
+    showChat
+  });
+
   // Mock data for TikTok-style stories
   const mockStoryUsers = [
     { id: '1', name: 'Sarah Johnson ✨', avatar: '🇺🇸', hasStory: true },
