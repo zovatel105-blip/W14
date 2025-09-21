@@ -546,505 +546,245 @@ const MessagesPage = () => {
   const votaTokEmojis = ['🔥', '💯', '⚡', '🎯', '💎', '🚀', '✨', '🏆'];
 
   return (
-    <div className="h-screen bg-gray-50 flex relative overflow-hidden">
-      {/* VotaTok Conversations Sidebar - Inspired by Profile design */}
-      {showList && (
+    <div className="h-screen bg-white flex flex-col relative overflow-hidden font-['Inter',system-ui,sans-serif]">
+      {/* TikTok-style Inbox */}
+      {showInbox && (
         <motion.div 
-          initial={{ x: -30, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          className="w-full md:w-96 bg-white border-r border-gray-200 flex flex-col shadow-sm relative z-10"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="flex-1 flex flex-col bg-white"
         >
-          {/* VotaTok Header - Clean like Profile */}
-          <div className="p-6 border-b border-gray-100 bg-white sticky top-0 z-20 shadow-sm">
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center space-x-4">
-                <motion.div 
-                  whileHover={{ scale: 1.05 }}
-                  className={`w-12 h-12 bg-gradient-to-br ${getVotaTokColors(user?.display_name || user?.username || 'User')} rounded-2xl flex items-center justify-center shadow-lg`}
+          {/* Header */}
+          <div className="flex items-center justify-between px-4 py-3 bg-white sticky top-0 z-20">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => setShowNewChat(true)}
+              className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center"
+            >
+              <Plus className="w-5 h-5 text-black" strokeWidth={2} />
+            </motion.button>
+            
+            <h1 className="text-lg font-semibold text-black">Inbox</h1>
+            
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center"
+            >
+              <Search className="w-5 h-5 text-black" strokeWidth={2} />
+            </motion.button>
+          </div>
+
+          {/* Stories Row */}
+          <div className="px-4 py-3 border-b border-gray-100">
+            <div className="flex space-x-4 overflow-x-auto scrollbar-hide">
+              {mockStoryUsers.map((storyUser, index) => (
+                <motion.div
+                  key={storyUser.id}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  className="flex-shrink-0 flex flex-col items-center space-y-2"
                 >
-                  <span className="text-white text-lg font-bold">
-                    {getInitials(user?.display_name || user?.username || 'User')}
+                  <div className={cn(
+                    "w-18 h-18 rounded-full flex items-center justify-center text-2xl relative",
+                    storyUser.hasStory ? "ring-2 ring-pink-500 ring-offset-2" : "bg-gray-100"
+                  )}
+                  style={{ width: '72px', height: '72px' }}>
+                    {storyUser.avatar}
+                    {storyUser.hasStory && (
+                      <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center">
+                        <Plus className="w-3 h-3 text-white" strokeWidth={2} />
+                      </div>
+                    )}
+                  </div>
+                  <span className="text-xs text-gray-700 text-center max-w-16 truncate font-medium">
+                    {storyUser.name}
                   </span>
                 </motion.div>
-                <div>
-                  <h1 className="text-2xl font-bold text-gray-900">
-                    VoteChat
-                  </h1>
-                  <p className="text-sm text-purple-600 font-medium">@{user?.username || 'usuario'}</p>
-                </div>
-              </div>
-              
-              <div className="flex items-center space-x-3">
-                {/* Chat Requests Bell */}
-                {chatRequests.length > 0 && (
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => setShowRequests(!showRequests)}
-                    className="relative p-3 bg-blue-500 rounded-2xl shadow-lg hover:bg-blue-600 transition-colors"
-                  >
-                    <Bell className="w-5 h-5 text-white" strokeWidth={1.5} />
-                    <motion.span 
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center font-bold shadow-lg"
-                    >
-                      {chatRequests.length}
-                    </motion.span>
-                  </motion.button>
-                )}
-                
-                {/* New Chat Button */}
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setShowNewChat(!showNewChat)}
-                  className="p-3 bg-purple-500 rounded-2xl shadow-lg hover:bg-purple-600 transition-colors"
-                >
-                  <Plus className="w-5 h-5 text-white" strokeWidth={1.5} />
-                </motion.button>
-              </div>
+              ))}
             </div>
-
-            {/* Enhanced Chat Requests - Profile Modal Style */}
-            <AnimatePresence>
-              {showRequests && chatRequests.length > 0 && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0, y: -20 }}
-                  animate={{ height: "auto", opacity: 1, y: 0 }}
-                  exit={{ height: 0, opacity: 0, y: -20 }}
-                  className="mb-6 overflow-hidden"
-                >
-                  <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl p-4 border border-blue-200">
-                    <h3 className="text-sm font-bold text-purple-900 mb-4 flex items-center">
-                      <Bell className="w-4 h-4 mr-2" strokeWidth={1.5} />
-                      Nuevas Conexiones ({chatRequests.length})
-                    </h3>
-                    <div className="space-y-3">
-                      {chatRequests.map((request) => (
-                        <motion.div 
-                          key={request.id} 
-                          initial={{ x: -20, opacity: 0 }}
-                          animate={{ x: 0, opacity: 1 }}
-                          className="flex items-center justify-between bg-white rounded-2xl p-4 shadow-md border border-gray-100"
-                        >
-                          <div className="flex items-center space-x-3">
-                            <div className={`w-12 h-12 bg-gradient-to-br ${getVotaTokColors(request.sender.display_name)} rounded-2xl flex items-center justify-center shadow-lg`}>
-                              <span className="text-white font-bold text-sm">
-                                {getInitials(request.sender.display_name)}
-                              </span>
-                            </div>
-                            <div>
-                              <p className="font-bold text-gray-900 text-sm">{request.sender.display_name}</p>
-                              <p className="text-xs text-purple-600 font-medium">@{request.sender.username}</p>
-                              {request.message && (
-                                <p className="text-xs text-gray-600 mt-1 bg-gray-50 rounded-xl px-3 py-1 max-w-32 truncate">
-                                  "{request.message}"
-                                </p>
-                              )}
-                            </div>
-                          </div>
-                          <div className="flex space-x-2">
-                            <motion.button
-                              whileHover={{ scale: 1.05 }}
-                              whileTap={{ scale: 0.95 }}
-                              onClick={() => handleChatRequest(request.id, 'accept')}
-                              className="bg-green-500 text-white rounded-2xl p-3 shadow-lg hover:bg-green-600 transition-colors"
-                              title="Aceptar"
-                            >
-                              <Check className="w-4 h-4" strokeWidth={1.5} />
-                            </motion.button>
-                            <motion.button
-                              whileHover={{ scale: 1.05 }}
-                              whileTap={{ scale: 0.95 }}
-                              onClick={() => handleChatRequest(request.id, 'reject')}
-                              className="bg-gray-400 text-white rounded-2xl p-3 shadow-lg hover:bg-gray-500 transition-colors"
-                              title="Rechazar"
-                            >
-                              <X className="w-4 h-4" strokeWidth={1.5} />
-                            </motion.button>
-                          </div>
-                        </motion.div>
-                      ))}
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-
-            {/* VotaTok User Search - Profile Input Style */}
-            <AnimatePresence>
-              {showNewChat && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0, scale: 0.95 }}
-                  animate={{ height: "auto", opacity: 1, scale: 1 }}
-                  exit={{ height: 0, opacity: 0, scale: 0.95 }}
-                  className="overflow-hidden"
-                >
-                  <div className="relative mb-4">
-                    <div className="absolute inset-y-0 left-0 pl-4 flex items-center">
-                      <Search className="w-5 h-5 text-gray-400" strokeWidth={1.5} />
-                    </div>
-                    <input
-                      type="text"
-                      placeholder="Buscar VoTokkers..."
-                      value={searchQuery}
-                      onChange={(e) => {
-                        setSearchQuery(e.target.value);
-                        searchUsers(e.target.value);
-                      }}
-                      className="w-full pl-12 pr-4 py-4 bg-gray-50 rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-300 focus:bg-white text-sm border border-gray-200 transition-all placeholder-gray-400"
-                    />
-                    {loading && (
-                      <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                        <motion.div 
-                          animate={{ rotate: 360 }}
-                          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                          className="w-5 h-5 border-2 border-purple-300 border-t-purple-600 rounded-full"
-                        />
-                      </div>
-                    )}
-                  </div>
-                  
-                  {/* Enhanced Search Results - Profile Modal Style */}
-                  <AnimatePresence>
-                    {searchResults.length > 0 && (
-                      <motion.div
-                        initial={{ y: -10, opacity: 0, scale: 0.95 }}
-                        animate={{ y: 0, opacity: 1, scale: 1 }}
-                        exit={{ y: -10, opacity: 0, scale: 0.95 }}
-                        className="bg-white border border-gray-200 rounded-2xl shadow-xl max-h-80 overflow-y-auto"
-                      >
-                        {searchResults.map((searchUser, index) => (
-                          <motion.button
-                            key={searchUser.id}
-                            initial={{ x: -20, opacity: 0 }}
-                            animate={{ x: 0, opacity: 1 }}
-                            transition={{ delay: index * 0.05 }}
-                            onClick={() => startConversation(searchUser)}
-                            className="w-full px-5 py-4 text-left flex items-center hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-b-0 group"
-                          >
-                            <div className={`w-14 h-14 bg-gradient-to-br ${getVotaTokColors(searchUser.display_name)} rounded-2xl flex items-center justify-center mr-4 shadow-lg group-hover:scale-105 transition-transform`}>
-                              <span className="text-white font-bold text-lg">
-                                {getInitials(searchUser.display_name)}
-                              </span>
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <div className="font-bold text-gray-900 text-sm truncate">{searchUser.display_name}</div>
-                              <div className="text-xs text-purple-600 truncate font-medium">@{searchUser.username}</div>
-                            </div>
-                            <div className="flex items-center space-x-2">
-                              {isUserOnline(searchUser.id) && (
-                                <motion.div 
-                                  initial={{ scale: 0 }}
-                                  animate={{ scale: 1 }}
-                                  className="w-3 h-3 bg-green-500 rounded-full shadow-sm"
-                                />
-                              )}
-                              <MessageCircle className="w-4 h-4 text-gray-400 group-hover:text-purple-500 transition-colors" strokeWidth={1.5} />
-                            </div>
-                          </motion.button>
-                        ))}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
-              )}
-            </AnimatePresence>
           </div>
 
-          {/* VotaTok Conversations List */}
+          {/* Messages List */}
           <div className="flex-1 overflow-y-auto">
-            {conversations.length === 0 ? (
-              <motion.div 
-                initial={{ opacity: 0, y: 30 }}
+            {mockInboxItems.map((item, index) => (
+              <motion.button
+                key={item.id}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="p-8 text-center space-y-6"
+                transition={{ delay: index * 0.05 }}
+                onClick={() => {
+                  if (item.type === 'chat') {
+                    // Mock conversation for demo
+                    setSelectedConversation({
+                      id: item.id,
+                      participants: [{
+                        id: item.id,
+                        username: item.title.replace(/[^\w]/g, '').toLowerCase(),
+                        display_name: item.title
+                      }]
+                    });
+                  }
+                }}
+                className="w-full px-4 py-3 flex items-center space-x-3 hover:bg-gray-50 transition-colors border-b border-gray-50 last:border-b-0"
               >
-                <div className="w-24 h-24 mx-auto bg-gradient-to-br from-purple-500 to-pink-500 rounded-3xl flex items-center justify-center shadow-xl border-4 border-white">
-                  <Users className="w-12 h-12 text-white" strokeWidth={1.5} />
-                </div>
-                <div className="space-y-3">
-                  <h3 className="text-2xl font-bold text-gray-900">
-                    ¡Conecta con VoTokkers!
-                  </h3>
-                  <p className="text-sm text-gray-600 leading-relaxed max-w-sm mx-auto">
-                    Inicia conversaciones sobre tus votaciones favoritas y conecta con la comunidad
-                  </p>
-                </div>
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setShowNewChat(true)}
-                  className="bg-gradient-to-br from-purple-500 to-pink-500 text-white px-10 py-4 rounded-2xl hover:shadow-xl transition-all font-bold shadow-lg text-base"
-                >
-                  ✨ Empezar Chat
-                </motion.button>
-              </motion.div>
-            ) : (
-              <div className="py-2">
-                {conversations.map((conversation, index) => {
-                  const otherUser = conversation.participants[0];
-                  const isOnline = isUserOnline(otherUser.id);
-                  const hasUnread = conversation.unread_count > 0;
-                  
-                  return (
-                    <motion.button
-                      key={conversation.id}
-                      initial={{ x: -30, opacity: 0 }}
-                      animate={{ x: 0, opacity: 1 }}
-                      transition={{ delay: index * 0.1 }}
-                      onClick={() => setSelectedConversation(conversation)}
-                      className={cn(
-                        "w-full p-5 text-left hover:bg-gray-50 transition-all duration-200 relative group border-b border-gray-100 last:border-b-0",
-                        selectedConversation?.id === conversation.id && "bg-purple-50 border-r-4 border-purple-500 shadow-sm"
-                      )}
+                {/* Icon/Avatar */}
+                <div className="flex-shrink-0">
+                  {item.isNotification ? (
+                    <div 
+                      className="w-12 h-12 rounded-full flex items-center justify-center text-lg"
+                      style={{ 
+                        backgroundColor: item.iconBg,
+                        width: '48px', 
+                        height: '48px' 
+                      }}
                     >
-                      <div className="flex items-center">
-                        <div className="relative">
-                          <div className={`w-16 h-16 bg-gradient-to-br ${getVotaTokColors(otherUser.display_name)} rounded-2xl flex items-center justify-center shadow-lg mr-4 group-hover:scale-105 transition-transform`}>
-                            <span className="text-white font-bold text-xl">
-                              {getInitials(otherUser.display_name)}
-                            </span>
-                          </div>
-                          {/* Online Status */}
-                          {isOnline && (
-                            <motion.div 
-                              initial={{ scale: 0 }}
-                              animate={{ scale: 1 }}
-                              className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-500 border-3 border-white rounded-full shadow-md"
-                            />
-                          )}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between mb-2">
-                            <span className={cn(
-                              "truncate text-base font-bold",
-                              hasUnread ? "text-purple-900" : "text-gray-800"
-                            )}>
-                              {otherUser.display_name}
-                            </span>
-                            {conversation.last_message_at && (
-                              <span className="text-xs text-purple-500 ml-2 flex-shrink-0 font-medium">
-                                {formatTime(conversation.last_message_at)}
-                              </span>
-                            )}
-                          </div>
-                          <div className="flex items-center justify-between">
-                            <span className={cn(
-                              "text-sm truncate max-w-48",
-                              hasUnread ? "font-semibold text-gray-700" : "text-gray-500"
-                            )}>
-                              {conversation.last_message || `💬 Conectar con ${otherUser.display_name.split(' ')[0]}`}
-                            </span>
-                            {hasUnread && (
-                              <motion.span
-                                initial={{ scale: 0 }}
-                                animate={{ scale: 1 }}
-                                className="bg-gradient-to-br from-purple-500 to-pink-500 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center font-bold ml-2 flex-shrink-0 shadow-lg"
-                              >
-                                {conversation.unread_count}
-                              </motion.span>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    </motion.button>
-                  );
-                })}
-              </div>
-            )}
+                      <span>{item.icon}</span>
+                    </div>
+                  ) : (
+                    <div 
+                      className="w-12 h-12 rounded-full flex items-center justify-center text-xl bg-gray-100"
+                      style={{ width: '48px', height: '48px' }}
+                    >
+                      {item.avatar}
+                    </div>
+                  )}
+                </div>
+                
+                {/* Content */}
+                <div className="flex-1 min-w-0 text-left">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="font-semibold text-black text-base truncate">
+                      {item.title}
+                    </span>
+                    {item.time && (
+                      <span className="text-xs text-gray-500 ml-2 flex-shrink-0">
+                        {item.time}
+                      </span>
+                    )}
+                  </div>
+                  {item.message && (
+                    <p className="text-sm text-gray-600 truncate leading-relaxed">
+                      {item.message}
+                    </p>
+                  )}
+                </div>
+                
+                {/* Badge */}
+                {item.count > 0 && (
+                  <div 
+                    className="flex-shrink-0 w-6 h-6 bg-pink-500 rounded-full flex items-center justify-center"
+                    style={{ backgroundColor: '#FF4B8D' }}
+                  >
+                    <span className="text-xs text-white font-bold">
+                      {item.count > 99 ? '99+' : item.count}
+                    </span>
+                  </div>
+                )}
+              </motion.button>
+            ))}
           </div>
+
+          {/* Bottom padding for mobile */}
+          <div className="h-4"></div>
         </motion.div>
       )}
 
-      {/* VotaTok Chat Area */}
+      {/* Chat View */}
       {showChat && (
         <motion.div 
-          initial={{ x: 30, opacity: 0 }}
+          initial={{ x: 300, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
-          className="flex-1 flex flex-col bg-white relative z-10"
+          className="flex-1 flex flex-col bg-white"
         >
-          {/* VotaTok Chat Header - Profile Style */}
-          <div className="bg-white border-b border-gray-100 px-6 py-4 shadow-sm">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                {isMobile && (
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => setSelectedConversation(null)}
-                    className="mr-4 p-2 hover:bg-gray-100 rounded-2xl transition-colors"
-                  >
-                    <ArrowLeft className="w-5 h-5 text-purple-600" strokeWidth={1.5} />
-                  </motion.button>
-                )}
-                <div className="relative">
-                  <div className={`w-12 h-12 bg-gradient-to-br ${getVotaTokColors(selectedConversation.participants[0].display_name)} rounded-2xl flex items-center justify-center mr-4 shadow-lg`}>
-                    <span className="text-white font-bold">
-                      {getInitials(selectedConversation.participants[0].display_name)}
-                    </span>
-                  </div>
-                  {isUserOnline(selectedConversation.participants[0].id) && (
-                    <motion.div 
-                      animate={{ scale: [1, 1.2, 1] }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                      className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full shadow-md"
-                    />
-                  )}
-                </div>
-                <div>
-                  <h2 className="font-bold text-gray-900 text-lg">
-                    {selectedConversation.participants[0].display_name}
-                  </h2>
-                  <p className={cn(
-                    "text-sm font-medium",
-                    isUserOnline(selectedConversation.participants[0].id) 
-                      ? "text-green-600" 
-                      : "text-purple-500"
-                  )}>
-                    {isUserOnline(selectedConversation.participants[0].id) ? "🟢 Activo ahora" : "🔵 En VotaTok"}
-                  </p>
-                </div>
+          {/* Chat Header */}
+          <div className="flex items-center justify-between px-4 py-3 bg-white border-b border-gray-100">
+            <div className="flex items-center space-x-3">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => setSelectedConversation(null)}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <ArrowLeft className="w-5 h-5 text-black" strokeWidth={2} />
+              </motion.button>
+              
+              <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center text-lg">
+                🇺🇸
               </div>
               
-              <div className="flex items-center space-x-3">
-                <motion.button 
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="p-3 hover:bg-gray-100 rounded-2xl transition-colors"
-                  title="Llamada de voz"
-                >
-                  <Phone className="w-5 h-5 text-purple-600" strokeWidth={1.5} />
-                </motion.button>
-                <motion.button 
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="p-3 hover:bg-gray-100 rounded-2xl transition-colors"
-                  title="Videollamada"
-                >
-                  <Video className="w-5 h-5 text-purple-600" strokeWidth={1.5} />
-                </motion.button>
-                <motion.button 
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="p-3 hover:bg-gray-100 rounded-2xl transition-colors"
-                  title="Información del chat"
-                >
-                  <Info className="w-5 h-5 text-purple-600" strokeWidth={1.5} />
-                </motion.button>
+              <div>
+                <h2 className="font-semibold text-black text-base">
+                  {selectedConversation.participants[0].display_name}
+                </h2>
+                <p className="text-sm text-green-600">Activo ahora</p>
               </div>
+            </div>
+            
+            <div className="flex items-center space-x-2">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <Phone className="w-5 h-5 text-black" strokeWidth={2} />
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <Camera className="w-5 h-5 text-black" strokeWidth={2} />
+              </motion.button>
             </div>
           </div>
 
-          {/* VotaTok Messages Area */}
-          <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-gray-50">
+          {/* Messages Area */}
+          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
             {messages.length === 0 ? (
               <motion.div 
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="text-center py-20 space-y-6"
+                className="text-center py-20 space-y-4"
               >
-                <div className={`w-32 h-32 bg-gradient-to-br ${getVotaTokColors(selectedConversation.participants[0].display_name)} rounded-3xl flex items-center justify-center mx-auto shadow-2xl`}>
-                  <span className="text-white font-bold text-4xl">
-                    {getInitials(selectedConversation.participants[0].display_name)}
-                  </span>
+                <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto text-2xl">
+                  🇺🇸
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-2xl font-bold text-gray-900">
+                  <h3 className="text-xl font-semibold text-black">
                     {selectedConversation.participants[0].display_name}
                   </h3>
-                  <p className="text-sm text-purple-600 font-medium">
-                    @{selectedConversation.participants[0].username}
-                  </p>
                   <p className="text-sm text-gray-600">
-                    {isUserOnline(selectedConversation.participants[0].id) ? "🟢 Activo ahora" : "🎯 VoTokker Activo"}
+                    Inicia una conversación
                   </p>
                 </div>
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.5 }}
-                  className="bg-white rounded-3xl p-6 max-w-md mx-auto shadow-xl border border-gray-100"
-                >
-                  <p className="text-sm text-gray-700 leading-relaxed">
-                    🚀 ¡Inicia una conversación con {selectedConversation.participants[0].display_name.split(' ')[0]}! 
-                    <br />
-                    <span className="text-purple-600 font-medium">Comparte opiniones, vota juntos y conecta</span>
-                  </p>
-                </motion.div>
               </motion.div>
             ) : (
-              <div className="space-y-6 max-w-3xl mx-auto">
+              <div className="space-y-4">
                 {messages.map((message, index) => {
                   const isOwnMessage = message.sender_id === user.id;
-                  const showTimestamp = index === 0 || 
-                    (new Date(message.created_at) - new Date(messages[index - 1].created_at)) > 300000; // 5 minutes
                   
                   return (
-                    <motion.div key={message.id}>
-                      {/* Timestamp */}
-                      {showTimestamp && (
-                        <div className="text-center mb-6">
-                          <span className="bg-white px-4 py-2 rounded-full text-xs text-purple-600 shadow-md border border-gray-100 font-medium">
-                            {formatMessageTime(message.created_at)}
-                          </span>
-                        </div>
+                    <motion.div
+                      key={message.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      className={cn(
+                        "flex",
+                        isOwnMessage ? "justify-end" : "justify-start"
                       )}
-                      
-                      <motion.div
-                        initial={{ opacity: 0, y: 20, scale: 0.9 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        transition={{ delay: index * 0.1 }}
-                        className={cn(
-                          "flex items-end space-x-3",
-                          isOwnMessage ? "justify-end flex-row-reverse space-x-reverse" : "justify-start"
-                        )}
-                        onTouchStart={() => startLongPress(message.id)}
-                        onTouchEnd={endLongPress}
-                        onMouseDown={() => startLongPress(message.id)}
-                        onMouseUp={endLongPress}
-                        onMouseLeave={endLongPress}
-                      >
-                        {/* Avatar for other user */}
-                        {!isOwnMessage && (
-                          <div className={`w-8 h-8 bg-gradient-to-br ${getVotaTokColors(selectedConversation.participants[0].display_name)} rounded-2xl flex items-center justify-center shadow-md flex-shrink-0`}>
-                            <span className="text-white font-bold text-xs">
-                              {getInitials(selectedConversation.participants[0].display_name)}
-                            </span>
-                          </div>
-                        )}
-                        
-                        {/* Message Bubble */}
-                        <motion.div
-                          whileHover={{ scale: 1.02 }}
-                          className={cn(
-                            "max-w-sm lg:max-w-md px-6 py-4 rounded-3xl relative group cursor-pointer shadow-lg border",
-                            isOwnMessage
-                              ? "bg-gradient-to-br from-purple-500 to-pink-500 text-white border-purple-300 rounded-br-xl shadow-purple-200"
-                              : "bg-white text-gray-800 border-gray-200 rounded-bl-xl shadow-gray-200"
-                          )}
-                        >
-                          <p className="text-sm leading-relaxed font-medium">{message.content}</p>
-                          
-                          {/* VotaTok Reactions */}
-                          {message.reactions && message.reactions.length > 0 && (
-                            <div className="absolute -bottom-3 left-4 flex space-x-1">
-                              {message.reactions.map((reaction, i) => (
-                                <motion.span 
-                                  key={i}
-                                  initial={{ scale: 0 }}
-                                  animate={{ scale: 1 }}
-                                  whileHover={{ scale: 1.2 }}
-                                  className="text-lg bg-white shadow-lg rounded-full px-3 py-1 border border-gray-100"
-                                >
-                                  {reaction.emoji}
-                                </motion.span>
-                              ))}
-                            </div>
-                          )}
-                        </motion.div>
-                      </motion.div>
+                    >
+                      <div className={cn(
+                        "max-w-xs lg:max-w-md px-4 py-2 rounded-2xl",
+                        isOwnMessage
+                          ? "bg-pink-500 text-white"
+                          : "bg-gray-200 text-black"
+                      )}>
+                        <p className="text-sm">{message.content}</p>
+                      </div>
                     </motion.div>
                   );
                 })}
@@ -1053,63 +793,45 @@ const MessagesPage = () => {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* VotaTok Message Input */}
-          <div className="bg-white border-t border-gray-200 p-6">
-            <form onSubmit={sendMessage} className="flex items-center space-x-4">
-              {/* Media Actions */}
-              <div className="flex items-center space-x-2">
-                <motion.button
-                  type="button"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setShowMediaPicker(!showMediaPicker)}
-                  className="p-3 bg-purple-500 rounded-2xl shadow-lg hover:bg-purple-600 transition-colors"
-                  title="Cámara"
-                >
-                  <Camera className="w-5 h-5 text-white" strokeWidth={1.5} />
-                </motion.button>
-                <motion.button
-                  type="button"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="p-3 bg-blue-500 rounded-2xl shadow-lg hover:bg-blue-600 transition-colors"
-                  title="Galería"
-                >
-                  <Image className="w-5 h-5 text-white" strokeWidth={1.5} />
-                </motion.button>
-              </div>
+          {/* Message Input */}
+          <div className="bg-white border-t border-gray-100 p-4">
+            <form onSubmit={sendMessage} className="flex items-center space-x-3">
+              <motion.button
+                type="button"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              >
+                <Camera className="w-5 h-5 text-gray-600" strokeWidth={2} />
+              </motion.button>
               
-              {/* Input Field */}
               <div className="flex-1 relative">
                 <input
                   ref={inputRef}
                   type="text"
                   value={newMessage}
                   onChange={(e) => setNewMessage(e.target.value)}
-                  placeholder="Escribe tu mensaje..."
-                  className="w-full px-6 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple-300 focus:bg-white text-sm transition-all placeholder-gray-400"
+                  placeholder="Escribe un mensaje..."
+                  className="w-full px-4 py-2 bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-pink-500 text-sm"
                   disabled={sendingMessage}
                 />
                 <motion.button
                   type="button"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => setShowEmojiPicker(true)}
-                  className="absolute right-4 top-1/2 transform -translate-y-1/2 p-2 hover:bg-gray-100 rounded-full transition-colors"
-                  title="Emojis VotaTok"
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-200 rounded-full transition-colors"
                 >
-                  <Smile className="w-5 h-5 text-gray-500" strokeWidth={1.5} />
+                  <Smile className="w-4 h-4 text-gray-600" strokeWidth={2} />
                 </motion.button>
               </div>
               
-              {/* Send Button */}
               {newMessage.trim() ? (
                 <motion.button
                   type="submit"
                   disabled={sendingMessage}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="bg-gradient-to-br from-purple-500 to-pink-500 text-white font-bold px-6 py-4 rounded-2xl hover:shadow-xl transition-all disabled:opacity-50 shadow-lg"
+                  className="bg-pink-500 text-white p-2 rounded-full hover:bg-pink-600 transition-colors disabled:opacity-50"
                 >
                   {sendingMessage ? (
                     <motion.div 
@@ -1118,7 +840,7 @@ const MessagesPage = () => {
                       className="w-5 h-5 border-2 border-white border-t-transparent rounded-full" 
                     />
                   ) : (
-                    <Send className="w-5 h-5" strokeWidth={1.5} />
+                    <Send className="w-5 h-5" strokeWidth={2} />
                   )}
                 </motion.button>
               ) : (
@@ -1126,10 +848,9 @@ const MessagesPage = () => {
                   type="button"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="p-4 bg-pink-500 rounded-2xl shadow-lg hover:bg-pink-600 transition-colors"
-                  title="Mensaje de voz"
+                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
                 >
-                  <Mic className="w-5 h-5 text-white" strokeWidth={1.5} />
+                  <Mic className="w-5 h-5 text-gray-600" strokeWidth={2} />
                 </motion.button>
               )}
             </form>
@@ -1137,131 +858,60 @@ const MessagesPage = () => {
         </motion.div>
       )}
 
-      {/* VotaTok Empty State - Profile Style */}
-      {!selectedConversation && !isMobile && (
-        <motion.div 
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="flex-1 flex items-center justify-center bg-white relative z-10"
-        >
-          <div className="text-center max-w-lg space-y-6">
-            <motion.div
-              animate={{ 
-                scale: [1, 1.05, 1],
-                y: [0, -5, 0]
-              }}
-              transition={{ 
-                duration: 4,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-              className="w-40 h-40 mx-auto bg-gradient-to-br from-purple-500 via-pink-500 to-indigo-500 rounded-3xl flex items-center justify-center shadow-2xl border-4 border-white"
-            >
-              <MessageCircle className="w-20 h-20 text-white" strokeWidth={1.5} />
-            </motion.div>
-            <div className="space-y-4">
-              <h3 className="text-4xl font-bold text-gray-900">
-                VoteChat
-              </h3>
-              <div className="space-y-2">
-                <p className="text-xl text-gray-700 leading-relaxed font-medium">
-                  Conecta con otros VoTokkers
-                </p>
-                <p className="text-lg text-gray-600 leading-relaxed">
-                  Comparte opiniones, vota juntos y crea <br />
-                  <span className="font-semibold text-purple-600 bg-purple-50 px-2 py-1 rounded-lg">conexiones auténticas</span>
-                </p>
-              </div>
-            </div>
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setShowNewChat(true)}
-              className="bg-gradient-to-br from-purple-500 to-pink-500 text-white px-12 py-5 rounded-3xl hover:shadow-2xl transition-all font-bold text-xl shadow-xl border border-purple-400"
-            >
-              🚀 Iniciar Conversación
-            </motion.button>
-          </div>
-        </motion.div>
-      )}
-
-      {/* Enhanced Media Picker - Profile Modal Style */}
+      {/* New Chat Modal */}
       <AnimatePresence>
-        {showMediaPicker && (
+        {showNewChat && (
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.9 }}
-            className="absolute bottom-32 left-6 bg-white border border-gray-200 rounded-2xl shadow-2xl p-4"
-          >
-            <div className="flex space-x-3">
-              <motion.button 
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="p-4 bg-purple-500 rounded-2xl shadow-lg hover:bg-purple-600 transition-colors"
-                title="Foto"
-              >
-                <Camera className="w-6 h-6 text-white" strokeWidth={1.5} />
-              </motion.button>
-              <motion.button 
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="p-4 bg-blue-500 rounded-2xl shadow-lg hover:bg-blue-600 transition-colors"
-                title="Galería"
-              >
-                <Image className="w-6 h-6 text-white" strokeWidth={1.5} />
-              </motion.button>
-              <motion.button 
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="p-4 bg-pink-500 rounded-2xl shadow-lg hover:bg-pink-600 transition-colors"
-                title="Audio"
-              >
-                <Mic className="w-6 h-6 text-white" strokeWidth={1.5} />
-              </motion.button>
-              <motion.button 
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setShowMediaPicker(false)}
-                className="p-4 bg-gray-400 rounded-2xl shadow-lg hover:bg-gray-500 transition-colors"
-              >
-                <X className="w-6 h-6 text-white" strokeWidth={1.5} />
-              </motion.button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* VotaTok Emoji Picker - Profile Modal Style */}
-      <AnimatePresence>
-        {showEmojiPicker && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-6"
-            onClick={() => setShowEmojiPicker(false)}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+            onClick={() => setShowNewChat(false)}
           >
             <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-white rounded-3xl p-8 shadow-2xl max-w-sm w-full border border-gray-200"
+              className="bg-white rounded-2xl p-6 w-full max-w-md"
             >
-              <h3 className="text-xl font-bold text-center mb-6 text-gray-900">
-                VotaTok Reacciones
-              </h3>
-              <div className="grid grid-cols-4 gap-4">
-                {votaTokEmojis.map((emoji) => (
-                  <motion.button
-                    key={emoji}
-                    whileHover={{ scale: 1.3, rotate: 10 }}
-                    whileTap={{ scale: 0.8 }}
-                    onClick={() => addReaction(reactionTarget, emoji)}
-                    className="w-16 h-16 bg-gray-50 hover:bg-gray-100 rounded-2xl flex items-center justify-center text-3xl transition-all hover:shadow-lg border border-gray-100"
-                  >
-                    {emoji}
-                  </motion.button>
-                ))}
+              <h3 className="text-lg font-semibold text-black mb-4">Nueva conversación</h3>
+              
+              <div className="relative mb-4">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" strokeWidth={2} />
+                <input
+                  type="text"
+                  placeholder="Buscar usuarios..."
+                  value={searchQuery}
+                  onChange={(e) => {
+                    setSearchQuery(e.target.value);
+                    searchUsers(e.target.value);
+                  }}
+                  className="w-full pl-10 pr-4 py-3 bg-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 text-sm"
+                />
               </div>
+
+              {searchResults.length > 0 && (
+                <div className="space-y-2 max-h-60 overflow-y-auto">
+                  {searchResults.map((searchUser) => (
+                    <motion.button
+                      key={searchUser.id}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={() => startConversation(searchUser)}
+                      className="w-full flex items-center space-x-3 p-3 hover:bg-gray-50 rounded-xl transition-colors"
+                    >
+                      <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
+                        🇺🇸
+                      </div>
+                      <div className="flex-1 text-left">
+                        <p className="font-semibold text-black text-sm">{searchUser.display_name}</p>
+                        <p className="text-xs text-gray-600">@{searchUser.username}</p>
+                      </div>
+                    </motion.button>
+                  ))}
+                </div>
+              )}
             </motion.div>
           </motion.div>
         )}
