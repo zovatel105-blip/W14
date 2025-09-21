@@ -445,23 +445,7 @@ const MessagesPage = () => {
     setSearchResults([]);
   };
 
-  // Long press handlers for reactions
-  const startLongPress = (messageId) => {
-    longPressTimer.current = setTimeout(() => {
-      handleLongPress(messageId);
-    }, 500);
-  };
-
-  const endLongPress = () => {
-    if (longPressTimer.current) {
-      clearTimeout(longPressTimer.current);
-    }
-  };
-
-  const handleLongPress = (messageId) => {
-    setReactionTarget(messageId);
-    setShowEmojiPicker(true);
-  };
+  // Duplicate functions removed - already exist above
 
   const addReaction = async (messageId, emoji) => {
     try {
