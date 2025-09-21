@@ -580,6 +580,117 @@ const MessagesPage = () => {
     setSelectedSegment(segmentId);
   };
 
+  // Cargar datos reales del sistema
+  const loadSegmentData = async () => {
+    try {
+      // Cargar seguidores nuevos
+      const followersResponse = await apiRequest('/api/user/followers/recent');
+      const followersCount = followersResponse?.length || 0;
+
+      // Cargar actividad (likes, comentarios, etc.)
+      const activityResponse = await apiRequest('/api/user/activity/unread');
+      const activityCount = activityResponse?.unread_count || 0;
+
+      // Cargar solicitudes de mensaje
+      const messageRequestsResponse = await apiRequest('/api/messages/requests');
+      const messageRequestsCount = messageRequestsResponse?.length || 0;
+
+      setSegmentData({
+        followers: { count: followersCount, loading: false },
+        activity: { count: activityCount, loading: false },
+        messages: { count: messageRequestsCount, loading: false }
+      });
+    } catch (error) {
+      console.error('Error loading segment data:', error);
+      // Usar valores por defecto en caso de error
+      setSegmentData({
+        followers: { count: 0, loading: false },
+        activity: { count: 0, loading: false },
+        messages: { count: 0, loading: false }
+      });
+    }
+  };
+
+  // Cargar notificaciones reales basadas en conversaciones
+  const loadRealNotifications = async () => {
+    try {
+      setLoadingNotifications(true);
+      
+      // Combinar conversaciones existentes con solicitudes de chat
+      const [conversationsData, chatRequestsData] = await Promise.all([
+        apiRequest('/api/conversations'),
+        apiRequest('/api/chat-requests')
+      ]);
+
+      const realData = [];
+
+      // Agregar conversaciones existentes
+      if (conversationsData?.length > 0) {
+        conversationsData.forEach(conv => {
+          const otherUser = conv.participants.find(p => p.id !== user?.id) || conv.participants[0];
+          realData.push({
+            id: conv.id,
+            type: 'conversation',
+            title: otherUser.display_name || otherUser.username,
+            message: conv.last_message || 'Iniciar conversación',
+            unreadCount: conv.unread_count || 0,
+            time: formatTimeForInbox(conv.last_message_at || conv.created_at),
+            avatar: getAvatarForUser(otherUser),
+            userId: otherUser.id
+          });
+        });
+      }
+
+      // Agregar solicitudes de chat pendientes
+      if (chatRequestsData?.length > 0) {
+        chatRequestsData.forEach(request => {
+          realData.push({
+            id: `request-${request.id}`,
+            type: 'chat_request',
+            title: `${request.sender.display_name} 💌`,
+            message: request.message || 'Te ha enviado una solicitud de chat',
+            unreadCount: 1,
+            time: formatTimeForInbox(request.created_at),
+            avatar: getAvatarForUser(request.sender),
+            userId: request.sender.id,
+            requestId: request.id
+          });
+        });
+      }
+
+      // Si no hay datos reales, usar algunos ejemplos
+      if (realData.length === 0) {
+        realData.push({
+          id: 'welcome',
+          type: 'system',
+          title: '¡Bienvenido a VotaTok! 🎉',
+          message: 'Comienza a seguir usuarios y interactuar para ver conversaciones aquí',
+          unreadCount: 0,
+          time: 'ahora',
+          avatar: '🎯',
+          isSystem: true
+        });
+      }
+
+      setRealNotifications(realData);
+    } catch (error) {
+      console.error('Error loading notifications:', error);
+      // Fallback data en caso de error
+      setRealNotifications([{
+        id: 'error',
+        type: 'system',
+        title: 'Error de conexión',
+        message: 'No se pudieron cargar los mensajes. Intenta recargar.',
+        unreadCount: 0,
+        time: 'ahora',
+        avatar: '⚠️',
+        isSystem: true
+      }]);
+    } finally {
+      setLoadingNotifications(false);
+    }
+  };
+
   const getIconComponent = (iconName) => {
     const icons = {
       'Users': () => <span className="text-white">👥</span>,
