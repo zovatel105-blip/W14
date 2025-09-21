@@ -570,42 +570,107 @@ const MessagesPage = () => {
   // VotaTok-specific emoji reactions for voting-style interactions
   const votaTokEmojis = ['🔥', '💯', '⚡', '🎯', '💎', '🚀', '✨', '🏆'];
 
-  // Combined inbox items with all three functions
-  const combinedInboxItems = [
-    // Function buttons
+  // Control segmentado - sin selección inicial
+  const [selectedSegment, setSelectedSegment] = useState(null);
+
+  // Definición de segmentos según especificaciones
+  const segments = [
     {
-      id: 'inbox-function',
-      type: 'function',
-      icon: '📥',
-      iconBg: '#0096ff',
-      title: 'Inbox',
-      message: 'Mensajes y notificaciones',
-      count: 0,
-      isFunction: true
+      id: 'followers',
+      icon: 'Users',
+      iconBg: '#4ECDC4', // Teal
+      title: 'New followers',
+      message: 'anayat started following you.',
+      badge: 99
     },
     {
-      id: 'chats-function', 
-      type: 'function',
-      icon: '💬',
-      iconBg: '#10B981',
-      title: 'Chats',  
-      message: 'Conversaciones recientes',
-      count: 0,
-      isFunction: true
+      id: 'activity', 
+      icon: 'Bell',
+      iconBg: '#FF4B8D', // Rosa TikTok
+      title: 'Activity',
+      message: 'commented: 🤪...',
+      badge: 99
     },
     {
-      id: 'calls-function',
-      type: 'function', 
-      icon: '📞',
-      iconBg: '#8B5CF6',
-      title: 'Calls',
-      message: 'Historial de llamadas',
-      count: 0,
-      isFunction: true
-    },
-    // Regular inbox items
-    ...mockInboxItems
+      id: 'messages',
+      icon: 'MessageCircle',
+      iconBg: '#4A4A4A', // Gris oscuro
+      title: 'Message requests', 
+      message: 'You have 180 requests',
+      badge: 99
+    }
   ];
+
+  // Datos mock multilingües según especificaciones
+  const mockNotifications = [
+    {
+      id: '1',
+      type: 'user',
+      title: 'Sarah Johnson ✨',
+      message: 'Hey! Loved your latest video 🔥 Can we collaborate?',
+      unreadCount: 3,
+      time: 'now',
+      avatar: '🇺🇸'
+    },
+    {
+      id: '2',
+      type: 'user', 
+      title: 'Ahmed Hassan 🌟',
+      message: 'مرحبا! أحببت المحتوى الخاص بك. هل يمكننا التعاون؟',
+      unreadCount: 1,
+      time: '2h',
+      avatar: '🇺🇸'
+    },
+    {
+      id: '3',
+      type: 'user',
+      title: 'MinSu Park 💫', 
+      message: '안녕하세요! 정말 멋진 영상이었어요. 구독했습니다! 😊',
+      unreadCount: 2,
+      time: '5h',
+      avatar: '🇺🇸'
+    },
+    {
+      id: '4',
+      type: 'user',
+      title: 'María Rodríguez 💖',
+      message: '¡Hola! Me encanta tu contenido. ¿Podemos hacer un dueto?',
+      unreadCount: 5,
+      time: '1d',
+      avatar: '🇺🇸'
+    },
+    {
+      id: '5',
+      type: 'user',
+      title: 'Elena Volkov 🔥',
+      message: 'Привет! Отличный контент, подписалась на тебя! 💫',
+      unreadCount: 0,
+      time: '2d',
+      avatar: '🇺🇸'
+    },
+    {
+      id: '6',
+      type: 'user',
+      title: 'Jake Thompson 🚀',
+      message: 'Bro, your latest trend is fire! Let\'s collab soon 🎵',
+      unreadCount: 1,
+      time: '3d',
+      avatar: '🇺🇸'
+    }
+  ];
+
+  const handleSegmentClick = (segmentId) => {
+    setSelectedSegment(segmentId);
+  };
+
+  const getIconComponent = (iconName) => {
+    const icons = {
+      'Users': () => <span className="text-white">👥</span>,
+      'Bell': () => <span className="text-white">🔔</span>, 
+      'MessageCircle': () => <span className="text-white">💬</span>
+    };
+    return icons[iconName] || (() => <span>📱</span>);
+  };
 
   return (
     <div className="h-screen bg-white flex flex-col relative overflow-hidden font-['Inter',system-ui,sans-serif]">
