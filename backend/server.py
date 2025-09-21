@@ -2966,11 +2966,17 @@ async def get_recent_followers(current_user: UserResponse = Depends(get_current_
         for follow in recent_follows:
             follower = await db.users.find_one({"id": follow["follower_id"]})
             if follower:
+                # Asignar avatar por defecto si no tiene uno
+                avatar_url = follower.get("avatar_url")
+                if not avatar_url:
+                    username = follower.get("username", "user")
+                    avatar_url = f"https://api.dicebear.com/7.x/avataaars/svg?seed={username}&backgroundColor=b6e3f4,c0aede,d1d4f9"
+                
                 followers.append({
                     "id": follower["id"],
                     "username": follower["username"],
                     "display_name": follower.get("display_name", follower["username"]),
-                    "avatar": follower.get("avatar"),
+                    "avatar_url": avatar_url,  # Corregido de "avatar" a "avatar_url"
                     "followed_at": follow["created_at"],
                     "is_verified": follower.get("is_verified", False)
                 })
