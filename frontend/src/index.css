@@ -49,6 +49,19 @@ code {
   user-select: none;
 }
 
+/* TikTok-style scrollbar hide */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;  /* Chrome, Safari and Opera */
+}
+
+/* Inter font import */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 /* Eliminate all white outlines and rings on all elements */
 *:focus,
 *:active,
