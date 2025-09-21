@@ -13,7 +13,17 @@ from datetime import datetime, timedelta
 
 # Get backend URL - use external URL from frontend/.env
 def get_backend_url():
-    # Use localhost URL as configured in frontend/.env for testing
+    # Read the actual backend URL from frontend/.env
+    try:
+        with open('/app/frontend/.env', 'r') as f:
+            content = f.read()
+            for line in content.split('\n'):
+                if line.startswith('REACT_APP_BACKEND_URL='):
+                    backend_url = line.split('=', 1)[1].strip()
+                    return f"{backend_url}/api"
+    except:
+        pass
+    # Fallback to localhost
     return "http://localhost:8001/api"
 
 def get_mobile_headers():
