@@ -572,63 +572,9 @@ const MessagesPage = () => {
     messages: { count: 0, loading: true }
   });
 
-  // Datos mock multilingües según especificaciones
-  const mockNotifications = [
-    {
-      id: '1',
-      type: 'user',
-      title: 'Sarah Johnson ✨',
-      message: 'Hey! Loved your latest video 🔥 Can we collaborate?',
-      unreadCount: 3,
-      time: 'now',
-      avatar: '🇺🇸'
-    },
-    {
-      id: '2',
-      type: 'user', 
-      title: 'Ahmed Hassan 🌟',
-      message: 'مرحبا! أحببت المحتوى الخاص بك. هل يمكننا التعاون؟',
-      unreadCount: 1,
-      time: '2h',
-      avatar: '🇺🇸'
-    },
-    {
-      id: '3',
-      type: 'user',
-      title: 'MinSu Park 💫', 
-      message: '안녕하세요! 정말 멋진 영상이었어요. 구독했습니다! 😊',
-      unreadCount: 2,
-      time: '5h',
-      avatar: '🇺🇸'
-    },
-    {
-      id: '4',
-      type: 'user',
-      title: 'María Rodríguez 💖',
-      message: '¡Hola! Me encanta tu contenido. ¿Podemos hacer un dueto?',
-      unreadCount: 5,
-      time: '1d',
-      avatar: '🇺🇸'
-    },
-    {
-      id: '5',
-      type: 'user',
-      title: 'Elena Volkov 🔥',
-      message: 'Привет! Отличный контент, подписалась на тебя! 💫',
-      unreadCount: 0,
-      time: '2d',
-      avatar: '🇺🇸'
-    },
-    {
-      id: '6',
-      type: 'user',
-      title: 'Jake Thompson 🚀',
-      message: 'Bro, your latest trend is fire! Let\'s collab soon 🎵',
-      unreadCount: 1,
-      time: '3d',
-      avatar: '🇺🇸'
-    }
-  ];
+  // Estados para datos reales
+  const [realNotifications, setRealNotifications] = useState([]);
+  const [loadingNotifications, setLoadingNotifications] = useState(true);
 
   const handleSegmentClick = (segmentId) => {
     setSelectedSegment(segmentId);
