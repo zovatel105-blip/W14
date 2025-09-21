@@ -663,7 +663,7 @@ const MessagesPage = () => {
   };
 
   // Cargar notificaciones específicas por segmento
-  const loadRealNotifications = async () => {
+  const loadNotifications = async () => {
     try {
       setLoadingNotifications(true);
       
