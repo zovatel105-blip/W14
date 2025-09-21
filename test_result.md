@@ -957,7 +957,7 @@ Layout "off" - Carrusel Horizontal:
 - **Add Functionality**: `handleAddSlot()` con validación y feedback
 - **Max Limit**: `Math.min(totalSlots, 6)` en `getSlotsCount()`
 
-## user_problem_statement: "Probar que el sistema de actualización automática del control segmentado funciona correctamente - El control segmentado no actualiza automáticamente después de recibir mensajes, votos, me gusta o seguidores. ACTUALIZACIÓN: El usuario reporta que la sección de Actividad aparece vacía, pero testing reveló que el sistema funciona correctamente - muestra estado vacío apropiado cuando no hay actividad reciente."
+## user_problem_statement: "Create test users with real avatar URLs and create test data to demonstrate that the chat avatar system works correctly: 1. Create 2-3 test users with real avatar_url configured (use sample profile images) 2. Create conversations between demo user and these test users 3. Create follower relationships so demo user gets 'new follower' notifications with real avatars 4. Verify that the conversations endpoint returns users with avatar_url 5. Test that the system correctly displays real profile pictures instead of just initials"
 
 ## backend:
   - task: "Demo login functionality for El Susurro Inteligente access"
