@@ -62,6 +62,11 @@ code {
 /* Inter font import */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
+/* Fuente Inter para la aplicación */
+.font-inter {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
 /* Eliminate all white outlines and rings on all elements */
 *:focus,
 *:active,
