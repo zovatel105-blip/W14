@@ -291,7 +291,7 @@ class ConversationResponse(BaseModel):
 class Follow(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     follower_id: str  # ID del usuario que sigue
-    following_id: str  # ID del usuario seguido
+    followed_id: str  # ID del usuario seguido
     created_at: datetime = Field(default_factory=datetime.utcnow)
 
 class FollowCreate(BaseModel):
