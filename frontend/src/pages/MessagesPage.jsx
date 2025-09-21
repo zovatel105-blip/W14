@@ -570,52 +570,42 @@ const MessagesPage = () => {
   // VotaTok-specific emoji reactions for voting-style interactions
   const votaTokEmojis = ['🔥', '💯', '⚡', '🎯', '💎', '🚀', '✨', '🏆'];
 
-  // TikTok tabs
-  const [activeTab, setActiveTab] = useState('inbox');
-
-  const TikTokHeader = ({ title, onPlusClick, onSearchClick }) => (
-    <div className="flex items-center justify-between px-4 py-3 bg-white sticky top-0 z-20">
-      <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={onPlusClick}
-        className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center"
-      >
-        <Plus className="w-5 h-5 text-black" strokeWidth={2} />
-      </motion.button>
-      
-      <h1 className="text-lg font-semibold text-black">{title}</h1>
-      
-      <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={onSearchClick}
-        className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center"
-      >
-        <Search className="w-5 h-5 text-black" strokeWidth={2} />
-      </motion.button>
-    </div>
-  );
-
-  const TikTokTabs = () => (
-    <div className="flex bg-white border-b border-gray-100">
-      {['inbox', 'chats', 'calls'].map((tab) => (
-        <motion.button
-          key={tab}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          onClick={() => setActiveTab(tab)}
-          className={`flex-1 py-3 text-center font-medium capitalize transition-colors ${
-            activeTab === tab 
-              ? 'text-black border-b-2 border-black' 
-              : 'text-gray-500'
-          }`}
-        >
-          {tab}
-        </motion.button>
-      ))}
-    </div>
-  );
+  // Combined inbox items with all three functions
+  const combinedInboxItems = [
+    // Function buttons
+    {
+      id: 'inbox-function',
+      type: 'function',
+      icon: '📥',
+      iconBg: '#0096ff',
+      title: 'Inbox',
+      message: 'Mensajes y notificaciones',
+      count: 0,
+      isFunction: true
+    },
+    {
+      id: 'chats-function', 
+      type: 'function',
+      icon: '💬',
+      iconBg: '#10B981',
+      title: 'Chats',  
+      message: 'Conversaciones recientes',
+      count: 0,
+      isFunction: true
+    },
+    {
+      id: 'calls-function',
+      type: 'function', 
+      icon: '📞',
+      iconBg: '#8B5CF6',
+      title: 'Calls',
+      message: 'Historial de llamadas',
+      count: 0,
+      isFunction: true
+    },
+    // Regular inbox items
+    ...mockInboxItems
+  ];
 
   return (
     <div className="h-screen bg-white flex flex-col relative overflow-hidden font-['Inter',system-ui,sans-serif]">
