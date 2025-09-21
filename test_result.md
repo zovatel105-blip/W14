@@ -4584,9 +4584,8 @@ metadata:
 
 test_plan:
   current_focus:
-    - "Supabase Poll Service Testing"
-  stuck_tasks:
-    - "Supabase Poll Service Testing"
+    - "New chat endpoints replacing hardcoded data"
+  stuck_tasks: []
   test_all: false
   test_priority: "high_first"
 
