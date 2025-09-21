@@ -144,16 +144,21 @@ const MessagesPage = () => {
     loadChatRequests();
   }, []);
 
-  // Force inbox to show by clearing selected conversation
+  // Force inbox to show initially, but allow conversation selection
   useEffect(() => {
-    setSelectedConversation(null);
-  }, []);
-
-  // Also clear selected conversation after conversations load
-  useEffect(() => {
-    if (conversations.length >= 0) {
+    // Only reset if we don't have URL parameters for user chat
+    const targetParam = searchParams.get('user');
+    if (!targetParam) {
       setSelectedConversation(null);
     }
+  }, [searchParams]);
+
+  // Don't clear selected conversation when conversations load - let user selections persist
+  useEffect(() => {
+    // Remove this effect as it interferes with conversation selection
+    // if (conversations.length >= 0) {
+    //   setSelectedConversation(null);
+    // }
   }, [conversations]);
 
   // Cargar datos cuando el usuario y conversaciones estén disponibles
