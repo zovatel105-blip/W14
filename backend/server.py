@@ -3051,6 +3051,46 @@ async def get_recent_activity(current_user: UserResponse = Depends(get_current_u
                     "unread": True
                 })
         
+        # Get recent votes on user's polls using poll_id
+        votes = await db.votes.find({
+            "$and": [
+                {"poll_id": {"$in": user_poll_ids}},
+                {"user_id": {"$ne": current_user.id}},  # Exclude self-votes
+                {"created_at": {"$gte": seven_days_ago}}
+            ]
+        }).sort("created_at", -1).limit(20).to_list(20)
+        
+        print(f"DEBUG Activity: Found {len(votes)} votes on user's polls")
+        
+        for vote in votes:
+            user = await db.users.find_one({"id": vote["user_id"]})
+            poll = await db.polls.find_one({"id": vote["poll_id"]})
+            option = None
+            
+            # Find the option that was voted for
+            if poll and poll.get("options"):
+                for opt in poll["options"]:
+                    if opt.get("id") == vote["option_id"]:
+                        option = opt
+                        break
+            
+            if user and poll and option:
+                activities.append({
+                    "id": f"vote-{vote['id']}",
+                    "type": "vote",
+                    "user": {
+                        "id": user["id"],
+                        "username": user["username"],
+                        "display_name": user.get("display_name", user["username"]),
+                        "avatar_url": user.get("avatar_url")  # Incluir avatar_url
+                    },
+                    "content_type": "poll",
+                    "content_preview": poll.get("title", "")[:50],
+                    "vote_option": option.get("text", ""),
+                    "created_at": vote["created_at"],
+                    "unread": True
+                })
+        
         # Sort all activities by date
         activities.sort(key=lambda x: x["created_at"], reverse=True)
         
