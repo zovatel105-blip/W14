@@ -202,23 +202,26 @@ const ActivityPage = () => {
               >
                 {/* Avatar */}
                 <div className="w-12 h-12 rounded-full mr-3 flex items-center justify-center text-lg flex-shrink-0 relative overflow-hidden bg-gray-100">
-                  {activity.avatar && (activity.avatar.startsWith('http') || activity.avatar.startsWith('/')) ? (
+                  {activity.avatar ? (
                     <>
                       <img 
                         src={activity.avatar} 
                         alt="Avatar" 
                         className="w-full h-full rounded-full object-cover"
                         onError={(e) => {
+                          // Si la imagen falla al cargar, ocultar imagen y mostrar fallback
                           e.target.style.display = 'none';
                           e.target.parentNode.querySelector('.avatar-fallback').style.display = 'flex';
                         }}
                       />
                       <div className="avatar-fallback w-full h-full rounded-full flex items-center justify-center text-lg font-bold" style={{ display: 'none' }}>
-                        {activity.title ? activity.title.charAt(0).toUpperCase() : '🔔'}
+                        {activity.fallbackAvatar}
                       </div>
                     </>
                   ) : (
-                    activity.avatar
+                    <div className="w-full h-full rounded-full flex items-center justify-center text-lg font-bold">
+                      {activity.fallbackAvatar}
+                    </div>
                   )}
                 </div>
                 
