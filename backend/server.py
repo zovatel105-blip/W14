@@ -2946,14 +2946,26 @@ async def cancel_chat_request(
 async def get_recent_followers(current_user: UserResponse = Depends(get_current_user)):
     """Get recent followers (last 7 days)"""
     try:
+        # DEBUG: Primero verificar si hay follows en absoluto
+        all_follows = await db.follows.find({
+            "followed_id": current_user.id
+        }).sort("created_at", -1).limit(10).to_list(10)
+        
+        print(f"DEBUG: Total follows para usuario {current_user.id}: {len(all_follows)}")
+        for follow in all_follows:
+            print(f"DEBUG: Follow {follow.get('id', 'no-id')} - created_at: {follow.get('created_at', 'no-date')}")
+        
         # Calculate 7 days ago
         seven_days_ago = datetime.utcnow() - timedelta(days=7)
+        print(f"DEBUG: Seven days ago: {seven_days_ago}")
         
         # Find recent follows where current user is the followed user
         recent_follows = await db.follows.find({
             "followed_id": current_user.id,
             "created_at": {"$gte": seven_days_ago}
         }).sort("created_at", -1).limit(50).to_list(50)
+        
+        print(f"DEBUG: Recent follows (last 7 days): {len(recent_follows)}")
         
         # Get follower details
         followers = []
