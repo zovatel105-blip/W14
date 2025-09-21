@@ -7,6 +7,8 @@ import { cn } from '../lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const MessagesPage = () => {
+  // INTENTIONAL SYNTAX ERROR FOR TESTING
+  SYNTAX_ERROR_TEST_123;
   const [searchParams, setSearchParams] = useSearchParams();
   const [conversations, setConversations] = useState([]);
   const [selectedConversation, setSelectedConversation] = useState(null);
