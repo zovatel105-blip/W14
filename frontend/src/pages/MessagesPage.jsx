@@ -205,13 +205,13 @@ const MessagesPage = () => {
     const interval = setInterval(() => {
       // Solo actualizar si no estamos en una conversación individual
       if (!selectedConversation) {
-        loadNotifications();
-        loadSegmentData();
+        loadNotifications(); // Esto ya usa el selectedSegment actual
+        loadSegmentData();   // Actualizar badges de todos los segmentos
       }
     }, 30000); // 30 segundos
 
     return () => clearInterval(interval);
-  }, [user, selectedSegment, selectedConversation]);
+  }, [user]); // Removido selectedSegment y selectedConversation de dependencies
 
   // Procesar parámetro 'user' de la URL para iniciar chat desde perfil
   useEffect(() => {
