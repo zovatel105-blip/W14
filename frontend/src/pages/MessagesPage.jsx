@@ -738,51 +738,14 @@ const MessagesPage = () => {
         unreadCount: activity.unread ? 1 : 0,
         time: formatTimeForInbox(activity.created_at),
         avatar: '🔔', // Icono campana roja
-        userId: activity.user_id,
+        userId: activity.user.id,
         activityType: activity.type,
         isSystem: false
       }));
     } catch (error) {
       console.log('Error loading activity:', error.message);
-      // Datos de ejemplo para demostrar funcionalidad
-      return [
-        {
-          id: 'activity-demo-1',
-          type: 'activity_notification',
-          title: 'Ana Pérez le dio me gusta a tu publicación',
-          message: '❤️ Le encanta tu video sobre música urbana',
-          unreadCount: 1,
-          time: '30m',
-          avatar: '🔔',
-          userId: 'demo-user-3',
-          activityType: 'like',
-          isSystem: false
-        },
-        {
-          id: 'activity-demo-2',
-          type: 'activity_notification',
-          title: 'Luis Torres comentó tu publicación',
-          message: '💬 "¡Increíble contenido! Me encanta tu estilo"',
-          unreadCount: 1,
-          time: '1h',
-          avatar: '🔔',
-          userId: 'demo-user-4',
-          activityType: 'comment',
-          isSystem: false
-        },
-        {
-          id: 'activity-demo-3',
-          type: 'activity_notification',
-          title: 'Sofia Martín te mencionó',
-          message: '📢 Te mencionó en un comentario',
-          unreadCount: 1,
-          time: '3h',
-          avatar: '🔔',
-          userId: 'demo-user-5',
-          activityType: 'mention',
-          isSystem: false
-        }
-      ];
+      // Retornar array vacío en lugar de datos hardcodeados
+      return [];
     }
   };
 
