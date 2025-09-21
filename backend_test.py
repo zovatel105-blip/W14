@@ -11591,6 +11591,10 @@ def main():
     print("\n💬 TESTING: Chat Configuration New Implementation")
     test_results["chat_configuration"] = test_chat_configuration_new_implementation(base_url)
     
+    # Run new chat endpoints test (replacing hardcoded data)
+    print("\n🎯 TESTING: New Chat Endpoints Replacing Hardcoded Data")
+    test_results["new_chat_endpoints"] = test_new_chat_endpoints_replacing_hardcoded_data(base_url)
+    
     # Final summary
     print("\n" + "=" * 80)
     print("📊 FINAL TEST RESULTS SUMMARY")
