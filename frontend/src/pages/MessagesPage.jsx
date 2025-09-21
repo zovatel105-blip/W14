@@ -1091,6 +1091,16 @@ const MessagesPage = () => {
 
           {/* CONTROL SEGMENTADO - OPTIMIZADO MÓVIL */}
           <div className="p-4">
+            {/* Indicador de vista actual */}
+            {selectedSegment === null && (
+              <div className="mb-3 flex items-center justify-center">
+                <div className="bg-blue-50 px-4 py-2 rounded-full flex items-center space-x-2">
+                  <MessageCircle className="w-4 h-4 text-blue-600" />
+                  <span className="text-sm font-medium text-blue-800">Chats</span>
+                </div>
+              </div>
+            )}
+            
             <div className="bg-gray-100 rounded-full p-1 flex">
               {[
                 {
