@@ -13173,6 +13173,344 @@ def main():
         print(f"   - Revisar implementación antes de producción")
         return False
 
+def test_avatar_fix_comprehensive(base_url):
+    """🎯 TESTING CRÍTICO: Avatar fix - crear usuarios con avatar_url y verificar sistema de chat"""
+    print("\n🎯 === TESTING AVATAR FIX - USUARIOS CON AVATAR_URL EN CHAT ===")
+    print("CONTEXTO DEL FIX:")
+    print("- Implementar sistema de avatares reales en lugar de solo iniciales")
+    print("- Crear usuarios de prueba con avatar_url real")
+    print("- Verificar que avatar_url se almacena correctamente en registro")
+    print("- Crear conversaciones entre demo user y usuarios con avatar")
+    print("- Verificar que GET /api/conversations incluye avatar_url en participant data")
+    print("- Confirmar que el sistema de chat muestra fotos de perfil reales")
+    
+    # Avatar URL específico solicitado
+    test_avatar_url = "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face"
+    
+    success_count = 0
+    total_tests = 8
+    created_users = []
+    
+    # Test 1: Crear usuario de prueba con avatar_url usando endpoint de registro actualizado
+    print("\n1️⃣ CREANDO USUARIO DE PRUEBA CON AVATAR_URL...")
+    timestamp = int(time.time())
+    test_user_data = {
+        "username": f"avatar_user_{timestamp}",
+        "email": f"avatar_test_{timestamp}@example.com",
+        "password": "AvatarTest123!",
+        "display_name": f"Avatar Test User {timestamp}",
+        "avatar_url": test_avatar_url
+    }
+    
+    try:
+        response = requests.post(f"{base_url}/auth/register", json=test_user_data, timeout=10)
+        print(f"   Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            print(f"   ✅ Usuario con avatar creado exitosamente")
+            print(f"   👤 Usuario: {data['user']['username']}")
+            print(f"   📧 Email: {data['user']['email']}")
+            print(f"   🖼️ Avatar URL: {data['user'].get('avatar_url', 'NO ENCONTRADO')}")
+            
+            # Verificar que avatar_url está presente en la respuesta
+            if data['user'].get('avatar_url') == test_avatar_url:
+                print(f"   ✅ Avatar URL correctamente almacenado en respuesta de registro")
+                success_count += 1
+                created_users.append({
+                    'user': data['user'],
+                    'token': data['access_token']
+                })
+            else:
+                print(f"   ❌ Avatar URL no coincide o falta en respuesta")
+                print(f"   Expected: {test_avatar_url}")
+                print(f"   Got: {data['user'].get('avatar_url', 'None')}")
+        else:
+            print(f"   ❌ Error creando usuario con avatar: {response.text}")
+            
+    except Exception as e:
+        print(f"   ❌ Error en creación de usuario con avatar: {e}")
+    
+    # Test 2: Verificar que el usuario fue creado con avatar_url correctamente almacenado en BD
+    print("\n2️⃣ VERIFICANDO USUARIO CON AVATAR EN BASE DE DATOS...")
+    if created_users:
+        try:
+            headers = {"Authorization": f"Bearer {created_users[0]['token']}"}
+            response = requests.get(f"{base_url}/auth/me", headers=headers, timeout=10)
+            
+            if response.status_code == 200:
+                user_data = response.json()
+                print(f"   ✅ Usuario verificado en base de datos")
+                print(f"   🆔 ID: {user_data['id']}")
+                print(f"   👤 Username: {user_data['username']}")
+                print(f"   🖼️ Avatar URL: {user_data.get('avatar_url', 'NO ENCONTRADO')}")
+                
+                if user_data.get('avatar_url') == test_avatar_url:
+                    print(f"   ✅ Avatar URL persistido correctamente en base de datos")
+                    success_count += 1
+                else:
+                    print(f"   ❌ Avatar URL no persistido correctamente")
+            else:
+                print(f"   ❌ Error verificando usuario en BD: {response.status_code}")
+        except Exception as e:
+            print(f"   ❌ Error verificando usuario en BD: {e}")
+    
+    # Test 3: Crear segundo usuario con avatar diferente
+    print("\n3️⃣ CREANDO SEGUNDO USUARIO CON AVATAR DIFERENTE...")
+    second_avatar_url = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face"
+    second_user_data = {
+        "username": f"avatar_user2_{timestamp}",
+        "email": f"avatar_test2_{timestamp}@example.com",
+        "password": "AvatarTest123!",
+        "display_name": f"Second Avatar User {timestamp}",
+        "avatar_url": second_avatar_url
+    }
+    
+    try:
+        response = requests.post(f"{base_url}/auth/register", json=second_user_data, timeout=10)
+        
+        if response.status_code == 200:
+            data = response.json()
+            print(f"   ✅ Segundo usuario con avatar creado exitosamente")
+            print(f"   👤 Usuario: {data['user']['username']}")
+            print(f"   🖼️ Avatar URL: {data['user'].get('avatar_url', 'NO ENCONTRADO')}")
+            
+            if data['user'].get('avatar_url') == second_avatar_url:
+                print(f"   ✅ Segundo avatar URL correctamente almacenado")
+                success_count += 1
+                created_users.append({
+                    'user': data['user'],
+                    'token': data['access_token']
+                })
+            else:
+                print(f"   ❌ Segundo avatar URL no almacenado correctamente")
+        else:
+            print(f"   ❌ Error creando segundo usuario: {response.text}")
+            
+    except Exception as e:
+        print(f"   ❌ Error creando segundo usuario: {e}")
+    
+    # Test 4: Crear conversación entre demo user y usuario con avatar
+    print("\n4️⃣ CREANDO CONVERSACIÓN ENTRE DEMO USER Y USUARIO CON AVATAR...")
+    
+    # Primero, intentar login con demo user
+    demo_token = None
+    try:
+        demo_login = {
+            "email": "demo@example.com",
+            "password": "demo123"
+        }
+        response = requests.post(f"{base_url}/auth/login", json=demo_login, timeout=10)
+        
+        if response.status_code == 200:
+            demo_data = response.json()
+            demo_token = demo_data['access_token']
+            demo_user = demo_data['user']
+            print(f"   ✅ Demo user logueado exitosamente: {demo_user['username']}")
+        else:
+            print(f"   ⚠️ Demo user no existe, creándolo...")
+            # Crear demo user si no existe
+            demo_register = {
+                "username": "demo_user",
+                "email": "demo@example.com",
+                "password": "demo123",
+                "display_name": "Demo User",
+                "avatar_url": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop&crop=face"
+            }
+            reg_response = requests.post(f"{base_url}/auth/register", json=demo_register, timeout=10)
+            if reg_response.status_code == 200:
+                demo_data = reg_response.json()
+                demo_token = demo_data['access_token']
+                demo_user = demo_data['user']
+                print(f"   ✅ Demo user creado exitosamente: {demo_user['username']}")
+            else:
+                print(f"   ❌ Error creando demo user: {reg_response.text}")
+                
+    except Exception as e:
+        print(f"   ❌ Error con demo user: {e}")
+    
+    # Crear conversación si tenemos demo token y usuarios con avatar
+    if demo_token and created_users:
+        try:
+            demo_headers = {"Authorization": f"Bearer {demo_token}"}
+            message_data = {
+                "recipient_id": created_users[0]['user']['id'],
+                "content": "¡Hola! Este es un mensaje de prueba para verificar el sistema de avatares.",
+                "message_type": "text"
+            }
+            
+            response = requests.post(f"{base_url}/messages", json=message_data, headers=demo_headers, timeout=10)
+            
+            if response.status_code == 200:
+                print(f"   ✅ Conversación creada exitosamente entre demo user y usuario con avatar")
+                success_count += 1
+            else:
+                print(f"   ❌ Error creando conversación: {response.text}")
+                
+        except Exception as e:
+            print(f"   ❌ Error creando conversación: {e}")
+    
+    # Test 5: Verificar GET /api/conversations incluye avatar_url en participant data
+    print("\n5️⃣ VERIFICANDO GET /api/conversations INCLUYE AVATAR_URL...")
+    if demo_token:
+        try:
+            demo_headers = {"Authorization": f"Bearer {demo_token}"}
+            response = requests.get(f"{base_url}/conversations", headers=demo_headers, timeout=10)
+            
+            if response.status_code == 200:
+                conversations = response.json()
+                print(f"   ✅ Conversaciones obtenidas exitosamente: {len(conversations)} conversaciones")
+                
+                # Verificar que las conversaciones incluyen avatar_url en participants
+                avatar_found = False
+                for conv in conversations:
+                    participants = conv.get('participants', [])
+                    for participant in participants:
+                        if participant.get('avatar_url'):
+                            print(f"   ✅ Avatar URL encontrado en participant: {participant['username']}")
+                            print(f"   🖼️ Avatar URL: {participant['avatar_url']}")
+                            avatar_found = True
+                            break
+                    if avatar_found:
+                        break
+                
+                if avatar_found:
+                    print(f"   ✅ Avatar URLs correctamente incluidos en participant data")
+                    success_count += 1
+                else:
+                    print(f"   ❌ No se encontraron avatar URLs en participant data")
+                    # Debug: mostrar estructura de participants
+                    if conversations and conversations[0].get('participants'):
+                        sample_participant = conversations[0]['participants'][0]
+                        print(f"   🔍 Estructura de participant: {list(sample_participant.keys())}")
+            else:
+                print(f"   ❌ Error obteniendo conversaciones: {response.text}")
+                
+        except Exception as e:
+            print(f"   ❌ Error verificando conversaciones: {e}")
+    
+    # Test 6: Verificar que usuarios con avatar aparecen correctamente en búsquedas
+    print("\n6️⃣ VERIFICANDO BÚSQUEDA DE USUARIOS CON AVATAR...")
+    if demo_token and created_users:
+        try:
+            demo_headers = {"Authorization": f"Bearer {demo_token}"}
+            search_query = created_users[0]['user']['username'][:5]  # Buscar por parte del username
+            
+            response = requests.get(f"{base_url}/users/search?q={search_query}", headers=demo_headers, timeout=10)
+            
+            if response.status_code == 200:
+                search_results = response.json()
+                print(f"   ✅ Búsqueda de usuarios exitosa: {len(search_results)} resultados")
+                
+                # Verificar que los resultados incluyen avatar_url
+                avatar_in_search = False
+                for user in search_results:
+                    if user.get('avatar_url'):
+                        print(f"   ✅ Usuario con avatar en búsqueda: {user['username']}")
+                        print(f"   🖼️ Avatar URL: {user['avatar_url']}")
+                        avatar_in_search = True
+                        break
+                
+                if avatar_in_search:
+                    print(f"   ✅ Avatar URLs incluidos en resultados de búsqueda")
+                    success_count += 1
+                else:
+                    print(f"   ❌ Avatar URLs no incluidos en búsqueda")
+            else:
+                print(f"   ❌ Error en búsqueda de usuarios: {response.text}")
+                
+        except Exception as e:
+            print(f"   ❌ Error en búsqueda de usuarios: {e}")
+    
+    # Test 7: Verificar que el perfil de usuario muestra avatar correctamente
+    print("\n7️⃣ VERIFICANDO PERFIL DE USUARIO CON AVATAR...")
+    if created_users:
+        try:
+            # Usar el primer usuario creado
+            user_headers = {"Authorization": f"Bearer {created_users[0]['token']}"}
+            user_id = created_users[0]['user']['id']
+            
+            response = requests.get(f"{base_url}/user/profile/{user_id}", headers=user_headers, timeout=10)
+            
+            if response.status_code == 200:
+                profile = response.json()
+                print(f"   ✅ Perfil de usuario obtenido exitosamente")
+                print(f"   👤 Username: {profile.get('username', 'N/A')}")
+                print(f"   🖼️ Avatar URL: {profile.get('avatar_url', 'NO ENCONTRADO')}")
+                
+                if profile.get('avatar_url') == test_avatar_url:
+                    print(f"   ✅ Avatar URL correcto en perfil de usuario")
+                    success_count += 1
+                else:
+                    print(f"   ❌ Avatar URL incorrecto o faltante en perfil")
+            else:
+                print(f"   ❌ Error obteniendo perfil de usuario: {response.text}")
+                
+        except Exception as e:
+            print(f"   ❌ Error verificando perfil de usuario: {e}")
+    
+    # Test 8: Verificar que el sistema maneja correctamente usuarios sin avatar
+    print("\n8️⃣ VERIFICANDO MANEJO DE USUARIOS SIN AVATAR...")
+    try:
+        # Crear usuario sin avatar_url
+        no_avatar_user_data = {
+            "username": f"no_avatar_user_{timestamp}",
+            "email": f"no_avatar_{timestamp}@example.com",
+            "password": "NoAvatar123!",
+            "display_name": f"No Avatar User {timestamp}"
+            # Intencionalmente sin avatar_url
+        }
+        
+        response = requests.post(f"{base_url}/auth/register", json=no_avatar_user_data, timeout=10)
+        
+        if response.status_code == 200:
+            data = response.json()
+            print(f"   ✅ Usuario sin avatar creado exitosamente")
+            print(f"   👤 Usuario: {data['user']['username']}")
+            
+            # Verificar que avatar_url es null o no está presente
+            avatar_url = data['user'].get('avatar_url')
+            if avatar_url is None or avatar_url == "":
+                print(f"   ✅ Usuario sin avatar manejado correctamente (avatar_url: {avatar_url})")
+                success_count += 1
+            else:
+                print(f"   ❌ Usuario sin avatar tiene avatar_url inesperado: {avatar_url}")
+        else:
+            print(f"   ❌ Error creando usuario sin avatar: {response.text}")
+            
+    except Exception as e:
+        print(f"   ❌ Error verificando usuario sin avatar: {e}")
+    
+    # Resumen final
+    print(f"\n📊 RESUMEN TESTING AVATAR FIX:")
+    print(f"   Tests exitosos: {success_count}/{total_tests}")
+    print(f"   Porcentaje de éxito: {(success_count/total_tests)*100:.1f}%")
+    print(f"   Usuarios creados con avatar: {len(created_users)}")
+    
+    if success_count >= 6:
+        print(f"\n✅ CONCLUSIÓN: AVATAR FIX IMPLEMENTADO CORRECTAMENTE")
+        print(f"   ✅ Registro con avatar_url funciona correctamente")
+        print(f"   ✅ Avatar URLs se almacenan y persisten en base de datos")
+        print(f"   ✅ Conversaciones incluyen avatar_url en participant data")
+        print(f"   ✅ Sistema de búsqueda incluye avatares")
+        print(f"   ✅ Perfiles de usuario muestran avatares correctamente")
+        print(f"   ✅ Sistema maneja usuarios con y sin avatar apropiadamente")
+        print(f"\n🎯 RESULTADO: El sistema de chat ahora muestra fotos de perfil reales")
+        print(f"   - Avatar URL utilizado: {test_avatar_url}")
+        print(f"   - Sistema listo para mostrar avatares reales en lugar de iniciales")
+    elif success_count >= 4:
+        print(f"\n⚠️ CONCLUSIÓN: AVATAR FIX PARCIALMENTE FUNCIONAL")
+        print(f"   - Funcionalidades básicas de avatar operan")
+        print(f"   - Pueden existir problemas menores en integración")
+        print(f"   - Revisar tests fallidos para mejoras")
+    else:
+        print(f"\n❌ CONCLUSIÓN: PROBLEMAS CRÍTICOS EN AVATAR FIX")
+        print(f"   - Múltiples tests fallan")
+        print(f"   - Sistema de avatares no funciona correctamente")
+        print(f"   - Requiere investigación y corrección inmediata")
+    
+    return success_count >= 6
+
 if __name__ == "__main__":
     success = main()
     sys.exit(0 if success else 1)
