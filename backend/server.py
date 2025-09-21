@@ -2989,6 +2989,22 @@ async def get_recent_activity(current_user: UserResponse = Depends(get_current_u
             "created_at": {"$gte": seven_days_ago}
         }).sort("created_at", -1).limit(20).to_list(20)
         
+        print(f"DEBUG Activity: Looking for likes with poll.author_id={current_user.id}")
+        print(f"DEBUG Activity: Found {len(likes)} likes")
+        
+        # También intentar buscar por author_id directamente
+        likes_alt = await db.poll_likes.find({
+            "author_id": current_user.id,
+            "created_at": {"$gte": seven_days_ago}
+        }).sort("created_at", -1).limit(20).to_list(20)
+        
+        print(f"DEBUG Activity: Alternative search found {len(likes_alt)} likes")
+        
+        # Ver una muestra de la estructura
+        sample_like = await db.poll_likes.find_one({})
+        if sample_like:
+            print(f"DEBUG Activity: Sample like structure: {list(sample_like.keys())}")
+        
         for like in likes:
             user = await db.users.find_one({"id": like["user_id"]})
             poll = await db.polls.find_one({"id": like["poll_id"]})
