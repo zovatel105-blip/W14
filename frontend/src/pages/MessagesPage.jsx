@@ -700,10 +700,10 @@ const MessagesPage = () => {
         realData = getEmptyStateForSegment(selectedSegment);
       }
 
-      setRealNotifications(realData);
+      setNotifications(realData);
     } catch (error) {
       console.log('Error loading notifications:', error.message);
-      setRealNotifications(getEmptyStateForSegment(selectedSegment));
+      setNotifications(getEmptyStateForSegment(selectedSegment));
     } finally {
       setLoadingNotifications(false);
     }
