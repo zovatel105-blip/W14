@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { MessageCircle, X, ArrowLeft, Users, Bell, Send, Plus } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { AuthContext } from '../../contexts/AuthContext';
-import { AppConfig } from '../../config/config.js';
+import { useAuth } from '../../contexts/AuthContext';
+import AppConfig from '../../config/config.js';
 
 const MessagesMainPage = () => {
   const navigate = useNavigate();
