@@ -700,6 +700,46 @@ const MessagesPage = () => {
     return icons[iconName] || (() => <span>📱</span>);
   };
 
+  // Funciones de utilidad optimizadas para móvil
+  const formatTimeForInbox = (timestamp) => {
+    if (!timestamp) return 'ahora';
+    
+    const now = new Date();
+    const messageTime = new Date(timestamp);
+    const diffInMinutes = Math.floor((now - messageTime) / (1000 * 60));
+    
+    if (diffInMinutes < 1) return 'ahora';
+    if (diffInMinutes < 60) return `${diffInMinutes}m`;
+    
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    if (diffInHours < 24) return `${diffInHours}h`;
+    
+    const diffInDays = Math.floor(diffInHours / 24);
+    if (diffInDays < 7) return `${diffInDays}d`;
+    
+    return `${Math.floor(diffInDays / 7)}sem`;
+  };
+
+  const getAvatarForUser = (user) => {
+    if (!user) return '👤';
+    
+    // Si el usuario tiene avatar personalizado, usar iniciales
+    if (user.display_name || user.username) {
+      const name = user.display_name || user.username;
+      return name.charAt(0).toUpperCase();
+    }
+    
+    // Fallback
+    return '👤';
+  };
+
+  const getSegmentBadgeCount = (segmentId) => {
+    const data = segmentData[segmentId];
+    if (data?.loading) return '...';
+    if (!data?.count || data.count === 0) return '';
+    return data.count > 99 ? '99+' : data.count.toString();
+  };
+
   // Debug logging
   console.log('🔥 MESSAGES PAGE DEBUG:', {
     showInbox,
