@@ -996,6 +996,28 @@ const MessagesPage = () => {
     return `${Math.floor(diffInDays / 7)}sem`;
   };
 
+  // Función para renderizar avatar (texto o imagen)
+  const renderAvatar = (avatar) => {
+    // Si avatar es una URL (contiene http o /), renderizar como imagen
+    if (avatar && (avatar.startsWith('http') || avatar.startsWith('/'))) {
+      return (
+        <img 
+          src={avatar} 
+          alt="Avatar" 
+          className="w-full h-full rounded-full object-cover"
+          onError={(e) => {
+            // Si la imagen falla al cargar, mostrar iniciales o emoji
+            e.target.style.display = 'none';
+            e.target.nextSibling.style.display = 'flex';
+          }}
+        />
+      );
+    }
+    
+    // Si es texto (iniciales o emoji), renderizarlo normalmente
+    return avatar;
+  };
+
   const getAvatarForUser = (user) => {
     if (!user) return '👤';
     
