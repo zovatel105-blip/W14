@@ -31,15 +31,9 @@ const MessagesPage = () => {
 
   // Mobile responsive
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
-  const showInbox = !selectedConversation;
-  const showChat = selectedConversation;
-
-  // Debug logging
-  console.log('🔍 MessagesPage render:', {
-    selectedConversation: selectedConversation?.id || 'null',
-    showInbox,
-    showChat
-  });
+  // Force TikTok inbox to always show initially
+  const showInbox = true; // Always show TikTok inbox design
+  const showChat = false; // Disable old chat until called explicitly
 
   // Mock data for TikTok-style stories
   const mockStoryUsers = [
