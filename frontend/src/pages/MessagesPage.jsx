@@ -976,7 +976,7 @@ const MessagesPage = () => {
       id: selectedConversation.id,
       participant: selectedConversation.participants?.[0]?.display_name
     } : null,
-    realNotifications: realNotifications.length,
+    notifications: notifications.length,
     loadingNotifications
   });
 
@@ -1132,7 +1132,7 @@ const MessagesPage = () => {
                   <span className="text-sm text-gray-500">Cargando mensajes...</span>
                 </div>
               </div>
-            ) : realNotifications.length === 0 ? (
+            ) : notifications.length === 0 ? (
               // Empty state
               <div className="flex items-center justify-center py-20 px-6">
                 <div className="text-center space-y-4">
@@ -1149,7 +1149,7 @@ const MessagesPage = () => {
               </div>
             ) : (
               // Lista de notificaciones reales
-              realNotifications.map((notification, index) => (
+              notifications.map((notification, index) => (
                 <motion.button
                   key={notification.id}
                   initial={{ opacity: 0, y: 20 }}
