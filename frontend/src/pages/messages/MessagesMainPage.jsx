@@ -359,6 +359,50 @@ const MessagesMainPage = () => {
             </div>
           </div>
 
+          {/* Perfil Central */}
+          <div className="flex-shrink-0 bg-white px-4 py-6 border-b border-gray-100">
+            <div className="flex flex-col items-center text-center">
+              {/* Logo principal del perfil */}
+              <div className="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center mb-4 relative overflow-hidden">
+                {selectedConversation?.participants?.[0]?.avatar_url ? (
+                  <>
+                    <img 
+                      src={selectedConversation.participants[0].avatar_url} 
+                      alt="Avatar" 
+                      className="w-full h-full rounded-full object-cover"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        e.target.parentNode.querySelector('.avatar-fallback').style.display = 'flex';
+                      }}
+                    />
+                    <div className="avatar-fallback w-full h-full rounded-full flex items-center justify-center text-2xl font-bold text-gray-600" style={{ display: 'none' }}>
+                      {selectedConversation?.participants?.[0]?.display_name?.charAt(0) || '👤'}
+                    </div>
+                  </>
+                ) : (
+                  <span className="text-2xl font-semibold text-gray-600">
+                    {selectedConversation?.participants?.[0]?.display_name?.charAt(0) || '👤'}
+                  </span>
+                )}
+              </div>
+              
+              {/* Nombre del perfil */}
+              <h3 className="text-xl font-semibold text-gray-900 mb-1">
+                {selectedConversation?.participants?.[0]?.display_name || 'Usuario'}
+              </h3>
+              
+              {/* Nombre de usuario en gris claro */}
+              <p className="text-base text-gray-400 mb-2">
+                @{selectedConversation?.participants?.[0]?.username || 'usuario'}
+              </p>
+              
+              {/* Estadísticas en gris medio y tamaño pequeño */}
+              <div className="text-sm text-gray-500">
+                <span>0 votos • 0 seguidores</span>
+              </div>
+            </div>
+          </div>
+
           {/* Messages Area */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
             <div className="flex justify-center">
