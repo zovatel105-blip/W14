@@ -1219,7 +1219,7 @@ const MessagesPage = () => {
                         isRequest: true,
                         requestId: notification.requestId
                       });
-                    } else {
+                    } else if (notification.type === 'conversation') {
                       // Conversación normal
                       setSelectedConversation({
                         id: notification.id,
@@ -1229,7 +1229,16 @@ const MessagesPage = () => {
                           display_name: notification.title.replace(/[^\w\s]/g, '').trim()
                         }]
                       });
+                    } else if (notification.type === 'new_follower') {
+                      // Navegar al perfil del nuevo seguidor
+                      console.log('Navigating to follower profile:', notification.userId);
+                      // TODO: Implementar navegación al perfil
+                    } else if (notification.type === 'activity_notification') {
+                      // Navegar al contenido que recibió la actividad
+                      console.log('Navigating to activity content:', notification);
+                      // TODO: Implementar navegación al contenido específico
                     }
+                    // Si no es ningún tipo conocido, no hacer nada
                   }}
                   className={`w-full flex items-center px-4 py-4 border-b border-gray-100 transition-colors min-h-[72px] ${
                     notification.isSystem 
