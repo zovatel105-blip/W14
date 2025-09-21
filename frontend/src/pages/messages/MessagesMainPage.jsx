@@ -337,54 +337,90 @@ const MessagesMainPage = () => {
       ) : (
         /* Chat View */
         <div className="flex flex-col h-full bg-white">
-          {/* Chat Header */}
-          <div className="flex-shrink-0 bg-white border-b border-gray-200 px-4 py-3">
-            <div className="flex items-center">
+          {/* Chat Header estilo Instagram */}
+          <div className="flex-shrink-0 bg-white border-b border-gray-200 px-4 py-6">
+            <div className="flex items-start">
               <button
                 onClick={handleCloseChat}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors mr-2"
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors mr-4 mt-2"
               >
                 <ArrowLeft className="h-5 w-5 text-gray-600" />
               </button>
-              <div className="flex items-center">
-                <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center mr-3">
-                  <span className="text-sm font-semibold">
-                    {selectedConversation?.participants?.[0]?.display_name?.charAt(0) || '👤'}
-                  </span>
+              
+              {/* Información centrada del usuario estilo Instagram */}
+              <div className="flex-1 flex flex-col items-center text-center">
+                {/* Avatar grande */}
+                <div className="w-20 h-20 rounded-full bg-gray-200 flex items-center justify-center mb-4 shadow-lg relative overflow-hidden">
+                  {selectedConversation?.participants?.[0]?.avatar_url ? (
+                    <>
+                      <img 
+                        src={selectedConversation.participants[0].avatar_url} 
+                        alt="Avatar" 
+                        className="w-full h-full rounded-full object-cover"
+                        onError={(e) => {
+                          e.target.style.display = 'none';
+                          e.target.parentNode.querySelector('.avatar-fallback').style.display = 'flex';
+                        }}
+                      />
+                      <div className="avatar-fallback w-full h-full rounded-full flex items-center justify-center text-2xl font-bold text-gray-600" style={{ display: 'none' }}>
+                        {selectedConversation?.participants?.[0]?.display_name?.charAt(0) || '👤'}
+                      </div>
+                    </>
+                  ) : (
+                    <span className="text-2xl font-semibold text-gray-600">
+                      {selectedConversation?.participants?.[0]?.display_name?.charAt(0) || '👤'}
+                    </span>
+                  )}
                 </div>
-                <h2 className="text-lg font-semibold text-gray-900">
+                
+                {/* Nombre de usuario prominente */}
+                <h2 className="text-xl font-bold text-gray-900 mb-1">
                   {selectedConversation?.participants?.[0]?.display_name || 'Usuario'}
                 </h2>
+                
+                {/* Username */}
+                <p className="text-sm text-gray-500 mb-2">
+                  @{selectedConversation?.participants?.[0]?.username || 'usuario'}
+                </p>
+                
+                {/* Información de seguidores estilo Instagram */}
+                <div className="flex items-center space-x-4 text-sm text-gray-600">
+                  <span>0 siguiendo</span>
+                  <span className="w-1 h-1 bg-gray-400 rounded-full"></span>
+                  <span>0 seguidores</span>
+                </div>
               </div>
             </div>
           </div>
 
           {/* Messages Area */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
             <div className="flex justify-center">
-              <div className="bg-gray-100 px-4 py-2 rounded-lg">
+              <div className="bg-white px-4 py-2 rounded-lg shadow-sm">
                 <span className="text-sm text-gray-600">Conversación iniciada</span>
               </div>
             </div>
           </div>
 
-          {/* Message Input */}
+          {/* Message Input estilo Instagram */}
           <div className="flex-shrink-0 bg-white border-t border-gray-200 p-4">
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-3">
               <input
                 type="text"
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
-                placeholder="Escribe un mensaje..."
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                placeholder="Message..."
+                className="flex-1 px-4 py-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
                 onKeyPress={(e) => {
                   if (e.key === 'Enter' && newMessage.trim()) {
-                    // TODO: Implementar envío de mensaje
                     console.log('Sending message:', newMessage);
                     setNewMessage('');
                   }
                 }}
               />
+              <button className="p-2 text-gray-500 hover:text-gray-700 transition-colors">
+                <span className="text-xl">😊</span>
+              </button>
               <button
                 onClick={() => {
                   if (newMessage.trim()) {
@@ -395,7 +431,7 @@ const MessagesMainPage = () => {
                 disabled={!newMessage.trim()}
                 className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
-                <Send className="h-5 w-5" />
+                <Send className="h-4 w-4" />
               </button>
             </div>
           </div>
