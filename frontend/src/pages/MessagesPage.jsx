@@ -1007,7 +1007,7 @@ const MessagesPage = () => {
               <Plus className="w-5 h-5 text-black" strokeWidth={2} />
             </motion.button>
             
-            <h1 className="text-lg font-semibold text-black">🔥 INBOX REAL DATA 🔥</h1>
+            <h1 className="text-lg font-semibold text-black">Inbox</h1>
             
             <motion.button
               whileHover={{ scale: 1.05 }}
