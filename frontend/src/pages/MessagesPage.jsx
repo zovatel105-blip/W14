@@ -31,7 +31,7 @@ const MessagesPage = () => {
     messages: { count: 0, loading: true }
   });
   const [loadingNotifications, setLoadingNotifications] = useState(true);
-  const [realNotifications, setRealNotifications] = useState([]);
+  const [notifications, setNotifications] = useState([]);
   
   const longPressTimer = useRef(null);
   const { user, apiRequest } = useAuth();
