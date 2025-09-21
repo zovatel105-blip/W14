@@ -776,7 +776,10 @@ const MessagesPage = () => {
   console.log('🔥 MESSAGES PAGE DEBUG:', {
     showInbox,
     showChat,
-    selectedConversation: selectedConversation?.id,
+    selectedConversation: selectedConversation ? {
+      id: selectedConversation.id,
+      participant: selectedConversation.participants?.[0]?.display_name
+    } : null,
     realNotifications: realNotifications.length,
     loadingNotifications
   });
