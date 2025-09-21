@@ -274,7 +274,7 @@ const MessagesMainPage = () => {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.05 }}
                       onClick={() => handleConversationClick(conversation)}
-                      className="w-full flex items-center px-4 py-4 border-b border-gray-100 transition-colors min-h-[72px] hover:bg-gray-50 active:bg-gray-100"
+                      className="w-full flex items-center px-6 py-4 border-b border-gray-100 transition-colors min-h-[80px] hover:bg-gray-50 active:bg-gray-100"
                       style={{ touchAction: 'manipulation' }}
                     >
                       {/* Avatar */}
