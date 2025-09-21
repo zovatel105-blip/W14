@@ -87,7 +87,8 @@ const FollowersPage = () => {
         message: `@${follower.username} comenzó a seguirte`,
         unreadCount: 0,
         time: formatTimeForInbox(follower.followed_at),
-        avatar: follower.avatar_url || getAvatarForUser(follower),
+        avatar: follower.avatar_url, // Usar directamente avatar_url, no fallback aquí
+        fallbackAvatar: getAvatarForUser(follower), // Separar el fallback
         userId: follower.id,
         isSystem: false
       }));
