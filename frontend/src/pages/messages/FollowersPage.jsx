@@ -177,23 +177,26 @@ const FollowersPage = () => {
               >
                 {/* Avatar */}
                 <div className="w-12 h-12 rounded-full mr-3 flex items-center justify-center text-lg flex-shrink-0 relative overflow-hidden bg-gray-100">
-                  {follower.avatar && (follower.avatar.startsWith('http') || follower.avatar.startsWith('/')) ? (
+                  {follower.avatar ? (
                     <>
                       <img 
                         src={follower.avatar} 
                         alt="Avatar" 
                         className="w-full h-full rounded-full object-cover"
                         onError={(e) => {
+                          // Si la imagen falla al cargar, ocultar imagen y mostrar fallback
                           e.target.style.display = 'none';
                           e.target.parentNode.querySelector('.avatar-fallback').style.display = 'flex';
                         }}
                       />
                       <div className="avatar-fallback w-full h-full rounded-full flex items-center justify-center text-lg font-bold" style={{ display: 'none' }}>
-                        {follower.title ? follower.title.charAt(0).toUpperCase() : '👤'}
+                        {follower.fallbackAvatar}
                       </div>
                     </>
                   ) : (
-                    follower.avatar
+                    <div className="w-full h-full rounded-full flex items-center justify-center text-lg font-bold">
+                      {follower.fallbackAvatar}
+                    </div>
                   )}
                 </div>
                 
