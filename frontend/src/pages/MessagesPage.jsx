@@ -958,25 +958,6 @@ const MessagesPage = () => {
     }
   };
 
-      setRealNotifications(realData);
-    } catch (error) {
-      console.log('Error processing notifications:', error.message);
-      // Fallback simple y seguro
-      setRealNotifications([{
-        id: 'welcome-fallback',
-        type: 'system',
-        title: '¡Hola! 👋',
-        message: 'Tus conversaciones aparecerán aquí cuando estén disponibles',
-        unreadCount: 0,
-        time: 'ahora',
-        avatar: '💬',
-        isSystem: true
-      }]);
-    } finally {
-      setLoadingNotifications(false);
-    }
-  };
-
   const getIconComponent = (iconName) => {
     const icons = {
       'Users': Users,
