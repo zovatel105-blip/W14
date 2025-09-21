@@ -191,23 +191,26 @@ const RequestsPage = () => {
               >
                 {/* Avatar */}
                 <div className="w-12 h-12 rounded-full mr-3 flex items-center justify-center text-lg flex-shrink-0 relative overflow-hidden bg-gradient-to-br from-purple-500 to-pink-500 text-white font-bold">
-                  {request.avatar && (request.avatar.startsWith('http') || request.avatar.startsWith('/')) ? (
+                  {request.avatar ? (
                     <>
                       <img 
                         src={request.avatar} 
                         alt="Avatar" 
                         className="w-full h-full rounded-full object-cover"
                         onError={(e) => {
+                          // Si la imagen falla al cargar, ocultar imagen y mostrar fallback
                           e.target.style.display = 'none';
                           e.target.parentNode.querySelector('.avatar-fallback').style.display = 'flex';
                         }}
                       />
                       <div className="avatar-fallback w-full h-full rounded-full flex items-center justify-center text-lg font-bold" style={{ display: 'none' }}>
-                        {request.title ? request.title.charAt(0).toUpperCase() : '💬'}
+                        {request.fallbackAvatar}
                       </div>
                     </>
                   ) : (
-                    request.avatar
+                    <div className="w-full h-full rounded-full flex items-center justify-center text-lg font-bold">
+                      {request.fallbackAvatar}
+                    </div>
                   )}
                 </div>
                 
