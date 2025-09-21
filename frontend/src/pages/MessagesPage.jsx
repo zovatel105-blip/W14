@@ -814,7 +814,7 @@ const MessagesPage = () => {
         message: request.preview || 'Te ha enviado una solicitud de mensaje',
         unreadCount: 1,
         time: formatTimeForInbox(request.created_at),
-        avatar: '💬', // Icono burbuja de chat azul oscuro
+        avatar: request.sender.avatar_url || getAvatarForUser(request.sender), // Usar foto de perfil real o fallback
         userId: request.sender.id,
         requestId: request.id,
         isSystem: false,
