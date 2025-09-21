@@ -156,28 +156,19 @@ const MessagesPage = () => {
     }
   }, [conversations]);
 
-  // Cargar datos reales cuando el usuario esté disponible
+  // Cargar datos cuando el usuario y conversaciones estén disponibles
   useEffect(() => {
     if (user) {
       loadSegmentData();
-      loadRealNotifications();
-      
-      // Recargar datos cada 30 segundos para mantener actualizado
-      const interval = setInterval(() => {
-        loadSegmentData();
-        loadRealNotifications();
-      }, 30000);
-      
-      return () => clearInterval(interval);
     }
-  }, [user]);
+  }, [user, chatRequests]);
 
-  // Refrescar datos cuando las conversaciones cambien
+  // Cargar notificaciones cuando las conversaciones cambien
   useEffect(() => {
-    if (user && conversations.length >= 0) {
+    if (user) {
       loadRealNotifications();
     }
-  }, [conversations, user]);
+  }, [conversations, chatRequests, user]);
 
   // Procesar parámetro 'user' de la URL para iniciar chat desde perfil
   useEffect(() => {
