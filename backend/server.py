@@ -3088,7 +3088,7 @@ async def get_message_requests(current_user: UserResponse = Depends(get_current_
                             "id": sender["id"],
                             "username": sender["username"],
                             "display_name": sender.get("display_name", sender["username"]),
-                            "avatar": sender.get("avatar"),
+                            "avatar_url": sender.get("avatar_url"),  # Usar foto de perfil real
                             "is_verified": sender.get("is_verified", False)
                         },
                         "message": req.get("message", ""),
