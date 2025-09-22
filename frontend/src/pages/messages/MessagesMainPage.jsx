@@ -402,7 +402,7 @@ const MessagesMainPage = () => {
       console.log('🔍 Tipo de content:', typeof messageContent);
       console.log('🔍 Valor exacto content:', JSON.stringify(messageContent));
       
-      const response = await apiRequest('/api/messages-debug', {
+      const response = await apiRequest('/api/messages', {
         method: 'POST',
         body: messagePayload
       });
