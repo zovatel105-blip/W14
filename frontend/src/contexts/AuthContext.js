@@ -1,6 +1,5 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import AppConfig from '../config/config';
 
 const AuthContext = createContext();
 
@@ -12,162 +11,183 @@ export const useAuth = () => {
   return context;
 };
 
+// Authentication states
+const AUTH_STATES = {
+  LOADING: 'loading',
+  AUTHENTICATED: 'authenticated', 
+  UNAUTHENTICATED: 'unauthenticated',
+  ERROR: 'error'
+};
+
+// Error types for better error handling
+const ERROR_TYPES = {
+  NETWORK: 'network',
+  AUTHENTICATION: 'authentication',
+  VALIDATION: 'validation',
+  SERVER: 'server',
+  UNKNOWN: 'unknown'
+};
+
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  // Core authentication state
+  const [authState, setAuthState] = useState(AUTH_STATES.LOADING);
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  
+  // Registration/Login specific state
+  const [registrationLoading, setRegistrationLoading] = useState(false);
+  const [loginLoading, setLoginLoading] = useState(false);
 
-  // Load auth state from localStorage and verify token
-  useEffect(() => {
-    const initializeAuth = async () => {
-      // Check for OAuth session in URL fragment first
-      const fragment = window.location.hash.substring(1);
-      const params = new URLSearchParams(fragment);
-      const sessionId = params.get('session_id');
-      
-      if (sessionId) {
-        // Handle OAuth login
-        try {
-          const response = await fetch(`${BACKEND_URL}/api/auth/oauth/google`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ session_id: sessionId }),
-          });
-
-          if (response.ok) {
-            const data = await response.json();
-            
-            // Save auth data with consistent key names
-            localStorage.setItem('token', data.access_token);
-            localStorage.setItem('user', JSON.stringify(data.user));
-            
-            setToken(data.access_token);
-            setUser(data.user);
-            setIsAuthenticated(true);
-            
-            // Clear the hash from URL
-            window.location.hash = '';
-            
-            setLoading(false);
-            return;
-          }
-        } catch (error) {
-          console.error('OAuth authentication error:', error);
-        }
-      }
-      
-      const savedToken = localStorage.getItem('token');
-      const savedUser = localStorage.getItem('user');
-      
-      if (savedToken && savedUser) {
-        try {
-          // Verify token with backend
-          const response = await fetch(`${BACKEND_URL}/api/auth/me`, {
-            method: 'GET',
-            headers: {
-              'Authorization': `Bearer ${savedToken}`,
-              'Content-Type': 'application/json'
-            }
-          });
-
-          if (response.ok) {
-            // Token is valid
-            setToken(savedToken);
-            setUser(JSON.parse(savedUser));
-            setIsAuthenticated(true);
-          } else {
-            // Token is invalid, clear storage
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            localStorage.removeItem('userId');
-          }
-        } catch (error) {
-          console.error('Token validation error:', error);
-          // Only clear tokens if it's a network error or authentication error
-          // Don't clear on temporary network issues
-          if (error.name === 'TypeError' && error.message.includes('fetch')) {
-            console.warn('Network error during token validation, keeping token');
-            // Keep the token and user data for now
-          } else {
-            // Clear invalid tokens for other errors
-            localStorage.removeItem('token');
-            localStorage.removeItem('user');
-            localStorage.removeItem('userId');
-          }
-        }
-      }
-      setLoading(false);
-    };
-
-    initializeAuth();
+  // Get backend URL with fallback
+  const getBackendUrl = useCallback(() => {
+    return AppConfig.BACKEND_URL;
   }, []);
 
-  const login = async (email, password) => {
-    try {
-      console.log('Attempting login with:', { email });
-      const response = await fetch(`${BACKEND_URL}/api/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
+  // Clear error state
+  const clearError = useCallback(() => {
+    setError(null);
+  }, []);
 
-      if (!response.ok) {
-        let errorMessage = 'Login failed';
-        try {
-          const errorData = await response.json();
-          console.error('Login failed:', errorData);
-          errorMessage = errorData.detail || errorMessage;
-        } catch (parseError) {
-          // If response is not JSON (e.g., HTML error page), use status text
-          console.error('Login failed - non-JSON response:', response.status, response.statusText);
-          errorMessage = response.statusText || `HTTP ${response.status}`;
-        }
-        throw new Error(errorMessage);
+  // Set auth data in state and localStorage
+  const setAuthData = useCallback((userData, tokenData) => {
+    try {
+      // Validate required data
+      if (!userData || !tokenData) {
+        throw new Error('Missing user data or token');
       }
 
-      let data;
+      // Set state
+      setUser(userData);
+      setToken(tokenData);
+      setAuthState(AUTH_STATES.AUTHENTICATED);
+      
+      // Save to localStorage with error handling
       try {
-        data = await response.json();
-      } catch (parseError) {
-        throw new Error('El servidor devolvió una respuesta inválida. Verifica la conexión.');
+        localStorage.setItem('token', tokenData);
+        localStorage.setItem('user', JSON.stringify(userData));
+      } catch (storageError) {
+        console.warn('Failed to save auth data to localStorage:', storageError);
+        // Continue anyway - the session will work but won't persist
       }
-      console.log('Login successful:', { user: data.user?.email, hasToken: !!data.access_token });
-      
-      // Save auth data with consistent key names
-      localStorage.setItem('token', data.access_token);
-      localStorage.setItem('user', JSON.stringify(data.user));
-      
-      setToken(data.access_token);
-      setUser(data.user);
-      setIsAuthenticated(true);
-      
-      return { success: true, user: data.user };
     } catch (error) {
-      console.error('Login error:', error);
-      
-      // Distinguish between network errors and authentication errors
-      if (error.name === 'TypeError' && error.message.includes('fetch')) {
-        return { success: false, error: 'No se pudo conectar al servidor. Verifica tu conexión.' };
-      } else {
-        return { success: false, error: error.message };  
-      }
+      console.error('Error setting auth data:', error);
+      setError({
+        type: ERROR_TYPES.UNKNOWN,
+        message: 'Failed to set authentication data'
+      });
     }
-  };
+  }, []);
 
-  const register = async (userData) => {
+  // Clear auth data
+  const clearAuthData = useCallback(() => {
+    setUser(null);
+    setToken(null);
+    setAuthState(AUTH_STATES.UNAUTHENTICATED);
+    setError(null);
+    
+    // Clear localStorage
     try {
-      const registerUrl = `${BACKEND_URL}/api/auth/register`;
-      console.log('🔍 REGISTER DEBUG:', {
-        BACKEND_URL,
-        registerUrl,
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+      localStorage.removeItem('userId'); // Legacy cleanup
+    } catch (storageError) {
+      console.warn('Failed to clear localStorage:', storageError);
+    }
+  }, []);
+
+  // Make authenticated API request
+  const makeAuthenticatedRequest = useCallback(async (url, options = {}) => {
+    const backendUrl = getBackendUrl();
+    const fullUrl = url.startsWith('http') ? url : `${backendUrl}${url}`;
+    
+    const config = {
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        ...(token && { Authorization: `Bearer ${token}` }),
+        ...options.headers
+      }
+    };
+
+    // Auto-serialize body to JSON if it's an object and not FormData
+    if (config.body && typeof config.body === 'object' && !(config.body instanceof FormData)) {
+      config.body = JSON.stringify(config.body);
+    }
+
+    try {
+      const response = await fetch(fullUrl, config);
+      
+      // Handle 401 - token expired
+      if (response.status === 401) {
+        clearAuthData();
+        throw new Error('Session expired. Please login again.');
+      }
+      
+      return response;
+    } catch (fetchError) {
+      if (fetchError.name === 'TypeError' && fetchError.message.includes('fetch')) {
+        throw new Error('Network connection failed. Please check your internet connection.');
+      }
+      throw fetchError;
+    }
+  }, [token, getBackendUrl, clearAuthData]);
+
+  // Parse and categorize errors
+  const parseError = useCallback((error, response = null) => {
+    let errorType = ERROR_TYPES.UNKNOWN;
+    let errorMessage = 'An unexpected error occurred';
+
+    if (error.name === 'TypeError' && error.message.includes('fetch')) {
+      errorType = ERROR_TYPES.NETWORK;
+      errorMessage = 'Network connection failed. Please check your internet connection.';
+    } else if (response) {
+      if (response.status >= 500) {
+        errorType = ERROR_TYPES.SERVER;
+        errorMessage = 'Server error. Please try again later.';
+      } else if (response.status === 401) {
+        errorType = ERROR_TYPES.AUTHENTICATION;
+        errorMessage = 'Invalid credentials. Please check your email and password.';
+      } else if (response.status === 400) {
+        errorType = ERROR_TYPES.VALIDATION;
+        errorMessage = error.message || 'Invalid data provided.';
+      }
+    } else {
+      errorMessage = error.message || errorMessage;
+    }
+
+    return { type: errorType, message: errorMessage };
+  }, []);
+
+  // Enhanced register function with comprehensive error handling
+  const register = useCallback(async (userData) => {
+    setRegistrationLoading(true);
+    setError(null);
+    
+    try {
+      // Input validation
+      if (!userData.email || !userData.password || !userData.username) {
+        throw new Error('Email, username, and password are required');
+      }
+
+      if (userData.password.length < 8) {
+        throw new Error('Password must be at least 8 characters long');
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(userData.email)) {
+        throw new Error('Please enter a valid email address');
+      }
+
+      const backendUrl = getBackendUrl();
+      const registerUrl = `${backendUrl}/api/auth/register`;
+      
+      console.log('🔍 REGISTER ATTEMPT:', {
+        url: registerUrl,
         userData: { ...userData, password: '[HIDDEN]' }
       });
-      
+
       const response = await fetch(registerUrl, {
         method: 'POST',
         headers: {
@@ -177,144 +197,353 @@ export const AuthProvider = ({ children }) => {
       });
 
       if (!response.ok) {
-        let errorMessage = 'Registration failed';
+        let errorData;
         try {
-          const errorData = await response.json();
-          errorMessage = errorData.detail || errorMessage;
+          errorData = await response.json();
         } catch (parseError) {
-          // If response is not JSON (e.g., HTML error page), use status text
-          errorMessage = response.statusText || `HTTP ${response.status}`;
+          throw new Error(`Registration failed: HTTP ${response.status}`);
         }
-        throw new Error(errorMessage);
+        
+        // Handle specific backend errors
+        if (errorData.detail) {
+          if (errorData.detail.toLowerCase().includes('email already registered') || 
+              errorData.detail.toLowerCase().includes('user already exists')) {
+            throw new Error('This email address is already registered. Please use a different email or try logging in.');
+          } else if (errorData.detail.toLowerCase().includes('username already exists')) {
+            throw new Error('This username is already taken. Please choose a different username.');
+          } else {
+            throw new Error(errorData.detail);
+          }
+        } else {
+          throw new Error(`Registration failed: ${response.statusText || 'Unknown error'}`);
+        }
       }
 
-      let data;
+      let responseData;
       try {
-        data = await response.json();
+        responseData = await response.json();
       } catch (parseError) {
-        throw new Error('El servidor devolvió una respuesta inválida. Verifica la conexión.');
+        throw new Error('Server returned invalid response. Please try again.');
       }
+
+      // Validate response data
+      if (!responseData.access_token || !responseData.user) {
+        throw new Error('Invalid response from server. Please try again.');
+      }
+
+      console.log('✅ REGISTRATION SUCCESSFUL:', {
+        user: responseData.user.email,
+        hasToken: !!responseData.access_token
+      });
+
+      // Set auth data
+      setAuthData(responseData.user, responseData.access_token);
       
-      // Save auth data with consistent key names
-      localStorage.setItem('token', data.access_token);
-      localStorage.setItem('user', JSON.stringify(data.user));
-      
-      setToken(data.access_token);
-      setUser(data.user);
-      setIsAuthenticated(true);
-      
-      return { success: true, user: data.user };
+      return { 
+        success: true, 
+        user: responseData.user,
+        message: 'Account created successfully!'
+      };
+
     } catch (error) {
-      console.error('Registration error:', error);
+      console.error('❌ REGISTRATION ERROR:', error);
       
-      // Distinguish between network errors and registration errors
-      if (error.name === 'TypeError' && error.message.includes('fetch')) {
-        return { success: false, error: 'No se pudo conectar al servidor. Verifica tu conexión.' };
+      const parsedError = parseError(error);
+      setError(parsedError);
+      
+      return { 
+        success: false, 
+        error: parsedError.message,
+        errorType: parsedError.type
+      };
+    } finally {
+      setRegistrationLoading(false);
+    }
+  }, [getBackendUrl, setAuthData, parseError]);
+
+  // Enhanced login function
+  const login = useCallback(async (email, password) => {
+    setLoginLoading(true);
+    setError(null);
+    
+    try {
+      // Input validation
+      if (!email || !password) {
+        throw new Error('Email and password are required');
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        throw new Error('Please enter a valid email address');
+      }
+
+      const backendUrl = getBackendUrl();
+      const loginUrl = `${backendUrl}/api/auth/login`;
+      
+      console.log('🔍 LOGIN ATTEMPT:', { email, url: loginUrl });
+
+      const response = await fetch(loginUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        let errorData;
+        try {
+          errorData = await response.json();
+        } catch (parseError) {
+          throw new Error(`Login failed: HTTP ${response.status}`);
+        }
+        
+        if (errorData.detail) {
+          if (errorData.detail.toLowerCase().includes('incorrect email or password') ||
+              errorData.detail.toLowerCase().includes('invalid credentials')) {
+            throw new Error('Incorrect email or password. Please check your credentials and try again.');
+          } else {
+            throw new Error(errorData.detail);
+          }
+        } else {
+          throw new Error(`Login failed: ${response.statusText || 'Unknown error'}`);
+        }
+      }
+
+      let responseData;
+      try {
+        responseData = await response.json();
+      } catch (parseError) {
+        throw new Error('Server returned invalid response. Please try again.');
+      }
+
+      // Validate response data
+      if (!responseData.access_token || !responseData.user) {
+        throw new Error('Invalid response from server. Please try again.');
+      }
+
+      console.log('✅ LOGIN SUCCESSFUL:', {
+        user: responseData.user.email,
+        hasToken: !!responseData.access_token
+      });
+
+      // Set auth data
+      setAuthData(responseData.user, responseData.access_token);
+      
+      return { 
+        success: true, 
+        user: responseData.user,
+        message: 'Login successful!'
+      };
+
+    } catch (error) {
+      console.error('❌ LOGIN ERROR:', error);
+      
+      const parsedError = parseError(error);
+      setError(parsedError);
+      
+      return { 
+        success: false, 
+        error: parsedError.message,
+        errorType: parsedError.type
+      };
+    } finally {
+      setLoginLoading(false);
+    }
+  }, [getBackendUrl, setAuthData, parseError]);
+
+  // Verify token with backend
+  const verifyToken = useCallback(async (tokenToVerify) => {
+    try {
+      const response = await makeAuthenticatedRequest('/api/auth/me', {
+        headers: {
+          Authorization: `Bearer ${tokenToVerify}`
+        }
+      });
+
+      if (response.ok) {
+        const userData = await response.json();
+        return { valid: true, user: userData };
       } else {
-        return { success: false, error: error.message };
+        return { valid: false };
       }
+    } catch (error) {
+      console.error('Token verification error:', error);
+      return { valid: false };
     }
-  };
+  }, [makeAuthenticatedRequest]);
 
-  const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    localStorage.removeItem('userId'); // Clear old userId from addiction system
-    
-    setToken(null);
-    setUser(null);
-    setIsAuthenticated(false);
-  };
+  // Initialize authentication state
+  useEffect(() => {
+    const initializeAuth = async () => {
+      setLoading(true);
+      setAuthState(AUTH_STATES.LOADING);
+      
+      try {
+        // Check for OAuth session in URL fragment first
+        const fragment = window.location.hash.substring(1);
+        const params = new URLSearchParams(fragment);
+        const sessionId = params.get('session_id');
+        
+        if (sessionId) {
+          try {
+            const backendUrl = getBackendUrl();
+            const response = await fetch(`${backendUrl}/api/auth/oauth/google`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ session_id: sessionId }),
+            });
 
-  const getAuthHeaders = () => {
-    if (!token) return {};
-    return {
-      'Authorization': `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    };
-  };
-
-  const apiRequest = async (endpoint, options = {}) => {
-    const url = endpoint.startsWith('http') ? endpoint : `${BACKEND_URL}${endpoint}`;
-    
-    const config = {
-      ...options,
-      headers: {
-        ...getAuthHeaders(),
-        ...options.headers
+            if (response.ok) {
+              const data = await response.json();
+              setAuthData(data.user, data.access_token);
+              
+              // Clear the hash from URL
+              window.location.hash = '';
+              return;
+            }
+          } catch (oauthError) {
+            console.error('OAuth authentication error:', oauthError);
+          }
+        }
+        
+        // Check stored credentials
+        const savedToken = localStorage.getItem('token');
+        const savedUser = localStorage.getItem('user');
+        
+        if (savedToken && savedUser) {
+          try {
+            const parsedUser = JSON.parse(savedUser);
+            const { valid, user: verifiedUser } = await verifyToken(savedToken);
+            
+            if (valid && verifiedUser) {
+              setAuthData(verifiedUser, savedToken);
+            } else {
+              // Token is invalid, clear storage
+              clearAuthData();
+            }
+          } catch (error) {
+            console.error('Stored auth data is invalid:', error);
+            clearAuthData();
+          }
+        } else {
+          setAuthState(AUTH_STATES.UNAUTHENTICATED);
+        }
+      } catch (error) {
+        console.error('Auth initialization error:', error);
+        setError({
+          type: ERROR_TYPES.UNKNOWN,
+          message: 'Failed to initialize authentication'
+        });
+        setAuthState(AUTH_STATES.ERROR);
+      } finally {
+        setLoading(false);
       }
     };
 
-    // Auto-serialize body to JSON if it's an object
-    if (config.body && typeof config.body === 'object' && !(config.body instanceof FormData)) {
-      config.body = JSON.stringify(config.body);
-      config.headers['Content-Type'] = 'application/json';
-    }
+    initializeAuth();
+  }, [getBackendUrl, setAuthData, clearAuthData, verifyToken]);
 
-    const response = await fetch(url, config);
-    
-    if (response.status === 401) {
-      // Token expired or invalid
-      logout();
-      throw new Error('Session expired. Please login again.');
-    }
-    
-    if (!response.ok) {
-      throw new Error(`API request failed: ${response.status} ${response.statusText}`);
-    }
-    
-    // Parse JSON response
-    return await response.json();
-  };
+  // Logout function
+  const logout = useCallback(() => {
+    clearAuthData();
+  }, [clearAuthData]);
 
-  const refreshUser = async () => {
+  // Refresh user data
+  const refreshUser = useCallback(async () => {
     if (!token) return;
 
     try {
-      const userData = await apiRequest('/api/auth/me');
-      setUser(userData);
-      localStorage.setItem('user', JSON.stringify(userData));
+      const response = await makeAuthenticatedRequest('/api/auth/me');
+      if (response.ok) {
+        const userData = await response.json();
+        setUser(userData);
+        localStorage.setItem('user', JSON.stringify(userData));
+      }
     } catch (error) {
       console.error('Error refreshing user data:', error);
     }
-  };
+  }, [token, makeAuthenticatedRequest]);
 
-  const updateUser = async (updateData) => {
+  // Update user profile
+  const updateUser = useCallback(async (updateData) => {
     if (!token) {
       throw new Error('Not authenticated');
     }
 
     try {
-      const updatedUser = await apiRequest('/api/auth/profile', {
+      const response = await makeAuthenticatedRequest('/api/auth/profile', {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updateData),
+        body: updateData,
       });
 
-      setUser(updatedUser);
-      localStorage.setItem('user', JSON.stringify(updatedUser));
-      
-      return updatedUser;
+      if (response.ok) {
+        const updatedUser = await response.json();
+        setUser(updatedUser);
+        localStorage.setItem('user', JSON.stringify(updatedUser));
+        return updatedUser;
+      } else {
+        throw new Error('Failed to update profile');
+      }
     } catch (error) {
       console.error('Error updating user:', error);
       throw error;
     }
-  };
+  }, [token, makeAuthenticatedRequest]);
+
+  // Get auth headers
+  const getAuthHeaders = useCallback(() => {
+    if (!token) return {};
+    return {
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    };
+  }, [token]);
+
+  // Legacy API request method for backward compatibility
+  const apiRequest = useCallback(async (endpoint, options = {}) => {
+    const response = await makeAuthenticatedRequest(endpoint, options);
+    
+    if (!response.ok) {
+      throw new Error(`API request failed: ${response.status} ${response.statusText}`);
+    }
+    
+    return await response.json();
+  }, [makeAuthenticatedRequest]);
+
+  // Computed properties
+  const isAuthenticated = authState === AUTH_STATES.AUTHENTICATED;
+  const isLoading = loading || authState === AUTH_STATES.LOADING;
 
   const value = {
+    // State
     isAuthenticated,
     user,
     token,
-    loading,
+    loading: isLoading,
+    error,
+    authState,
+    registrationLoading,
+    loginLoading,
+    
+    // Actions
     login,
     register,
     logout,
-    getAuthHeaders,
-    apiRequest,
     refreshUser,
-    updateUser
+    updateUser,
+    clearError,
+    
+    // Utilities
+    getAuthHeaders,
+    apiRequest, // Legacy compatibility
+    makeAuthenticatedRequest,
+    
+    // Constants
+    AUTH_STATES,
+    ERROR_TYPES
   };
 
   return (
