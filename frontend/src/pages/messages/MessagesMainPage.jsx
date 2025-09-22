@@ -619,11 +619,76 @@ const MessagesMainPage = () => {
 
           {/* Messages Area */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            {/* Mensaje de inicio de conversación */}
             <div className="flex justify-center">
               <div className="bg-gray-100 px-4 py-2 rounded-lg">
                 <span className="text-sm text-gray-600">Conversación iniciada</span>
               </div>
             </div>
+            
+            {/* Renderizar mensajes */}
+            {messages.map((message, index) => {
+              const isOwnMessage = message.sender_id === user?.id;
+              const showAvatar = !isOwnMessage && (index === 0 || messages[index - 1].sender_id !== message.sender_id);
+              
+              return (
+                <div key={message.id} className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'} mb-4`}>
+                  <div className={`flex items-end space-x-2 max-w-xs lg:max-w-md ${isOwnMessage ? 'flex-row-reverse space-x-reverse' : ''}`}>
+                    {/* Avatar para mensajes de otros usuarios */}
+                    {showAvatar && !isOwnMessage && (
+                      <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
+                        {message.sender?.avatar_url ? (
+                          <img 
+                            src={message.sender.avatar_url} 
+                            alt="Avatar" 
+                            className="w-full h-full rounded-full object-cover"
+                          />
+                        ) : (
+                          <span className="text-sm font-semibold text-gray-600">
+                            {message.sender?.display_name?.charAt(0) || '👤'}
+                          </span>
+                        )}
+                      </div>
+                    )}
+                    
+                    {/* Spacer cuando no se muestra avatar */}
+                    {!showAvatar && !isOwnMessage && <div className="w-8" />}
+                    
+                    {/* Mensaje */}
+                    <div className={`relative px-4 py-2 rounded-2xl ${
+                      isOwnMessage 
+                        ? 'bg-blue-500 text-white' 
+                        : 'bg-gray-100 text-gray-900'
+                    }`}>
+                      <p className="text-sm">{message.content}</p>
+                      
+                      {/* Indicador de estado para mensajes propios */}
+                      {isOwnMessage && message.status && (
+                        <div className="absolute -bottom-1 -right-1">
+                          {message.status === 'sending' && (
+                            <div className="w-3 h-3 bg-gray-400 rounded-full animate-pulse"></div>
+                          )}
+                          {message.status === 'sent' && (
+                            <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                          )}
+                          {message.status === 'failed' && (
+                            <div className="w-3 h-3 bg-red-500 rounded-full cursor-pointer" title="Error al enviar"></div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  
+                  {/* Timestamp */}
+                  <div className={`text-xs text-gray-400 mt-1 ${isOwnMessage ? 'text-right mr-2' : 'text-left ml-2'}`}>
+                    {new Date(message.timestamp).toLocaleTimeString('es-ES', { 
+                      hour: '2-digit', 
+                      minute: '2-digit' 
+                    })}
+                  </div>
+                </div>
+              );
+            })}
           </div>
 
           {/* Message Input */}
