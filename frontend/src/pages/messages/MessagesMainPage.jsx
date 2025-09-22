@@ -144,6 +144,7 @@ const MessagesMainPage = () => {
 
   // Cargar datos al montar
   useEffect(() => {
+    console.log('🚀 MessagesMainPage montado, usuario:', user?.username);
     if (user) {
       loadConversations();
       loadSegmentData();
