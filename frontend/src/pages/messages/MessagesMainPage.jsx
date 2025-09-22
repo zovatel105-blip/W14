@@ -328,7 +328,14 @@ const MessagesMainPage = () => {
       loadConversations();
 
     } catch (error) {
-      console.error('❌ Error enviando mensaje:', error);
+      console.error('❌ Error enviando mensaje COMPLETO:', error);
+      console.error('❌ Error message:', error.message);
+      console.error('❌ Error stack:', error.stack);
+      
+      // Si es un error HTTP, intentar obtener más detalles
+      if (error.message && error.message.includes('422')) {
+        console.error('❌ Error 422 detectado - problema de validación en backend');
+      }
       
       // Marcar mensaje como fallido
       setMessages(prevMessages =>
