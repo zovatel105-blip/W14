@@ -165,28 +165,29 @@ const MessagesMainPage = () => {
     const urlParams = new URLSearchParams(location.search);
     const targetUsername = urlParams.get('user');
     
-    if (targetUsername && conversations.length > 0) {
-      console.log('🔍 Buscando conversación para usuario:', targetUsername);
+    if (targetUsername && user) {
+      console.log('🔍 Detectado parámetro user en URL:', targetUsername);
       
-      // Buscar conversación existente con este usuario
-      const existingConversation = conversations.find(conv => {
-        const otherUser = conv.participants?.find(p => p.id !== user?.id);
-        return otherUser?.username === targetUsername;
-      });
+      // Si ya tenemos conversaciones cargadas, buscar inmediatamente
+      if (conversations.length > 0) {
+        const existingConversation = conversations.find(conv => {
+          const otherUser = conv.participants?.find(p => p.id !== user?.id);
+          return otherUser?.username === targetUsername;
+        });
 
-      if (existingConversation) {
-        console.log('✅ Conversación existente encontrada:', existingConversation.id);
-        setSelectedConversation(existingConversation);
-        setShowChat(true);
-        // Limpiar la URL sin el parámetro user
-        navigate('/messages', { replace: true });
-      } else {
-        // Si no existe conversación, iniciar nueva con el usuario
-        console.log('🆕 Iniciando nueva conversación con:', targetUsername);
-        handleStartNewConversationWithUser(targetUsername);
-        // Limpiar la URL sin el parámetro user
-        navigate('/messages', { replace: true });
+        if (existingConversation) {
+          console.log('✅ Conversación existente encontrada:', existingConversation.id);
+          setSelectedConversation(existingConversation);
+          setShowChat(true);
+          navigate('/messages', { replace: true });
+          return;
+        }
       }
+      
+      // Si no encontramos conversación existente, iniciar nueva conversación
+      console.log('🆕 Iniciando nueva conversación con:', targetUsername);
+      handleStartNewConversationWithUser(targetUsername);
+      navigate('/messages', { replace: true });
     }
   }, [location.search, conversations, user, navigate]);
 
