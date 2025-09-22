@@ -181,6 +181,10 @@ export const AuthProvider = ({ children }) => {
         throw new Error('Email, username, and password are required');
       }
 
+      if (!userData.display_name || !userData.display_name.trim()) {
+        throw new Error('Display name is required');
+      }
+
       if (userData.password.length < 8) {
         throw new Error('Password must be at least 8 characters long');
       }
