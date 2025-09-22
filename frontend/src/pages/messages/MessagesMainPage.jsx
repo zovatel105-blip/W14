@@ -747,18 +747,25 @@ const MessagesMainPage = () => {
               {/* Estadísticas en gris medio y tamaño pequeño */}
               <div className="text-sm text-gray-500">
                 {(() => {
-                  const otherUser = selectedConversation?.participants?.[0];
+                  const otherUser = selectedConversation?.participants?.find(p => p.id !== user?.id);
+                  console.log('🎯 Renderizando estadísticas - otherUser:', otherUser);
+                  console.log('🎯 UserStats actual:', userStats);
+                  
                   const stats = otherUser ? userStats[otherUser.id] : null;
+                  console.log('🎯 Stats encontradas:', stats);
                   
                   if (stats) {
+                    const displayText = `${stats.votes} voto${stats.votes !== 1 ? 's' : ''} • ${stats.followers} seguidor${stats.followers !== 1 ? 'es' : ''}`;
+                    console.log('🎯 Texto a mostrar:', displayText);
                     return (
                       <span>
-                        {stats.votes} voto{stats.votes !== 1 ? 's' : ''} • {stats.followers} seguidor{stats.followers !== 1 ? 'es' : ''}
+                        {displayText}
                       </span>
                     );
                   }
                   
                   // Mostrar loading o datos por defecto mientras cargan
+                  console.log('🎯 Mostrando loading...');
                   return <span>Cargando estadísticas...</span>;
                 })()}
               </div>
