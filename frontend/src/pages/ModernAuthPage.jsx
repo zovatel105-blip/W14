@@ -105,8 +105,6 @@ const ModernAuthPage = () => {
             title: "¡Bienvenido de vuelta!",
             description: `Hola ${result.user.display_name}, sesión iniciada correctamente.`,
           });
-          // Redirect to feed
-          navigate('/feed');
         } else {
           // Handle login errors
           handleAuthError(result.error);
