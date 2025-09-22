@@ -305,9 +305,16 @@ const MessagesMainPage = () => {
     console.log('🔄 useEffect selectedConversation cambió:', selectedConversation);
     
     if (selectedConversation) {
-      console.log('🔄 Participants:', selectedConversation.participants);
-      const otherUser = selectedConversation.participants?.find(p => p.id !== user?.id);
-      console.log('🔄 User actual:', user?.id, user?.username);
+      console.log('🔄 Conversation ID:', selectedConversation.id);
+      console.log('🔄 Participants completos:', selectedConversation.participants);
+      console.log('🔄 User actual completo:', user);
+      
+      // Buscar el otro participante (no el usuario actual)
+      const otherUser = selectedConversation.participants?.find(p => {
+        console.log('🔄 Comparando participant:', p.id, 'vs user:', user?.id);
+        return p.id !== user?.id;
+      });
+      
       console.log('🔄 Other user encontrado:', otherUser);
       
       if (otherUser && otherUser.id) {
@@ -315,11 +322,13 @@ const MessagesMainPage = () => {
         loadUserStats(otherUser.id);
       } else {
         console.warn('⚠️ No se pudo encontrar otherUser o no tiene ID válido');
+        console.warn('⚠️ Participants:', selectedConversation.participants);
+        console.warn('⚠️ User ID:', user?.id);
       }
       
       loadMessages(selectedConversation.id);
     }
-  }, [selectedConversation]);
+  }, [selectedConversation, user]);
   const handleSendMessage = async () => {
     if (!newMessage.trim() || !selectedConversation) return;
 
