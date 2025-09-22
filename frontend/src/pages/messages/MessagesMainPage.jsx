@@ -286,12 +286,16 @@ const MessagesMainPage = () => {
       }
 
       // Enviar mensaje al backend
+      const messagePayload = {
+        recipient_id: recipient.id,
+        content: messageContent
+      };
+      
+      console.log('📤 Payload enviando al backend:', messagePayload);
+      
       const response = await apiRequest('/api/messages', {
         method: 'POST',
-        body: {
-          recipient_id: recipient.id,
-          content: messageContent
-        }
+        body: messagePayload
       });
 
       console.log('✅ Mensaje enviado exitosamente:', response);
