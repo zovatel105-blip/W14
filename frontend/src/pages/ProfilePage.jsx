@@ -1175,7 +1175,7 @@ const ProfilePage = () => {
                       <Vote className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" strokeWidth={1.5} />
                     </div>
                     <div className="min-w-0">
-                      <p className="text-xl sm:text-2xl font-bold text-gray-900 leading-none">{isOwnProfile ? (displayUser?.totalVotes || 0) : (displayUser?.votes || 0)}</p>
+                      <p className="text-xl sm:text-2xl font-bold text-gray-900 leading-none">{displayUser?.totalVotes || 0}</p>
                       <p className="text-xs sm:text-sm text-gray-600">Votos</p>
                     </div>
                   </div>
