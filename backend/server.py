@@ -2584,40 +2584,6 @@ async def get_user_following(user_id: str):
 
 # =============  MESSAGING ENDPOINTS =============
 
-@api_router.post("/messages-debug")
-async def debug_message_request(request: Request):
-    """Debug endpoint to capture exact request data"""
-    try:
-        # Log everything about the request
-        print(f"🔍 DEBUG ENDPOINT - Headers: {dict(request.headers)}")
-        print(f"🔍 DEBUG ENDPOINT - Method: {request.method}")
-        print(f"🔍 DEBUG ENDPOINT - URL: {request.url}")
-        
-        # Get raw body
-        body = await request.body()
-        print(f"🔍 DEBUG ENDPOINT - Raw body: {body}")
-        print(f"🔍 DEBUG ENDPOINT - Body length: {len(body)}")
-        
-        # Try to parse as JSON
-        try:
-            import json
-            parsed_body = json.loads(body)
-            print(f"🔍 DEBUG ENDPOINT - Parsed JSON: {parsed_body}")
-            print(f"🔍 DEBUG ENDPOINT - JSON keys: {list(parsed_body.keys())}")
-            
-            # Check each field
-            for key, value in parsed_body.items():
-                print(f"🔍 DEBUG ENDPOINT - {key}: {value} (type: {type(value)})")
-                
-        except Exception as parse_error:
-            print(f"❌ DEBUG ENDPOINT - JSON parse error: {parse_error}")
-        
-        return {"status": "debug_complete", "body_received": True}
-        
-    except Exception as e:
-        print(f"❌ DEBUG ENDPOINT - Error: {e}")
-        return {"status": "debug_error", "error": str(e)}
-
 @api_router.post("/messages")
 async def send_message(message: MessageCreate, current_user: UserResponse = Depends(get_current_user)):
     """Send a message to another user"""
