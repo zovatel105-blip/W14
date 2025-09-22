@@ -410,6 +410,28 @@ const MessagesMainPage = () => {
         });
 
         console.log('✅ Mensaje enviado exitosamente:', response);
+        
+        // Actualizar el mensaje temporal con la respuesta del servidor
+        setMessages(prevMessages =>
+          prevMessages.map(msg =>
+            msg.id === tempMessageId
+              ? { ...response, status: 'sent' }
+              : msg
+          )
+        );
+
+        // Actualizar la conversación con el último mensaje
+        setSelectedConversation(prev => ({
+          ...prev,
+          last_message: {
+            content: messageContent,
+            timestamp: response.timestamp,
+            sender_id: user.id
+          }
+        }));
+
+        // Recargar conversaciones para actualizar la lista
+        loadConversations();
       } catch (error) {
         console.error('❌ Error enviando mensaje COMPLETO:', error);
         console.error('❌ Error message:', error.message);
@@ -427,28 +449,6 @@ const MessagesMainPage = () => {
         
         throw error;
       }
-
-      // Actualizar el mensaje temporal con la respuesta del servidor
-      setMessages(prevMessages =>
-        prevMessages.map(msg =>
-          msg.id === tempMessageId
-            ? { ...response, status: 'sent' }
-            : msg
-        )
-      );
-
-      // Actualizar la conversación con el último mensaje
-      setSelectedConversation(prev => ({
-        ...prev,
-        last_message: {
-          content: messageContent,
-          timestamp: response.timestamp,
-          sender_id: user.id
-        }
-      }));
-
-      // Recargar conversaciones para actualizar la lista
-      loadConversations();
 
     } catch (error) {
       console.error('❌ Error enviando mensaje COMPLETO:', error);
