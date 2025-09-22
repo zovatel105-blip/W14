@@ -714,7 +714,21 @@ const MessagesMainPage = () => {
               
               {/* Estadísticas en gris medio y tamaño pequeño */}
               <div className="text-sm text-gray-500">
-                <span>0 votos • 0 seguidores</span>
+                {(() => {
+                  const otherUser = selectedConversation?.participants?.[0];
+                  const stats = otherUser ? userStats[otherUser.id] : null;
+                  
+                  if (stats) {
+                    return (
+                      <span>
+                        {stats.votes} voto{stats.votes !== 1 ? 's' : ''} • {stats.followers} seguidor{stats.followers !== 1 ? 'es' : ''}
+                      </span>
+                    );
+                  }
+                  
+                  // Mostrar loading o datos por defecto mientras cargan
+                  return <span>Cargando estadísticas...</span>;
+                })()}
               </div>
             </div>
           </div>
