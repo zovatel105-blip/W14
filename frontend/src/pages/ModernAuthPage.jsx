@@ -187,177 +187,236 @@ const ModernAuthPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        {/* Logo/Header */}
-        <div className="text-center mb-8">
-          <div className="mx-auto w-16 h-16 bg-gradient-to-r from-pink-500 to-purple-500 rounded-2xl flex items-center justify-center mb-4">
-            <span className="text-white text-2xl font-bold">V</span>
-          </div>
-          <h1 className="text-3xl font-bold text-white mb-2">
-            {isLogin ? 'Iniciar Sesión' : 'Crear Cuenta'}
-          </h1>
-          <p className="text-gray-300">
-            {isLogin ? 'Bienvenido de vuelta' : 'Únete a nuestra comunidad'}
-          </p>
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 flex flex-col">
+      {/* Background decorative elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Subtle geometric shapes */}
+        <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-pink-200/30 to-purple-200/30 rounded-full blur-2xl animate-pulse" />
+        <div className="absolute bottom-32 right-16 w-40 h-40 bg-gradient-to-br from-blue-200/20 to-indigo-200/20 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}} />
+        <div className="absolute top-1/2 left-1/4 w-24 h-24 bg-gradient-to-br from-orange-200/25 to-pink-200/25 rounded-full blur-2xl animate-pulse" style={{animationDelay: '2s'}} />
+        
+        {/* Floating icons */}
+        <div className="absolute top-16 right-20 text-pink-300/40 animate-bounce" style={{animationDelay: '0.5s'}}>
+          <Heart className="w-6 h-6" />
         </div>
+        <div className="absolute bottom-20 left-20 text-blue-300/40 animate-bounce" style={{animationDelay: '1.5s'}}>
+          <Camera className="w-5 h-5" />
+        </div>
+      </div>
 
-        {/* Auth Form */}
-        <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-8 shadow-2xl border border-white/20">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* General Error */}
-            {errors.general && (
-              <div className="p-3 bg-red-500/20 border border-red-500/30 rounded-lg flex items-center gap-2">
-                <AlertTriangle className="w-5 h-5 text-red-400" />
-                <span className="text-red-200 text-sm">{errors.general}</span>
-              </div>
-            )}
-
-            {/* Email Field */}
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-200">
-                Correo Electrónico
-              </label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className={`w-full pl-10 pr-4 py-3 bg-white/10 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all ${
-                    errors.email ? 'border-red-500' : 'border-white/20'
-                  }`}
-                  placeholder="ejemplo@correo.com"
-                  disabled={loading}
-                />
-              </div>
-              {errors.email && (
-                <p className="text-red-400 text-sm">{errors.email}</p>
-              )}
+      {/* Main content container */}
+      <div className="flex-1 flex items-center justify-center px-4 py-8 relative z-10">
+        <div className="w-full max-w-sm mx-auto">
+          
+          {/* App Logo/Brand */}
+          <div className="text-center mb-8">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 rounded-2xl mb-6 shadow-lg">
+              <span className="text-white text-3xl font-bold">V</span>
             </div>
-
-            {/* Register-only fields */}
-            {!isLogin && (
-              <>
-                {/* Username Field */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-200">
-                    Nombre de Usuario
-                  </label>
-                  <div className="relative">
-                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <input
-                      type="text"
-                      name="username"
-                      value={formData.username}
-                      onChange={handleChange}
-                      className={`w-full pl-10 pr-4 py-3 bg-white/10 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all ${
-                        errors.username ? 'border-red-500' : 'border-white/20'
-                      }`}
-                      placeholder="usuario123"
-                      disabled={loading}
-                    />
-                  </div>
-                  {errors.username && (
-                    <p className="text-red-400 text-sm">{errors.username}</p>
-                  )}
-                </div>
-
-                {/* Display Name Field */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-200">
-                    Nombre para Mostrar
-                  </label>
-                  <div className="relative">
-                    <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                    <input
-                      type="text"
-                      name="display_name"
-                      value={formData.display_name}
-                      onChange={handleChange}
-                      className={`w-full pl-10 pr-4 py-3 bg-white/10 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all ${
-                        errors.display_name ? 'border-red-500' : 'border-white/20'
-                      }`}
-                      placeholder="Tu Nombre"
-                      disabled={loading}
-                    />
-                  </div>
-                  {errors.display_name && (
-                    <p className="text-red-400 text-sm">{errors.display_name}</p>
-                  )}
-                </div>
-              </>
-            )}
-
-            {/* Password Field */}
-            <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-200">
-                Contraseña
-              </label>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  className={`w-full pl-10 pr-12 py-3 bg-white/10 border rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all ${
-                    errors.password ? 'border-red-500' : 'border-white/20'
-                  }`}
-                  placeholder="Mínimo 6 caracteres"
-                  disabled={loading}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-300 transition-colors"
-                  disabled={loading}
-                >
-                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                </button>
-              </div>
-              {errors.password && (
-                <p className="text-red-400 text-sm">{errors.password}</p>
-              )}
-            </div>
-
-            {/* Submit Button */}
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full bg-gradient-to-r from-purple-500 to-pink-500 text-white py-3 rounded-lg font-semibold hover:from-purple-600 hover:to-pink-600 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-transparent transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-            >
-              {loading && <Loader2 className="w-5 h-5 animate-spin" />}
-              {loading 
-                ? (isLogin ? 'Iniciando sesión...' : 'Creando cuenta...') 
-                : (isLogin ? 'Iniciar Sesión' : 'Crear Cuenta')
-              }
-            </button>
-          </form>
-
-          {/* Toggle Mode */}
-          <div className="mt-6 text-center">
-            <p className="text-gray-300">
-              {isLogin ? '¿No tienes cuenta?' : '¿Ya tienes cuenta?'}
-              {' '}
-              <button
-                type="button"
-                onClick={toggleMode}
-                disabled={loading}
-                className="text-purple-400 hover:text-purple-300 font-semibold transition-colors disabled:opacity-50"
-              >
-                {isLogin ? 'Crear una' : 'Iniciar sesión'}
-              </button>
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">
+              {isLogin ? 'Iniciar Sesión' : 'Crear Cuenta'}
+            </h1>
+            <p className="text-gray-600 text-sm">
+              {isLogin ? 'Bienvenido de vuelta a VotaTok' : 'Únete a la comunidad VotaTok'}
             </p>
           </div>
-        </div>
 
-        {/* Footer */}
-        <div className="text-center mt-8">
-          <p className="text-gray-400 text-sm">
-            Al continuar, aceptas nuestros términos y condiciones.
-          </p>
+          {/* Auth Form Card */}
+          <div className="bg-white/70 backdrop-blur-xl rounded-3xl p-8 shadow-xl border border-gray-200/50 hover:shadow-2xl transition-all duration-300">
+            <form onSubmit={handleSubmit} className="space-y-5">
+              
+              {/* General Error Alert */}
+              {errors.general && (
+                <div className="p-4 bg-red-50/80 border border-red-200/60 rounded-2xl flex items-start gap-3 backdrop-blur-sm">
+                  <AlertTriangle className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" />
+                  <span className="text-red-700 text-sm leading-relaxed">{errors.general}</span>
+                </div>
+              )}
+
+              {/* Email Field */}
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700 block">
+                  Correo Electrónico
+                </label>
+                <div className="relative group">
+                  <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-gray-600 transition-colors" />
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className={`w-full pl-12 pr-4 py-4 bg-gray-50/80 border-2 rounded-2xl text-gray-900 placeholder-gray-500 focus:outline-none focus:border-gray-400 focus:bg-white hover:bg-gray-50 transition-all duration-200 ${
+                      errors.email ? 'border-red-300 bg-red-50/50' : 'border-gray-200'
+                    }`}
+                    placeholder="ejemplo@correo.com"
+                    disabled={loading}
+                  />
+                </div>
+                {errors.email && (
+                  <p className="text-red-500 text-xs ml-1 flex items-center gap-1">
+                    <AlertTriangle className="w-3 h-3" />
+                    {errors.email}
+                  </p>
+                )}
+              </div>
+
+              {/* Register-only fields */}
+              {!isLogin && (
+                <>
+                  {/* Username Field */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-gray-700 block">
+                      Nombre de Usuario
+                    </label>
+                    <div className="relative group">
+                      <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-gray-600 transition-colors" />
+                      <input
+                        type="text"
+                        name="username"
+                        value={formData.username}
+                        onChange={handleChange}
+                        className={`w-full pl-12 pr-4 py-4 bg-gray-50/80 border-2 rounded-2xl text-gray-900 placeholder-gray-500 focus:outline-none focus:border-gray-400 focus:bg-white hover:bg-gray-50 transition-all duration-200 ${
+                          errors.username ? 'border-red-300 bg-red-50/50' : 'border-gray-200'
+                        }`}
+                        placeholder="usuario123"
+                        disabled={loading}
+                      />
+                    </div>
+                    {errors.username && (
+                      <p className="text-red-500 text-xs ml-1 flex items-center gap-1">
+                        <AlertTriangle className="w-3 h-3" />
+                        {errors.username}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Display Name Field */}
+                  <div className="space-y-2">
+                    <label className="text-sm font-semibold text-gray-700 block">
+                      Nombre para Mostrar
+                    </label>
+                    <div className="relative group">
+                      <User className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-gray-600 transition-colors" />
+                      <input
+                        type="text"
+                        name="display_name"
+                        value={formData.display_name}
+                        onChange={handleChange}
+                        className={`w-full pl-12 pr-4 py-4 bg-gray-50/80 border-2 rounded-2xl text-gray-900 placeholder-gray-500 focus:outline-none focus:border-gray-400 focus:bg-white hover:bg-gray-50 transition-all duration-200 ${
+                          errors.display_name ? 'border-red-300 bg-red-50/50' : 'border-gray-200'
+                        }`}
+                        placeholder="Tu Nombre"
+                        disabled={loading}
+                      />
+                    </div>
+                    {errors.display_name && (
+                      <p className="text-red-500 text-xs ml-1 flex items-center gap-1">
+                        <AlertTriangle className="w-3 h-3" />
+                        {errors.display_name}
+                      </p>
+                    )}
+                  </div>
+                </>
+              )}
+
+              {/* Password Field */}
+              <div className="space-y-2">
+                <label className="text-sm font-semibold text-gray-700 block">
+                  Contraseña
+                </label>
+                <div className="relative group">
+                  <Lock className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 group-focus-within:text-gray-600 transition-colors" />
+                  <input
+                    type={showPassword ? 'text' : 'password'}
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    className={`w-full pl-12 pr-14 py-4 bg-gray-50/80 border-2 rounded-2xl text-gray-900 placeholder-gray-500 focus:outline-none focus:border-gray-400 focus:bg-white hover:bg-gray-50 transition-all duration-200 ${
+                      errors.password ? 'border-red-300 bg-red-50/50' : 'border-gray-200'
+                    }`}
+                    placeholder="Mínimo 6 caracteres"
+                    disabled={loading}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors p-1"
+                    disabled={loading}
+                  >
+                    {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                  </button>
+                </div>
+                {errors.password && (
+                  <p className="text-red-500 text-xs ml-1 flex items-center gap-1">
+                    <AlertTriangle className="w-3 h-3" />
+                    {errors.password}
+                  </p>
+                )}
+              </div>
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full bg-gradient-to-r from-gray-900 to-gray-800 text-white py-4 rounded-2xl font-semibold hover:from-gray-800 hover:to-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-300/50 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 transform hover:scale-[1.02] active:scale-[0.98] shadow-lg hover:shadow-xl"
+              >
+                {loading && <Loader2 className="w-5 h-5 animate-spin" />}
+                {loading 
+                  ? (isLogin ? 'Iniciando sesión...' : 'Creando cuenta...') 
+                  : (isLogin ? 'Iniciar Sesión' : 'Crear Cuenta')
+                }
+              </button>
+
+              {/* Divider */}
+              <div className="flex items-center gap-4 my-6">
+                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
+                <span className="text-sm text-gray-500 font-medium px-2">o continúa con</span>
+                <div className="flex-1 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
+              </div>
+
+              {/* Google OAuth Button */}
+              <button
+                type="button"
+                onClick={() => {
+                  const currentUrl = window.location.origin;
+                  const redirectUrl = `${currentUrl}/profile`;
+                  const googleAuthUrl = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(redirectUrl)}`;
+                  window.location.href = googleAuthUrl;
+                }}
+                disabled={loading}
+                className="w-full bg-white border-2 border-gray-200 text-gray-700 py-4 rounded-2xl font-semibold hover:bg-gray-50 hover:border-gray-300 focus:outline-none focus:ring-4 focus:ring-gray-200/50 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 transform hover:scale-[1.02] active:scale-[0.98] shadow-sm hover:shadow-md"
+              >
+                <GoogleIcon className="w-5 h-5" />
+                <span>Continuar con Google</span>
+              </button>
+            </form>
+
+            {/* Toggle Auth Mode */}
+            <div className="mt-8 text-center">
+              <p className="text-gray-600 text-sm">
+                {isLogin ? '¿No tienes cuenta?' : '¿Ya tienes cuenta?'}
+                {' '}
+                <button
+                  type="button"
+                  onClick={toggleMode}
+                  disabled={loading}
+                  className="text-gray-900 hover:text-gray-700 font-semibold transition-colors disabled:opacity-50 underline decoration-2 underline-offset-2 hover:decoration-gray-400"
+                >
+                  {isLogin ? 'Crear una' : 'Iniciar sesión'}
+                </button>
+              </p>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="text-center mt-8">
+            <p className="text-gray-500 text-xs leading-relaxed max-w-xs mx-auto">
+              Al continuar, aceptas nuestros{' '}
+              <span className="text-gray-700 font-medium">términos de servicio</span>{' '}
+              y{' '}
+              <span className="text-gray-700 font-medium">política de privacidad</span>.
+            </p>
+          </div>
         </div>
       </div>
     </div>
