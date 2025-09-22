@@ -213,7 +213,32 @@ const MessagesMainPage = () => {
     }
   }, [pendingUserToOpen, conversations, user]);
 
-  // Función para enviar mensaje
+  // Cargar mensajes de una conversación
+  const loadMessages = async (conversationId) => {
+    try {
+      console.log('📥 Cargando mensajes para conversación:', conversationId);
+      
+      // Si es una conversación nueva (id empieza con 'new-'), no hay mensajes que cargar
+      if (conversationId.startsWith('new-')) {
+        setMessages([]);
+        return;
+      }
+      
+      const messagesData = await apiRequest(`/api/conversations/${conversationId}/messages`);
+      console.log('✅ Mensajes cargados:', messagesData.length);
+      setMessages(messagesData || []);
+    } catch (error) {
+      console.error('❌ Error cargando mensajes:', error);
+      setMessages([]);
+    }
+  };
+
+  // Cuando se selecciona una conversación, cargar sus mensajes
+  useEffect(() => {
+    if (selectedConversation) {
+      loadMessages(selectedConversation.id);
+    }
+  }, [selectedConversation]);
   const handleSendMessage = async () => {
     if (!newMessage.trim() || !selectedConversation) return;
 
