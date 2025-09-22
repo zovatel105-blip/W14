@@ -42,7 +42,17 @@ export const AuthProvider = ({ children }) => {
 
   // Get backend URL with fallback
   const getBackendUrl = useCallback(() => {
-    return AppConfig.BACKEND_URL;
+    // Debug: Log what we're getting from different sources
+    const envUrl = process.env.REACT_APP_BACKEND_URL;
+    const configUrl = AppConfig.BACKEND_URL;
+    
+    console.log('🔍 DEBUG - Backend URL sources:', {
+      'process.env.REACT_APP_BACKEND_URL': envUrl,
+      'AppConfig.BACKEND_URL': configUrl
+    });
+    
+    // Return the URL with proper fallback
+    return envUrl || configUrl || 'http://localhost:8001';
   }, []);
 
   // Clear error state
