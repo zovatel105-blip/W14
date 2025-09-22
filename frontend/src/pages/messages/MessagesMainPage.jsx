@@ -635,21 +635,10 @@ const MessagesMainPage = () => {
                 onChange={(e) => setNewMessage(e.target.value)}
                 placeholder="Escribe un mensaje..."
                 className="flex-1 px-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                onKeyPress={(e) => {
-                  if (e.key === 'Enter' && newMessage.trim()) {
-                    // TODO: Implementar envío de mensaje
-                    console.log('Sending message:', newMessage);
-                    setNewMessage('');
-                  }
-                }}
+                onKeyPress={handleKeyPress}
               />
               <button
-                onClick={() => {
-                  if (newMessage.trim()) {
-                    console.log('Sending message:', newMessage);
-                    setNewMessage('');
-                  }
-                }}
+                onClick={handleSendMessage}
                 disabled={!newMessage.trim()}
                 className="p-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
