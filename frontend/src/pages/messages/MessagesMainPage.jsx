@@ -9,6 +9,10 @@ const MessagesMainPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { user } = useAuth();
+  
+  // Debug: Log inicial
+  console.log('🔍 MessagesMainPage - URL actual:', location.pathname + location.search);
+  console.log('🔍 MessagesMainPage - Usuario:', user?.username);
   const [conversations, setConversations] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedConversation, setSelectedConversation] = useState(null);
