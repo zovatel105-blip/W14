@@ -240,14 +240,19 @@ const MessagesMainPage = () => {
   const loadUserStats = async (userId) => {
     try {
       console.log('📊 Cargando estadísticas para usuario:', userId);
+      console.log('📊 Tipo de userId:', typeof userId);
+      console.log('📊 UserStats cache actual:', userStats);
       
       // Si ya tenemos las estadísticas cached, no recargar
       if (userStats[userId]) {
+        console.log('📊 Estadísticas encontradas en cache:', userStats[userId]);
         return userStats[userId];
       }
       
       // Cargar estadísticas del usuario desde el backend
+      console.log('📊 Haciendo request a API:', `/api/user/profile/${userId}`);
       const userProfile = await apiRequest(`/api/user/profile/${userId}`);
+      console.log('📊 Respuesta del API completa:', userProfile);
       
       // Extraer estadísticas del perfil del usuario
       const stats = {
@@ -257,17 +262,24 @@ const MessagesMainPage = () => {
         votes_made: userProfile.votes_count || 0
       };
       
-      console.log('✅ Estadísticas cargadas:', stats);
+      console.log('✅ Estadísticas procesadas:', stats);
       
       // Cachear las estadísticas
-      setUserStats(prev => ({
-        ...prev,
-        [userId]: stats
-      }));
+      setUserStats(prev => {
+        const newStats = {
+          ...prev,
+          [userId]: stats
+        };
+        console.log('📊 Actualizando cache con:', newStats);
+        return newStats;
+      });
       
       return stats;
     } catch (error) {
-      console.error('❌ Error cargando estadísticas:', error);
+      console.error('❌ Error cargando estadísticas completo:', error);
+      console.error('❌ Error message:', error.message);
+      console.error('❌ Error stack:', error.stack);
+      
       // Retornar estadísticas por defecto en caso de error
       const defaultStats = {
         votes: 0,
@@ -275,6 +287,8 @@ const MessagesMainPage = () => {
         following: 0,
         votes_made: 0
       };
+      
+      console.log('📊 Usando estadísticas por defecto:', defaultStats);
       
       // Cachear las estadísticas por defecto para evitar llamadas repetidas
       setUserStats(prev => ({
