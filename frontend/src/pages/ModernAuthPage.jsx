@@ -125,8 +125,8 @@ const ModernAuthPage = () => {
             title: "¡Cuenta creada exitosamente!",
             description: `Bienvenido ${result.user.display_name}, tu cuenta ha sido registrada.`,
           });
-          // Redirect to dashboard after successful registration
-          navigate('/dashboard');
+          // Redirect to feed after successful registration
+          navigate('/feed');
         } else {
           // Handle registration errors
           handleAuthError(result.error);
