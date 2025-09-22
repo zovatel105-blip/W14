@@ -165,36 +165,53 @@ const MessagesMainPage = () => {
     }
   }, [location.state, navigate, location.pathname]);
 
-  // Manejar parámetro user en URL para abrir chat directo
+  // Estado para manejar navegación directa a usuario
+  const [pendingUserToOpen, setPendingUserToOpen] = useState(null);
+
+  // Detectar parámetro user en URL inmediatamente
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const targetUsername = urlParams.get('user');
     
-    if (targetUsername && user) {
-      console.log('🔍 Detectado parámetro user en URL:', targetUsername);
-      
-      // Si ya tenemos conversaciones cargadas, buscar inmediatamente
-      if (conversations.length > 0) {
-        const existingConversation = conversations.find(conv => {
-          const otherUser = conv.participants?.find(p => p.id !== user?.id);
-          return otherUser?.username === targetUsername;
-        });
-
-        if (existingConversation) {
-          console.log('✅ Conversación existente encontrada:', existingConversation.id);
-          setSelectedConversation(existingConversation);
-          setShowChat(true);
-          navigate('/messages', { replace: true });
-          return;
-        }
-      }
-      
-      // Si no encontramos conversación existente, iniciar nueva conversación
-      console.log('🆕 Iniciando nueva conversación con:', targetUsername);
-      handleStartNewConversationWithUser(targetUsername);
+    console.log('🔍 useEffect URL - Parámetro user detectado:', targetUsername);
+    console.log('🔍 useEffect URL - location.search:', location.search);
+    
+    if (targetUsername) {
+      setPendingUserToOpen(targetUsername);
+      // Limpiar la URL inmediatamente
       navigate('/messages', { replace: true });
     }
-  }, [location.search, conversations, user, navigate]);
+  }, [location.search, navigate]);
+
+  // Procesar usuario pendiente cuando las conversaciones estén listas
+  useEffect(() => {
+    if (pendingUserToOpen && user) {
+      console.log('🔍 Procesando usuario pendiente:', pendingUserToOpen);
+      console.log('🔍 Conversaciones disponibles:', conversations.length);
+      
+      // Buscar conversación existente
+      const existingConversation = conversations.find(conv => {
+        const otherUser = conv.participants?.find(p => p.id !== user?.id);
+        const found = otherUser?.username === pendingUserToOpen;
+        if (found) {
+          console.log('✅ Conversación encontrada con:', otherUser.username);
+        }
+        return found;
+      });
+
+      if (existingConversation) {
+        console.log('✅ Abriendo conversación existente:', existingConversation.id);
+        setSelectedConversation(existingConversation);
+        setShowChat(true);
+      } else {
+        console.log('🆕 Creando nueva conversación con:', pendingUserToOpen);
+        handleStartNewConversationWithUser(pendingUserToOpen);
+      }
+      
+      // Limpiar usuario pendiente
+      setPendingUserToOpen(null);
+    }
+  }, [pendingUserToOpen, conversations, user]);
 
   // Función para iniciar nueva conversación con un usuario específico
   const handleStartNewConversationWithUser = async (username) => {
