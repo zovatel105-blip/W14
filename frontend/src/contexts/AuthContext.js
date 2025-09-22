@@ -159,9 +159,9 @@ export const AuthProvider = ({ children }) => {
       } else if (response.status === 401) {
         errorType = ERROR_TYPES.AUTHENTICATION;
         errorMessage = 'Invalid credentials. Please check your email and password.';
-      } else if (response.status === 400) {
+      } else if (response.status === 400 || response.status === 422) {
         errorType = ERROR_TYPES.VALIDATION;
-        errorMessage = error.message || 'Invalid data provided.';
+        errorMessage = error.message || 'Invalid data provided. Please check all required fields.';
       }
     } else {
       errorMessage = error.message || errorMessage;
