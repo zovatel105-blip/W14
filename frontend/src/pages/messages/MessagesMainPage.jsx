@@ -366,6 +366,7 @@ const MessagesMainPage = () => {
 
     try {
       console.log('📤 Enviando mensaje:', messageContent);
+      console.log('🔍 Conversación actual:', selectedConversation);
       
       // Agregar mensaje temporal a la UI inmediatamente
       setMessages(prevMessages => [...prevMessages, tempMessage]);
@@ -376,12 +377,13 @@ const MessagesMainPage = () => {
       
       console.log('🔍 Debug recipient:', {
         conversationId: selectedConversation.id,
+        isNewConversation: selectedConversation.isNewConversation,
         participants: selectedConversation.participants,
         userId: user.id,
         recipient: recipient,
         recipientId: recipient?.id
       });
-      
+
       if (!recipient) {
         throw new Error('No se pudo encontrar el destinatario');
       }
@@ -395,11 +397,11 @@ const MessagesMainPage = () => {
         throw new Error('ID del destinatario no válido');
       }
       
-      if (!messageContent || messageContent.trim().length === 0) {
+      if (!messageContent || messageContent.length === 0) {
         throw new Error('El mensaje no puede estar vacío');
       }
       
-      if (messageContent.trim().length > 1000) {
+      if (messageContent.length > 1000) {
         throw new Error('El mensaje es demasiado largo (máximo 1000 caracteres)');
       }
       
@@ -409,10 +411,10 @@ const MessagesMainPage = () => {
         throw new Error(`ID del destinatario tiene formato inválido: ${recipient.id}`);
       }
 
-      // Enviar mensaje al backend
+      // Enviar mensaje al backend - EL BACKEND CREARÁ LA CONVERSACIÓN AUTOMÁTICAMENTE
       const messagePayload = {
         recipient_id: recipient.id,
-        content: messageContent.trim() // Limpiar espacios
+        content: messageContent
       };
       
       console.log('📤 Payload enviando al backend:', messagePayload);
@@ -430,11 +432,21 @@ const MessagesMainPage = () => {
 
         console.log('✅ Mensaje enviado exitosamente:', response);
         
+        // Si era una conversación nueva, actualizar con los datos reales del backend
+        if (selectedConversation.isNewConversation && response.conversation_id) {
+          console.log('🔄 Actualizando conversación nueva con ID real:', response.conversation_id);
+          setSelectedConversation(prev => ({
+            ...prev,
+            id: response.conversation_id,
+            isNewConversation: false
+          }));
+        }
+        
         // Actualizar el mensaje temporal con la respuesta del servidor
         setMessages(prevMessages =>
           prevMessages.map(msg =>
             msg.id === tempMessageId
-              ? { ...response, status: 'sent' }
+              ? { ...response, status: 'sent', id: response.message_id }
               : msg
           )
         );
@@ -473,11 +485,6 @@ const MessagesMainPage = () => {
       console.error('❌ Error enviando mensaje COMPLETO:', error);
       console.error('❌ Error message:', error.message);
       console.error('❌ Error stack:', error.stack);
-      
-      // Si es un error HTTP, intentar obtener más detalles
-      if (error.message && error.message.includes('422')) {
-        console.error('❌ Error 422 detectado - problema de validación en backend');
-      }
       
       // Marcar mensaje como fallido
       setMessages(prevMessages =>
