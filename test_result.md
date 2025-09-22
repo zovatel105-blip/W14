@@ -957,7 +957,7 @@ Layout "off" - Carrusel Horizontal:
 - **Add Functionality**: `handleAddSlot()` con validación y feedback
 - **Max Limit**: `Math.min(totalSlots, 6)` en `getSlotsCount()`
 
-## user_problem_statement: "Create test users with real avatar URLs and create test data to demonstrate that the chat avatar system works correctly: 1. Create 2-3 test users with real avatar_url configured (use sample profile images) 2. Create conversations between demo user and these test users 3. Create follower relationships so demo user gets 'new follower' notifications with real avatars 4. Verify that the conversations endpoint returns users with avatar_url 5. Test that the system correctly displays real profile pictures instead of just initials"
+## user_problem_statement: "Un authcontext mejorado que no presente errores - Crear un AuthContext mejorado que funcione sin errores durante el proceso de registro"
 
 ## backend:
   - task: "Demo login functionality for El Susurro Inteligente access"
