@@ -167,6 +167,9 @@ const MessagesMainPage = () => {
 
   // Estado para manejar navegación directa a usuario
   const [pendingUserToOpen, setPendingUserToOpen] = useState(null);
+  
+  // Estado para estadísticas del usuario en chat
+  const [userStats, setUserStats] = useState({});
 
   // Detectar parámetro user en URL inmediatamente
   useEffect(() => {
