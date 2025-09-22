@@ -395,6 +395,15 @@ const ProfilePage = () => {
     }
   }, [userId, navigate, toast]);
 
+  // Debug useEffect para verificar estado del perfil
+  useEffect(() => {
+    console.log('🔍 ProfilePage DEBUG - Estado actual:');
+    console.log('  - userId (from URL):', userId);
+    console.log('  - viewedUser:', viewedUser);
+    console.log('  - authUser:', authUser?.username, authUser?.id);
+    console.log('  - isOwnProfile:', isOwnProfile);
+  }, [userId, viewedUser, authUser, isOwnProfile]);
+
   // Define isOwnProfile early - needed by useEffect hooks
   const isOwnProfile = !userId || (authUser && (userId === authUser?.username || userId === authUser?.id));
 
