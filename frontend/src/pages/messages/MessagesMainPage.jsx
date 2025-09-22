@@ -752,7 +752,7 @@ const MessagesMainPage = () => {
                   console.log('🎯 UserStats actual:', userStats);
                   
                   const stats = otherUser ? userStats[otherUser.id] : null;
-                  console.log('🎯 Stats encontradas:', stats);
+                  console.log('🎯 Stats encontradas para', otherUser?.id, ':', stats);
                   
                   if (stats) {
                     const displayText = `${stats.votes} voto${stats.votes !== 1 ? 's' : ''} • ${stats.followers} seguidor${stats.followers !== 1 ? 'es' : ''}`;
@@ -765,7 +765,7 @@ const MessagesMainPage = () => {
                   }
                   
                   // Mostrar loading o datos por defecto mientras cargan
-                  console.log('🎯 Mostrando loading...');
+                  console.log('🎯 Mostrando loading... otherUser presente:', !!otherUser);
                   return <span>Cargando estadísticas...</span>;
                 })()}
               </div>
