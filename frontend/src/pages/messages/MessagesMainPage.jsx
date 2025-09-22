@@ -247,14 +247,14 @@ const MessagesMainPage = () => {
       }
       
       // Cargar estadísticas del usuario desde el backend
-      const userProfile = await apiRequest(`/api/users/${userId}/profile`);
+      const userProfile = await apiRequest(`/api/user/profile/${userId}`);
       
-      // Calcular estadísticas reales
+      // Extraer estadísticas del perfil del usuario
       const stats = {
         votes: userProfile.total_votes || 0,
         followers: userProfile.followers_count || 0,
         following: userProfile.following_count || 0,
-        posts: userProfile.posts_count || 0
+        votes_made: userProfile.votes_count || 0
       };
       
       console.log('✅ Estadísticas cargadas:', stats);
@@ -269,12 +269,20 @@ const MessagesMainPage = () => {
     } catch (error) {
       console.error('❌ Error cargando estadísticas:', error);
       // Retornar estadísticas por defecto en caso de error
-      return {
+      const defaultStats = {
         votes: 0,
         followers: 0,
         following: 0,
-        posts: 0
+        votes_made: 0
       };
+      
+      // Cachear las estadísticas por defecto para evitar llamadas repetidas
+      setUserStats(prev => ({
+        ...prev,
+        [userId]: defaultStats
+      }));
+      
+      return defaultStats;
     }
   };
 
