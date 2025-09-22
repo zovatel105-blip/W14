@@ -1335,7 +1335,13 @@ const ProfilePage = () => {
                   <Button 
                     variant="outline" 
                     className="h-11 sm:h-12 rounded-2xl border-gray-200 hover:bg-gray-50 font-medium text-sm"
-                    onClick={() => navigate(`/messages?user=${viewedUser?.username || userId}`)}
+                    onClick={() => {
+                      const targetUser = viewedUser?.username || userId;
+                      console.log('🔍 ProfilePage - Enviando mensaje a:', targetUser);
+                      console.log('🔍 ProfilePage - viewedUser:', viewedUser);
+                      console.log('🔍 ProfilePage - userId:', userId);
+                      navigate(`/messages?user=${targetUser}`);
+                    }}
                   >
                     <MessageCircle className="w-4 h-4 mr-2" strokeWidth={1.5} />
                     Mensaje
