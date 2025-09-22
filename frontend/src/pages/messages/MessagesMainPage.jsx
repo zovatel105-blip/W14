@@ -390,10 +390,29 @@ const MessagesMainPage = () => {
         throw new Error('El destinatario no tiene ID válido');
       }
 
+      // Validar datos antes de enviar
+      if (!recipient.id) {
+        throw new Error('ID del destinatario no válido');
+      }
+      
+      if (!messageContent || messageContent.trim().length === 0) {
+        throw new Error('El mensaje no puede estar vacío');
+      }
+      
+      if (messageContent.trim().length > 1000) {
+        throw new Error('El mensaje es demasiado largo (máximo 1000 caracteres)');
+      }
+      
+      // Verificar que recipient.id sea un UUID válido
+      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+      if (!uuidRegex.test(recipient.id)) {
+        throw new Error(`ID del destinatario tiene formato inválido: ${recipient.id}`);
+      }
+
       // Enviar mensaje al backend
       const messagePayload = {
         recipient_id: recipient.id,
-        content: messageContent
+        content: messageContent.trim() // Limpiar espacios
       };
       
       console.log('📤 Payload enviando al backend:', messagePayload);
