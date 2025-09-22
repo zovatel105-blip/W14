@@ -406,6 +406,9 @@ const ProfilePage = () => {
   // Define isOwnProfile early - needed by useEffect hooks
   const isOwnProfile = !userId || (authUser && (userId === authUser?.username || userId === authUser?.id));
 
+  // Estado temporal para debug visual en móvil
+  const [debugInfo, setDebugInfo] = useState(null);
+
   // Debug useEffect para verificar estado del perfil
   useEffect(() => {
     console.log('🔍 ProfilePage DEBUG - Estado actual:');
