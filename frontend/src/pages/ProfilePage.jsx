@@ -1792,6 +1792,24 @@ const ProfilePage = () => {
           onStoryCreated={handleStoryCreated}
         />
       )}
+
+      {/* DEBUG INFO TEMPORAL PARA MÓVIL */}
+      {debugInfo && (
+        <div className="fixed bottom-4 left-4 right-4 bg-black bg-opacity-80 text-white p-3 rounded-lg z-50 text-xs max-h-32 overflow-y-auto">
+          <div className="font-bold mb-1">DEBUG INFO:</div>
+          <div>URL userId: {debugInfo.userId || 'null'}</div>
+          <div>ViewedUser exists: {debugInfo.viewedUserExists ? 'YES' : 'NO'}</div>
+          <div>ViewedUser username: {debugInfo.viewedUsername || 'null'}</div>
+          <div>Auth username: {debugInfo.authUsername || 'null'}</div>
+          <div>Is own profile: {debugInfo.isOwnProfile ? 'YES' : 'NO'}</div>
+          <button 
+            onClick={() => setDebugInfo(null)}
+            className="absolute top-1 right-2 text-white opacity-60 hover:opacity-100"
+          >
+            ×
+          </button>
+        </div>
+      )}
     </>
   );
 };
