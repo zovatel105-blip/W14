@@ -170,6 +170,9 @@ const MessagesMainPage = () => {
   
   // Estado para estadísticas del usuario en chat
   const [userStats, setUserStats] = useState({});
+  
+  // Estado temporal para debug en móvil
+  const [chatDebugInfo, setChatDebugInfo] = useState(null);
 
   // Detectar parámetro user en URL inmediatamente
   useEffect(() => {
