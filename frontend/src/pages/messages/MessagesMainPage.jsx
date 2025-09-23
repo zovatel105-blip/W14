@@ -51,6 +51,68 @@ const MessagesMainPage = () => {
     return response.json();
   };
 
+  // Función para buscar usuarios
+  const searchUsers = async (query) => {
+    if (!query.trim()) {
+      setSearchResults([]);
+      return;
+    }
+
+    try {
+      setSearchLoading(true);
+      const results = await apiRequest(`/api/users/search?q=${encodeURIComponent(query)}`);
+      // Filtrar el usuario actual de los resultados
+      const filteredResults = results.filter(result => result.id !== user?.id);
+      setSearchResults(filteredResults);
+    } catch (error) {
+      console.error('Error searching users:', error);
+      setSearchResults([]);
+    } finally {
+      setSearchLoading(false);
+    }
+  };
+
+  // Función para iniciar conversación con un usuario
+  const startConversation = async (selectedUser) => {
+    try {
+      setShowNewChatModal(false);
+      setSearchQuery('');
+      setSearchResults([]);
+
+      // Crear una conversación temporal para mostrar la interfaz de chat
+      const tempConversation = {
+        id: null, // null indica que es una conversación nueva
+        participants: [
+          {
+            id: selectedUser.id,
+            username: selectedUser.username,
+            display_name: selectedUser.display_name || selectedUser.username,
+            avatar_url: selectedUser.avatar_url
+          }
+        ],
+        last_message: null,
+        last_message_at: null,
+        unread_count: 0
+      };
+
+      setSelectedConversation(tempConversation);
+      setShowChat(true);
+      setMessages([]);
+
+      console.log('🔍 Starting conversation with:', selectedUser.username);
+
+    } catch (error) {
+      console.error('Error starting conversation:', error);
+    }
+  };
+
+  // Función para cerrar el modal y limpiar búsqueda
+  const closeNewChatModal = () => {
+    setShowNewChatModal(false);
+    setSearchQuery('');
+    setSearchResults([]);
+  };
+
   // Función para obtener avatar del usuario
   const getAvatarForUser = (user) => {
     if (!user) return '👤';
