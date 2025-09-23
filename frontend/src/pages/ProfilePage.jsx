@@ -543,12 +543,14 @@ const ProfilePage = () => {
       // Convertir el formato interno al formato esperado por el backend
       const backendFormat = {};
       Object.entries(socialLinks).forEach(([key, value]) => {
-        if (typeof value === 'object' && value.url) {
-          backendFormat[key] = value.url;
-        } else if (typeof value === 'string') {
-          backendFormat[key] = value;
+        if (typeof value === 'object' && value.url && value.url.trim()) {
+          backendFormat[key] = value.url.trim();
+        } else if (typeof value === 'string' && value.trim()) {
+          backendFormat[key] = value.trim();
         }
       });
+
+      console.log('🔗 Sending social links to backend:', backendFormat);
 
       const response = await fetch(config.API_ENDPOINTS.USERS.UPDATE_SOCIAL_LINKS, {
         method: 'PUT',
@@ -559,36 +561,43 @@ const ProfilePage = () => {
         body: JSON.stringify(backendFormat)
       });
 
+      console.log('🌐 Response status:', response.status);
+      
       if (!response.ok) {
-        throw new Error('Failed to save social links');
+        const errorText = await response.text();
+        console.error('❌ Backend error:', errorText);
+        throw new Error(`Failed to save social links: ${response.status} - ${errorText}`);
       }
 
       const savedLinks = await response.json();
+      console.log('✅ Saved links from backend:', savedLinks);
       
-      // Mantener la información local (nombres y colores)
+      // Actualizar el estado local manteniendo nombres y colores
       const updatedLinks = {};
       Object.entries(socialLinks).forEach(([key, value]) => {
-        if (typeof value === 'object') {
+        if (typeof value === 'object' && savedLinks[key]) {
           updatedLinks[key] = {
             ...value,
-            url: savedLinks[key] || value.url
+            url: savedLinks[key]
           };
+        } else if (typeof value === 'string' && savedLinks[key]) {
+          updatedLinks[key] = savedLinks[key];
         }
       });
+      
       setSocialLinks(updatedLinks);
+      console.log('🔄 Updated local state:', updatedLinks);
       
       toast({
         title: "Enlaces guardados",
-        description: "Tus enlaces de redes sociales han sido actualizados",
+        description: "Tus enlaces de redes sociales han sido actualizados correctamente",
       });
       
-      console.log('🔗 Social links saved:', savedLinks);
-      
     } catch (error) {
-      console.error('Error saving social links:', error);
+      console.error('❌ Error saving social links:', error);
       toast({
-        title: "Error",
-        description: "No se pudieron guardar los enlaces. Intenta de nuevo.",
+        title: "Error al guardar",
+        description: `No se pudieron guardar los enlaces: ${error.message}`,
         variant: "destructive",
       });
     } finally {
