@@ -693,6 +693,47 @@ const TikTokScrollView = ({
   const [savedPolls, setSavedPolls] = useState(new Set()); // Track saved polls locally
   const { user: currentUser } = useAuth();
 
+  // Load user's saved polls on component mount
+  useEffect(() => {
+    const loadSavedPolls = async () => {
+      if (!currentUser?.id) return;
+      
+      try {
+        console.log('🔖 TikTokScrollView: Loading saved polls for user:', currentUser.id);
+        
+        // Get current user ID from token
+        const token = localStorage.getItem('token');
+        if (!token) return;
+        
+        const tokenParts = token.split('.');
+        if (tokenParts.length !== 3) return;
+        
+        const payload = JSON.parse(atob(tokenParts[1]));
+        const userId = payload.sub;
+        
+        if (!userId) return;
+        
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/users/${userId}/saved-polls`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (response.ok) {
+          const result = await response.json();
+          const savedPollIds = result.saved_polls?.map(poll => poll.id) || [];
+          console.log('🔖 TikTokScrollView: Loaded saved poll IDs:', savedPollIds);
+          setSavedPolls(new Set(savedPollIds));
+        }
+      } catch (error) {
+        console.error('🔖 TikTokScrollView: Error loading saved polls:', error);
+      }
+    };
+    
+    loadSavedPolls();
+  }, [currentUser?.id]);
+
   // DEBUG: Monitorear cambios de activeIndex para sincronización de audio
   useEffect(() => {
     console.log(`🎯 ACTIVE INDEX CHANGED: ${activeIndex}`);
