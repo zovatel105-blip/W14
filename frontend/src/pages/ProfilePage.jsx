@@ -540,13 +540,23 @@ const ProfilePage = () => {
 
     setSavingSocialLinks(true);
     try {
+      // Convertir el formato interno al formato esperado por el backend
+      const backendFormat = {};
+      Object.entries(socialLinks).forEach(([key, value]) => {
+        if (typeof value === 'object' && value.url) {
+          backendFormat[key] = value.url;
+        } else if (typeof value === 'string') {
+          backendFormat[key] = value;
+        }
+      });
+
       const response = await fetch(config.API_ENDPOINTS.USERS.UPDATE_SOCIAL_LINKS, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
-        body: JSON.stringify(socialLinks)
+        body: JSON.stringify(backendFormat)
       });
 
       if (!response.ok) {
@@ -554,7 +564,18 @@ const ProfilePage = () => {
       }
 
       const savedLinks = await response.json();
-      setSocialLinks(savedLinks);
+      
+      // Mantener la información local (nombres y colores)
+      const updatedLinks = {};
+      Object.entries(socialLinks).forEach(([key, value]) => {
+        if (typeof value === 'object') {
+          updatedLinks[key] = {
+            ...value,
+            url: savedLinks[key] || value.url
+          };
+        }
+      });
+      setSocialLinks(updatedLinks);
       
       toast({
         title: "Enlaces guardados",
