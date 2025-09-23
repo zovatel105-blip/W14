@@ -29,6 +29,7 @@ import numpy as np
 # Import models
 from models import (
     UserProfile, User, UserCreate, UserLogin, UserResponse, Token,
+    UserSocialLinks, SocialLinksUpdate, SocialLinksResponse,
     Message, MessageCreate, Conversation, ConversationResponse,
     UserUpdate, PasswordChange, UserSettings,
     Comment, CommentCreate, CommentUpdate, CommentResponse, CommentLike,
