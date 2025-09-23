@@ -132,16 +132,17 @@ const TikTokPollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, onCr
 
   // Get user ID from poll author
   const getAuthorUserId = () => {
-    // Primero intentar con el objeto author si existe
+    // Primero intentar con el objeto author si existe (priorizar UUID)
     if (poll.author && poll.author.id) {
       return poll.author.id;
     }
-    if (poll.author && poll.author.username) {
-      return poll.author.username;
-    }
-    // Luego intentar con authorUser (legacy support)
+    // Luego intentar con authorUser UUID (legacy support)
     if (poll.authorUser && poll.authorUser.id) {
       return poll.authorUser.id;
+    }
+    // Solo usar username si no hay UUID disponible
+    if (poll.author && poll.author.username) {
+      return poll.author.username;
     }
     if (poll.authorUser && poll.authorUser.username) {
       return poll.authorUser.username;
