@@ -149,22 +149,24 @@ export const FollowProvider = ({ children }) => {
         if (user) {
           userId = user.id;
         } else {
-          return false;
+          return { is_following: false, follow_id: null };
         }
       }
 
       const response = await apiRequest(`/api/users/${userId}/follow-status`);
-      // Update local cache with both keys
+      
+      // Update local state immediately with the response
       setFollowingUsers(prev => {
         const newMap = new Map(prev);
         newMap.set(userId, response.is_following);
         newMap.set(originalKey, response.is_following);
         return newMap;
       });
-      return response.is_following;
+      
+      return response;
     } catch (error) {
       console.error('Error getting follow status:', error);
-      return false;
+      return { is_following: false, follow_id: null };
     }
   };
 
