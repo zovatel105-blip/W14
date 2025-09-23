@@ -14405,6 +14405,10 @@ def main():
     print("\n🎨 TESTING: Chat Avatar System with Real URLs")
     test_results["chat_avatar_system"] = test_chat_avatar_system_with_real_urls(base_url)
     
+    # Run saved polls functionality test
+    print("\n💾 TESTING: Saved Polls Functionality")
+    test_results["saved_polls_functionality"] = test_saved_polls_functionality(base_url)
+    
     # Final summary
     print("\n" + "=" * 80)
     print("📊 FINAL TEST RESULTS SUMMARY")
