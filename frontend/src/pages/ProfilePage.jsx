@@ -1630,6 +1630,16 @@ const ProfilePage = () => {
                       <Link className="w-4 h-4" strokeWidth={1.5} />
                     </TabsTrigger>
                   )}
+                  
+                  {/* Pestaña de Enlaces Sociales para visitantes */}
+                  {!isOwnProfile && Object.keys(socialLinks).length > 0 && (
+                    <TabsTrigger 
+                      value="social" 
+                      className="rounded-xl py-3 text-sm font-medium data-[state=active]:bg-white data-[state=active]:shadow-sm"
+                    >
+                      <Link className="w-4 h-4" strokeWidth={1.5} />
+                    </TabsTrigger>
+                  )}
                 </TabsList>
               </div>
 
