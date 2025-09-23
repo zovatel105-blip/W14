@@ -1805,138 +1805,90 @@ const ProfilePage = () => {
                         <p className="text-sm text-gray-600">Agrega los enlaces a tus perfiles de redes sociales</p>
                       </div>
                       
-                      {/* Formulario de Enlaces Sociales */}
+                      {/* Lista de Enlaces Agregados */}
                       <div className="max-w-lg mx-auto space-y-4">
-                        {/* Website */}
-                        <div className="space-y-2">
-                          <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                            <div className="w-5 h-5 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full"></div>
-                            Mi Website
-                          </label>
-                          <input
-                            type="url"
-                            value={socialLinks.website || ''}
-                            onChange={(e) => setSocialLinks(prev => ({ ...prev, website: e.target.value }))}
-                            placeholder="https://mipagina.com"
-                            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                          />
-                        </div>
-
-                        {/* Behance */}
-                        <div className="space-y-2">
-                          <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                            <div className="w-5 h-5 bg-blue-600 rounded-full"></div>
-                            Behance
-                          </label>
-                          <input
-                            type="url"
-                            value={socialLinks.behance || ''}
-                            onChange={(e) => setSocialLinks(prev => ({ ...prev, behance: e.target.value }))}
-                            placeholder="https://behance.net/tuusuario"
-                            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                          />
-                        </div>
-
-                        {/* Dribbble */}
-                        <div className="space-y-2">
-                          <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                            <div className="w-5 h-5 bg-pink-500 rounded-full"></div>
-                            Dribbble
-                          </label>
-                          <input
-                            type="url"
-                            value={socialLinks.dribbble || ''}
-                            onChange={(e) => setSocialLinks(prev => ({ ...prev, dribbble: e.target.value }))}
-                            placeholder="https://dribbble.com/tuusuario"
-                            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-                          />
-                        </div>
-
-                        {/* TikTok */}
-                        <div className="space-y-2">
-                          <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                            <div className="w-5 h-5 bg-black rounded-full"></div>
-                            TikTok
-                          </label>
-                          <input
-                            type="url"
-                            value={socialLinks.tiktok || ''}
-                            onChange={(e) => setSocialLinks(prev => ({ ...prev, tiktok: e.target.value }))}
-                            placeholder="https://tiktok.com/@tuusuario"
-                            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                          />
-                        </div>
-
-                        {/* Twitch */}
-                        <div className="space-y-2">
-                          <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                            <div className="w-5 h-5 bg-purple-600 rounded-full"></div>
-                            Twitch
-                          </label>
-                          <input
-                            type="url"
-                            value={socialLinks.twitch || ''}
-                            onChange={(e) => setSocialLinks(prev => ({ ...prev, twitch: e.target.value }))}
-                            placeholder="https://twitch.tv/tuusuario"
-                            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
-                          />
-                        </div>
-
-                        {/* Instagram */}
-                        <div className="space-y-2">
-                          <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                            <div className="w-5 h-5 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full"></div>
-                            Instagram
-                          </label>
-                          <input
-                            type="url"
-                            value={socialLinks.instagram || ''}
-                            onChange={(e) => setSocialLinks(prev => ({ ...prev, instagram: e.target.value }))}
-                            placeholder="https://instagram.com/tuusuario"
-                            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-pink-500 focus:border-transparent"
-                          />
-                        </div>
-
-                        {/* Discord */}
-                        <div className="space-y-2">
-                          <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                            <div className="w-5 h-5 bg-indigo-600 rounded-full"></div>
-                            Discord
-                          </label>
-                          <input
-                            type="text"
-                            value={socialLinks.discord || ''}
-                            onChange={(e) => setSocialLinks(prev => ({ ...prev, discord: e.target.value }))}
-                            placeholder="tuusuario#1234"
-                            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                          />
-                        </div>
-
-                        {/* YouTube */}
-                        <div className="space-y-2">
-                          <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                            <div className="w-5 h-5 bg-red-600 rounded-full"></div>
-                            YouTube
-                          </label>
-                          <input
-                            type="url"
-                            value={socialLinks.youtube || ''}
-                            onChange={(e) => setSocialLinks(prev => ({ ...prev, youtube: e.target.value }))}
-                            placeholder="https://youtube.com/@tuusuario"
-                            className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent"
-                          />
-                        </div>
-
-                        {/* Botón Guardar */}
-                        <div className="pt-6">
+                        {Object.entries(socialLinks).map(([platformId, url]) => {
+                          const platform = availablePlatforms.find(p => p.id === platformId);
+                          if (!platform || !url) return null;
+                          
+                          return (
+                            <div key={platformId} className="space-y-2">
+                              <div className="flex items-center justify-between">
+                                <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
+                                  <div className={`w-5 h-5 rounded-full ${platform.color.includes('gradient') ? `bg-gradient-to-r ${platform.color}` : platform.color}`}></div>
+                                  {platform.name}
+                                </label>
+                                <button
+                                  onClick={() => handleRemoveSocialLink(platformId)}
+                                  className="p-1 text-gray-400 hover:text-red-500 transition-colors"
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </button>
+                              </div>
+                              <input
+                                type={platformId === 'discord' ? 'text' : 'url'}
+                                value={url}
+                                onChange={(e) => handleUpdateSocialLink(platformId, e.target.value)}
+                                placeholder={platform.placeholder}
+                                className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                              />
+                            </div>
+                          );
+                        })}
+                        
+                        {/* Botón Agregar Nueva Red Social */}
+                        {getAvailablePlatforms().length > 0 && (
                           <button
-                            onClick={handleSaveSocialLinks}
-                            disabled={savingSocialLinks}
-                            className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold py-3 px-6 rounded-xl hover:from-purple-700 hover:to-blue-700 transition-all duration-200 disabled:opacity-50"
+                            onClick={() => setShowAddSocialModal(true)}
+                            className="w-full flex items-center justify-center gap-2 py-4 px-4 border-2 border-dashed border-gray-300 rounded-xl text-gray-500 hover:border-purple-400 hover:text-purple-600 transition-colors"
                           >
-                            {savingSocialLinks ? 'Guardando...' : 'Guardar Enlaces'}
+                            <Plus className="w-5 h-5" />
+                            Agregar red social
                           </button>
-                        </div>
+                        )}
+
+                        {/* Modal para Seleccionar Plataforma */}
+                        {showAddSocialModal && (
+                          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" onClick={() => setShowAddSocialModal(false)}>
+                            <div className="bg-white rounded-2xl p-6 max-w-sm w-full mx-4" onClick={e => e.stopPropagation()}>
+                              <div className="flex items-center justify-between mb-4">
+                                <h4 className="text-lg font-semibold text-gray-900">Agregar Red Social</h4>
+                                <button
+                                  onClick={() => setShowAddSocialModal(false)}
+                                  className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
+                                >
+                                  <X className="w-5 h-5" />
+                                </button>
+                              </div>
+                              
+                              <div className="space-y-2 max-h-60 overflow-y-auto">
+                                {getAvailablePlatforms().map(platform => (
+                                  <button
+                                    key={platform.id}
+                                    onClick={() => handleAddSocialLink(platform.id)}
+                                    className="w-full flex items-center gap-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors"
+                                  >
+                                    <div className={`w-6 h-6 rounded-full ${platform.color.includes('gradient') ? `bg-gradient-to-r ${platform.color}` : platform.color}`}></div>
+                                    <span className="font-medium text-gray-900">{platform.name}</span>
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Botón Guardar - Solo si hay enlaces agregados */}
+                        {Object.keys(socialLinks).length > 0 && (
+                          <div className="pt-6">
+                            <button
+                              onClick={handleSaveSocialLinks}
+                              disabled={savingSocialLinks}
+                              className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold py-3 px-6 rounded-xl hover:from-purple-700 hover:to-blue-700 transition-all duration-200 disabled:opacity-50"
+                            >
+                              {savingSocialLinks ? 'Guardando...' : 'Guardar Enlaces'}
+                            </button>
+                          </div>
+                        )}
                       </div>
 
                       {/* Información adicional */}
