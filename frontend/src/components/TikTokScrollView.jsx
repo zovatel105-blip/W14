@@ -676,6 +676,7 @@ const TikTokScrollView = ({
   const containerRef = useRef(null);
   const [activeIndex, setActiveIndex] = useState(initialIndex);
   const [isScrolling, setIsScrolling] = useState(false);
+  const [savedPolls, setSavedPolls] = useState(new Set()); // Track saved polls locally
   const { user: currentUser } = useAuth();
 
   // DEBUG: Monitorear cambios de activeIndex para sincronización de audio
