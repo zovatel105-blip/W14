@@ -95,20 +95,21 @@ const ProfilePage = () => {
   const [socialLinks, setSocialLinks] = useState({});
   const [savingSocialLinks, setSavingSocialLinks] = useState(false);
   const [showAddSocialModal, setShowAddSocialModal] = useState(false);
+  const [newSocialName, setNewSocialName] = useState('');
+  const [newSocialUrl, setNewSocialUrl] = useState('');
   
-  // Lista de plataformas sociales disponibles
-  const availablePlatforms = [
-    { id: 'website', name: 'Mi Website', color: 'from-purple-600 to-blue-600', placeholder: 'https://mipagina.com' },
-    { id: 'behance', name: 'Behance', color: 'bg-blue-600', placeholder: 'https://behance.net/tuusuario' },
-    { id: 'dribbble', name: 'Dribbble', color: 'bg-pink-500', placeholder: 'https://dribbble.com/tuusuario' },
-    { id: 'tiktok', name: 'TikTok', color: 'bg-black', placeholder: 'https://tiktok.com/@tuusuario' },
-    { id: 'twitch', name: 'Twitch', color: 'bg-purple-600', placeholder: 'https://twitch.tv/tuusuario' },
-    { id: 'instagram', name: 'Instagram', color: 'from-purple-600 to-pink-600', placeholder: 'https://instagram.com/tuusuario' },
-    { id: 'discord', name: 'Discord', color: 'bg-indigo-600', placeholder: 'tuusuario#1234' },
-    { id: 'youtube', name: 'YouTube', color: 'bg-red-600', placeholder: 'https://youtube.com/@tuusuario' },
-    { id: 'twitter', name: 'Twitter/X', color: 'bg-gray-900', placeholder: 'https://twitter.com/tuusuario' },
-    { id: 'linkedin', name: 'LinkedIn', color: 'bg-blue-700', placeholder: 'https://linkedin.com/in/tuusuario' }
+  // Colores disponibles para las plataformas
+  const availableColors = [
+    'bg-blue-600', 'bg-purple-600', 'bg-pink-500', 'bg-red-600', 'bg-indigo-600',
+    'bg-green-600', 'bg-yellow-500', 'bg-gray-700', 'bg-orange-500', 'bg-teal-600',
+    'from-purple-600 to-blue-600', 'from-pink-500 to-red-500', 'from-blue-500 to-indigo-600',
+    'from-green-500 to-teal-600', 'from-yellow-400 to-orange-500'
   ];
+
+  // Función para asignar color aleatorio a una nueva plataforma
+  const getRandomColor = () => {
+    return availableColors[Math.floor(Math.random() * availableColors.length)];
+  };
   const { toast } = useToast();
   const { user: authUser, refreshUser } = useAuth();
   const { getUserFollowers, getUserFollowing, followUser, unfollowUser, isFollowing, getFollowStatus, followStateVersion, refreshTrigger, getUserByUsername } = useFollow();
