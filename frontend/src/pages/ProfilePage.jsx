@@ -574,6 +574,37 @@ const ProfilePage = () => {
     }
   };
 
+  // Agregar nueva red social
+  const handleAddSocialLink = (platformId) => {
+    setSocialLinks(prev => ({
+      ...prev,
+      [platformId]: ''
+    }));
+    setShowAddSocialModal(false);
+  };
+
+  // Eliminar red social
+  const handleRemoveSocialLink = (platformId) => {
+    setSocialLinks(prev => {
+      const newLinks = { ...prev };
+      delete newLinks[platformId];
+      return newLinks;
+    });
+  };
+
+  // Actualizar URL de red social
+  const handleUpdateSocialLink = (platformId, value) => {
+    setSocialLinks(prev => ({
+      ...prev,
+      [platformId]: value
+    }));
+  };
+
+  // Obtener plataformas disponibles para agregar (que no estén ya agregadas)
+  const getAvailablePlatforms = () => {
+    return availablePlatforms.filter(platform => !(platform.id in socialLinks));
+  };
+
   // Load user's social links on component mount
   useEffect(() => {
     const loadUserSocialLinks = async () => {
