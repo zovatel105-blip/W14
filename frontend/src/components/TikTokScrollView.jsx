@@ -81,7 +81,7 @@ const TikTokPollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, onCr
   const [isNotificationEnabled, setIsNotificationEnabled] = useState(false);
   
   const navigate = useNavigate();
-  const { followUser, unfollowUser, isFollowing, getFollowStatus } = useFollow();
+  const { followUser, unfollowUser, isFollowing, getFollowStatus, followStateVersion } = useFollow();
   const { user: currentUser } = useAuth();
   const { toast } = useToast();
   const { shareModal, sharePoll, closeShareModal } = useShare();
