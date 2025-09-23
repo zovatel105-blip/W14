@@ -161,6 +161,23 @@ class SocialLinksResponse(BaseModel):
     discord: Optional[str] = None
     youtube: Optional[str] = None
 
+# =============  CUSTOM SOCIAL LINKS MODELS =============
+
+class SocialLink(BaseModel):
+    name: str
+    url: str
+    color: Optional[str] = "#007bff"
+
+class SocialLinks(BaseModel):
+    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    user_id: str
+    links: List[SocialLink] = []
+    created_at: datetime = Field(default_factory=datetime.utcnow)
+    updated_at: datetime = Field(default_factory=datetime.utcnow)
+
+class SocialLinksCreate(BaseModel):
+    links: List[SocialLink]
+
 class Token(BaseModel):
     access_token: str
     token_type: str
