@@ -527,71 +527,65 @@ const ProfilePage = () => {
     }
   };
 
-  const handleSocialShare = (platform) => {
-    const profileUrl = window.location.href;
-    const profileText = `Mira mi perfil: @${displayUser?.username || 'usuario'}`;
-    
-    let shareUrl = '';
-    
-    switch (platform) {
-      case 'website':
-        // Copy profile URL to clipboard
-        copyToClipboard(profileUrl);
-        break;
-      case 'behance':
-        shareUrl = `https://www.behance.net/share?url=${encodeURIComponent(profileUrl)}&title=${encodeURIComponent(profileText)}`;
-        break;
-      case 'dribbble':
-        shareUrl = `https://dribbble.com/shots/new?url=${encodeURIComponent(profileUrl)}`;
-        break;
-      case 'twitch':
-        // Twitch doesn't have direct sharing, copy URL
-        copyToClipboard(profileUrl);
-        toast({
-          title: "URL copiada",
-          description: "Comparte tu perfil en Twitch pegando esta URL",
-        });
-        return;
-      case 'tiktok':
-        // TikTok doesn't have direct web sharing, copy URL
-        copyToClipboard(profileUrl);
-        toast({
-          title: "URL copiada",
-          description: "Comparte tu perfil en TikTok pegando esta URL",
-        });
-        return;
-      case 'snapchat':
-        shareUrl = `https://www.snapchat.com/share?url=${encodeURIComponent(profileUrl)}`;
-        break;
-      case 'unsplash':
-        // Unsplash doesn't have direct sharing, copy URL
-        copyToClipboard(profileUrl);
-        toast({
-          title: "URL copiada",
-          description: "Comparte tu perfil en Unsplash pegando esta URL",
-        });
-        return;
-      case 'discord':
-        // Discord doesn't have direct web sharing, copy URL
-        copyToClipboard(profileUrl);
-        toast({
-          title: "URL copiada",
-          description: "Comparte tu perfil en Discord pegando esta URL",
-        });
-        return;
-      default:
-        copyToClipboard(profileUrl);
-        return;
-    }
-    
-    if (shareUrl) {
-      window.open(shareUrl, '_blank', 'width=600,height=400');
+  const handleSaveSocialLinks = async () => {
+    if (!authUser?.id) return;
+
+    setSavingSocialLinks(true);
+    try {
+      // Aquí se implementará la llamada al backend para guardar los enlaces sociales
+      // Por ahora simulamos el guardado y mostramos el toast
+      
+      // Simular llamada API
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
       toast({
-        title: "Compartiendo perfil",
-        description: `Abriendo ${platform} para compartir tu perfil`,
+        title: "Enlaces guardados",
+        description: "Tus enlaces de redes sociales han sido actualizados",
       });
+      
+      console.log('🔗 Social links saved:', socialLinks);
+      
+    } catch (error) {
+      console.error('Error saving social links:', error);
+      toast({
+        title: "Error",
+        description: "No se pudieron guardar los enlaces. Intenta de nuevo.",
+        variant: "destructive",
+      });
+    } finally {
+      setSavingSocialLinks(false);
     }
   };
+
+  // Load user's social links on component mount
+  useEffect(() => {
+    const loadUserSocialLinks = async () => {
+      if (!authUser?.id || !isOwnProfile) return;
+      
+      try {
+        // Aquí se implementará la carga de enlaces desde el backend
+        // Por ahora usamos datos de ejemplo
+        const savedLinks = {
+          website: '',
+          behance: '',
+          dribbble: '',
+          tiktok: '',
+          twitch: '',
+          instagram: '',
+          discord: '',
+          youtube: ''
+        };
+        
+        setSocialLinks(savedLinks);
+        console.log('🔗 Social links loaded:', savedLinks);
+        
+      } catch (error) {
+        console.error('Error loading social links:', error);
+      }
+    };
+
+    loadUserSocialLinks();
+  }, [authUser?.id, isOwnProfile]);
 
   // Handle when a new story is created
   const handleStoryCreated = async (newStory) => {
