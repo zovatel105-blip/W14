@@ -537,7 +537,8 @@ const TikTokPollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, onCr
               <span className="font-medium text-sm">{formatNumber(poll.shares)}</span>
             </Button>
 
-            {onSave && (
+            {/* Save button */}
+            {onSave ? (
               <Button
                 variant="ghost"
                 size="sm"
@@ -559,6 +560,8 @@ const TikTokPollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, onCr
               >
                 <Bookmark className="w-5 h-5" />
               </Button>
+            ) : (
+              console.log('🔖 TikTokScrollView: onSave prop is falsy, not rendering save button')
             )}
 
             {/* Feed Menu - Only shown for other users' posts */}
