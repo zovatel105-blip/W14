@@ -572,25 +572,12 @@ const ProfilePage = () => {
       const savedLinks = await response.json();
       console.log('✅ Saved links from backend:', savedLinks);
       
-      // Actualizar el estado local manteniendo nombres y colores
-      const updatedLinks = {};
-      Object.entries(socialLinks).forEach(([key, value]) => {
-        if (typeof value === 'object' && savedLinks[key]) {
-          updatedLinks[key] = {
-            ...value,
-            url: savedLinks[key]
-          };
-        } else if (typeof value === 'string' && savedLinks[key]) {
-          updatedLinks[key] = savedLinks[key];
-        }
-      });
-      
-      setSocialLinks(updatedLinks);
-      console.log('🔄 Updated local state:', updatedLinks);
+      // NO cambiar el estado local después de guardar - mantener la información de nombres y colores
+      // Los enlaces ya están en socialLinks y se mostrarán correctamente
       
       toast({
         title: "Enlaces guardados",
-        description: "Tus enlaces de redes sociales han sido actualizados correctamente",
+        description: "Tus enlaces de redes sociales han sido guardados exitosamente",
       });
       
     } catch (error) {
