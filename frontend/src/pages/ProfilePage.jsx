@@ -533,7 +533,7 @@ const ProfilePage = () => {
 
     setSavingSocialLinks(true);
     try {
-      const response = await fetch(`${config.API_ENDPOINTS.USERS.SOCIAL_LINKS}`, {
+      const response = await fetch(config.API_ENDPOINTS.USERS.UPDATE_SOCIAL_LINKS, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -575,7 +575,7 @@ const ProfilePage = () => {
       
       try {
         const targetUserId = userId || authUser?.id;
-        const response = await fetch(`${config.API_ENDPOINTS.USERS.SOCIAL_LINKS(targetUserId)}`, {
+        const response = await fetch(config.API_ENDPOINTS.USERS.SOCIAL_LINKS(targetUserId), {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
           }
