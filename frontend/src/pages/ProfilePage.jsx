@@ -1850,34 +1850,37 @@ const ProfilePage = () => {
                       {/* Header del Panel */}
                       <div className="text-center mb-8">
                         <h3 className="text-lg font-semibold text-gray-900 mb-2">Mis Redes Sociales</h3>
-                        <p className="text-sm text-gray-600">Agrega los enlaces a tus perfiles de redes sociales</p>
+                        <p className="text-sm text-gray-600">Agrega cualquier red social o plataforma que uses</p>
                       </div>
                       
                       {/* Lista de Enlaces Agregados */}
                       <div className="max-w-lg mx-auto space-y-4">
-                        {Object.entries(socialLinks).map(([platformId, url]) => {
-                          const platform = availablePlatforms.find(p => p.id === platformId);
-                          if (!platform || !url) return null;
+                        {Object.entries(socialLinks).map(([linkId, linkData]) => {
+                          if (!linkData || (typeof linkData === 'object' && !linkData.url)) return null;
+                          
+                          const displayName = typeof linkData === 'object' ? linkData.name : linkId;
+                          const url = typeof linkData === 'object' ? linkData.url : linkData;
+                          const color = typeof linkData === 'object' && linkData.color ? linkData.color : 'bg-gray-600';
                           
                           return (
-                            <div key={platformId} className="space-y-2">
+                            <div key={linkId} className="space-y-2">
                               <div className="flex items-center justify-between">
                                 <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                                  <div className={`w-5 h-5 rounded-full ${platform.color.includes('gradient') ? `bg-gradient-to-r ${platform.color}` : platform.color}`}></div>
-                                  {platform.name}
+                                  <div className={`w-5 h-5 rounded-full ${color.includes('gradient') ? `bg-gradient-to-r ${color}` : color}`}></div>
+                                  {displayName}
                                 </label>
                                 <button
-                                  onClick={() => handleRemoveSocialLink(platformId)}
+                                  onClick={() => handleRemoveSocialLink(linkId)}
                                   className="p-1 text-gray-400 hover:text-red-500 transition-colors"
                                 >
                                   <Trash2 className="w-4 h-4" />
                                 </button>
                               </div>
                               <input
-                                type={platformId === 'discord' ? 'text' : 'url'}
+                                type="url"
                                 value={url}
-                                onChange={(e) => handleUpdateSocialLink(platformId, e.target.value)}
-                                placeholder={platform.placeholder}
+                                onChange={(e) => handleUpdateSocialLink(linkId, e.target.value)}
+                                placeholder="https://ejemplo.com/tuusuario"
                                 className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                               />
                             </div>
@@ -1885,22 +1888,20 @@ const ProfilePage = () => {
                         })}
                         
                         {/* Botón Agregar Nueva Red Social */}
-                        {getAvailablePlatforms().length > 0 && (
-                          <button
-                            onClick={() => setShowAddSocialModal(true)}
-                            className="w-full flex items-center justify-center gap-2 py-4 px-4 border-2 border-dashed border-gray-300 rounded-xl text-gray-500 hover:border-purple-400 hover:text-purple-600 transition-colors"
-                          >
-                            <Plus className="w-5 h-5" />
-                            Agregar red social
-                          </button>
-                        )}
+                        <button
+                          onClick={() => setShowAddSocialModal(true)}
+                          className="w-full flex items-center justify-center gap-2 py-4 px-4 border-2 border-dashed border-gray-300 rounded-xl text-gray-500 hover:border-purple-400 hover:text-purple-600 transition-colors"
+                        >
+                          <Plus className="w-5 h-5" />
+                          Agregar red social
+                        </button>
 
-                        {/* Modal para Seleccionar Plataforma */}
+                        {/* Modal para Agregar Red Social Personalizada */}
                         {showAddSocialModal && (
                           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" onClick={() => setShowAddSocialModal(false)}>
-                            <div className="bg-white rounded-2xl p-6 max-w-sm w-full mx-4" onClick={e => e.stopPropagation()}>
-                              <div className="flex items-center justify-between mb-4">
-                                <h4 className="text-lg font-semibold text-gray-900">Agregar Red Social</h4>
+                            <div className="bg-white rounded-2xl p-6 max-w-md w-full mx-4" onClick={e => e.stopPropagation()}>
+                              <div className="flex items-center justify-between mb-6">
+                                <h4 className="text-xl font-semibold text-gray-900">Agregar Red Social</h4>
                                 <button
                                   onClick={() => setShowAddSocialModal(false)}
                                   className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
@@ -1909,17 +1910,51 @@ const ProfilePage = () => {
                                 </button>
                               </div>
                               
-                              <div className="space-y-2 max-h-60 overflow-y-auto">
-                                {getAvailablePlatforms().map(platform => (
-                                  <button
-                                    key={platform.id}
-                                    onClick={() => handleAddSocialLink(platform.id)}
-                                    className="w-full flex items-center gap-3 p-3 text-left hover:bg-gray-50 rounded-lg transition-colors"
-                                  >
-                                    <div className={`w-6 h-6 rounded-full ${platform.color.includes('gradient') ? `bg-gradient-to-r ${platform.color}` : platform.color}`}></div>
-                                    <span className="font-medium text-gray-900">{platform.name}</span>
-                                  </button>
-                                ))}
+                              <div className="space-y-4">
+                                {/* Nombre personalizado */}
+                                <div className="space-y-2">
+                                  <label className="text-sm font-medium text-gray-700">
+                                    Nombre de la plataforma
+                                  </label>
+                                  <input
+                                    type="text"
+                                    value={newSocialName}
+                                    onChange={(e) => setNewSocialName(e.target.value)}
+                                    placeholder="Ej: YouTube, TikTok, Mi Blog, etc."
+                                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                  />
+                                </div>
+
+                                {/* URL */}
+                                <div className="space-y-2">
+                                  <label className="text-sm font-medium text-gray-700">
+                                    Enlace
+                                  </label>
+                                  <input
+                                    type="url"
+                                    value={newSocialUrl}
+                                    onChange={(e) => setNewSocialUrl(e.target.value)}
+                                    placeholder="https://ejemplo.com/tuusuario"
+                                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                  />
+                                </div>
+                              </div>
+
+                              {/* Botones del Modal */}
+                              <div className="flex gap-3 mt-6">
+                                <button
+                                  onClick={() => setShowAddSocialModal(false)}
+                                  className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors"
+                                >
+                                  Cancelar
+                                </button>
+                                <button
+                                  onClick={handleAddCustomSocialLink}
+                                  disabled={!newSocialName.trim() || !newSocialUrl.trim()}
+                                  className="flex-1 px-4 py-2 bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                  Agregar
+                                </button>
                               </div>
                             </div>
                           </div>
@@ -1942,7 +1977,7 @@ const ProfilePage = () => {
                       {/* Información adicional */}
                       <div className="mt-8 text-center">
                         <p className="text-xs text-gray-500">
-                          Los enlaces aparecerán en tu perfil para que otros puedan encontrarte
+                          Agrega cualquier plataforma: redes sociales, tu sitio web, portfolio, etc.
                         </p>
                       </div>
                     </div>
