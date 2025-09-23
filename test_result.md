@@ -1279,7 +1279,7 @@ Layout "off" - Carrusel Horizontal:
 
 ## test_plan:
   current_focus:
-    - "Chat Navigation Bug Fix - Dynamic showInbox/showChat based on selectedConversation - COMPLETED"
+    - "Enhanced save button with visual state changes in TikTokScrollView"
   stuck_tasks: []
   test_all: false
   test_priority: "high_first"
