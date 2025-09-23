@@ -542,27 +542,47 @@ const TikTokPollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, onCr
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={(e) => {
+                onClick={async (e) => {
                   e.preventDefault();
                   e.stopPropagation();
+                  
+                  const isCurrentlySaved = savedPolls.has(poll.id);
                   console.log('🔖 TikTokScrollView: Save button clicked for poll:', poll.id);
-                  console.log('🔖 TikTokScrollView: onSave function type:', typeof onSave);
-                  console.log('🔖 TikTokScrollView: About to call onSave...');
+                  console.log('🔖 TikTokScrollView: Currently saved:', isCurrentlySaved);
+                  
                   try {
-                    onSave(poll.id);
-                    // Toggle saved state locally for immediate visual feedback
-                    setSavedPolls(prev => {
-                      const newSet = new Set(prev);
-                      if (newSet.has(poll.id)) {
-                        newSet.delete(poll.id); // Unsave
-                      } else {
-                        newSet.add(poll.id); // Save
+                    if (isCurrentlySaved) {
+                      // Unsave the poll
+                      console.log('🔖 TikTokScrollView: Unsaving poll...');
+                      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/polls/${poll.id}/save`, {
+                        method: 'DELETE',
+                        headers: {
+                          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                          'Content-Type': 'application/json'
+                        }
+                      });
+                      
+                      if (response.ok) {
+                        setSavedPolls(prev => {
+                          const newSet = new Set(prev);
+                          newSet.delete(poll.id);
+                          return newSet;
+                        });
+                        console.log('🔖 TikTokScrollView: Poll unsaved successfully');
                       }
-                      return newSet;
-                    });
-                    console.log('🔖 TikTokScrollView: onSave called successfully');
+                    } else {
+                      // Save the poll
+                      console.log('🔖 TikTokScrollView: Saving poll...');
+                      onSave(poll.id);
+                      // Add to local state immediately for visual feedback
+                      setSavedPolls(prev => {
+                        const newSet = new Set(prev);
+                        newSet.add(poll.id);
+                        return newSet;
+                      });
+                    }
                   } catch (error) {
-                    console.error('🔖 TikTokScrollView: Error calling onSave:', error);
+                    console.error('🔖 TikTokScrollView: Error with save/unsave:', error);
                   }
                 }}
                 className={`flex items-center justify-center hover:scale-105 transition-all duration-200 h-auto p-2 rounded-lg backdrop-blur-sm cursor-pointer pointer-events-auto z-50 ${
