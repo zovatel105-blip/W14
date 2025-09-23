@@ -27,6 +27,7 @@ import { useFollow } from '../contexts/FollowContext';
 import { useShare } from '../hooks/useShare';
 import { useTikTok } from '../contexts/TikTokContext';
 import { cn } from '../lib/utils';
+import config from '../config/config';
 
 const StatCard = ({ icon: Icon, label, value, color = "blue", onClick, clickable = false }) => (
   <Card 
