@@ -1440,9 +1440,10 @@ const ProfilePage = () => {
                   {isOwnProfile && (
                     <TabsTrigger 
                       value="liked" 
-                      className="rounded-xl py-3 text-sm font-medium data-[state=active]:bg-white data-[state=active]:shadow-sm"
+                      className="rounded-xl py-3 text-sm font-medium data-[state=active]:bg-white data-[state=active]:shadow-sm flex items-center gap-2"
                     >
                       <Heart className="w-4 h-4" strokeWidth={1.5} />
+                      <span className="hidden sm:inline">Me gusta</span>
                     </TabsTrigger>
                   )}
                   <TabsTrigger 
