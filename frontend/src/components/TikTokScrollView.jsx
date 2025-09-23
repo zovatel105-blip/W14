@@ -545,7 +545,14 @@ const TikTokPollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, onCr
                   e.preventDefault();
                   e.stopPropagation();
                   console.log('🔖 TikTokScrollView: Save button clicked for poll:', poll.id);
-                  onSave(poll.id);
+                  console.log('🔖 TikTokScrollView: onSave function type:', typeof onSave);
+                  console.log('🔖 TikTokScrollView: About to call onSave...');
+                  try {
+                    onSave(poll.id);
+                    console.log('🔖 TikTokScrollView: onSave called successfully');
+                  } catch (error) {
+                    console.error('🔖 TikTokScrollView: Error calling onSave:', error);
+                  }
                 }}
                 className="flex items-center justify-center text-white hover:text-yellow-400 hover:scale-105 transition-all duration-200 h-auto p-2 rounded-lg bg-black/20 backdrop-blur-sm cursor-pointer pointer-events-auto z-50"
                 style={{ pointerEvents: 'auto' }}
