@@ -1902,7 +1902,11 @@ const ProfilePage = () => {
                                 <button
                                   onClick={handleAddCustomSocialLink}
                                   disabled={!newSocialName.trim() || !newSocialUrl.trim()}
-                                  className="flex-1 px-4 py-2 bg-purple-600 text-white rounded-xl hover:bg-purple-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                  className={`flex-1 px-4 py-2 rounded-xl transition-colors ${
+                                    !newSocialName.trim() || !newSocialUrl.trim() 
+                                      ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
+                                      : 'bg-purple-600 text-white hover:bg-purple-700'
+                                  }`}
                                 >
                                   Agregar
                                 </button>
