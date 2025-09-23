@@ -170,6 +170,11 @@ class AppConfig {
         SOCIAL_LINKS: (id) => `${baseUrl}/api/users/${id}/social-links`,
         UPDATE_SOCIAL_LINKS: `${baseUrl}/api/users/social-links`
       },
+      SOCIAL_LINKS: {
+        MY_LINKS: `${baseUrl}/api/social_links/me`,
+        USER_LINKS: (id) => `${baseUrl}/api/social_links/${id}`,
+        SAVE: `${baseUrl}/api/social_links`
+      },
       UPLOAD: {
         FILE: `${baseUrl}/api/upload`,
         GET: (id) => `${baseUrl}/api/upload/${id}`,
