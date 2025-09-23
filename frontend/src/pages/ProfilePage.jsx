@@ -620,8 +620,12 @@ const ProfilePage = () => {
 
         if (response.ok) {
           const links = await response.json();
-          setSocialLinks(links);
-          console.log('🔗 Social links loaded:', links);
+          // Solo mantener enlaces que tienen valor
+          const filteredLinks = Object.fromEntries(
+            Object.entries(links).filter(([key, value]) => value && value.trim() !== '')
+          );
+          setSocialLinks(filteredLinks);
+          console.log('🔗 Social links loaded:', filteredLinks);
         }
         
       } catch (error) {
