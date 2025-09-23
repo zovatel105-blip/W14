@@ -575,35 +575,57 @@ const ProfilePage = () => {
     }
   };
 
-  // Agregar nueva red social
-  const handleAddSocialLink = (platformId) => {
+  // Agregar nueva red social personalizada
+  const handleAddCustomSocialLink = () => {
+    if (!newSocialName.trim() || !newSocialUrl.trim()) {
+      toast({
+        title: "Campos requeridos",
+        description: "Por favor completa el nombre y la URL",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const linkId = newSocialName.toLowerCase().replace(/[^a-z0-9]/g, '_');
+    const color = getRandomColor();
+
     setSocialLinks(prev => ({
       ...prev,
-      [platformId]: ''
+      [linkId]: {
+        name: newSocialName.trim(),
+        url: newSocialUrl.trim(),
+        color: color
+      }
     }));
+    
+    setNewSocialName('');
+    setNewSocialUrl('');
     setShowAddSocialModal(false);
+    
+    toast({
+      title: "Red social agregada",
+      description: `${newSocialName} ha sido agregado a tu perfil`,
+    });
   };
 
   // Eliminar red social
-  const handleRemoveSocialLink = (platformId) => {
+  const handleRemoveSocialLink = (linkId) => {
     setSocialLinks(prev => {
       const newLinks = { ...prev };
-      delete newLinks[platformId];
+      delete newLinks[linkId];
       return newLinks;
     });
   };
 
   // Actualizar URL de red social
-  const handleUpdateSocialLink = (platformId, value) => {
+  const handleUpdateSocialLink = (linkId, value) => {
     setSocialLinks(prev => ({
       ...prev,
-      [platformId]: value
+      [linkId]: {
+        ...prev[linkId],
+        url: value
+      }
     }));
-  };
-
-  // Obtener plataformas disponibles para agregar (que no estén ya agregadas)
-  const getAvailablePlatforms = () => {
-    return availablePlatforms.filter(platform => !(platform.id in socialLinks));
   };
 
   // Load user's social links on component mount
