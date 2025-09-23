@@ -1805,6 +1805,16 @@ const ProfilePage = () => {
                       
                       {/* Lista de Enlaces Agregados */}
                       <div className="max-w-lg mx-auto space-y-4">
+                        {/* Botón Agregar Nueva Red Social - PRIMERO */}
+                        <button
+                          onClick={() => setShowAddSocialModal(true)}
+                          className="w-full flex items-center justify-center gap-2 py-4 px-4 border-2 border-dashed border-gray-300 rounded-xl text-gray-500 hover:border-purple-400 hover:text-purple-600 transition-colors"
+                        >
+                          <Plus className="w-5 h-5" />
+                          Agregar red social
+                        </button>
+
+                        {/* Enlaces Guardados - DEBAJO del botón */}
                         {Object.entries(socialLinks).map(([linkId, linkData]) => {
                           if (!linkData || (typeof linkData === 'object' && !linkData.url)) return null;
                           
@@ -1836,15 +1846,6 @@ const ProfilePage = () => {
                             </div>
                           );
                         })}
-                        
-                        {/* Botón Agregar Nueva Red Social */}
-                        <button
-                          onClick={() => setShowAddSocialModal(true)}
-                          className="w-full flex items-center justify-center gap-2 py-4 px-4 border-2 border-dashed border-gray-300 rounded-xl text-gray-500 hover:border-purple-400 hover:text-purple-600 transition-colors"
-                        >
-                          <Plus className="w-5 h-5" />
-                          Agregar red social
-                        </button>
 
                         {/* Modal para Agregar Red Social Personalizada */}
                         {showAddSocialModal && (
