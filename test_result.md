@@ -966,7 +966,7 @@ Layout "off" - Carrusel Horizontal:
 - **Add Functionality**: `handleAddSlot()` con validación y feedback
 - **Max Limit**: `Math.min(totalSlots, 6)` en `getSlotsCount()`
 
-## user_problem_statement: "Las estadísticas que aparecen dentro del chat conversaciones deben ser datos reales - Cambiar estadísticas hardcodeadas por datos reales del usuario"
+## user_problem_statement: "Test the enhanced save button with visual state changes in TikTokScrollView - verify immediate visual feedback, color changes (white/yellow), icon fill states, and toggle functionality"
 
 ## backend:
   - task: "AuthContext backend compatibility validation"
