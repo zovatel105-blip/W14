@@ -662,7 +662,14 @@ const ProfilePage = () => {
         const targetUserId = userId || authUser?.id;
         console.log('🔍 Loading social links for user:', targetUserId);
         
-        const response = await fetch(config.API_ENDPOINTS.USERS.SOCIAL_LINKS(targetUserId), {
+        // Use the appropriate endpoint based on whether it's current user or other user
+        const endpoint = !userId || userId === authUser?.id 
+          ? config.API_ENDPOINTS.SOCIAL_LINKS.MY_LINKS
+          : config.API_ENDPOINTS.SOCIAL_LINKS.USER_LINKS(targetUserId);
+        
+        console.log('📡 Calling endpoint:', endpoint);
+        
+        const response = await fetch(endpoint, {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`
           }
@@ -671,39 +678,33 @@ const ProfilePage = () => {
         console.log('📡 Load response status:', response.status);
         
         if (response.ok) {
-          const links = await response.json();
-          console.log('📥 Loaded links from backend:', links);
+          const data = await response.json();
+          console.log('📥 Loaded data from backend:', data);
           
-          // Convertir al formato interno si es necesario
+          // The new API returns {links: [...]} format
+          const links = data.links || [];
+          
+          // Convert to the internal format expected by the UI
           const processedLinks = {};
-          Object.entries(links).forEach(([key, value]) => {
-            if (value && value.trim()) {
-              // Si ya tenemos información local (nombre y color), mantenerla
-              const existingLink = socialLinks[key];
-              if (existingLink && typeof existingLink === 'object') {
-                processedLinks[key] = {
-                  ...existingLink,
-                  url: value
-                };
-              } else {
-                // Crear nuevo enlace con datos por defecto
-                processedLinks[key] = {
-                  name: key.charAt(0).toUpperCase() + key.slice(1),
-                  url: value,
-                  color: getRandomColor()
-                };
-              }
-            }
+          links.forEach((link, index) => {
+            const linkId = `custom_${index}`;
+            processedLinks[linkId] = {
+              name: link.name,
+              url: link.url,
+              color: link.color || getRandomColor()
+            };
           });
           
           setSocialLinks(processedLinks);
           console.log('🔄 Processed social links:', processedLinks);
         } else {
           console.log('ℹ️ No social links found or error loading');
+          setSocialLinks({});
         }
         
       } catch (error) {
         console.error('❌ Error loading social links:', error);
+        setSocialLinks({});
       }
     };
 
