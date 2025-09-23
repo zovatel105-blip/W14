@@ -1649,6 +1649,133 @@ const ProfilePage = () => {
                     )}
                   </TabsContent>
                 )}
+
+                {/* Panel de Compartición Social Rápida */}
+                {isOwnProfile && (
+                  <TabsContent value="social" className="space-y-6">
+                    <div className="px-4 py-6">
+                      {/* Header del Panel */}
+                      <div className="text-center mb-8">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-2">Panel de Compartición Social</h3>
+                        <p className="text-sm text-gray-600">Comparte tu perfil en tus redes sociales favoritas</p>
+                      </div>
+                      
+                      {/* Grid de Botones Sociales */}
+                      <div className="grid grid-cols-2 gap-4 max-w-md mx-auto">
+                        {/* My Website */}
+                        <button
+                          onClick={() => handleSocialShare('website')}
+                          className="group relative overflow-hidden bg-gradient-to-r from-purple-600 via-blue-600 to-purple-800 text-white p-6 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                        >
+                          <div className="flex items-center justify-between">
+                            <span className="text-lg font-semibold">My Website</span>
+                            <svg className="w-6 h-6 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m19 19 2-2m0 0 2-2m-2 2-2-2m2 2-2-2M3 7l3-3M6 4l3 3M3 17l3 3M6 20l3-3" />
+                            </svg>
+                          </div>
+                        </button>
+
+                        {/* Behance */}
+                        <button
+                          onClick={() => handleSocialShare('behance')}
+                          className="group relative overflow-hidden bg-blue-600 text-white p-6 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                        >
+                          <div className="flex items-center justify-between">
+                            <span className="text-lg font-semibold">Behance</span>
+                            <svg className="w-6 h-6 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m19 19 2-2m0 0 2-2m-2 2-2-2m2 2-2-2M3 7l3-3M6 4l3 3M3 17l3 3M6 20l3-3" />
+                            </svg>
+                          </div>
+                        </button>
+
+                        {/* Dribbble */}
+                        <button
+                          onClick={() => handleSocialShare('dribbble')}
+                          className="group relative overflow-hidden bg-pink-500 text-white p-6 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                        >
+                          <div className="flex items-center justify-between">
+                            <span className="text-lg font-semibold">Dribbble</span>
+                            <svg className="w-6 h-6 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m19 19 2-2m0 0 2-2m-2 2-2-2m2 2-2-2M3 7l3-3M6 4l3 3M3 17l3 3M6 20l3-3" />
+                            </svg>
+                          </div>
+                        </button>
+
+                        {/* Twitch */}
+                        <button
+                          onClick={() => handleSocialShare('twitch')}
+                          className="group relative overflow-hidden bg-purple-600 text-white p-6 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                        >
+                          <div className="flex items-center justify-between">
+                            <span className="text-lg font-semibold">Twitch</span>
+                            <svg className="w-6 h-6 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m19 19 2-2m0 0 2-2m-2 2-2-2m2 2-2-2M3 7l3-3M6 4l3 3M3 17l3 3M6 20l3-3" />
+                            </svg>
+                          </div>
+                        </button>
+
+                        {/* TikTok */}
+                        <button
+                          onClick={() => handleSocialShare('tiktok')}
+                          className="group relative overflow-hidden bg-black text-white p-6 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                        >
+                          <div className="flex items-center justify-between">
+                            <span className="text-lg font-semibold">TikTok</span>
+                            <svg className="w-6 h-6 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m19 19 2-2m0 0 2-2m-2 2-2-2m2 2-2-2M3 7l3-3M6 4l3 3M3 17l3 3M6 20l3-3" />
+                            </svg>
+                          </div>
+                        </button>
+
+                        {/* SnapChat */}
+                        <button
+                          onClick={() => handleSocialShare('snapchat')}
+                          className="group relative overflow-hidden bg-yellow-400 text-gray-800 p-6 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                        >
+                          <div className="flex items-center justify-between">
+                            <span className="text-lg font-semibold">SnapChat</span>
+                            <svg className="w-6 h-6 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m19 19 2-2m0 0 2-2m-2 2-2-2m2 2-2-2M3 7l3-3M6 4l3 3M3 17l3 3M6 20l3-3" />
+                            </svg>
+                          </div>
+                        </button>
+
+                        {/* Unsplash */}
+                        <button
+                          onClick={() => handleSocialShare('unsplash')}
+                          className="group relative overflow-hidden bg-gradient-to-r from-gray-800 to-gray-600 text-white p-6 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                        >
+                          <div className="flex items-center justify-between">
+                            <span className="text-lg font-semibold">Unsplash</span>
+                            <svg className="w-6 h-6 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m19 19 2-2m0 0 2-2m-2 2-2-2m2 2-2-2M3 7l3-3M6 4l3 3M3 17l3 3M6 20l3-3" />
+                            </svg>
+                          </div>
+                        </button>
+
+                        {/* Discord */}
+                        <button
+                          onClick={() => handleSocialShare('discord')}
+                          className="group relative overflow-hidden bg-indigo-600 text-white p-6 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+                        >
+                          <div className="flex items-center justify-between">
+                            <span className="text-lg font-semibold">Discord</span>
+                            <svg className="w-6 h-6 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="m19 19 2-2m0 0 2-2m-2 2-2-2m2 2-2-2M3 7l3-3M6 4l3 3M3 17l3 3M6 20l3-3" />
+                            </svg>
+                          </div>
+                        </button>
+                      </div>
+
+                      {/* Información adicional */}
+                      <div className="mt-8 text-center">
+                        <p className="text-xs text-gray-500">
+                          Comparte tu perfil para aumentar el engagement y el tráfico cruzado
+                        </p>
+                      </div>
+                    </div>
+                  </TabsContent>
+                )}
               </div>
             </Tabs>
           </div>
