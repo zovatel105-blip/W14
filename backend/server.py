@@ -6700,16 +6700,113 @@ async def get_saved_polls(
         # Create a mapping for easier lookup
         polls_dict = {poll["id"]: poll for poll in polls}
         
-        # Return polls in the order they were saved
+        # Return polls in the order they were saved with enriched data
         ordered_polls = []
-        for record in saved_records:
-            if record["poll_id"] in polls_dict:
-                poll = polls_dict[record["poll_id"]]
-                # Remove MongoDB ObjectId fields that can't be serialized
-                if "_id" in poll:
-                    del poll["_id"]
-                poll["saved_at"] = record["saved_at"]
-                ordered_polls.append(poll)
+        if saved_records:
+            # Get all author IDs for batch processing
+            author_ids = list(set(poll["author_id"] for poll in polls if poll.get("author_id")))
+            authors_dict = {}
+            if author_ids:
+                authors_cursor = db.users.find({"id": {"$in": author_ids}})
+                authors_list = await authors_cursor.to_list(len(author_ids))
+                authors_dict = {user["id"]: UserResponse(**user) for user in authors_list}
+            
+            # Get user votes and likes for saved polls
+            poll_ids = [poll["id"] for poll in polls]
+            
+            user_votes_cursor = db.votes.find({
+                "poll_id": {"$in": poll_ids},
+                "user_id": current_user.id
+            })
+            user_votes = await user_votes_cursor.to_list(len(poll_ids))
+            user_votes_dict = {vote["poll_id"]: vote["option_id"] for vote in user_votes}
+            
+            user_likes_cursor = db.poll_likes.find({
+                "poll_id": {"$in": poll_ids},
+                "user_id": current_user.id
+            })
+            user_likes = await user_likes_cursor.to_list(len(poll_ids))
+            liked_poll_ids = set(like["poll_id"] for like in user_likes)
+            
+            for record in saved_records:
+                if record["poll_id"] in polls_dict:
+                    poll_data = polls_dict[record["poll_id"]]
+                    
+                    # Get option users
+                    option_user_ids = [option["user_id"] for option in poll_data.get("options", [])]
+                    if option_user_ids:
+                        option_users_cursor = db.users.find({"id": {"$in": option_user_ids}})
+                        option_users_list = await option_users_cursor.to_list(len(option_user_ids))
+                        option_users_dict = {user["id"]: user for user in option_users_list}
+                    else:
+                        option_users_dict = {}
+                    
+                    # Process options with complete user data
+                    options = []
+                    for option in poll_data.get("options", []):
+                        option_user = option_users_dict.get(option["user_id"])
+                        if option_user:
+                            # Keep media_url as relative path for frontend to handle
+                            media_url = option.get("media_url")
+                            
+                            # Get thumbnail URL for videos
+                            thumbnail_url = option.get("thumbnail_url")
+                            if not thumbnail_url and media_url and option.get("media_type") == "video":
+                                thumbnail_url = await get_thumbnail_for_media_url(media_url)
+                            
+                            option_dict = {
+                                "id": option["id"],
+                                "text": option["text"],
+                                "votes": option["votes"],
+                                "user": {
+                                    "username": option_user["username"],
+                                    "displayName": option_user["display_name"],
+                                    "avatar": option_user.get("avatar_url"),
+                                    "verified": option_user.get("is_verified", False),
+                                    "followers": "1K"  # Placeholder
+                                },
+                                "mentioned_users": option.get("mentioned_users", []),
+                                "media": {
+                                    "type": option.get("media_type"),
+                                    "url": media_url,
+                                    "thumbnail": thumbnail_url or media_url,
+                                    "transform": option.get("media_transform")
+                                } if media_url else None
+                            }
+                            options.append(option_dict)
+                    
+                    # Skip polls without valid options or without title
+                    if not options or not poll_data.get("title"):
+                        continue
+                    
+                    # Get music info if available
+                    music_info = await get_music_info(poll_data.get("music_id")) if poll_data.get("music_id") else None
+                    
+                    # Build enriched poll response similar to regular polls endpoint
+                    enriched_poll = {
+                        "id": poll_data["id"],
+                        "title": poll_data["title"],
+                        "author": authors_dict.get(poll_data["author_id"]),
+                        "description": poll_data.get("description"),
+                        "options": options,
+                        "total_votes": poll_data["total_votes"],
+                        "likes": poll_data["likes"],
+                        "shares": poll_data["shares"],
+                        "comments_count": poll_data["comments_count"],
+                        "music": music_info,
+                        "user_vote": user_votes_dict.get(poll_data["id"]),
+                        "user_liked": poll_data["id"] in liked_poll_ids,
+                        "is_featured": poll_data["is_featured"],
+                        "tags": poll_data.get("tags", []),
+                        "category": poll_data.get("category"),
+                        "mentioned_users": poll_data.get("mentioned_users", []),
+                        "layout": poll_data.get("layout"),
+                        "created_at": poll_data["created_at"],
+                        "time_ago": calculate_time_ago(poll_data["created_at"]),
+                        "saved_at": record["saved_at"]
+                    }
+                    
+                    ordered_polls.append(enriched_poll)
         
         logger.info(f"📚 Returning {len(ordered_polls)} ordered polls")
         
