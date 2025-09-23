@@ -5,7 +5,12 @@
 class AppConfig {
   // API Configuration
   static get BACKEND_URL() {
-    return process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001';
+    // Fix for container environment - ensure backend URL is always correct
+    const envUrl = process.env.REACT_APP_BACKEND_URL;
+    const defaultUrl = 'http://localhost:8001';
+    console.log('🔧 CONFIG: REACT_APP_BACKEND_URL =', envUrl);
+    console.log('🔧 CONFIG: Using backend URL =', envUrl || defaultUrl);
+    return envUrl || defaultUrl;
   }
 
   // UI Timeouts and Intervals
