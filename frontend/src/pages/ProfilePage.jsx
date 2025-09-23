@@ -516,6 +516,72 @@ const ProfilePage = () => {
     }
   };
 
+  const handleSocialShare = (platform) => {
+    const profileUrl = window.location.href;
+    const profileText = `Mira mi perfil: @${displayUser?.username || 'usuario'}`;
+    
+    let shareUrl = '';
+    
+    switch (platform) {
+      case 'website':
+        // Copy profile URL to clipboard
+        copyToClipboard(profileUrl);
+        break;
+      case 'behance':
+        shareUrl = `https://www.behance.net/share?url=${encodeURIComponent(profileUrl)}&title=${encodeURIComponent(profileText)}`;
+        break;
+      case 'dribbble':
+        shareUrl = `https://dribbble.com/shots/new?url=${encodeURIComponent(profileUrl)}`;
+        break;
+      case 'twitch':
+        // Twitch doesn't have direct sharing, copy URL
+        copyToClipboard(profileUrl);
+        toast({
+          title: "URL copiada",
+          description: "Comparte tu perfil en Twitch pegando esta URL",
+        });
+        return;
+      case 'tiktok':
+        // TikTok doesn't have direct web sharing, copy URL
+        copyToClipboard(profileUrl);
+        toast({
+          title: "URL copiada",
+          description: "Comparte tu perfil en TikTok pegando esta URL",
+        });
+        return;
+      case 'snapchat':
+        shareUrl = `https://www.snapchat.com/share?url=${encodeURIComponent(profileUrl)}`;
+        break;
+      case 'unsplash':
+        // Unsplash doesn't have direct sharing, copy URL
+        copyToClipboard(profileUrl);
+        toast({
+          title: "URL copiada",
+          description: "Comparte tu perfil en Unsplash pegando esta URL",
+        });
+        return;
+      case 'discord':
+        // Discord doesn't have direct web sharing, copy URL
+        copyToClipboard(profileUrl);
+        toast({
+          title: "URL copiada",
+          description: "Comparte tu perfil en Discord pegando esta URL",
+        });
+        return;
+      default:
+        copyToClipboard(profileUrl);
+        return;
+    }
+    
+    if (shareUrl) {
+      window.open(shareUrl, '_blank', 'width=600,height=400');
+      toast({
+        title: "Compartiendo perfil",
+        description: `Abriendo ${platform} para compartir tu perfil`,
+      });
+    }
+  };
+
   // Handle when a new story is created
   const handleStoryCreated = async (newStory) => {
     try {
