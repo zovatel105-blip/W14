@@ -966,7 +966,7 @@ Layout "off" - Carrusel Horizontal:
 - **Add Functionality**: `handleAddSlot()` con validación y feedback
 - **Max Limit**: `Math.min(totalSlots, 6)` en `getSlotsCount()`
 
-## user_problem_statement: "Test the fixed save button state persistence functionality - verify initial state loading from backend, save/unsave operations with proper API calls, state persistence across page navigation, and console logging of saved poll IDs"
+## user_problem_statement: "Test user-to-user messaging functionality: Verificar completamente si los usuarios pueden enviarse mensajes entre sí"
 
 ## frontend:
   - task: "Save button state persistence functionality with loadSavedPolls on component mount"
