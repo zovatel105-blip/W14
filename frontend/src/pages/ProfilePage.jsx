@@ -91,6 +91,17 @@ const ProfilePage = () => {
   const [userStories, setUserStories] = useState([]);
   const [showStoryViewer, setShowStoryViewer] = useState(false);
   const [showCreateStoryModal, setShowCreateStoryModal] = useState(false);
+  const [socialLinks, setSocialLinks] = useState({
+    website: '',
+    behance: '',
+    dribbble: '',
+    tiktok: '',
+    twitch: '',
+    instagram: '',
+    discord: '',
+    youtube: ''
+  });
+  const [savingSocialLinks, setSavingSocialLinks] = useState(false);
   const { toast } = useToast();
   const { user: authUser, refreshUser } = useAuth();
   const { getUserFollowers, getUserFollowing, followUser, unfollowUser, isFollowing, getFollowStatus, followStateVersion, refreshTrigger, getUserByUsername } = useFollow();
