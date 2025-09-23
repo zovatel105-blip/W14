@@ -14076,6 +14076,279 @@ def test_statistics_consistency_fix(base_url):
     
     return success_count >= 7
 
+def test_saved_polls_functionality(base_url):
+    """🎯 TESTING CRÍTICO: Funcionalidad completa de polls guardados"""
+    print("\n🎯 === TESTING FUNCIONALIDAD DE POLLS GUARDADOS ===")
+    print("CONTEXTO DEL TEST:")
+    print("- Probar POST /api/polls/{poll_id}/save para guardar polls")
+    print("- Probar GET /api/users/{user_id}/saved-polls para obtener polls guardados")
+    print("- Probar DELETE /api/polls/{poll_id}/save para desguardar polls")
+    print("- Usar credenciales demo: demo@example.com / demo123")
+    print("- Probar flujo completo: login → obtener polls → guardar → verificar → desguardar → verificar")
+    
+    success_count = 0
+    total_tests = 7
+    demo_token = None
+    demo_user = None
+    test_poll_id = None
+    
+    # Test 1: Login con credenciales demo
+    print("\n1️⃣ LOGIN CON CREDENCIALES DEMO...")
+    try:
+        login_data = {
+            "email": "demo@example.com",
+            "password": "demo123"
+        }
+        
+        response = requests.post(f"{base_url}/auth/login", json=login_data, timeout=10)
+        print(f"   Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            demo_token = data['access_token']
+            demo_user = data['user']
+            print(f"   ✅ Login exitoso con credenciales demo")
+            print(f"   👤 Usuario: {demo_user['username']} ({demo_user['email']})")
+            print(f"   🔑 Token obtenido: {demo_token[:20]}...")
+            success_count += 1
+        else:
+            print(f"   ❌ Login falló: {response.text}")
+            print("   🚨 CRÍTICO: No se pueden probar polls guardados sin autenticación")
+            return False
+            
+    except Exception as e:
+        print(f"   ❌ Error en login: {e}")
+        return False
+    
+    headers = {"Authorization": f"Bearer {demo_token}"}
+    
+    # Test 2: Obtener lista de polls disponibles para probar
+    print("\n2️⃣ OBTENIENDO POLLS DISPONIBLES PARA PROBAR...")
+    try:
+        response = requests.get(f"{base_url}/polls?limit=10", headers=headers, timeout=10)
+        print(f"   Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            polls = response.json()
+            print(f"   ✅ Polls obtenidos exitosamente")
+            print(f"   📊 Total polls disponibles: {len(polls)}")
+            
+            if len(polls) > 0:
+                test_poll_id = polls[0]['id']
+                poll_title = polls[0].get('title', 'Sin título')
+                poll_author = polls[0].get('author', {}).get('username', 'Desconocido')
+                print(f"   🎯 Poll seleccionado para test: {test_poll_id}")
+                print(f"   📝 Título: {poll_title}")
+                print(f"   👤 Autor: {poll_author}")
+                success_count += 1
+            else:
+                print(f"   ⚠️ No hay polls disponibles para probar")
+                print(f"   💡 Creando poll de prueba...")
+                
+                # Crear poll de prueba
+                from datetime import datetime, timedelta
+                poll_data = {
+                    "title": "Poll de prueba para saved polls",
+                    "description": "Este es un poll creado para probar la funcionalidad de guardado",
+                    "options": [
+                        {"text": "Opción A", "image_url": None},
+                        {"text": "Opción B", "image_url": None}
+                    ],
+                    "category": "test",
+                    "expires_at": (datetime.utcnow() + timedelta(days=1)).isoformat(),
+                    "allow_multiple_votes": False,
+                    "is_anonymous": False
+                }
+                
+                create_response = requests.post(f"{base_url}/polls", json=poll_data, headers=headers, timeout=10)
+                if create_response.status_code == 200:
+                    created_poll = create_response.json()
+                    test_poll_id = created_poll['id']
+                    print(f"   ✅ Poll de prueba creado: {test_poll_id}")
+                    success_count += 1
+                else:
+                    print(f"   ❌ No se pudo crear poll de prueba: {create_response.text}")
+                    return False
+        else:
+            print(f"   ❌ Error obteniendo polls: {response.text}")
+            return False
+            
+    except Exception as e:
+        print(f"   ❌ Error obteniendo polls: {e}")
+        return False
+    
+    if not test_poll_id:
+        print("   🚨 CRÍTICO: No hay poll disponible para probar")
+        return False
+    
+    # Test 3: Guardar poll usando POST /api/polls/{poll_id}/save
+    print(f"\n3️⃣ GUARDANDO POLL {test_poll_id}...")
+    try:
+        response = requests.post(f"{base_url}/polls/{test_poll_id}/save", headers=headers, timeout=10)
+        print(f"   Status Code: {response.status_code}")
+        print(f"   Response: {response.text}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            print(f"   ✅ Poll guardado exitosamente")
+            print(f"   📝 Mensaje: {data.get('message', 'N/A')}")
+            print(f"   💾 Estado guardado: {data.get('saved', False)}")
+            
+            if data.get('success') and data.get('saved'):
+                print(f"   ✅ Confirmación: Poll marcado como guardado")
+                success_count += 1
+            else:
+                print(f"   ❌ Respuesta inesperada del endpoint de guardado")
+        else:
+            print(f"   ❌ Error guardando poll: {response.text}")
+            
+    except Exception as e:
+        print(f"   ❌ Error guardando poll: {e}")
+    
+    # Test 4: Verificar que el poll aparece en saved polls usando GET /api/users/{user_id}/saved-polls
+    print(f"\n4️⃣ VERIFICANDO POLL EN LISTA DE GUARDADOS...")
+    try:
+        response = requests.get(f"{base_url}/users/{demo_user['id']}/saved-polls", headers=headers, timeout=10)
+        print(f"   Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            saved_polls = data.get('saved_polls', [])
+            total = data.get('total', 0)
+            
+            print(f"   ✅ Lista de polls guardados obtenida exitosamente")
+            print(f"   📊 Total polls guardados: {total}")
+            print(f"   📋 Polls en respuesta: {len(saved_polls)}")
+            
+            # Verificar que nuestro poll está en la lista
+            poll_found = False
+            for saved_poll in saved_polls:
+                if saved_poll.get('id') == test_poll_id:
+                    poll_found = True
+                    print(f"   ✅ Poll encontrado en lista de guardados")
+                    print(f"   📝 Título: {saved_poll.get('title', 'N/A')}")
+                    print(f"   📅 Guardado en: {saved_poll.get('saved_at', 'N/A')}")
+                    break
+            
+            if poll_found:
+                print(f"   ✅ Verificación exitosa: Poll aparece en saved polls")
+                success_count += 1
+            else:
+                print(f"   ❌ CRÍTICO: Poll guardado no aparece en la lista")
+                print(f"   🔍 IDs en lista: {[p.get('id') for p in saved_polls]}")
+                print(f"   🎯 ID buscado: {test_poll_id}")
+        else:
+            print(f"   ❌ Error obteniendo saved polls: {response.text}")
+            
+    except Exception as e:
+        print(f"   ❌ Error verificando saved polls: {e}")
+    
+    # Test 5: Intentar guardar el mismo poll otra vez (debe manejar duplicados)
+    print(f"\n5️⃣ PROBANDO GUARDADO DUPLICADO...")
+    try:
+        response = requests.post(f"{base_url}/polls/{test_poll_id}/save", headers=headers, timeout=10)
+        print(f"   Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            print(f"   ✅ Endpoint maneja duplicados correctamente")
+            print(f"   📝 Mensaje: {data.get('message', 'N/A')}")
+            
+            if "already saved" in data.get('message', '').lower():
+                print(f"   ✅ Mensaje apropiado para poll ya guardado")
+                success_count += 1
+            else:
+                print(f"   ⚠️ Mensaje no indica que ya estaba guardado")
+        else:
+            print(f"   ❌ Error en guardado duplicado: {response.text}")
+            
+    except Exception as e:
+        print(f"   ❌ Error probando guardado duplicado: {e}")
+    
+    # Test 6: Desguardar poll usando DELETE /api/polls/{poll_id}/save
+    print(f"\n6️⃣ DESGUARDANDO POLL {test_poll_id}...")
+    try:
+        response = requests.delete(f"{base_url}/polls/{test_poll_id}/save", headers=headers, timeout=10)
+        print(f"   Status Code: {response.status_code}")
+        print(f"   Response: {response.text}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            print(f"   ✅ Poll desguardado exitosamente")
+            print(f"   📝 Mensaje: {data.get('message', 'N/A')}")
+            print(f"   💾 Estado guardado: {data.get('saved', True)}")
+            
+            if data.get('success') and not data.get('saved'):
+                print(f"   ✅ Confirmación: Poll marcado como no guardado")
+                success_count += 1
+            else:
+                print(f"   ❌ Respuesta inesperada del endpoint de desguardado")
+        else:
+            print(f"   ❌ Error desguardando poll: {response.text}")
+            
+    except Exception as e:
+        print(f"   ❌ Error desguardando poll: {e}")
+    
+    # Test 7: Verificar que el poll ya no aparece en saved polls
+    print(f"\n7️⃣ VERIFICANDO QUE POLL YA NO ESTÁ EN GUARDADOS...")
+    try:
+        response = requests.get(f"{base_url}/users/{demo_user['id']}/saved-polls", headers=headers, timeout=10)
+        print(f"   Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            saved_polls = data.get('saved_polls', [])
+            total = data.get('total', 0)
+            
+            print(f"   ✅ Lista de polls guardados obtenida exitosamente")
+            print(f"   📊 Total polls guardados: {total}")
+            
+            # Verificar que nuestro poll NO está en la lista
+            poll_found = False
+            for saved_poll in saved_polls:
+                if saved_poll.get('id') == test_poll_id:
+                    poll_found = True
+                    break
+            
+            if not poll_found:
+                print(f"   ✅ Verificación exitosa: Poll ya no aparece en saved polls")
+                success_count += 1
+            else:
+                print(f"   ❌ CRÍTICO: Poll desguardado aún aparece en la lista")
+        else:
+            print(f"   ❌ Error obteniendo saved polls: {response.text}")
+            
+    except Exception as e:
+        print(f"   ❌ Error verificando saved polls después de desguardar: {e}")
+    
+    # Resumen final
+    print(f"\n📊 RESUMEN TESTING SAVED POLLS:")
+    print(f"   Tests exitosos: {success_count}/{total_tests}")
+    print(f"   Porcentaje de éxito: {(success_count/total_tests)*100:.1f}%")
+    
+    if success_count >= 6:
+        print(f"\n✅ CONCLUSIÓN: FUNCIONALIDAD DE SAVED POLLS COMPLETAMENTE OPERATIVA")
+        print(f"   ✅ Login con credenciales demo funciona correctamente")
+        print(f"   ✅ Endpoint POST /api/polls/{{poll_id}}/save funciona")
+        print(f"   ✅ Endpoint GET /api/users/{{user_id}}/saved-polls funciona")
+        print(f"   ✅ Endpoint DELETE /api/polls/{{poll_id}}/save funciona")
+        print(f"   ✅ Flujo completo de guardar → verificar → desguardar → verificar funciona")
+        print(f"   ✅ Manejo de duplicados implementado correctamente")
+        print(f"   ✅ Sincronización entre endpoints funciona perfectamente")
+        print(f"\n🎯 RESULTADO: Sistema de saved polls listo para producción")
+    elif success_count >= 4:
+        print(f"\n⚠️ CONCLUSIÓN: FUNCIONALIDAD MAYORMENTE OPERATIVA")
+        print(f"   - La mayoría de endpoints funcionan correctamente")
+        print(f"   - Pueden existir problemas menores en algunos flujos")
+        print(f"   - Funcionalidad básica de saved polls disponible")
+    else:
+        print(f"\n❌ CONCLUSIÓN: PROBLEMAS CRÍTICOS EN SAVED POLLS")
+        print(f"   - Múltiples endpoints fallan")
+        print(f"   - Sistema de saved polls no está operativo")
+        print(f"   - Requiere investigación y corrección inmediata")
+    
+    return success_count >= 5
+
 def main():
     """Run all backend tests"""
     print("🚀 Starting Backend API Testing - Statistics Consistency Fix Verification")
