@@ -540,46 +540,40 @@ const ProfilePage = () => {
 
     setSavingSocialLinks(true);
     try {
-      // Convertir el formato interno al formato esperado por el backend
-      const backendFormat = {};
-      Object.entries(socialLinks).forEach(([key, value]) => {
-        if (typeof value === 'object' && value.url && value.url.trim()) {
-          backendFormat[key] = value.url.trim();
-        } else if (typeof value === 'string' && value.trim()) {
-          backendFormat[key] = value.trim();
-        }
-      });
+      // Convert internal format to the new API format
+      const linksArray = Object.values(socialLinks).map(linkData => ({
+        name: linkData.name,
+        url: linkData.url,
+        color: linkData.color || '#007bff'
+      }));
 
-      console.log('🔗 Sending social links to backend:', backendFormat);
+      console.log('💾 Saving social links:', linksArray);
 
-      const response = await fetch(config.API_ENDPOINTS.USERS.UPDATE_SOCIAL_LINKS, {
-        method: 'PUT',
+      const response = await fetch(config.API_ENDPOINTS.SOCIAL_LINKS.SAVE, {
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('token')}`
         },
-        body: JSON.stringify(backendFormat)
+        body: JSON.stringify({
+          links: linksArray
+        })
       });
 
-      console.log('🌐 Response status:', response.status);
-      
+      console.log('📡 Save response status:', response.status);
+
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error('❌ Backend error:', errorText);
-        throw new Error(`Failed to save social links: ${response.status} - ${errorText}`);
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const savedLinks = await response.json();
-      console.log('✅ Saved links from backend:', savedLinks);
-      
-      // NO cambiar el estado local después de guardar - mantener la información de nombres y colores
-      // Los enlaces ya están en socialLinks y se mostrarán correctamente
+      const result = await response.json();
+      console.log('✅ Saved successfully:', result);
       
       toast({
         title: "Enlaces guardados",
         description: "Tus enlaces de redes sociales han sido guardados exitosamente",
       });
-      
+
     } catch (error) {
       console.error('❌ Error saving social links:', error);
       toast({
