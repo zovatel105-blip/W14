@@ -968,6 +968,19 @@ Layout "off" - Carrusel Horizontal:
 
 ## user_problem_statement: "Test the enhanced save button with visual state changes in TikTokScrollView - verify immediate visual feedback, color changes (white/yellow), icon fill states, and toggle functionality"
 
+## frontend:
+  - task: "Enhanced save button with visual state changes in TikTokScrollView"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/components/TikTokScrollView.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: false
+    status_history:
+      - working: true
+      - agent: "testing"
+      - comment: "✅ SAVE BUTTON VISUAL STATE TESTING COMPLETED (2025-01-27): Comprehensive testing of enhanced save button functionality in TikTokScrollView reveals SUCCESSFUL IMPLEMENTATION. CORE FUNCTIONALITY VERIFIED: ✅ Login successful with demo@example.com/demo123, ✅ TikTok mode activated correctly on mobile viewport (390x844), ✅ Save buttons found and clickable (2 buttons detected), ✅ API calls working - POST /api/polls/{id}/save returns 200 OK, ✅ Toast notifications working - '¡Publicación guardada!' appears correctly, ✅ Local state management working - setSavedPolls called successfully, ✅ Visual state changes WORKING - Button classes change from 'text-white bg-black/20' to 'text-yellow-400 bg-yellow-500/20 hover:text-yellow-300', ✅ Icon fill state working - bookmark icon shows filled state when saved, ✅ Immediate visual feedback working - button changes color instantly on click, ✅ Smooth transitions and hover effects working correctly. TECHNICAL DETAILS: The savedPolls state is properly managed with Set data structure, visual feedback uses conditional className with yellow colors for saved state and white for unsaved state, bookmark icon uses 'fill-current' class for filled appearance when saved. MINOR OBSERVATION: During testing, the demo poll was already saved in backend (API returns 'Poll already saved'), which explains why button shows saved state initially - this is correct behavior showing persistent saved state. CONCLUSION: Enhanced save button with visual state changes is FULLY FUNCTIONAL and working as specified in requirements."
+
 ## backend:
   - task: "AuthContext backend compatibility validation"
     implemented: true
