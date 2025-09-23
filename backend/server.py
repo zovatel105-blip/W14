@@ -1270,6 +1270,42 @@ async def get_music_library(
         'has_more': offset + limit < total
     }
 
+# =============  CHAT PERMISSION UTILITIES =============
+
+async def check_chat_permission(sender_id: str, receiver_id: str) -> bool:
+    """
+    Check if users can chat directly or need permission
+    Returns True if they can chat directly, False if permission is needed
+    """
+    # Check if users are following each other (mutual follow = can chat directly)
+    sender_follows_receiver = await db.follows.find_one({
+        "follower_id": sender_id,
+        "following_id": receiver_id
+    })
+    
+    receiver_follows_sender = await db.follows.find_one({
+        "follower_id": receiver_id,
+        "following_id": sender_id
+    })
+    
+    # If they follow each other, they can chat directly
+    if sender_follows_receiver and receiver_follows_sender:
+        return True
+    
+    # Check if there's an existing accepted chat request
+    accepted_request = await db.chat_requests.find_one({
+        "$or": [
+            {"sender_id": sender_id, "receiver_id": receiver_id, "status": "accepted"},
+            {"sender_id": receiver_id, "receiver_id": sender_id, "status": "accepted"}
+        ]
+    })
+    
+    if accepted_request:
+        return True
+    
+    # Otherwise, they need permission
+    return False
+
 # =============  NOTIFICATION UTILITIES =============
 
 async def send_mention_notifications(mentioned_users: List[str], poll_id: str, current_user: UserResponse):
