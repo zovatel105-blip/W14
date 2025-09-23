@@ -1758,7 +1758,7 @@ const ProfilePage = () => {
                   </TabsContent>
                 )}
 
-                {/* Panel de Enlaces de Redes Sociales */}
+                {/* Panel de Enlaces de Redes Sociales - Para el propietario */}
                 {isOwnProfile && (
                   <TabsContent value="social" className="space-y-6">
                     <div className="px-4 py-6">
@@ -1894,6 +1894,57 @@ const ProfilePage = () => {
                         <p className="text-xs text-gray-500">
                           Agrega cualquier plataforma: redes sociales, tu sitio web, portfolio, etc.
                         </p>
+                      </div>
+                    </div>
+                  </TabsContent>
+                )}
+
+                {/* Panel de Enlaces Sociales - Para visitantes (solo vista) */}
+                {!isOwnProfile && Object.keys(socialLinks).length > 0 && (
+                  <TabsContent value="social" className="space-y-6">
+                    <div className="px-4 py-6">
+                      {/* Header del Panel */}
+                      <div className="text-center mb-8">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-2">Enlaces Sociales</h3>
+                        <p className="text-sm text-gray-600">Encuentra a {displayUser?.display_name || 'este usuario'} en otras plataformas</p>
+                      </div>
+                      
+                      {/* Lista de Enlaces (Solo vista) */}
+                      <div className="max-w-lg mx-auto space-y-4">
+                        {Object.entries(socialLinks).map(([linkId, linkData]) => {
+                          if (!linkData) return null;
+                          
+                          const displayName = typeof linkData === 'object' ? linkData.name : linkId;
+                          const url = typeof linkData === 'object' ? linkData.url : linkData;
+                          const color = typeof linkData === 'object' && linkData.color ? linkData.color : 'bg-gray-600';
+                          
+                          if (!url || url.trim() === '') return null;
+                          
+                          return (
+                            <a
+                              key={linkId}
+                              href={url.startsWith('http') ? url : `https://${url}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-3 p-4 bg-gray-50 hover:bg-gray-100 rounded-xl transition-colors group"
+                            >
+                              <div className={`w-6 h-6 rounded-full ${color.includes('gradient') ? `bg-gradient-to-r ${color}` : color}`}></div>
+                              <div className="flex-1">
+                                <div className="font-medium text-gray-900 group-hover:text-purple-600 transition-colors">
+                                  {displayName}
+                                </div>
+                                <div className="text-sm text-gray-500">
+                                  {url.length > 40 ? url.substring(0, 40) + '...' : url}
+                                </div>
+                              </div>
+                              <div className="text-gray-400 group-hover:text-purple-600 transition-colors">
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                </svg>
+                              </div>
+                            </a>
+                          );
+                        })}
                       </div>
                     </div>
                   </TabsContent>
