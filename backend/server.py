@@ -2673,6 +2673,44 @@ async def send_message(message: MessageCreate, current_user: UserResponse = Depe
         
         print(f"✅ DEBUG - Recipient found: {recipient.get('username')}")
         
+        # Check if users can chat directly or need permission
+        can_chat_directly = await check_chat_permission(current_user.id, message.recipient_id)
+        
+        if not can_chat_directly:
+            # Create chat request instead of direct message
+            existing_request = await db.chat_requests.find_one({
+                "sender_id": current_user.id,
+                "receiver_id": message.recipient_id,
+                "status": {"$in": ["pending", "accepted"]}
+            })
+            
+            if existing_request:
+                if existing_request["status"] == "accepted":
+                    # Permission granted, continue with message
+                    pass
+                else:
+                    raise HTTPException(
+                        status_code=403, 
+                        detail="Chat request already sent. Wait for user to accept."
+                    )
+            else:
+                # Send chat request
+                chat_request = ChatRequest(
+                    sender_id=current_user.id,
+                    receiver_id=message.recipient_id,
+                    message=f"Mensaje: {message.content[:100]}..." if len(message.content) > 100 else message.content,
+                    expires_at=datetime.utcnow() + timedelta(days=30)
+                )
+                
+                await db.chat_requests.insert_one(chat_request.dict())
+                
+                return {
+                    "success": True,
+                    "message": "Chat request sent. The user needs to accept before you can send messages.",
+                    "type": "chat_request",
+                    "request_id": chat_request.id
+                }
+        
     except Exception as e:
         print(f"❌ DEBUG - Error in send_message: {str(e)}")
         print(f"❌ DEBUG - Error type: {type(e)}")
