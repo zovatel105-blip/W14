@@ -718,7 +718,10 @@ const MessagesMainPage = () => {
   };
   const handleStartNewConversationWithUser = async (username) => {
     try {
-      console.log('🔍 Buscando usuario:', username);
+      console.log('🔍 === INICIANDO BÚSQUEDA DE USUARIO ===');
+      console.log('🔍 Username buscado:', username);
+      console.log('🔍 Tipo de username:', typeof username);
+      console.log('🔍 Length de username:', username?.length);
       console.log('🔍 Usuario actual (user):', user);
       
       // VALIDACIÓN CRÍTICA: No buscar si es el mismo usuario
@@ -730,18 +733,39 @@ const MessagesMainPage = () => {
       
       // Buscar el usuario por username usando cache
       const users = await searchUserWithCache(username);
-      console.log('📝 Resultados de búsqueda:', users);
+      console.log('📝 === RESULTADOS DE BÚSQUEDA ===');
+      console.log('📝 Número de usuarios encontrados:', users?.length || 0);
+      console.log('📝 Resultados completos:', users);
       
-      // Filtrar resultados para excluir al usuario actual
-      const filteredUsers = users.filter(u => u.id !== user.id && u.username !== user.username);
-      console.log('📝 Usuarios filtrados (sin usuario actual):', filteredUsers);
+      // El backend ya excluye al usuario actual, pero agregamos validación por seguridad
+      const validUsers = users.filter(u => u.id !== user.id);
+      console.log('📝 === DESPUÉS DE FILTRO DE SEGURIDAD ===');
+      console.log('📝 Usuarios válidos (sin usuario actual):', validUsers.length);
+      console.log('📝 Usuarios válidos:', validUsers.map(u => ({ id: u.id, username: u.username, display_name: u.display_name })));
       
-      // Buscar usuario target con coincidencia exacta
-      const targetUser = filteredUsers.find(u => 
-        u.username === username || 
-        u.display_name === username ||
-        u.username.toLowerCase() === username.toLowerCase()
-      );
+      // Buscar usuario target con coincidencia más flexible
+      const searchTerm = username.toLowerCase().trim();
+      const targetUser = validUsers.find(u => {
+        const matchUsername = u.username?.toLowerCase().trim() === searchTerm;
+        const matchDisplayName = u.display_name?.toLowerCase().trim() === searchTerm;
+        const partialUsername = u.username?.toLowerCase().includes(searchTerm);
+        const partialDisplayName = u.display_name?.toLowerCase().includes(searchTerm);
+        
+        console.log(`🔍 Comparando con usuario ${u.username}:`, {
+          searchTerm,
+          username: u.username?.toLowerCase().trim(),
+          display_name: u.display_name?.toLowerCase().trim(),
+          matchUsername,
+          matchDisplayName,
+          partialUsername,
+          partialDisplayName
+        });
+        
+        return matchUsername || matchDisplayName || partialUsername || partialDisplayName;
+      });
+      
+      console.log('📝 === RESULTADO DE MATCHING ===');
+      console.log('📝 Target user encontrado:', targetUser);
       
       if (targetUser) {
         console.log('✅ Usuario encontrado:', targetUser);
@@ -790,11 +814,19 @@ const MessagesMainPage = () => {
         setSelectedConversation(realConversation);
         setShowChat(true);
       } else {
-        console.error('❌ Usuario no encontrado en resultados filtrados:', username);
-        console.error('❌ Usuarios disponibles:', filteredUsers.map(u => u.username));
-        console.error('❌ Usuarios originales:', users.map(u => u.username));
-        // Mostrar mensaje de error al usuario
-        alert(`No se pudo encontrar al usuario: ${username}`);
+        console.error('❌ === USUARIO NO ENCONTRADO ===');
+        console.error('❌ Username buscado:', username);
+        console.error('❌ Usuarios disponibles:');
+        validUsers.forEach((u, index) => {
+          console.error(`  ${index + 1}. ID: ${u.id}, Username: "${u.username}", Display: "${u.display_name}"`);
+        });
+        console.error('❌ Usuarios originales:');
+        users.forEach((u, index) => {
+          console.error(`  ${index + 1}. ID: ${u.id}, Username: "${u.username}", Display: "${u.display_name}"`);
+        });
+        
+        // Mostrar mensaje de error más detallado al usuario
+        alert(`No se pudo encontrar al usuario "${username}". Los usuarios disponibles son: ${validUsers.map(u => u.username).join(', ')}`);
       }
     } catch (error) {
       console.error('❌ Error buscando usuario:', error);
