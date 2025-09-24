@@ -1628,10 +1628,6 @@ const ProfilePage = () => {
               {/* Navegación de tabs minimalista con padding lateral mínimo */}
               <div className="px-1 sm:px-2 mb-6">
                 <TabsList className={`grid w-full ${isOwnProfile ? 'grid-cols-5' : 'grid-cols-2'} bg-gray-50 rounded-2xl p-1 h-auto`}>
-                  {/* DEBUG: Show isOwnProfile value */}
-                  <div className="text-xs text-red-500 absolute -top-6">
-                    isOwnProfile: {isOwnProfile ? 'true' : 'false'} | userId: {userId || 'null'} | authUser: {authUser?.username || 'none'}
-                  </div>
                   <TabsTrigger 
                     value="polls" 
                     className="rounded-xl py-3 text-sm font-medium data-[state=active]:bg-white data-[state=active]:shadow-sm"
