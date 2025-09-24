@@ -1046,6 +1046,7 @@ const ContentCreationPage = () => {
         setTimeout(() => {
           setTitle('');
           setOptions([]);
+          setMentionInputValues({}); // Reset mention input values
           setSelectedMusic(null);
           setSelectedLayout(LAYOUT_OPTIONS[0]);
           setShowMusicSelector(false);
