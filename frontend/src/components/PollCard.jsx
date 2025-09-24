@@ -512,11 +512,22 @@ const PollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, fullScreen
                 {poll.title}
               </h2>
               
-              {/* Poll Description */}
-              {poll.description && (
-                <p className="text-sm text-gray-600 mt-2 leading-relaxed line-clamp-2">
-                  {poll.description}
-                </p>
+              {/* Option Descriptions Summary */}
+              {poll.options && poll.options.some(opt => opt.text && opt.text.trim()) && (
+                <div className="mt-2">
+                  <div className="flex flex-wrap gap-1">
+                    {poll.options.filter(opt => opt.text && opt.text.trim()).slice(0, 2).map((option, index) => (
+                      <span key={index} className="text-xs text-gray-600 bg-gray-100 px-2 py-1 rounded-full">
+                        {option.text.length > 20 ? `${option.text.substring(0, 20)}...` : option.text}
+                      </span>
+                    ))}
+                    {poll.options.filter(opt => opt.text && opt.text.trim()).length > 2 && (
+                      <span className="text-xs text-gray-500">
+                        +{poll.options.filter(opt => opt.text && opt.text.trim()).length - 2} más
+                      </span>
+                    )}
+                  </div>
+                </div>
               )}
               
               {/* Mentioned Users Display */}
