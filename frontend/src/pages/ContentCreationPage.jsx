@@ -626,7 +626,6 @@ const ContentCreationPage = () => {
   const [selectedMusic, setSelectedMusic] = useState(null);
   const [options, setOptions] = useState([]); // Changed from images to options
   const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
   const [isCreating, setIsCreating] = useState(false);
   const [currentSlotIndex, setCurrentSlotIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
