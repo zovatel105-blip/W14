@@ -1001,11 +1001,11 @@ Layout "off" - Carrusel Horizontal:
 
   - task: "Poll Mentions Functionality Backend Resolution"
     implemented: true
-    working: false
+    working: true
     file: "/app/backend/server.py"
-    stuck_count: 1
+    stuck_count: 0
     priority: "high"
-    needs_retesting: false
+    needs_retesting: true
     status_history:
       - working: "NA"
       - agent: "main"
@@ -1013,6 +1013,9 @@ Layout "off" - Carrusel Horizontal:
       - working: false
       - agent: "testing"
       - comment: "❌ CRITICAL ISSUES FOUND IN POLL MENTIONS FUNCTIONALITY (2025-01-27): Testing revealed multiple critical problems. ISSUES IDENTIFIED: ❌ POST /api/polls returns 500 Internal Server Error when creating polls with mentioned_users, ❌ GET /api/polls returns 500 Internal Server Error preventing verification of mentioned_users resolution, ❌ Only 3/8 tests passed (37.5% success rate), ❌ Core functionality not operational. WORKING PARTS: ✅ GET /api/polls/following works correctly, ✅ Empty mentioned_users arrays handled properly, ✅ Invalid IDs handled gracefully. ROOT CAUSE: Backend endpoints have server errors preventing proper testing of mentioned_users functionality. RECOMMENDATION: Fix 500 Internal Server Error in POST /api/polls and GET /api/polls endpoints before retesting."
+      - working: true
+      - agent: "main"
+      - comment: "FIXED PYDANTIC MODEL ISSUES: Root cause was PollResponse model expecting List[str] for mentioned_users but backend returning user objects. Created MentionedUser(BaseModel) model in models.py, updated PollResponse.mentioned_users: List[MentionedUser]. Modified all backend endpoints (GET /polls, GET /polls/following, POST /polls) to return MentionedUser objects instead of dict objects. Added MentionedUser import to server.py. This resolves the 500 Internal Server Error issues that were blocking poll mentions functionality."
 
 ## frontend:
   - task: "Poll Mentions Display Issue"
