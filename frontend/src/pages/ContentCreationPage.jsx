@@ -1143,21 +1143,14 @@ const ContentCreationPage = () => {
             </button>
           </div>
 
-          {/* Title and Description Inputs */}
-          <div className="px-3 sm:px-4 pb-2 space-y-2">
+          {/* Title Input */}
+          <div className="px-3 sm:px-4 pb-2">
             <input
               type="text"
               placeholder="Título de tu publicación..."
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               className="w-full bg-black/50 backdrop-blur-sm text-white px-3 py-2 rounded-lg border border-white/20 focus:border-white/50 focus:outline-none placeholder-gray-300 text-xs sm:text-sm"
-            />
-            <textarea
-              placeholder="Descripción (opcional)..."
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              rows="2"
-              className="w-full bg-black/50 backdrop-blur-sm text-white px-3 py-2 rounded-lg border border-white/20 focus:border-white/50 focus:outline-none placeholder-gray-300 text-xs sm:text-sm resize-none"
             />
           </div>
 
