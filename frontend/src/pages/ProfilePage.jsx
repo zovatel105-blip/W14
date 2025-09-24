@@ -653,7 +653,13 @@ const ProfilePage = () => {
       if (!userId && !authUser?.id) return;
       
       try {
-        const targetUserId = userId || authUser?.id;
+        // For other users, we need to wait until viewedUser is loaded to get their ID
+        if (userId && !isOwnProfile && !viewedUser?.id) {
+          console.log('⏳ Waiting for viewedUser to be loaded...');
+          return;
+        }
+        
+        const targetUserId = userId ? (viewedUser?.id || userId) : authUser?.id;
         console.log('🔍 Loading social links for user:', targetUserId);
         
         // Use the appropriate endpoint based on whether it's current user or other user
@@ -706,7 +712,7 @@ const ProfilePage = () => {
     };
 
     loadUserSocialLinks();
-  }, [authUser?.id, userId]);
+  }, [authUser?.id, userId, viewedUser?.id, isOwnProfile]);
 
   // Handle when a new story is created
   const handleStoryCreated = async (newStory) => {
