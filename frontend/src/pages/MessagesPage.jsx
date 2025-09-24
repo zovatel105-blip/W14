@@ -46,6 +46,109 @@ const MessagesPage = () => {
   const showInbox = !selectedConversation; // Show inbox when no conversation selected
   const showChat = !!selectedConversation; // Show chat when conversation is selected
 
+  // ===================== CORE FUNCTIONS =====================
+
+  // Load conversations from backend
+  const loadConversations = async () => {
+    if (!user?.id) return;
+    
+    setLoading(true);
+    try {
+      console.log('🔄 Loading conversations for user:', user.id);
+      
+      const response = await apiRequest('/api/conversations', {
+        method: 'GET'
+      });
+      
+      console.log('📥 Loaded conversations:', response);
+      
+      if (Array.isArray(response)) {
+        setConversations(response);
+      } else {
+        console.log('ℹ️ No conversations found');
+        setConversations([]);
+      }
+    } catch (error) {
+      console.error('❌ Error loading conversations:', error);
+      setConversations([]);
+      
+      if (error.message.includes('404')) {
+        console.log('ℹ️ No conversations endpoint available yet');
+      } else {
+        toast({
+          title: "Error al cargar conversaciones",
+          description: "No se pudieron cargar las conversaciones",
+          variant: "destructive",
+        });
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Load messages for a specific conversation
+  const loadMessages = async (conversationId) => {
+    if (!conversationId || !user?.id) return;
+    
+    try {
+      console.log('📩 Loading messages for conversation:', conversationId);
+      
+      const response = await apiRequest(`/api/conversations/${conversationId}/messages`, {
+        method: 'GET'
+      });
+      
+      console.log('📥 Loaded messages:', response);
+      
+      if (Array.isArray(response)) {
+        setMessages(response);
+      } else {
+        console.log('ℹ️ No messages found');
+        setMessages([]);
+      }
+      
+      // Scroll to bottom
+      setTimeout(() => {
+        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+      }, 100);
+      
+    } catch (error) {
+      console.error('❌ Error loading messages:', error);
+      setMessages([]);
+      
+      if (!error.message.includes('404')) {
+        toast({
+          title: "Error al cargar mensajes",
+          description: "No se pudieron cargar los mensajes",
+          variant: "destructive",
+        });
+      }
+    }
+  };
+
+  // Load chat requests
+  const loadChatRequests = async () => {
+    if (!user?.id) return;
+    
+    try {
+      console.log('📨 Loading chat requests...');
+      
+      const response = await apiRequest('/api/chat-requests/received', {
+        method: 'GET'
+      });
+      
+      console.log('📥 Loaded chat requests:', response);
+      
+      if (Array.isArray(response)) {
+        setChatRequests(response);
+      } else {
+        setChatRequests([]);
+      }
+    } catch (error) {
+      console.error('❌ Error loading chat requests:', error);
+      setChatRequests([]);
+    }
+  };
+
   // Search users for new conversation
   const searchUsers = async (query) => {
     if (!query || query.length < 2) {
@@ -125,282 +228,154 @@ const MessagesPage = () => {
     }
   };
 
-  useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 768);
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
-
-  useEffect(() => {
-    loadConversations();
-    loadChatRequests();
-  }, []);
-
-  // Force inbox to show initially, but allow conversation selection
-  useEffect(() => {
-    // Only reset if we don't have URL parameters for user chat
-    const targetParam = searchParams.get('user');
-    if (!targetParam) {
-      setSelectedConversation(null);
-    }
-  }, [searchParams]);
-
-  // Don't clear selected conversation when conversations load - let user selections persist
-  useEffect(() => {
-    // Remove this effect as it interferes with conversation selection
-    // if (conversations.length >= 0) {
-    //   setSelectedConversation(null);
-    // }
-  }, [conversations]);
-
-  // Cargar datos cuando el usuario y conversaciones estén disponibles
-  useEffect(() => {
-    if (user) {
-      loadSegmentData();
-    }
-  }, [user, chatRequests]);
-
-  // Cargar notificaciones cuando las conversaciones cambien
-  useEffect(() => {
-    if (user) {
-      loadNotifications();
-    }
-  }, [conversations, chatRequests, user]);
-
-  // Recargar notificaciones cuando cambie el segmento seleccionado  
-  useEffect(() => {
-    if (user && selectedSegment) {
-      loadNotifications();
-    }
-  }, [selectedSegment, user]);
-
-  // Polling automático para actualizar datos de segmentos cada 30 segundos
-  useEffect(() => {
-    if (!user) return;
-
-    // Cargar datos inicialmente
-    loadNotifications();
-    loadSegmentData();
-
-    // Configurar polling cada 30 segundos
-    const interval = setInterval(() => {
-      // Solo actualizar si no estamos en una conversación individual
-      if (!selectedConversation) {
-        loadNotifications(); // Esto ya usa el selectedSegment actual
-        loadSegmentData();   // Actualizar badges de todos los segmentos
-      }
-    }, 30000); // 30 segundos
-
-    return () => clearInterval(interval);
-  }, [user]); // Removido selectedSegment y selectedConversation de dependencies
-
-  // Actualizar cuando la ventana regrese al foco (usuario vuelve a la app)
-  useEffect(() => {
-    if (!user) return;
-
-    const handleFocus = () => {
-      // Actualizar datos cuando el usuario regrese a la aplicación
-      if (!selectedConversation) {
-        loadNotifications();
-        loadSegmentData();
-      }
+  // Send message
+  const sendMessage = async () => {
+    if (!newMessage.trim() || !selectedConversation || sendingMessage) return;
+    
+    const messageContent = newMessage.trim();
+    const tempMessageId = `temp-${Date.now()}`;
+    
+    // Add optimistic message
+    const optimisticMessage = {
+      id: tempMessageId,
+      content: messageContent,
+      sender_id: user.id,
+      sender: user,
+      created_at: new Date().toISOString(),
+      status: 'sending'
     };
-
-    const handleVisibilityChange = () => {
-      // Actualizar cuando la pestaña se vuelva visible
-      if (!document.hidden && !selectedConversation) {
-        loadNotifications();
-        loadSegmentData();
-      }
-    };
-
-    window.addEventListener('focus', handleFocus);
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-
-    return () => {
-      window.removeEventListener('focus', handleFocus);
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-    };
-  }, [user]);
-
-  // Procesar parámetro 'user' de la URL para iniciar chat desde perfil
-  useEffect(() => {
-    const targetParam = searchParams.get('user');
-    if (targetParam && user && conversations.length > 0) {
-      console.log('🎯 Processing URL parameter:', targetParam);
-      handleChatFromProfile(targetParam);
-    }
-  }, [searchParams, user, conversations]);
-
-  const handleChatFromProfile = async (targetParam) => {
+    
+    setMessages(prev => [...prev, optimisticMessage]);
+    setNewMessage('');
+    setSendingMessage(true);
+    
     try {
-      console.log('🔍 CHAT FROM PROFILE DEBUG:', {
-        targetParam,
-        userParam: searchParams.get('user'),
-        conversations: conversations.length
-      });
+      console.log('📤 Sending message:', messageContent);
       
-      // Limpiar el parámetro de la URL
-      setSearchParams({});
-      
-      // Buscar si ya existe una conversación con este usuario (por username o ID)
-      const existingConv = conversations.find(conv => 
-        conv.participants.some(p => 
-          p.username === targetParam || 
-          p.id === targetParam
-        )
-      );
-
-      console.log('🔍 Existing conversation search:', {
-        found: !!existingConv,
-        conversationsChecked: conversations.length,
-        searchingFor: targetParam
-      });
-
-      if (existingConv) {
-        console.log('✅ Found existing conversation, opening:', existingConv.id);
-        setSelectedConversation(existingConv);
-        return;
+      // Determine recipient
+      let recipientId;
+      if (selectedConversation.isNewConversation) {
+        recipientId = selectedConversation.otherParticipant.id;
+      } else {
+        const otherParticipant = selectedConversation.participants?.find(p => p.id !== user.id);
+        recipientId = otherParticipant?.id;
       }
+      
+      if (!recipientId) {
+        throw new Error('No se pudo determinar el destinatario');
+      }
+      
+      const messagePayload = {
+        recipient_id: recipientId,
+        content: messageContent
+      };
+      
+      console.log('📤 Message payload:', messagePayload);
+      
+      const response = await apiRequest('/api/messages', {
+        method: 'POST',
+        body: messagePayload
+      });
 
-      // Si no existe conversación, buscar el usuario
-      console.log('🔍 Searching for user:', targetParam);
+      console.log('✅ Respuesta del servidor:', response);
       
-      let targetUser = null;
-      
-      try {
-        // Intentar buscar por username primero usando la API de búsqueda
-        const searchResults = await apiRequest(`/api/users/search?q=${encodeURIComponent(targetParam)}`);
-        targetUser = searchResults.find(u => u.username === targetParam);
+      // Manejar diferentes tipos de respuesta del backend
+      if (response.type === 'chat_request') {
+        // El mensaje se convirtió en una solicitud de chat
+        console.log('📨 Solicitud de chat enviada:', response.request_id);
         
-        // Si no se encuentra por username exacto, buscar por coincidencia parcial
-        if (!targetUser && searchResults.length > 0) {
-          targetUser = searchResults.find(u => u.username.toLowerCase().includes(targetParam.toLowerCase()));
-        }
-      } catch (searchError) {
-        console.log('⚠️ Search API failed:', searchError.message);
-      }
-      
-      // Si no se encuentra por búsqueda, intentar buscar por ID usando el endpoint de perfil
-      if (!targetUser && targetParam) {
-        try {
-          // Intentar buscar por username usando el endpoint by-username
-          const profileResponse = await apiRequest(`/api/user/profile/by-username/${targetParam}`);
-          if (profileResponse) {
-            targetUser = {
-              id: profileResponse.id,
-              username: profileResponse.username,
-              display_name: profileResponse.display_name
-            };
-          }
-        } catch (profileError) {
-          console.log('⚠️ Could not find user by username via profile:', profileError.message);
-          
-          // Último intento: buscar por ID si el parámetro parece ser un ID
-          if (targetParam.includes('-') && targetParam.length > 20) {
-            try {
-              const profileByIdResponse = await apiRequest(`/api/user/profile/${targetParam}`);
-              if (profileByIdResponse) {
-                targetUser = {
-                  id: profileByIdResponse.id,
-                  username: profileByIdResponse.username,
-                  display_name: profileByIdResponse.display_name
-                };
-              }
-            } catch (idError) {
-              console.log('⚠️ Could not find user by ID:', idError.message);
-            }
-          }
-        }
-      }
-      
-      console.log('🔍 User search result:', {
-        targetUser: targetUser ? `${targetUser.username}(${targetUser.id})` : 'not found',
-        searchParam: targetParam
-      });
-      
-      if (targetUser) {
-        console.log('✅ Usuario encontrado, abriendo conversación:', targetUser.display_name);
+        // Eliminar mensaje temporal
+        setMessages(prevMessages =>
+          prevMessages.filter(msg => msg.id !== tempMessageId)
+        );
         
-        // Crear una conversación temporal para permitir al usuario escribir su mensaje
-        const tempConv = {
-          id: null, // Se creará cuando se envíe el primer mensaje
-          participants: [targetUser],
-          last_message: null,
-          last_message_at: null,
-          unread_count: 0
+        // Mostrar mensaje informativo al usuario
+        const chatRequestMessage = {
+          id: `system-${Date.now()}`,
+          content: '📨 Solicitud de chat enviada. El usuario debe aceptarla para poder intercambiar mensajes.',
+          sender_id: 'system',
+          isSystemMessage: true,
+          created_at: new Date().toISOString()
         };
         
-        setSelectedConversation(tempConv);
+        setMessages(prevMessages => [...prevMessages, chatRequestMessage]);
         
-        toast({
-          title: "💬 Chat Iniciado",
-          description: `Conectado con ${targetUser.display_name}. ¡Envía tu primer mensaje!`,
-        });
-      } else {
-        console.error('❌ Usuario no encontrado:', targetParam);
+        // Cerrar la conversación después de un momento
+        setTimeout(() => {
+          setSelectedConversation(null);
+        }, 3000);
         
-        // Mostrar un toast más amigable y ofrecer alternativas
-        toast({
-          title: "🔍 Usuario no encontrado",
-          description: "Intenta buscar usuarios en la sección 'Iniciar Conversación'",
-          variant: "default"
-        });
+      } else if (response.message_id) {
+        // Mensaje enviado normalmente
         
-        // Automaticamente abrir el panel de nueva conversación para ayudar al usuario
-        setShowNewChat(true);
+        // Si era una conversación nueva, actualizar con los datos reales del backend
+        if (selectedConversation.isNewConversation && response.conversation_id) {
+          console.log('🔄 Actualizando conversación nueva con ID real:', response.conversation_id);
+          setSelectedConversation(prev => ({
+            ...prev,
+            id: response.conversation_id,
+            isNewConversation: false
+          }));
+        }
+        
+        // Actualizar el mensaje temporal con la respuesta del servidor
+        setMessages(prevMessages =>
+          prevMessages.map(msg =>
+            msg.id === tempMessageId
+              ? { ...response, status: 'sent', id: response.message_id }
+              : msg
+          )
+        );
+
+        // Actualizar la conversación con el último mensaje
+        setSelectedConversation(prev => ({
+          ...prev,
+          last_message: {
+            content: messageContent,
+            timestamp: response.timestamp,
+            sender_id: user.id
+          }
+        }));
+
+        // Recargar conversaciones para actualizar la lista
+        loadConversations();
       }
-    } catch (error) {
-      console.error('❌ Error manejando chat desde perfil:', error);
-      toast({
-        title: "⚠️ Error de Conexión",
-        description: "Problema al conectar con el perfil. Intenta de nuevo.",
-        variant: "destructive"
-      });
       
-      // En caso de error, también abrir el panel de nueva conversación
-      setShowNewChat(true);
-    }
-  };
-
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
-
-  useEffect(() => {
-    if (selectedConversation && selectedConversation.id) {
-      loadMessages(selectedConversation.id);
-      const interval = setInterval(() => {
-        loadMessages(selectedConversation.id);
-      }, 5000); // Reducido a 5 segundos para mejor UX
-      return () => clearInterval(interval);
-    }
-  }, [selectedConversation]);
-
-  const loadConversations = async () => {
-    try {
-      const data = await apiRequest('/api/conversations');
-      setConversations(data);
     } catch (error) {
-      console.error('Error loading conversations:', error);
+      console.error('❌ Error sending message:', error);
+      
+      // Mark message as failed
+      setMessages(prevMessages =>
+        prevMessages.map(msg =>
+          msg.id === tempMessageId
+            ? { ...msg, status: 'failed' }
+            : msg
+        )
+      );
+      
+      toast({
+        title: "Error al enviar mensaje",
+        description: error.message || "No se pudo enviar el mensaje",
+        variant: "destructive",
+      });
+    } finally {
+      setSendingMessage(false);
     }
   };
 
-  const loadChatRequests = async () => {
-    try {
-      const data = await apiRequest('/api/chat-requests/received');
-      setChatRequests(data);
-    } catch (error) {
-      console.error('Error loading chat requests:', error);
-    }
-  };
-
+  // Handle chat request (accept/reject)
   const handleChatRequest = async (requestId, action) => {
+    if (!requestId) return;
+    
     try {
+      console.log(`📨 ${action === 'accept' ? 'Accepting' : 'Rejecting'} chat request:`, requestId);
+      
       const response = await apiRequest(`/api/chat-requests/${requestId}`, {
         method: 'PUT',
         body: { action }
       });
+
+      console.log('✅ Chat request response:', response);
 
       if (response.success) {
         toast({
@@ -418,10 +393,12 @@ const MessagesPage = () => {
           const newConv = conversation.find(c => c.id === response.conversation_id);
           if (newConv) {
             setSelectedConversation(newConv);
+            loadMessages(newConv.id);
           }
         }
       }
     } catch (error) {
+      console.error('❌ Error handling chat request:', error);
       toast({
         title: "Error",
         description: "No se pudo procesar la solicitud",
@@ -430,1280 +407,479 @@ const MessagesPage = () => {
     }
   };
 
-  const loadMessages = async (conversationId) => {
-    try {
-      const data = await apiRequest(`/api/conversations/${conversationId}/messages`);
-      setMessages(data);
-    } catch (error) {
-      console.error('Error loading messages:', error);
+  // ===================== EFFECT HOOKS =====================
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (user?.id) {
+      loadConversations();
+      loadChatRequests();
     }
-  };
+  }, [user?.id]);
 
-  const searchUsers = async (query) => {
-    if (query.length < 2) {
-      setSearchResults([]);
-      return;
-    }
-
-    try {
-      setLoading(true);
-      const data = await apiRequest(`/api/users/search?q=${encodeURIComponent(query)}`);
-      setSearchResults(data);
-    } catch (error) {
-      console.error('Error searching users:', error);
-      setSearchResults([]);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // 🎯 Funciones del chat
-  const handleLongPress = (messageId) => {
-    setReactionTarget(messageId);
-    setShowEmojiPicker(true);
-  };
-
-  const startLongPress = (messageId) => {
-    longPressTimer.current = setTimeout(() => {
-      handleLongPress(messageId);
-    }, 500);
-  };
-
-  const endLongPress = () => {
-    if (longPressTimer.current) {
-      clearTimeout(longPressTimer.current);
-    }
-  };
-
-  const addReaction = async (messageId, emoji) => {
-    try {
-      await apiRequest(`/api/messages/${messageId}/reaction`, {
-        method: 'POST',
-        body: { emoji }
-      });
-      setShowEmojiPicker(false);
-      setReactionTarget(null);
-      if (selectedConversation && selectedConversation.id) {
-        loadMessages(selectedConversation.id);
-      }
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "No se pudo agregar la reacción",
-        variant: "destructive"
-      });
-    }
-  };
-
-  const startConversation = async (selectedUser) => {
-    // Check if conversation already exists
-    const existingConv = conversations.find(conv => 
-      conv.participants.some(p => p.id === selectedUser.id)
-    );
-
-    if (existingConv) {
-      setSelectedConversation(existingConv);
-    } else {
-      // Crear conversación temporal para permitir al usuario escribir su mensaje
-      const tempConv = {
-        id: null, // Se creará cuando se envíe el primer mensaje
-        participants: [selectedUser],
-        last_message: null,
-        last_message_at: null,
-        unread_count: 0
-      };
-      setSelectedConversation(tempConv);
-    }
-    
-    setShowNewChat(false);
-    setSearchQuery('');
-    setSearchResults([]);
-  };
-
-  // Duplicate function removed - already exists above
-
-  // Función para aceptar solicitud de chat
-  const acceptChatRequest = async (requestId) => {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/chat-requests/${requestId}`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          action: 'accept'
-        })
-      });
-
-      if (response.ok) {
-        const result = await response.json();
-        
-        toast({
-          title: "Solicitud aceptada",
-          description: "Ahora puedes chatear con este usuario",
-          variant: "default",
-          duration: 3000,
-        });
-
-        // Recargar datos para mostrar la nueva conversación
-        await loadConversations();
-        
-        // Si hay conversation_id, navegar a ella
-        if (result.conversation_id) {
-          const newConversation = conversations.find(conv => conv.id === result.conversation_id);
-          if (newConversation) {
-            setSelectedConversation(newConversation);
-          }
-        }
-        
-        // Recargar notificaciones para quitar la solicitud
-        await loadNotifications();
-        
-      } else {
-        throw new Error('Error accepting chat request');
-      }
-    } catch (error) {
-      console.error('Error accepting chat request:', error);
-      toast({
-        title: "Error",
-        description: "No se pudo aceptar la solicitud",
-        variant: "destructive",
-        duration: 3000,
-      });
-    }
-  };
-
-  // Función para rechazar solicitud de chat
-  const rejectChatRequest = async (requestId) => {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/chat-requests/${requestId}`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          action: 'reject'
-        })
-      });
-
-      if (response.ok) {
-        toast({
-          title: "Solicitud rechazada",
-          description: "Se ha rechazado la solicitud de chat",
-          variant: "default",
-          duration: 3000,
-        });
-
-        // Recargar notificaciones para quitar la solicitud
-        await loadNotifications();
-        
-      } else {
-        throw new Error('Error rejecting chat request');
-      }
-    } catch (error) {
-      console.error('Error rejecting chat request:', error);
-      toast({
-        title: "Error",
-        description: "No se pudo rechazar la solicitud",
-        variant: "destructive",
-        duration: 3000,
-      });
-    }
-  };
-
-  // Función para enviar mensaje con manejo de chat requests
-  const sendMessage = async (e) => {
-    e.preventDefault();
-    if (!newMessage.trim() || sendingMessage) return;
-
-    const messageText = newMessage.trim();
-    setNewMessage('');
-    setSendingMessage(true);
-
-    try {
-      const recipientId = selectedConversation.participants[0].id;
+  useEffect(() => {
+    if (selectedConversation && selectedConversation.id && !selectedConversation.isNewConversation) {
+      loadMessages(selectedConversation.id);
       
-      const response = await apiRequest('/api/messages', {
-        method: 'POST',
-        body: {
-          recipient_id: recipientId,
-          content: messageText,
-          message_type: 'text',
-          is_ephemeral: ephemeralMode
-        }
-      });
+      // Set up polling for new messages
+      const interval = setInterval(() => {
+        loadMessages(selectedConversation.id);
+      }, 5000);
+      
+      return () => clearInterval(interval);
+    }
+  }, [selectedConversation]);
 
-      const result = await response.json();
+  // Auto-scroll to bottom when new messages arrive
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
-      if (response.ok) {
-        if (result.type === 'chat_request') {
-          // Se envió una solicitud de chat
-          toast({
-            title: "Solicitud enviada",
-            description: "Se ha enviado una solicitud de chat. El usuario debe aceptarla primero.",
-            variant: "default",
-            duration: 4000,
-          });
-          
-          // Limpiar el mensaje y cerrar chat
-          setNewMessage('');
-          setSelectedConversation(null);
-          
-          // Recargar datos para mostrar la solicitud enviada
-          await loadConversations();
-        } else {
-          // Mensaje enviado normalmente
-          // Si es una conversación temporal (nueva), recargar conversaciones
-          if (!selectedConversation.id) {
-            await loadConversations();
-            
-            // Buscar la nueva conversación creada y cambiar a ella
-            setTimeout(async () => {
-              await loadConversations();
-              const newConv = conversations.find(conv => 
-                conv.participants.some(p => p.id === recipientId)
-              );
-              if (newConv) {
-                setSelectedConversation(newConv);
-                loadMessages(newConv.id);
-              }
-            }, 1000);
-          } else {
-            // Si es una conversación existente, solo recargar mensajes
-            loadMessages(selectedConversation.id);
-          }
-          
-          loadConversations();
-        }
-      } else {
-        // Manejar errores específicos
-        if (response.status === 403 && result.detail?.includes('Chat request already sent')) {
-          toast({
-            title: "Solicitud pendiente",
-            description: "Ya has enviado una solicitud a este usuario. Espera a que la acepte.",
-            variant: "destructive",
-            duration: 4000,
-          });
-        } else {
-          throw new Error(result.detail || 'Error sending message');
-        }
+  // Handle URL parameters for direct user chat
+  useEffect(() => {
+    const targetUserId = searchParams.get('user');
+    if (targetUserId && conversations.length > 0) {
+      const existingConv = conversations.find(conv =>
+        conv.participants?.some(p => p.id === targetUserId)
+      );
+      if (existingConv) {
+        setSelectedConversation(existingConv);
       }
-    } catch (error) {
-      console.error('Error sending message:', error);
-      toast({
-        title: "Error",
-        description: error.message || "No se pudo enviar el mensaje",
-        variant: "destructive",
-        duration: 3000,
-      });
-    } finally {
-      setSendingMessage(false);
     }
-  };
+  }, [searchParams, conversations]);
 
-  const formatTime = (timestamp) => {
-    if (!timestamp) return '';
-    
-    const date = new Date(timestamp);
-    const now = new Date();
-    const diffInHours = (now - date) / (1000 * 60 * 60);
-    const diffInDays = Math.floor(diffInHours / 24);
-
-    if (diffInHours < 1) {
-      return "ahora";
-    } else if (diffInHours < 24) {
-      return date.toLocaleTimeString('es-ES', { 
-        hour: '2-digit', 
-        minute: '2-digit' 
-      });
-    } else if (diffInDays === 1) {
-      return "ayer";
-    } else if (diffInDays < 7) {
-      return `${diffInDays}d`;
+  // Handle search query changes
+  useEffect(() => {
+    if (searchQuery) {
+      searchUsers(searchQuery);
     } else {
-      return date.toLocaleDateString('es-ES', { 
-        day: '2-digit', 
-        month: '2-digit' 
-      });
+      setSearchResults([]);
     }
+  }, [searchQuery]);
+
+  // ===================== HELPER FUNCTIONS =====================
+
+  const getOtherParticipant = (conversation) => {
+    if (conversation.isNewConversation) {
+      return conversation.otherParticipant;
+    }
+    return conversation.participants?.find(p => p.id !== user?.id) || conversation.participants?.[0];
   };
 
   const formatMessageTime = (timestamp) => {
-    if (!timestamp) return '';
-    
     const date = new Date(timestamp);
     const now = new Date();
     const diffInHours = (now - date) / (1000 * 60 * 60);
-
-    if (diffInHours < 1) {
-      const minutes = Math.floor((now - date) / (1000 * 60));
-      return minutes < 1 ? "ahora" : `${minutes}m`;
-    } else if (diffInHours < 24) {
-      return date.toLocaleTimeString('es-ES', { 
-        hour: '2-digit', 
-        minute: '2-digit' 
-      });
+    
+    if (diffInHours < 24) {
+      return date.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+    } else if (diffInHours < 168) { // 7 days
+      return date.toLocaleDateString('es-ES', { weekday: 'short' });
     } else {
-      return date.toLocaleDateString('es-ES', { 
-        day: '2-digit', 
-        month: '2-digit',
-        hour: '2-digit', 
-        minute: '2-digit' 
-      });
+      return date.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });
     }
   };
 
-  // VotaTok-specific emoji reactions for voting-style interactions
-  const votaTokEmojis = ['🔥', '💯', '⚡', '🎯', '💎', '🚀', '✨', '🏆'];
-
-  const handleSegmentClick = (segmentId) => {
-    setSelectedSegment(segmentId);
-    // Recargar notificaciones específicas para el segmento seleccionado
-    if (user) {
-      loadNotifications();
-    }
-  };
-
-  // Cargar datos reales del sistema con fallbacks
-  const loadSegmentData = async () => {
-    try {
-      let followersCount = 0;
-      let activityCount = 0;
-      let messageRequestsCount = 0;
-
-      // Intentar cargar seguidores nuevos (con fallback silencioso)
-      try {
-        const followersResponse = await apiRequest('/api/users/followers/recent');
-        followersCount = followersResponse?.length || 0;
-      } catch (e) {
-        // Silently fail and use 0
-        console.log('Followers API not available, using fallback');
-      }
-
-      // Intentar cargar actividad (con fallback silencioso)
-      try {
-        const activityResponse = await apiRequest('/api/users/activity/recent');
-        activityCount = activityResponse?.length || 0;
-      } catch (e) {
-        // Silently fail and use 0
-        console.log('Activity API not available, using fallback');
-      }
-
-      // Intentar cargar solicitudes de mensajes (con fallback silencioso)
-      try {
-        const requestsResponse = await apiRequest('/api/messages/requests');
-        messageRequestsCount = requestsResponse?.length || 0;
-      } catch (e) {
-        // Usar chat requests existentes como fallback
-        messageRequestsCount = chatRequests?.length || 0;
-        console.log('Message requests API not available, using chat requests fallback');
-      }
-
-      // Actualizar estado
-      setSegmentData({
-        followers: { count: followersCount, loading: false },
-        activity: { count: activityCount, loading: false },
-        messages: { count: messageRequestsCount, loading: false }
-      });
-
-    } catch (error) {
-      console.log('Error loading segment data:', error.message);
-      // Fallback usando datos existentes
-      setSegmentData({
-        followers: { count: 0, loading: false },
-        activity: { count: 0, loading: false },
-        messages: { count: chatRequests?.length || 0, loading: false }
-      });
-    }
-  };
-
-  // Cargar notificaciones específicas por segmento
-  const loadNotifications = async () => {
-    try {
-      setLoadingNotifications(true);
-      
-      let realData = [];
-
-      // Cargar datos según el segmento seleccionado
-      if (selectedSegment === null) {
-        // Sin selección de segmento = mostrar conversaciones normales (función inicial)
-        realData = await loadConversationsData();
-      } else {
-        switch (selectedSegment) {
-          case 'followers':
-            // **Nuevos seguidores** - Personas que te siguen recientemente
-            realData = await loadNewFollowersData();
-            break;
-            
-          case 'activity':
-            // **Actividad** - Comentarios, me gusta y reacciones a tus publicaciones
-            realData = await loadActivityData();
-            break;
-            
-          case 'messages':
-            // **Solicitudes de mensajes** - Mensajes de personas que no sigues
-            realData = await loadMessageRequestsData();
-            break;
-            
-          default:
-            realData = await loadConversationsData();
-        }
-      }
-
-      // Si no hay datos específicos, usar mensaje apropiado
-      if (realData.length === 0) {
-        realData = getEmptyStateForSegment(selectedSegment);
-      }
-
-      setNotifications(realData);
-    } catch (error) {
-      console.log('Error loading notifications:', error.message);
-      setNotifications(getEmptyStateForSegment(selectedSegment));
-    } finally {
-      setLoadingNotifications(false);
-    }
-  };
-
-  // Cargar datos de nuevos seguidores
-  const loadNewFollowersData = async () => {
-    try {
-      const followersResponse = await apiRequest('/api/users/followers/recent');
-      return followersResponse.map(follower => ({
-        id: `follower-${follower.id}`,
-        type: 'new_follower',
-        title: `${follower.display_name || follower.username} te sigue`,
-        message: `@${follower.username} comenzó a seguirte`,
-        unreadCount: 0,
-        time: formatTimeForInbox(follower.followed_at),
-        avatar: follower.avatar_url || getAvatarForUser(follower), // Usar foto de perfil real o fallback
-        userId: follower.id,
-        isSystem: false
-      }));
-    } catch (error) {
-      console.log('Error loading followers:', error.message);
-      // Retornar array vacío en lugar de datos hardcodeados
-      return [];
-    }
-  };
-
-  // Cargar datos de actividad
-  const loadActivityData = async () => {
-    try {
-      const activityResponse = await apiRequest('/api/users/activity/recent');
-      return activityResponse.map(activity => ({
-        id: `activity-${activity.id}`,
-        type: 'activity_notification',
-        title: getActivityTitle(activity),
-        message: getActivityMessage(activity),
-        unreadCount: activity.unread ? 1 : 0,
-        time: formatTimeForInbox(activity.created_at),
-        avatar: activity.user.avatar_url || getAvatarForUser(activity.user), // Usar foto de perfil real o fallback
-        userId: activity.user.id,
-        activityType: activity.type,
-        isSystem: false
-      }));
-    } catch (error) {
-      console.log('Error loading activity:', error.message);
-      // Retornar array vacío en lugar de datos hardcodeados
-      return [];
-    }
-  };
-
-  // Cargar solicitudes de mensajes
-  const loadMessageRequestsData = async () => {
-    try {
-      const requestsResponse = await apiRequest('/api/messages/requests');
-      return requestsResponse.map(request => ({
-        id: `request-${request.id}`,
-        type: 'message_request',
-        title: `${request.sender.display_name || request.sender.username}`,
-        message: request.preview || 'Te ha enviado una solicitud de mensaje',
-        unreadCount: 1,
-        time: formatTimeForInbox(request.created_at),
-        avatar: request.sender.avatar_url || getAvatarForUser(request.sender), // Usar foto de perfil real o fallback
-        userId: request.sender.id,
-        requestId: request.id,
-        isSystem: false,
-        needsApproval: true
-      }));
-    } catch (error) {
-      console.log('Error loading message requests:', error.message);
-      // Usar datos existentes de chatRequests si disponibles
-      if (chatRequests && chatRequests.length > 0) {
-        return chatRequests.map(request => ({
-          id: `request-${request.id}`,
-          type: 'message_request',
-          title: `${request.sender?.display_name || request.sender?.username || 'Usuario'}`,
-          message: request.message || 'Te ha enviado una solicitud de mensaje',
-          unreadCount: 1,
-          time: formatTimeForInbox(request.created_at),
-          avatar: '💬',
-          userId: request.sender?.id,
-          requestId: request.id,
-          isSystem: false,
-          needsApproval: true
-        }));
-      }
-      
-      // Retornar array vacío en lugar de datos hardcodeados
-      return [];
-    }
-  };
-
-  // Cargar conversaciones existentes (para el estado por defecto)
-  const loadConversationsData = async () => {
-    const realData = [];
-
-    // Usar conversaciones existentes que ya están cargadas
-    if (conversations && conversations.length > 0) {
-      conversations.forEach(conv => {
-        const otherUser = conv.participants.find(p => p.id !== user?.id) || conv.participants[0];
-        if (otherUser) {
-          realData.push({
-            id: conv.id,
-            type: 'conversation',
-            title: otherUser.display_name || otherUser.username || 'Usuario',
-            message: conv.last_message || 'Iniciar conversación',
-            unreadCount: conv.unread_count || 0,
-            time: formatTimeForInbox(conv.last_message_at || conv.created_at),
-            avatar: getAvatarForUser(otherUser),
-            userId: otherUser.id
-          });
-        }
-      });
-    }
-
-    return realData;
-  };
-
-  // Obtener estado vacío específico para cada segmento
-  const getEmptyStateForSegment = (segment) => {
-    const emptyStates = {
-      followers: [{
-        id: 'empty-followers',
-        type: 'system',
-        title: 'Sin nuevos seguidores',
-        message: 'Los nuevos seguidores aparecerán aquí',
-        unreadCount: 0,
-        time: '',
-        avatar: '👤',
-        isSystem: true
-      }],
-      activity: [{
-        id: 'empty-activity',
-        type: 'system',
-        title: 'Sin actividad reciente',
-        message: 'Las notificaciones de actividad aparecerán aquí',
-        unreadCount: 0,
-        time: '',
-        avatar: '🔔',
-        isSystem: true
-      }],
-      messages: [{
-        id: 'empty-requests',
-        type: 'system',
-        title: 'Sin solicitudes de mensajes',
-        message: 'Las nuevas solicitudes aparecerán aquí',
-        unreadCount: 0,
-        time: '',
-        avatar: '💬',
-        isSystem: true
-      }]
-    };
-    
-    // Estado por defecto para conversaciones (cuando selectedSegment es null)
-    if (segment === null) {
-      return [{
-        id: 'empty-conversations', 
-        type: 'system',
-        title: 'Mensajes',
-        message: 'Tus conversaciones aparecerán aquí',
-        unreadCount: 0,
-        time: '',
-        avatar: '💬',
-        isSystem: true
-      }];
-    }
-    
-    return emptyStates[segment] || [{
-      id: 'empty-default',
-      type: 'system', 
-      title: 'Sin notificaciones',
-      message: 'Las notificaciones aparecerán aquí',
-      unreadCount: 0,
-      time: '',
-      avatar: '📱',
-      isSystem: true
-    }];
-  };
-
-  // Utilidades para formatear actividades
-  const getActivityTitle = (activity) => {
-    const user = activity.user?.display_name || activity.user?.username || 'Usuario';
-    switch (activity.type) {
-      case 'like':
-        return `${user} le dio me gusta a tu ${activity.content_type || 'publicación'}`;
-      case 'comment':
-        return `${user} comentó tu ${activity.content_type || 'publicación'}`;
-      case 'mention':
-        return `${user} te mencionó`;
-      case 'follow':
-        return `${user} comenzó a seguirte`;
-      case 'vote':
-        return `${user} votó en tu encuesta`;
-      default:
-        return `${user} interactuó con tu contenido`;
-    }
-  };
-
-  const getActivityMessage = (activity) => {
-    switch (activity.type) {
-      case 'like':
-        return `❤️ Le encanta tu ${activity.content_type || 'contenido'}${activity.content_preview ? ': "' + activity.content_preview + '"' : ''}`;
-      case 'comment':
-        return `💬 "${activity.comment_preview || 'Nuevo comentario'}"`;
-      case 'mention':
-        return `📢 Te mencionó en ${activity.content_type || 'una publicación'}`;
-      case 'follow':
-        return `👥 Ahora es tu seguidor`;
-      case 'vote':
-        return `🗳️ Votó en tu encuesta${activity.content_preview ? ': "' + activity.content_preview + '"' : ''}`;
-      default:
-        return activity.message || 'Nueva interacción';
-    }
-  };
-
-  const getIconComponent = (iconName) => {
-    const icons = {
-      'Users': Users,
-      'Bell': Bell, 
-      'MessageCircle': MessageCircle
-    };
-    return icons[iconName] || Users;
-  };
-
-  // Funciones de utilidad optimizadas para móvil
-  const formatTimeForInbox = (timestamp) => {
-    if (!timestamp) return 'ahora';
-    
-    const now = new Date();
-    const messageTime = new Date(timestamp);
-    const diffInMinutes = Math.floor((now - messageTime) / (1000 * 60));
-    
-    if (diffInMinutes < 1) return 'ahora';
-    if (diffInMinutes < 60) return `${diffInMinutes}m`;
-    
-    const diffInHours = Math.floor(diffInMinutes / 60);
-    if (diffInHours < 24) return `${diffInHours}h`;
-    
-    const diffInDays = Math.floor(diffInHours / 24);
-    if (diffInDays < 7) return `${diffInDays}d`;
-    
-    return `${Math.floor(diffInDays / 7)}sem`;
-  };
-
-  // Función para renderizar avatar (texto o imagen)
-  const renderAvatar = (avatar) => {
-    // Si avatar es una URL (contiene http o /), renderizar como imagen
-    if (avatar && (avatar.startsWith('http') || avatar.startsWith('/'))) {
-      return (
-        <img 
-          src={avatar} 
-          alt="Avatar" 
-          className="w-full h-full rounded-full object-cover"
-          onError={(e) => {
-            // Si la imagen falla al cargar, mostrar iniciales o emoji
-            e.target.style.display = 'none';
-            e.target.nextSibling.style.display = 'flex';
-          }}
-        />
-      );
-    }
-    
-    // Si es texto (iniciales o emoji), renderizarlo normalmente
-    return avatar;
-  };
-
-  const getAvatarForUser = (user) => {
-    if (!user) return '👤';
-    
-    // Si el usuario tiene avatar_url, devolverlo para que se renderice como imagen
-    if (user.avatar_url) {
-      return user.avatar_url;
-    }
-    
-    // Si el usuario tiene avatar personalizado, usar iniciales
-    if (user.display_name || user.username) {
-      const name = user.display_name || user.username;
-      return name.charAt(0).toUpperCase();
-    }
-    
-    // Fallback
-    return '👤';
-  };
-
-  const getSegmentBadgeCount = (segmentId) => {
-    const data = segmentData[segmentId];
-    if (data?.loading) return '...';
-    if (!data?.count || data.count === 0) return '';
-    return data.count > 99 ? '99+' : data.count.toString();
-  };
-
-  // Debug logging
-  console.log('🔥 MESSAGES PAGE DEBUG:', {
-    showInbox,
-    showChat,
-    selectedSegment: selectedSegment || 'conversations', // null = conversaciones por defecto
-    selectedConversation: selectedConversation ? {
-      id: selectedConversation.id,
-      participant: selectedConversation.participants?.[0]?.display_name
-    } : null,
-    notifications: notifications.length,
-    loadingNotifications
-  });
+  // ===================== RENDER =====================
 
   return (
-    <div className="h-screen bg-white flex flex-col relative overflow-hidden font-inter">
-      {/* DEBUG MESSAGE */}
-      <div style={{position: 'absolute', top: 0, right: 0, background: 'red', color: 'white', padding: '4px', zIndex: 9999, fontSize: '10px'}}>
-        TikTok: {showInbox ? 'ON' : 'OFF'}
-      </div>
-      
-      {/* TikTok Inbox Interface */}
-      {showInbox && (
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="flex-1 flex flex-col bg-white"
-        >
-          {/* TOP BAR (Header) - OPTIMIZADO MÓVIL */}
-          <div className="h-14 flex items-center justify-between px-4 py-3 bg-white border-b border-gray-100 sticky top-0 z-20 safe-area-top">
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={() => setShowNewChat(true)}
-              className="w-11 h-11 rounded-full flex items-center justify-center hover:bg-gray-100 active:bg-gray-200 transition-colors"
-              style={{ touchAction: 'manipulation' }}
-              aria-label="Nueva conversación"
-            >
-              <Plus className="w-5 h-5 text-black" strokeWidth={2} />
-            </motion.button>
-            
-            <h1 className="text-lg font-semibold text-black">Inbox</h1>
-            
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="w-11 h-11 rounded-full flex items-center justify-center hover:bg-gray-100 active:bg-gray-200 transition-colors"
-              style={{ touchAction: 'manipulation' }}
-              aria-label="Buscar"
-            >
-              <Search className="w-5 h-5 text-black" strokeWidth={2} />
-            </motion.button>
+    <div className="flex h-screen bg-white">
+      {/* Sidebar - Conversations List */}
+      <div className={cn(
+        "border-r bg-white transition-all duration-300",
+        isMobile 
+          ? (showInbox ? "w-full" : "w-0 overflow-hidden")
+          : "w-80"
+      )}>
+        {/* Header */}
+        <div className="h-16 border-b flex items-center justify-between px-4 bg-white">
+          <div className="flex items-center space-x-3">
+            <h1 className="text-xl font-bold text-gray-900">Mensajes</h1>
           </div>
+          <button
+            onClick={() => setShowNewChat(true)}
+            className="w-8 h-8 rounded-full bg-blue-500 text-white flex items-center justify-center hover:bg-blue-600 transition-colors"
+          >
+            <Plus className="w-4 h-4" />
+          </button>
+        </div>
 
-          {/* CONTROL SEGMENTADO - OPTIMIZADO MÓVIL */}
-          <div className="p-4">
-            {/* Indicador de vista actual */}
-            {selectedSegment === null ? (
-              <div className="mb-3 flex items-center justify-center">
-                <div className="bg-blue-50 px-4 py-2 rounded-full flex items-center space-x-2">
-                  <MessageCircle className="w-4 h-4 text-blue-600" />
-                  <span className="text-sm font-medium text-blue-800">Chats</span>
+        {/* Search */}
+        <div className="p-4 border-b">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <input
+              type="text"
+              placeholder="Buscar conversaciones..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 bg-gray-100 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+          </div>
+        </div>
+
+        {/* Chat Requests */}
+        {chatRequests.length > 0 && (
+          <div className="border-b bg-blue-50 p-4">
+            <h3 className="font-semibold text-blue-900 mb-2">Solicitudes de chat</h3>
+            {chatRequests.map((request) => (
+              <div key={request.id} className="flex items-center justify-between p-2 bg-white rounded-lg mb-2">
+                <div className="flex items-center space-x-2">
+                  <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
+                    <span className="text-xs font-semibold">
+                      {request.sender?.display_name?.charAt(0) || '?'}
+                    </span>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium">{request.sender?.display_name}</p>
+                    <p className="text-xs text-gray-500">@{request.sender?.username}</p>
+                  </div>
+                </div>
+                <div className="flex space-x-1">
+                  <button
+                    onClick={() => handleChatRequest(request.id, 'accept')}
+                    className="px-3 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600"
+                  >
+                    Aceptar
+                  </button>
+                  <button
+                    onClick={() => handleChatRequest(request.id, 'reject')}
+                    className="px-3 py-1 text-xs bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
+                  >
+                    Rechazar
+                  </button>
                 </div>
               </div>
-            ) : (
-              <div className="mb-3 flex items-center justify-center">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => handleSegmentClick(null)}
-                  className="bg-gray-50 hover:bg-gray-100 px-4 py-2 rounded-full flex items-center space-x-2 transition-colors"
-                >
-                  <ArrowLeft className="w-4 h-4 text-gray-600" />
-                  <MessageCircle className="w-4 h-4 text-gray-600" />
-                  <span className="text-sm font-medium text-gray-700">Volver a Chats</span>
-                </motion.button>
-              </div>
-            )}
-            
-            <div className="bg-gray-100 rounded-full p-1 flex">
-              {[
-                {
-                  id: 'followers',
-                  icon: 'Users',
-                  iconBg: '#87CEEB', // Azul claro para nuevos seguidores
-                  title: 'Nuevos seguidores',
-                  description: 'Personas que te siguen recientemente'
-                },
-                {
-                  id: 'activity', 
-                  icon: 'Bell',
-                  iconBg: '#DC2626', // Rojo para actividad (campana roja)
-                  title: 'Actividad',
-                  description: 'Comentarios, me gusta y reacciones'
-                },
-                {
-                  id: 'messages',
-                  icon: 'MessageCircle',
-                  iconBg: '#1E40AF', // Azul oscuro para solicitudes de mensajes
-                  title: 'Solicitudes de mensajes',
-                  description: 'Mensajes de personas que no sigues'
-                }
-              ].map((segment) => {
-                const isSelected = selectedSegment === segment.id;
-                const IconComponent = getIconComponent(segment.icon);
-                const badgeCount = getSegmentBadgeCount(segment.id);
+            ))}
+          </div>
+        )}
+
+        {/* Conversations List */}
+        <div className="flex-1 overflow-y-auto">
+          {loading ? (
+            <div className="p-4 text-center text-gray-500">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-2"></div>
+              Cargando conversaciones...
+            </div>
+          ) : conversations.length === 0 ? (
+            <div className="p-4 text-center text-gray-500">
+              <MessageCircle className="h-12 w-12 mx-auto mb-2 text-gray-300" />
+              <p>No tienes conversaciones aún</p>
+              <p className="text-sm">Inicia una nueva conversación</p>
+            </div>
+          ) : (
+            <div className="space-y-0">
+              {conversations.map((conversation) => {
+                const otherUser = getOtherParticipant(conversation);
+                if (!otherUser) return null;
                 
                 return (
-                  <motion.button
-                    key={segment.id}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() => handleSegmentClick(segment.id)}
-                    className={`flex-1 flex items-center justify-center space-x-2 py-3 px-2 rounded-full transition-all duration-200 min-h-[44px] ${
-                      isSelected 
-                        ? 'bg-white shadow-sm' 
-                        : 'hover:bg-gray-50 active:bg-gray-100'
-                    }`}
-                    style={{ touchAction: 'manipulation' }} // Optimización táctil
-                  >
-                    {/* Ícono circular - tamaño optimizado para táctil */}
-                    <div 
-                      className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0"
-                      style={{ backgroundColor: segment.iconBg }}
-                    >
-                      <IconComponent className="w-4 h-4 text-white" strokeWidth={2} />
-                    </div>
-                    
-                    {/* Texto - responsive */}
-                    <span className={`text-xs font-medium truncate max-w-[60px] leading-tight ${
-                      isSelected ? 'text-black' : 'text-gray-600'
-                    }`}>
-                      {segment.title}
-                    </span>
-                    
-                    {/* Badge - solo mostrar si hay contenido */}
-                    {badgeCount && (
-                      <div 
-                        className="min-w-[18px] h-[18px] rounded-full flex items-center justify-center flex-shrink-0"
-                        style={{ backgroundColor: '#FF4B8D' }}
-                      >
-                        <span className="text-[10px] text-white font-medium px-1">
-                          {badgeCount}
-                        </span>
-                      </div>
+                  <div
+                    key={conversation.id}
+                    onClick={() => setSelectedConversation(conversation)}
+                    className={cn(
+                      "flex items-center p-4 border-b cursor-pointer hover:bg-gray-50 transition-colors",
+                      selectedConversation?.id === conversation.id && "bg-blue-50"
                     )}
-                  </motion.button>
+                  >
+                    <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                      {otherUser.avatar_url ? (
+                        <img 
+                          src={otherUser.avatar_url} 
+                          alt="Avatar" 
+                          className="w-full h-full rounded-full object-cover"
+                        />
+                      ) : (
+                        <span className="text-sm font-semibold text-gray-600">
+                          {otherUser.display_name?.charAt(0) || '?'}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between mb-1">
+                        <h3 className="font-semibold text-gray-900 truncate">
+                          {otherUser.display_name || otherUser.username}
+                        </h3>
+                        {conversation.last_message && (
+                          <span className="text-xs text-gray-500">
+                            {formatMessageTime(conversation.last_message.created_at)}
+                          </span>
+                        )}
+                      </div>
+                      <p className="text-sm text-gray-600 truncate">
+                        {conversation.last_message?.content || 'Nueva conversación'}
+                      </p>
+                    </div>
+                  </div>
                 );
               })}
             </div>
-          </div>
+          )}
+        </div>
+      </div>
 
-          {/* LISTA DE MENSAJES - DATOS REALES */}
-          <div className="flex-1 overflow-y-auto">
-            {loadingNotifications ? (
-              // Loading state optimizado para móvil
-              <div className="flex items-center justify-center py-20">
-                <div className="flex flex-col items-center space-y-4">
-                  <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                    className="w-8 h-8 border-2 border-purple-300 border-t-purple-600 rounded-full"
-                  />
-                  <span className="text-sm text-gray-500">Cargando mensajes...</span>
-                </div>
-              </div>
-            ) : notifications.length === 0 ? (
-              // Empty state
-              <div className="flex items-center justify-center py-20 px-6">
-                <div className="text-center space-y-4">
-                  <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto text-2xl">
-                    💬
-                  </div>
-                  <div className="space-y-2">
-                    <h3 className="text-lg font-semibold text-gray-900">No hay mensajes</h3>
-                    <p className="text-sm text-gray-600 leading-relaxed">
-                      Cuando tengas conversaciones o solicitudes, aparecerán aquí
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              // Lista de notificaciones reales
-              notifications.map((notification, index) => (
-                <motion.button
-                  key={notification.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.05 }}
-                  onClick={() => {
-                    if (notification.isSystem) return;
-                    
-                    if (notification.type === 'message_request') {
-                      // Para solicitudes de mensaje, no hacer nada aquí
-                      // Los botones de aceptar/rechazar están dentro de la tarjeta
-                      return;
-                    } else if (notification.type === 'conversation') {
-                      // Conversación normal
-                      setSelectedConversation({
-                        id: notification.id,
-                        participants: [{
-                          id: notification.userId,
-                          username: notification.title.replace(/[^\w]/g, '').toLowerCase(),
-                          display_name: notification.title.replace(/[^\w\s]/g, '').trim()
-                        }]
-                      });
-                    } else if (notification.type === 'new_follower') {
-                      // Navegar al perfil del nuevo seguidor
-                      console.log('Navigating to follower profile:', notification.userId);
-                      window.location.href = `/profile/${notification.userId}`;
-                    } else if (notification.type === 'activity_notification') {
-                      // Para notificaciones de actividad, mostrar información relevante
-                      console.log('Activity notification clicked:', notification);
-                      // Por ahora mostrar un mensaje informativo
-                      alert(`Actividad: ${notification.title}\n${notification.message}`);
-                    }
-                    // Si no es ningún tipo conocido, no hacer nada
-                  }}
-                  className={`w-full flex items-center px-4 py-4 border-b border-gray-100 transition-colors min-h-[72px] ${
-                    notification.isSystem 
-                      ? 'cursor-default' 
-                      : notification.type === 'message_request'
-                        ? 'cursor-default'  // Las solicitudes no son clickeables
-                        : 'hover:bg-gray-50 active:bg-gray-100'
-                  }`}
-                  style={{ touchAction: 'manipulation' }}
-                  disabled={notification.isSystem || notification.type === 'message_request'}
-                >
-                  {/* Avatar (izquierda) - tamaño optimizado móvil */}
-                  <div className={`w-12 h-12 rounded-full mr-3 flex items-center justify-center text-lg flex-shrink-0 relative overflow-hidden ${
-                    notification.type === 'message_request' 
-                      ? 'bg-gradient-to-br from-purple-500 to-pink-500 text-white font-bold' 
-                      : notification.isSystem 
-                        ? 'bg-blue-100' 
-                        : 'bg-gray-100'
-                  }`}>
-                    {/* Renderizar imagen si es URL, texto si no */}
-                    {notification.avatar && (notification.avatar.startsWith('http') || notification.avatar.startsWith('/')) ? (
-                      <>
-                        <img 
-                          src={notification.avatar} 
-                          alt="Avatar" 
-                          className="w-full h-full rounded-full object-cover"
-                          onError={(e) => {
-                            // Si la imagen falla al cargar, ocultar imagen y mostrar fallback
-                            e.target.style.display = 'none';
-                            e.target.parentNode.querySelector('.avatar-fallback').style.display = 'flex';
-                          }}
-                        />
-                        <div className="avatar-fallback w-full h-full rounded-full flex items-center justify-center text-lg font-bold" style={{ display: 'none' }}>
-                          {notification.title ? notification.title.charAt(0).toUpperCase() : '👤'}
-                        </div>
-                      </>
-                    ) : (
-                      notification.avatar
-                    )}
-                  </div>
-                  
-                  {/* Contenido (centro - flex-1) */}
-                  <div className="flex-1 min-w-0 text-left">
-                    <div className="flex items-center justify-between mb-1">
-                      <span className={`text-base font-semibold truncate ${
-                        notification.type === 'message_request' 
-                          ? 'text-purple-700' 
-                          : notification.isSystem 
-                            ? 'text-blue-700' 
-                            : 'text-black'
-                      }`}>
-                        {notification.title}
-                      </span>
-                      <span className="text-xs text-gray-500 ml-2 flex-shrink-0">
-                        {notification.time}
-                      </span>
-                    </div>
-                    <p className="text-sm text-gray-600 truncate mt-1 leading-relaxed">
-                      {notification.message}
-                    </p>
-                    
-                    {/* Botones de aceptar/rechazar para solicitudes de mensaje */}
-                    {notification.type === 'message_request' && notification.needsApproval && (
-                      <div className="flex items-center space-x-2 mt-3">
-                        <motion.button
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            acceptChatRequest(notification.requestId);
-                          }}
-                          className="px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-700 transition-colors"
-                        >
-                          Aceptar
-                        </motion.button>
-                        <motion.button
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            rejectChatRequest(notification.requestId);
-                          }}
-                          className="px-4 py-2 bg-gray-200 text-gray-700 text-sm font-medium rounded-lg hover:bg-gray-300 transition-colors"
-                        >
-                          Rechazar
-                        </motion.button>
-                      </div>
-                    )}
-                  </div>
-                  
-                  {/* Badge (derecha) - solo para mensajes no leídos */}
-                  {notification.unreadCount > 0 && (
-                    <div 
-                      className="min-w-[24px] h-6 rounded-full flex items-center justify-center ml-3 flex-shrink-0"
-                      style={{ backgroundColor: '#FF4B8D' }}
-                    >
-                      <span className="text-xs text-white font-medium px-2">
-                        {notification.unreadCount > 99 ? '99+' : notification.unreadCount}
-                      </span>
-                    </div>
-                  )}
-                </motion.button>
-              ))
-            )}
-          </div>
-
-          {/* Bottom padding para mobile */}
-          <div className="h-4"></div>
-        </motion.div>
-      )}
-
-      {/* Chat View */}
-      {showChat && (
-        <motion.div 
-          initial={{ x: 300, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          className="flex-1 flex flex-col bg-white"
-        >
-          {/* Chat Header */}
-          <div className="flex items-center justify-between px-4 py-3 bg-white border-b border-gray-100">
-            <div className="flex items-center space-x-3">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setSelectedConversation(null)}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-              >
-                <ArrowLeft className="w-5 h-5 text-black" strokeWidth={2} />
-              </motion.button>
-              
-              <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center text-lg">
-                🇺🇸
-              </div>
-              
-              <div>
-                <h2 className="font-semibold text-black text-base">
-                  {selectedConversation.participants[0].display_name}
-                </h2>
-                <p className="text-sm text-green-600">Activo ahora</p>
-              </div>
-            </div>
-            
-            <div className="flex items-center space-x-2">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-              >
-                <Phone className="w-5 h-5 text-black" strokeWidth={2} />
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-              >
-                <Camera className="w-5 h-5 text-black" strokeWidth={2} />
-              </motion.button>
-            </div>
-          </div>
-
-          {/* Messages Area */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
-            {messages.length === 0 ? (
-              <motion.div 
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-center py-20 space-y-4"
-              >
-                <div className="w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mx-auto text-2xl">
-                  🇺🇸
-                </div>
-                <div className="space-y-2">
-                  <h3 className="text-xl font-semibold text-black">
-                    {selectedConversation.participants[0].display_name}
-                  </h3>
-                  <p className="text-sm text-gray-600">
-                    Inicia una conversación
-                  </p>
-                </div>
-              </motion.div>
-            ) : (
-              <div className="space-y-4">
-                {messages.map((message, index) => {
-                  const isOwnMessage = message.sender_id === user.id;
-                  
-                  return (
-                    <motion.div
-                      key={message.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.1 }}
-                      className={cn(
-                        "flex",
-                        isOwnMessage ? "justify-end" : "justify-start"
-                      )}
-                    >
-                      <div className={cn(
-                        "max-w-xs lg:max-w-md px-4 py-2 rounded-2xl",
-                        isOwnMessage
-                          ? "bg-pink-500 text-white"
-                          : "bg-gray-200 text-black"
-                      )}>
-                        <p className="text-sm">{message.content}</p>
-                      </div>
-                    </motion.div>
-                  );
-                })}
-              </div>
-            )}
-            <div ref={messagesEndRef} />
-          </div>
-
-          {/* Message Input */}
-          <div className="bg-white border-t border-gray-100 p-4">
-            <form onSubmit={sendMessage} className="flex items-center space-x-3">
-              <motion.button
-                type="button"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-              >
-                <Camera className="w-5 h-5 text-gray-600" strokeWidth={2} />
-              </motion.button>
-              
-              <div className="flex-1 relative">
-                <input
-                  ref={inputRef}
-                  type="text"
-                  value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
-                  placeholder="Escribe un mensaje..."
-                  className="w-full px-4 py-2 bg-gray-100 rounded-full focus:outline-none focus:ring-2 focus:ring-pink-500 text-sm"
-                  disabled={sendingMessage}
-                />
-                <motion.button
-                  type="button"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-200 rounded-full transition-colors"
-                >
-                  <Smile className="w-4 h-4 text-gray-600" strokeWidth={2} />
-                </motion.button>
-              </div>
-              
-              {newMessage.trim() ? (
-                <motion.button
-                  type="submit"
-                  disabled={sendingMessage}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="bg-pink-500 text-white p-2 rounded-full hover:bg-pink-600 transition-colors disabled:opacity-50"
-                >
-                  {sendingMessage ? (
-                    <motion.div 
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                      className="w-5 h-5 border-2 border-white border-t-transparent rounded-full" 
+      {/* Chat Area */}
+      <div className={cn(
+        "flex-1 flex flex-col transition-all duration-300",
+        isMobile 
+          ? (showChat ? "w-full" : "w-0 overflow-hidden")
+          : "flex"
+      )}>
+        {selectedConversation ? (
+          <>
+            {/* Chat Header */}
+            <div className="h-16 border-b flex items-center justify-between px-4 bg-white">
+              <div className="flex items-center space-x-3">
+                {isMobile && (
+                  <button
+                    onClick={() => setSelectedConversation(null)}
+                    className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-100"
+                  >
+                    <ArrowLeft className="w-4 h-4" />
+                  </button>
+                )}
+                <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center">
+                  {getOtherParticipant(selectedConversation)?.avatar_url ? (
+                    <img 
+                      src={getOtherParticipant(selectedConversation).avatar_url} 
+                      alt="Avatar" 
+                      className="w-full h-full rounded-full object-cover"
                     />
                   ) : (
-                    <Send className="w-5 h-5" strokeWidth={2} />
+                    <span className="text-sm font-semibold text-gray-600">
+                      {getOtherParticipant(selectedConversation)?.display_name?.charAt(0) || '?'}
+                    </span>
                   )}
-                </motion.button>
-              ) : (
-                <motion.button
-                  type="button"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                </div>
+                <div>
+                  <h2 className="font-semibold text-gray-900">
+                    {getOtherParticipant(selectedConversation)?.display_name || 
+                     getOtherParticipant(selectedConversation)?.username}
+                  </h2>
+                  <p className="text-sm text-gray-500">
+                    @{getOtherParticipant(selectedConversation)?.username}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Messages */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+              {messages.map((message, index) => {
+                const isOwnMessage = message.sender_id === user?.id;
+                const isSystemMessage = message.isSystemMessage || message.sender_id === 'system';
+                const showAvatar = !isOwnMessage && !isSystemMessage && (index === 0 || messages[index - 1].sender_id !== message.sender_id);
+                
+                // Renderizado especial para mensajes del sistema
+                if (isSystemMessage) {
+                  return (
+                    <div key={message.id} className="flex justify-center mb-4">
+                      <div className="bg-blue-50 text-blue-700 px-4 py-2 rounded-lg text-sm max-w-md text-center border border-blue-200">
+                        {message.content}
+                      </div>
+                    </div>
+                  );
+                }
+                
+                return (
+                  <div key={message.id} className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'} mb-4`}>
+                    <div className={`flex items-end space-x-2 max-w-xs lg:max-w-md ${isOwnMessage ? 'flex-row-reverse space-x-reverse' : ''}`}>
+                      {/* Avatar para mensajes de otros usuarios */}
+                      {showAvatar && !isOwnMessage && (
+                        <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
+                          {message.sender?.avatar_url ? (
+                            <img 
+                              src={message.sender.avatar_url} 
+                              alt="Avatar" 
+                              className="w-full h-full rounded-full object-cover"
+                            />
+                          ) : (
+                            <span className="text-sm font-semibold text-gray-600">
+                              {message.sender?.display_name?.charAt(0) || '👤'}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                      
+                      {/* Spacer cuando no se muestra avatar */}
+                      {!showAvatar && !isOwnMessage && <div className="w-8" />}
+                      
+                      {/* Mensaje */}
+                      <div className={`relative px-4 py-2 rounded-2xl ${
+                        isOwnMessage 
+                          ? 'bg-blue-500 text-white' 
+                          : 'bg-gray-100 text-gray-900'
+                      }`}>
+                        <p className="text-sm">{message.content}</p>
+                        
+                        {/* Indicador de estado para mensajes propios */}
+                        {isOwnMessage && message.status && (
+                          <div className="absolute -bottom-1 -right-1">
+                            {message.status === 'sending' && (
+                              <div className="w-3 h-3 bg-gray-400 rounded-full animate-pulse"></div>
+                            )}
+                            {message.status === 'sent' && (
+                              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                            )}
+                            {message.status === 'failed' && (
+                              <div className="w-3 h-3 bg-red-500 rounded-full cursor-pointer" title="Error al enviar"></div>
+                            )}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+              <div ref={messagesEndRef} />
+            </div>
+
+            {/* Message Input */}
+            <div className="border-t p-4">
+              <div className="flex items-center space-x-2">
+                <div className="flex-1 flex items-center bg-gray-100 rounded-full px-4 py-2">
+                  <input
+                    ref={inputRef}
+                    type="text"
+                    value={newMessage}
+                    onChange={(e) => setNewMessage(e.target.value)}
+                    onKeyPress={(e) => {
+                      if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        sendMessage();
+                      }
+                    }}
+                    placeholder="Escribe un mensaje..."
+                    className="flex-1 bg-transparent outline-none text-sm"
+                    disabled={sendingMessage}
+                  />
+                </div>
+                <button
+                  onClick={sendMessage}
+                  disabled={!newMessage.trim() || sendingMessage}
+                  className={cn(
+                    "w-10 h-10 rounded-full flex items-center justify-center transition-colors",
+                    newMessage.trim() && !sendingMessage
+                      ? "bg-blue-500 text-white hover:bg-blue-600"
+                      : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  )}
                 >
-                  <Mic className="w-5 h-5 text-gray-600" strokeWidth={2} />
-                </motion.button>
-              )}
-            </form>
+                  {sendingMessage ? (
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  ) : (
+                    <Send className="w-4 h-4" />
+                  )}
+                </button>
+              </div>
+            </div>
+          </>
+        ) : (
+          /* No conversation selected */
+          <div className="flex-1 flex items-center justify-center">
+            <div className="text-center">
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <MessageCircle className="h-8 w-8 text-blue-500" />
+              </div>
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                Mensajes
+              </h3>
+              <p className="text-gray-500">
+                Tus conversaciones aparecerán aquí. Busca usuarios para iniciar nuevos chats
+              </p>
+            </div>
           </div>
-        </motion.div>
-      )}
+        )}
+      </div>
 
       {/* New Chat Modal */}
-      <AnimatePresence>
-        {showNewChat && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4"
-            onClick={() => setShowNewChat(false)}
-          >
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              onClick={(e) => e.stopPropagation()}
-              className="bg-white rounded-2xl p-6 w-full max-w-md"
-            >
-              <h3 className="text-lg font-semibold text-black mb-4">Nueva conversación</h3>
-              
-              <div className="relative mb-4">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" strokeWidth={2} />
+      {showNewChat && (
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl w-full max-w-md max-h-[80vh] overflow-hidden">
+            {/* Modal Header */}
+            <div className="p-6 border-b">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-bold text-gray-900">Nuevo chat</h2>
+                <button
+                  onClick={() => {
+                    setShowNewChat(false);
+                    setSearchQuery('');
+                    setSearchResults([]);
+                  }}
+                  className="w-8 h-8 rounded-full flex items-center justify-center hover:bg-gray-100"
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+
+            {/* Search */}
+            <div className="p-4">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                 <input
                   type="text"
                   placeholder="Buscar usuarios..."
                   value={searchQuery}
-                  onChange={(e) => {
-                    setSearchQuery(e.target.value);
-                    searchUsers(e.target.value);
-                  }}
-                  className="w-full pl-10 pr-4 py-3 bg-gray-100 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 text-sm"
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  autoFocus
                 />
               </div>
+            </div>
 
-              {searchResults.length > 0 && (
-                <div className="space-y-2 max-h-60 overflow-y-auto">
-                  {searchResults.map((searchUser) => (
-                    <motion.button
-                      key={searchUser.id}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      onClick={() => startConversation(searchUser)}
-                      className="w-full flex items-center space-x-3 p-3 hover:bg-gray-50 rounded-xl transition-colors"
+            {/* Search Results */}
+            <div className="flex-1 overflow-y-auto px-4 pb-4">
+              {searchResults.length > 0 ? (
+                <div className="space-y-2">
+                  {searchResults.map((user) => (
+                    <div
+                      key={user.id}
+                      onClick={() => startNewConversation(user)}
+                      className="flex items-center p-3 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
                     >
-                      <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
-                        🇺🇸
+                      <div className="w-10 h-10 bg-gray-300 rounded-full flex items-center justify-center mr-3">
+                        {user.avatar_url ? (
+                          <img 
+                            src={user.avatar_url} 
+                            alt="Avatar" 
+                            className="w-full h-full rounded-full object-cover"
+                          />
+                        ) : (
+                          <span className="text-sm font-semibold text-gray-600">
+                            {user.display_name?.charAt(0) || user.username?.charAt(0) || '?'}
+                          </span>
+                        )}
                       </div>
-                      <div className="flex-1 text-left">
-                        <p className="font-semibold text-black text-sm">{searchUser.display_name}</p>
-                        <p className="text-xs text-gray-600">@{searchUser.username}</p>
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-gray-900">
+                          {user.display_name || user.username}
+                        </h3>
+                        <p className="text-sm text-gray-500">@{user.username}</p>
                       </div>
-                    </motion.button>
+                    </div>
                   ))}
                 </div>
+              ) : searchQuery ? (
+                <div className="text-center py-8 text-gray-500">
+                  <Users className="h-12 w-12 mx-auto mb-2 text-gray-300" />
+                  <p>No se encontraron usuarios</p>
+                  <p className="text-sm">Intenta con otro término de búsqueda</p>
+                </div>
+              ) : (
+                <div className="text-center py-8 text-gray-500">
+                  <Search className="h-12 w-12 mx-auto mb-2 text-gray-300" />
+                  <p>Busca usuarios para iniciar una conversación</p>
+                </div>
               )}
-            </motion.div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
