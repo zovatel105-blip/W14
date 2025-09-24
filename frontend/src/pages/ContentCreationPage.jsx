@@ -1162,7 +1162,6 @@ const ContentCreationPage = () => {
             />
           </div>
 
-          </div>
         </div>
       )}
 
