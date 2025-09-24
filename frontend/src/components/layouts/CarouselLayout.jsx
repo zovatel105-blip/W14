@@ -186,6 +186,13 @@ const CarouselLayout = ({ poll, onVote, isActive }) => {
                   {option.text}
                 </div>
               )}
+              
+              {/* Debug info */}
+              {isActive && (
+                <div className="absolute top-4 left-4 bg-red-600 text-white p-1 text-xs rounded">
+                  Debug: {option.text ? `"${option.text}"` : 'NO TEXT'}
+                </div>
+              )}
             </div>
           );
         })}
