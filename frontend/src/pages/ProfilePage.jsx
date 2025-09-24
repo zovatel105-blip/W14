@@ -1873,7 +1873,7 @@ const ProfilePage = () => {
               {/* Contenido de tabs - Con padding lateral mínimo */}
               <div className="mt-6">
                 <TabsContent value="polls" className="space-y-6">
-                  {userPolls.length === 0 ? (
+                  {polls.length === 0 ? (
                     <div className="text-center py-16 space-y-6 px-1 sm:px-2">
                       <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto">
                         <LayoutDashboard className="w-8 h-8 text-gray-400" strokeWidth={1.5} />
@@ -1887,7 +1887,7 @@ const ProfilePage = () => {
                     </div>
                   ) : (
                     <TikTokProfileGrid 
-                      polls={userPolls} 
+                      polls={polls} 
                       onPollClick={handlePollClick}
                       onUpdatePoll={handleUpdatePoll}
                       onDeletePoll={handleDeletePoll}
