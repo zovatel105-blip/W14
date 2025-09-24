@@ -120,6 +120,13 @@ const GridLayout = ({ poll, onVote, gridType, isActive = true }) => {
             {isActive && isWinner && poll.userVote && (
               <div className="absolute inset-0 ring-2 ring-green-400 ring-inset"></div>
             )}
+
+            {/* Option Description - Show when active and description exists */}
+            {isActive && option.text && (
+              <div className="absolute bottom-2 left-2 right-2 bg-black/70 backdrop-blur-sm text-white p-1.5 rounded text-xs z-10 line-clamp-2">
+                {option.text}
+              </div>
+            )}
           </div>
         );
       })}
