@@ -512,6 +512,13 @@ const PollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, fullScreen
                 {poll.title}
               </h2>
               
+              {/* Poll Description */}
+              {poll.description && (
+                <p className="text-sm text-gray-600 mt-2 leading-relaxed line-clamp-2">
+                  {poll.description}
+                </p>
+              )}
+              
               {/* Mentioned Users Display */}
               {poll.mentioned_users && poll.mentioned_users.length > 0 && (
                 <div className="flex items-center gap-1 mt-2">
