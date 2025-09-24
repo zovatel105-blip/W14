@@ -1988,9 +1988,9 @@ const ProfilePage = () => {
                 {/* Panel de Enlaces de Redes Sociales - Para el propietario */}
                 {isOwnProfile && (
                   <TabsContent value="social" className="space-y-6">
-                    <div className="px-4 py-6">
+                    <div className="px-4 pt-2 pb-6">
                       {/* Header del Panel */}
-                      <div className="text-center mb-8">
+                      <div className="text-center mb-6">
                         <h3 className="text-lg font-semibold text-gray-900 mb-2">Mis Redes Sociales</h3>
                         <p className="text-sm text-gray-600">Agrega cualquier red social o plataforma que uses</p>
                       </div>
