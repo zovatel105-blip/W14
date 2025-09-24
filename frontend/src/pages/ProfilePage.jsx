@@ -2016,19 +2016,22 @@ const ProfilePage = () => {
                                     rel="noopener noreferrer"
                                     className={`block w-full h-16 rounded-xl text-white font-bold relative overflow-hidden transition-transform hover:scale-105 shadow-md bg-gradient-to-br ${platformStyle.gradient}`}
                                   >
-                                    {/* Ícono de enlace externo en esquina superior derecha */}
-                                    <div className="absolute top-2 right-2">
-                                      <svg className="w-3 h-3 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                                      </svg>
-                                    </div>
-                                    
-                                    {/* Contenido centrado verticalmente pero alineado a la izquierda */}
-                                    <div className="h-full flex items-center justify-start gap-3 pl-4 pr-8">
-                                      <div className="text-white">
-                                        {platformStyle.icon}
+                                    {/* Contenido con logo y nombre a la izquierda e ícono centrado a la derecha */}
+                                    <div className="h-full flex items-center justify-between px-4">
+                                      {/* Logo y nombre a la izquierda */}
+                                      <div className="flex items-center gap-3">
+                                        <div className="text-white">
+                                          {platformStyle.icon}
+                                        </div>
+                                        <span className="text-sm font-bold">{displayName}</span>
                                       </div>
-                                      <span className="text-sm font-bold">{displayName}</span>
+                                      
+                                      {/* Ícono de enlace externo centrado a la derecha */}
+                                      <div className="text-white opacity-80">
+                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                        </svg>
+                                      </div>
                                     </div>
                                   </a>
                                   
