@@ -704,6 +704,10 @@ const ContentCreationPage = () => {
     
     if (!exists) {
       updateOption(index, 'mentionedUsers', [...currentMentioned, user]);
+      
+      // Clear the mention input field after selecting a user
+      setMentionInputValues(prev => ({...prev, [index]: ''}));
+      
       toast({
         title: "Usuario mencionado",
         description: `@${user.username} será notificado en la opción ${String.fromCharCode(65 + index)}`,
