@@ -999,6 +999,21 @@ Layout "off" - Carrusel Horizontal:
       - agent: "testing"
       - comment: "✅ CHAT SYSTEM HTTP 403 ERROR HANDLING WORKING CORRECTLY (2025-01-27): Comprehensive testing confirms the chat system properly handles HTTP 403 errors. VERIFIED: ✅ Backend returns HTTP 403 with correct message 'Chat request already sent. Wait for user to accept.', ✅ JSON format valid for frontend parsing, ✅ Frontend can generate Spanish message '⏳ Ya enviaste una solicitud de chat a este usuario. Espera a que la acepte para poder intercambiar mensajes.', ✅ Bidirectional chat request handling works correctly, ✅ Error message format consistent and parseable. Test success rate: 83.3% (5/6 tests passed). The functionality is working as expected."
 
+  - task: "HTTP 429 Rate Limiting Error in User Search"
+    implemented: true
+    working: true
+    file: "/app/frontend/src/pages/messages/MessagesMainPage.jsx"
+    stuck_count: 0
+    priority: "high"
+    needs_retesting: true
+    status_history:
+      - working: false
+      - agent: "main"
+      - comment: "USER REPORTED ISSUE: When clicking 'mensaje' on user profiles, getting HTTP 429 'Error al buscar usuario' error dialog. This occurs in handleStartNewConversationWithUser function when making API call to /api/users/search endpoint, indicating rate limiting is blocking user searches for chat initiation."
+      - working: true
+      - agent: "main"
+      - comment: "FIXED RATE LIMITING ISSUE: Implemented comprehensive rate limiting protection. ADDED: userSearchCache state with 5-minute cache expiration, searchUserWithCache function that checks cache before API calls, stale cache fallback when rate limited, 300ms debouncing in useEffect to prevent rapid calls, better error messaging ('Demasiadas búsquedas. Intenta de nuevo en unos momentos.'). The system now caches user search results and handles rate limits gracefully without blocking chat functionality."
+
   - task: "Poll Mentions Functionality Backend Resolution"
     implemented: true
     working: true
