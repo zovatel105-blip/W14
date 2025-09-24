@@ -179,6 +179,13 @@ const CarouselLayout = ({ poll, onVote, isActive }) => {
               {isActive && isWinner && poll.userVote && (
                 <div className="absolute inset-0 ring-2 ring-green-400 ring-inset"></div>
               )}
+
+              {/* Option Description - Show when active and description exists */}
+              {isActive && option.text && (
+                <div className="absolute bottom-4 left-4 right-4 bg-black/70 backdrop-blur-sm text-white p-2 rounded-lg text-sm z-10">
+                  {option.text}
+                </div>
+              )}
             </div>
           );
         })}
