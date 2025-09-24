@@ -647,6 +647,46 @@ const ProfilePage = () => {
     }));
   };
 
+  // Función para obtener colores e iconos de plataformas conocidas
+  const getPlatformStyle = (name) => {
+    const platformName = name.toLowerCase();
+    
+    const platforms = {
+      'youtube': { bg: 'bg-red-600', gradient: 'from-red-600 to-red-700', icon: '🎥' },
+      'tiktok': { bg: 'bg-black', gradient: 'from-gray-900 to-black', icon: '🎵' },
+      'instagram': { bg: 'bg-pink-500', gradient: 'from-purple-600 via-pink-500 to-orange-400', icon: '📷' },
+      'twitter': { bg: 'bg-blue-500', gradient: 'from-blue-400 to-blue-600', icon: '🐦' },
+      'x': { bg: 'bg-black', gradient: 'from-gray-800 to-black', icon: '❌' },
+      'facebook': { bg: 'bg-blue-600', gradient: 'from-blue-600 to-blue-800', icon: '📘' },
+      'linkedin': { bg: 'bg-blue-700', gradient: 'from-blue-700 to-blue-900', icon: '💼' },
+      'behance': { bg: 'bg-blue-600', gradient: 'from-blue-500 to-blue-700', icon: '🎨' },
+      'dribbble': { bg: 'bg-pink-500', gradient: 'from-pink-400 to-pink-600', icon: '🏀' },
+      'github': { bg: 'bg-gray-800', gradient: 'from-gray-700 to-gray-900', icon: '💻' },
+      'discord': { bg: 'bg-indigo-600', gradient: 'from-indigo-500 to-purple-600', icon: '🎮' },
+      'twitch': { bg: 'bg-purple-600', gradient: 'from-purple-500 to-purple-700', icon: '🎮' },
+      'snapchat': { bg: 'bg-yellow-400', gradient: 'from-yellow-300 to-yellow-500', icon: '👻' },
+      'unsplash': { bg: 'bg-emerald-400', gradient: 'from-emerald-300 to-emerald-500', icon: '📸' },
+      'website': { bg: 'bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600', gradient: 'from-purple-600 via-pink-600 to-blue-600', icon: '🌐' },
+      'my website': { bg: 'bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600', gradient: 'from-purple-600 via-pink-600 to-blue-600', icon: '🌐' },
+      'blog': { bg: 'bg-gradient-to-r from-indigo-500 to-purple-600', gradient: 'from-indigo-500 to-purple-600', icon: '📝' },
+      'portfolio': { bg: 'bg-gradient-to-r from-gray-700 to-gray-900', gradient: 'from-gray-700 to-gray-900', icon: '📁' },
+    };
+    
+    // Buscar coincidencia
+    for (const [key, style] of Object.entries(platforms)) {
+      if (platformName.includes(key) || key.includes(platformName)) {
+        return style;
+      }
+    }
+    
+    // Color por defecto si no encuentra coincidencia
+    return { 
+      bg: 'bg-gradient-to-r from-gray-600 to-gray-700', 
+      gradient: 'from-gray-600 to-gray-700', 
+      icon: '🔗' 
+    };
+  };
+
   // Load user's social links on component mount
   useEffect(() => {
     const loadUserSocialLinks = async () => {
