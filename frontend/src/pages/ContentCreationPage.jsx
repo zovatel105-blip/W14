@@ -626,6 +626,7 @@ const ContentCreationPage = () => {
   const [selectedMusic, setSelectedMusic] = useState(null);
   const [options, setOptions] = useState([]); // Changed from images to options
   const [title, setTitle] = useState('');
+  const [mentionInputValues, setMentionInputValues] = useState({}); // Track mention input text for each option
   const [isCreating, setIsCreating] = useState(false);
   const [currentSlotIndex, setCurrentSlotIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
