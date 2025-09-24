@@ -126,8 +126,11 @@ const UserMentionInput = ({
 
   // Handle mention selection
   const handleMentionSelect = (user) => {
-    const textBeforeCursor = value.slice(0, cursorPosition);
-    const textAfterCursor = value.slice(cursorPosition);
+    // Asegurar que value no sea undefined o null
+    const currentValue = value || '';
+    
+    const textBeforeCursor = currentValue.slice(0, cursorPosition);
+    const textAfterCursor = currentValue.slice(cursorPosition);
     
     // Find the @ symbol position
     const mentionStart = textBeforeCursor.lastIndexOf('@');
