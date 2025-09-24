@@ -18,18 +18,6 @@ const UserMentionInput = ({
   const textareaRef = useRef(null);
   const suggestionsRef = useRef(null);
 
-  // Mock users for suggestions (in production, this would come from API)
-  const mockUsers = [
-    { id: '1', username: 'progamer_alex', displayName: 'Alex ProGamer', verified: true },
-    { id: '2', username: 'artmaster_studio', displayName: 'Art Master', verified: false },
-    { id: '3', username: 'music_lover_99', displayName: 'Music Lover', verified: false },
-    { id: '4', username: 'tech_guru_2024', displayName: 'Tech Guru', verified: true },
-    { id: '5', username: 'fitness_queen', displayName: 'Fitness Queen', verified: true },
-    { id: '6', username: 'foodie_explorer', displayName: 'Foodie Explorer', verified: false },
-    { id: '7', username: 'travel_addict', displayName: 'Travel Addict', verified: true },
-    { id: '8', username: 'book_worm_reader', displayName: 'Book Worm', verified: false }
-  ];
-
   // Search for users when typing after @
   const searchUsers = async (query) => {
     setLoading(true);
