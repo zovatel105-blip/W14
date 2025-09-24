@@ -2011,42 +2011,46 @@ const ProfilePage = () => {
                         <p className="text-sm text-gray-600">Encuentra a {displayUser?.display_name || 'este usuario'} en otras plataformas</p>
                       </div>
                       
-                      {/* Lista de Enlaces (Solo vista) */}
-                      <div className="max-w-lg mx-auto space-y-4">
-                        {Object.entries(socialLinks).map(([linkId, linkData]) => {
-                          if (!linkData) return null;
-                          
-                          const displayName = typeof linkData === 'object' ? linkData.name : linkId;
-                          const url = typeof linkData === 'object' ? linkData.url : linkData;
-                          const color = typeof linkData === 'object' && linkData.color ? linkData.color : 'bg-gray-600';
-                          
-                          if (!url || url.trim() === '') return null;
-                          
-                          return (
-                            <a
-                              key={linkId}
-                              href={url.startsWith('http') ? url : `https://${url}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="flex items-center gap-3 p-4 bg-gray-50 hover:bg-gray-100 rounded-xl transition-colors group"
-                            >
-                              <div className={`w-6 h-6 rounded-full ${color.includes('gradient') ? `bg-gradient-to-r ${color}` : color}`}></div>
-                              <div className="flex-1">
-                                <div className="font-medium text-gray-900 group-hover:text-purple-600 transition-colors">
-                                  {displayName}
+                      {/* Lista de Enlaces (Solo vista) - Tarjetas coloridas como en referencia */}
+                      <div className="max-w-lg mx-auto">
+                        <div className="grid grid-cols-2 gap-3">
+                          {Object.entries(socialLinks).map(([linkId, linkData]) => {
+                            if (!linkData) return null;
+                            
+                            const displayName = typeof linkData === 'object' ? linkData.name : linkId;
+                            const url = typeof linkData === 'object' ? linkData.url : linkData;
+                            
+                            if (!url || url.trim() === '') return null;
+                            
+                            // Obtener estilo de la plataforma
+                            const platformStyle = getPlatformStyle(displayName);
+                            
+                            return (
+                              <a
+                                key={linkId}
+                                href={url.startsWith('http') ? url : `https://${url}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={`block w-full h-24 rounded-2xl text-white font-bold relative overflow-hidden transition-transform hover:scale-105 shadow-lg bg-gradient-to-br ${platformStyle.gradient}`}
+                              >
+                                <div className="h-full flex flex-col justify-between p-4">
+                                  {/* Ícono de enlace externo en esquina superior derecha */}
+                                  <div className="flex justify-end">
+                                    <svg className="w-4 h-4 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                    </svg>
+                                  </div>
+                                  
+                                  {/* Contenido principal */}
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-lg">{platformStyle.icon}</span>
+                                    <span className="text-sm font-bold leading-tight">{displayName}</span>
+                                  </div>
                                 </div>
-                                <div className="text-sm text-gray-500">
-                                  {url.length > 40 ? url.substring(0, 40) + '...' : url}
-                                </div>
-                              </div>
-                              <div className="text-gray-400 group-hover:text-purple-600 transition-colors">
-                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                                </svg>
-                              </div>
-                            </a>
-                          );
-                        })}
+                              </a>
+                            );
+                          })}
+                        </div>
                       </div>
                     </div>
                   </TabsContent>
