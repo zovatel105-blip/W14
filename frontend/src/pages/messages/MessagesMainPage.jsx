@@ -1000,7 +1000,19 @@ const MessagesMainPage = () => {
             {/* Renderizar mensajes */}
             {messages.map((message, index) => {
               const isOwnMessage = message.sender_id === user?.id;
-              const showAvatar = !isOwnMessage && (index === 0 || messages[index - 1].sender_id !== message.sender_id);
+              const isSystemMessage = message.isSystemMessage || message.sender_id === 'system';
+              const showAvatar = !isOwnMessage && !isSystemMessage && (index === 0 || messages[index - 1].sender_id !== message.sender_id);
+              
+              // Renderizado especial para mensajes del sistema
+              if (isSystemMessage) {
+                return (
+                  <div key={message.id} className="flex justify-center mb-4">
+                    <div className="bg-blue-50 text-blue-700 px-4 py-2 rounded-lg text-sm max-w-md text-center border border-blue-200">
+                      {message.content}
+                    </div>
+                  </div>
+                );
+              }
               
               return (
                 <div key={message.id} className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'} mb-4`}>
