@@ -42,12 +42,8 @@ const UserMentionInput = ({
       setSuggestions(filtered);
     } catch (error) {
       console.error('Error searching users:', error);
-      // Fallback to mock data if API fails
-      const filtered = mockUsers.filter(user => 
-        user.username.toLowerCase().includes(query.toLowerCase()) ||
-        user.displayName.toLowerCase().includes(query.toLowerCase())
-      ).slice(0, 5);
-      setSuggestions(filtered);
+      // No fallback data available
+      setSuggestions([]);
     } finally {
       setLoading(false);
     }
