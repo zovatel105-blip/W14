@@ -121,14 +121,38 @@ const GridLayout = ({ poll, onVote, gridType, isActive = true }) => {
               <div className="absolute inset-0 ring-2 ring-green-400 ring-inset"></div>
             )}
 
-            {/* Option Description - Centered above vote area */}
-            {option.text && (
-              <div className="absolute bottom-24 left-2 right-2 z-10">
-                <div className="w-full bg-black/70 backdrop-blur-sm text-white px-3 py-2 rounded-lg text-sm text-center">
-                  {option.text}
+            {/* Option Description - Position based on grid type and option index */}
+            {option.text && (() => {
+              let descriptionPosition;
+              
+              // Determine position based on grid type and option index
+              if (gridType === 'grid-2x2') {
+                // Grid 2x2: A,B (top row - index 0,1) = bottom, C,D (bottom row - index 2,3) = top
+                if (optionIndex === 0 || optionIndex === 1) {
+                  descriptionPosition = "bottom-4"; // A, B - descripción abajo
+                } else {
+                  descriptionPosition = "top-4"; // C, D - descripción arriba
+                }
+              } else if (gridType === 'grid-3x2') {
+                // Grid 3x2: A,B,C (top row - index 0,1,2) = bottom, D,E,F (bottom row - index 3,4,5) = top
+                if (optionIndex === 0 || optionIndex === 1 || optionIndex === 2) {
+                  descriptionPosition = "bottom-4"; // A, B, C - descripción abajo
+                } else {
+                  descriptionPosition = "top-4"; // D, E, F - descripción arriba
+                }
+              } else {
+                // Other grids: keep current position
+                descriptionPosition = "bottom-24";
+              }
+              
+              return (
+                <div className={`absolute ${descriptionPosition} left-2 right-2 z-10`}>
+                  <div className="w-full bg-black/70 backdrop-blur-sm text-white px-3 py-2 rounded-lg text-sm text-center">
+                    {option.text}
+                  </div>
                 </div>
-              </div>
-            )}
+              );
+            })()}
           </div>
         );
       })}
