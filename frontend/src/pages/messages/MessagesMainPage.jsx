@@ -707,8 +707,8 @@ const MessagesMainPage = () => {
         return;
       }
       
-      // Buscar el usuario por username
-      const users = await apiRequest(`/api/users/search?q=${encodeURIComponent(username)}`);
+      // Buscar el usuario por username usando cache
+      const users = await searchUserWithCache(username);
       console.log('📝 Resultados de búsqueda:', users);
       
       // Filtrar resultados para excluir al usuario actual
@@ -777,8 +777,12 @@ const MessagesMainPage = () => {
       }
     } catch (error) {
       console.error('❌ Error buscando usuario:', error);
-      // Mostrar mensaje de error al usuario
-      alert(`Error al buscar usuario: ${error.message}`);
+      // Mostrar mensaje de error al usuario con mensaje más amigable
+      if (error.message.includes('Demasiadas búsquedas')) {
+        alert(error.message);
+      } else {
+        alert(`Error al buscar usuario: ${error.message}`);
+      }
     }
   };
 
