@@ -2160,7 +2160,7 @@ const ProfilePage = () => {
                 {/* Panel de Enlaces Sociales - Para visitantes (solo vista) */}
                 {!isOwnProfile && Object.keys(socialLinks).length > 0 && (
                   <TabsContent value="social" className="space-y-6">
-                    <div className="px-4 py-6">
+                    <div className="px-4 pt-2 pb-6">
                       {/* Lista de Enlaces (Solo vista) - Tarjetas coloridas como en referencia */}
                       <div className="max-w-lg mx-auto">
                         <div className="grid grid-cols-2 gap-3">
