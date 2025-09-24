@@ -180,10 +180,12 @@ const CarouselLayout = ({ poll, onVote, isActive }) => {
                 <div className="absolute inset-0 ring-2 ring-green-400 ring-inset"></div>
               )}
 
-              {/* Option Description - Show above votes area */}
+              {/* Option Description - Same position as during creation */}
               {option.text && (
-                <div className="absolute bottom-16 left-4 right-4 bg-black/70 backdrop-blur-sm text-white p-2 rounded-lg text-sm z-10">
-                  {option.text}
+                <div className="absolute bottom-4 left-4 right-4 z-10">
+                  <div className="w-full bg-black/50 backdrop-blur-sm text-white px-3 py-2 rounded-lg text-sm">
+                    {option.text}
+                  </div>
                 </div>
               )}
             </div>
