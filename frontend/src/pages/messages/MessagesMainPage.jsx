@@ -309,44 +309,50 @@ const MessagesMainPage = () => {
     }
   }, [location.search, navigate]);
 
-  // Procesar usuario pendiente cuando las conversaciones estén listas
+  // Procesar usuario pendiente cuando las conversaciones estén listas (with debouncing)
   useEffect(() => {
     if (pendingUserToOpen && user) {
       console.log('🔍 Procesando usuario pendiente:', pendingUserToOpen);
       console.log('🔍 Conversaciones disponibles:', conversations.length);
       
-      // Actualizar debug info
-      setChatDebugInfo({
-        pendingUser: pendingUserToOpen,
-        currentUser: user.username,
-        conversationsCount: conversations.length,
-        timestamp: new Date().toLocaleTimeString()
-      });
-      
-      // Buscar conversación existente
-      const existingConversation = conversations.find(conv => {
-        const otherUser = conv.participants?.find(p => p.id !== user?.id);
-        const found = otherUser?.username === pendingUserToOpen;
-        if (found) {
-          console.log('✅ Conversación encontrada con:', otherUser.username);
-          console.log('🔍 Conversación completa:', conv);
-          console.log('🔍 Otros participantes:', otherUser);
-        }
-        return found;
-      });
+      // Debounce the processing to prevent rapid API calls
+      const timeoutId = setTimeout(() => {
+        // Actualizar debug info
+        setChatDebugInfo({
+          pendingUser: pendingUserToOpen,
+          currentUser: user.username,
+          conversationsCount: conversations.length,
+          timestamp: new Date().toLocaleTimeString()
+        });
+        
+        // Buscar conversación existente
+        const existingConversation = conversations.find(conv => {
+          const otherUser = conv.participants?.find(p => p.id !== user?.id);
+          const found = otherUser?.username === pendingUserToOpen;
+          if (found) {
+            console.log('✅ Conversación encontrada con:', otherUser.username);
+            console.log('🔍 Conversación completa:', conv);
+            console.log('🔍 Otros participantes:', otherUser);
+          }
+          return found;
+        });
 
-      if (existingConversation) {
-        console.log('✅ Abriendo conversación existente:', existingConversation.id);
-        setSelectedConversation(existingConversation);
-        setShowChat(true);
-      } else {
-        console.log('🆕 Creando nueva conversación con:', pendingUserToOpen);
-        console.log('🔍 Usuario actual para nueva conversación:', user.username, user.id);
-        handleStartNewConversationWithUser(pendingUserToOpen);
-      }
-      
-      // Limpiar usuario pendiente
-      setPendingUserToOpen(null);
+        if (existingConversation) {
+          console.log('✅ Abriendo conversación existente:', existingConversation.id);
+          setSelectedConversation(existingConversation);
+          setShowChat(true);
+        } else {
+          console.log('🆕 Creando nueva conversación con:', pendingUserToOpen);
+          console.log('🔍 Usuario actual para nueva conversación:', user.username, user.id);
+          handleStartNewConversationWithUser(pendingUserToOpen);
+        }
+        
+        // Limpiar usuario pendiente
+        setPendingUserToOpen(null);
+      }, 300); // 300ms debounce
+
+      // Cleanup function to clear timeout
+      return () => clearTimeout(timeoutId);
     }
   }, [pendingUserToOpen, conversations, user]);
 
