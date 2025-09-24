@@ -4522,17 +4522,27 @@ async def create_poll(
     # Resolve mentioned users to user objects for the response
     mentioned_users_data = []
     if poll.mentioned_users:
-        mentioned_users_cursor = db.users.find({"id": {"$in": poll.mentioned_users}})
-        mentioned_users_list = await mentioned_users_cursor.to_list(len(poll.mentioned_users))
-        mentioned_users_data = [
-            MentionedUser(
-                id=user["id"],
-                username=user["username"],
-                display_name=user.get("display_name"),
-                avatar_url=user.get("avatar_url")
-            ) 
-            for user in mentioned_users_list
-        ]
+        try:
+            mentioned_users_cursor = db.users.find({"id": {"$in": poll.mentioned_users}})
+            mentioned_users_list = await mentioned_users_cursor.to_list(len(poll.mentioned_users))
+            
+            # Log for debugging
+            print(f"DEBUG: Found {len(mentioned_users_list)} users out of {len(poll.mentioned_users)} mentioned IDs for poll {poll.id}")
+            if len(mentioned_users_list) != len(poll.mentioned_users):
+                print(f"DEBUG: Missing users for IDs: {set(poll.mentioned_users) - set(user['id'] for user in mentioned_users_list)}")
+            
+            mentioned_users_data = [
+                MentionedUser(
+                    id=user["id"],
+                    username=user["username"],
+                    display_name=user.get("display_name"),
+                    avatar_url=user.get("avatar_url")
+                ) 
+                for user in mentioned_users_list
+            ]
+        except Exception as e:
+            print(f"DEBUG: Error resolving mentioned users for poll {poll.id}: {e}")
+            mentioned_users_data = []
     
     return PollResponse(
         id=poll.id,
