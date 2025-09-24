@@ -538,6 +538,13 @@ class PollCreate(BaseModel):
     video_playback_settings: Optional[dict] = None  # Video playback configuration
     layout: Optional[str] = None  # Layout configuration (e.g., 'grid-3x2', 'vertical', etc.)
 
+# Simple user model for mentions
+class MentionedUser(BaseModel):
+    id: str
+    username: str
+    display_name: Optional[str] = None
+    avatar_url: Optional[str] = None
+
 class PollResponse(BaseModel):
     id: str
     title: str
@@ -554,7 +561,7 @@ class PollResponse(BaseModel):
     is_featured: bool
     tags: List[str]
     category: Optional[str]
-    mentioned_users: List[str] = []  # List of user IDs mentioned in the poll
+    mentioned_users: List[MentionedUser] = []  # List of mentioned users with details
     layout: Optional[str] = None  # Layout configuration
     created_at: datetime
     time_ago: str  # Campo calculado como "hace 2 horas"
