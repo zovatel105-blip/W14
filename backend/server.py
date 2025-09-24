@@ -4504,12 +4504,12 @@ async def create_poll(
         mentioned_users_cursor = db.users.find({"id": {"$in": poll.mentioned_users}})
         mentioned_users_list = await mentioned_users_cursor.to_list(len(poll.mentioned_users))
         mentioned_users_data = [
-            {
-                "id": user["id"],
-                "username": user["username"],
-                "display_name": user.get("display_name"),
-                "avatar_url": user.get("avatar_url")
-            } 
+            MentionedUser(
+                id=user["id"],
+                username=user["username"],
+                display_name=user.get("display_name"),
+                avatar_url=user.get("avatar_url")
+            ) 
             for user in mentioned_users_list
         ]
     
