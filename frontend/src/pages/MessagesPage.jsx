@@ -40,82 +40,11 @@ const MessagesPage = () => {
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
-  // Load real conversations from backend
-  const loadConversations = async () => {
-    if (!user?.id) return;
-    
-    setLoading(true);
-    try {
-      console.log('🔄 Loading conversations for user:', user.id);
-      
-      const response = await apiRequest('/api/conversations', {
-        method: 'GET'
-      });
-      
-      console.log('📥 Loaded conversations:', response);
-      
-      if (Array.isArray(response)) {
-        setConversations(response);
-      } else {
-        console.log('ℹ️ No conversations found');
-        setConversations([]);
-      }
-    } catch (error) {
-      console.error('❌ Error loading conversations:', error);
-      setConversations([]);
-      
-      if (error.message.includes('404')) {
-        console.log('ℹ️ No conversations endpoint available yet');
-      } else {
-        toast({
-          title: "Error al cargar conversaciones",
-          description: "No se pudieron cargar las conversaciones",
-          variant: "destructive",
-        });
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Load messages for a specific conversation
-  const loadMessages = async (conversationId) => {
-    if (!conversationId || !user?.id) return;
-    
-    try {
-      console.log('📩 Loading messages for conversation:', conversationId);
-      
-      const response = await apiRequest(`/api/conversations/${conversationId}/messages`, {
-        method: 'GET'
-      });
-      
-      console.log('📥 Loaded messages:', response);
-      
-      if (Array.isArray(response)) {
-        setMessages(response);
-      } else {
-        console.log('ℹ️ No messages found');
-        setMessages([]);
-      }
-      
-      // Scroll to bottom
-      setTimeout(() => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-      }, 100);
-      
-    } catch (error) {
-      console.error('❌ Error loading messages:', error);
-      setMessages([]);
-      
-      if (!error.message.includes('404')) {
-        toast({
-          title: "Error al cargar mensajes",
-          description: "No se pudieron cargar los mensajes",
-          variant: "destructive",
-        });
-      }
-    }
-  };
+  // Mobile responsive
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
+  // Dynamic view based on selected conversation
+  const showInbox = !selectedConversation; // Show inbox when no conversation selected
+  const showChat = !!selectedConversation; // Show chat when conversation is selected
 
   // Search users for new conversation
   const searchUsers = async (query) => {
@@ -155,7 +84,7 @@ const MessagesPage = () => {
       
       // Check if conversation already exists
       const existingConversation = conversations.find(conv => 
-        conv.participants.some(p => p.id === targetUser.id)
+        conv.participants && conv.participants.some(p => p.id === targetUser.id)
       );
       
       if (existingConversation) {
