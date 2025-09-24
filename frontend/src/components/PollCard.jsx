@@ -530,21 +530,28 @@ const PollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, fullScreen
                 </div>
               )}
               
-              {/* Mentioned Users Display */}
+              {/* Mentioned Users Display - Circular Avatars */}
               {poll.mentioned_users && poll.mentioned_users.length > 0 && (
-                <div className="flex items-center gap-1 mt-2">
+                <div className="flex items-center gap-2 mt-2">
                   <span className="text-xs text-gray-500">Menciona a:</span>
-                  <div className="flex items-center gap-1 flex-wrap">
+                  <div className="flex items-center gap-1">
                     {poll.mentioned_users.slice(0, 3).map((mentionedUser, index) => (
-                      <span key={mentionedUser.id || index} className="text-xs font-medium text-blue-600 hover:text-blue-800 cursor-pointer">
-                        @{mentionedUser.username || mentionedUser.display_name || `usuario${index + 1}`}
-                        {index < Math.min(poll.mentioned_users.length - 1, 2) && <span className="text-gray-400">, </span>}
-                      </span>
+                      <div key={mentionedUser.id || index} className="relative">
+                        <img
+                          src={mentionedUser.avatar_url || '/default-avatar.png'}
+                          alt={`@${mentionedUser.username || mentionedUser.display_name}`}
+                          className="w-6 h-6 rounded-full border border-white shadow-sm cursor-pointer hover:scale-110 transition-transform"
+                          onError={(e) => {
+                            e.target.src = '/default-avatar.png';
+                          }}
+                          title={`@${mentionedUser.username || mentionedUser.display_name}`}
+                        />
+                      </div>
                     ))}
                     {poll.mentioned_users.length > 3 && (
-                      <span className="text-xs text-gray-500">
-                        +{poll.mentioned_users.length - 3} más
-                      </span>
+                      <div className="w-6 h-6 rounded-full bg-gray-400 flex items-center justify-center text-xs text-white font-bold">
+                        +{poll.mentioned_users.length - 3}
+                      </div>
                     )}
                   </div>
                 </div>
