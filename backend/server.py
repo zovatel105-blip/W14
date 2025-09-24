@@ -3128,7 +3128,7 @@ async def get_recent_followers(current_user: UserResponse = Depends(get_current_
         
         # Find recent follows where current user is the followed user
         recent_follows = await db.follows.find({
-            "followed_id": current_user.id,
+            "following_id": current_user.id,  # FIXED: Changed from followed_id to following_id
             "created_at": {"$gte": seven_days_ago}
         }).sort("created_at", -1).limit(50).to_list(50)
         
@@ -3150,6 +3150,7 @@ async def get_recent_followers(current_user: UserResponse = Depends(get_current_
         
     except Exception as e:
         # Return empty list if no follows collection or error
+        print(f"Error getting recent followers: {e}")
         return []
 
 @api_router.get("/users/activity/recent")
