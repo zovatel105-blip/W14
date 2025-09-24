@@ -496,39 +496,69 @@ const MessagesMainPage = () => {
           body: messagePayload
         });
 
-        console.log('✅ Mensaje enviado exitosamente:', response);
+        console.log('✅ Respuesta del servidor:', response);
         
-        // Si era una conversación nueva, actualizar con los datos reales del backend
-        if (selectedConversation.isNewConversation && response.conversation_id) {
-          console.log('🔄 Actualizando conversación nueva con ID real:', response.conversation_id);
+        // Manejar diferentes tipos de respuesta del backend
+        if (response.type === 'chat_request') {
+          // El mensaje se convirtió en una solicitud de chat
+          console.log('📨 Solicitud de chat enviada:', response.request_id);
+          
+          // Eliminar mensaje temporal
+          setMessages(prevMessages =>
+            prevMessages.filter(msg => msg.id !== tempMessageId)
+          );
+          
+          // Mostrar mensaje informativo al usuario
+          const chatRequestMessage = {
+            id: `system-${Date.now()}`,
+            content: '📨 Solicitud de chat enviada. El usuario debe aceptarla para poder intercambiar mensajes.',
+            sender_id: 'system',
+            isSystemMessage: true,
+            created_at: new Date().toISOString()
+          };
+          
+          setMessages(prevMessages => [...prevMessages, chatRequestMessage]);
+          
+          // Cerrar la conversación después de un momento
+          setTimeout(() => {
+            setSelectedConversation(null);
+          }, 3000);
+          
+        } else if (response.message_id) {
+          // Mensaje enviado normalmente
+          
+          // Si era una conversación nueva, actualizar con los datos reales del backend
+          if (selectedConversation.isNewConversation && response.conversation_id) {
+            console.log('🔄 Actualizando conversación nueva con ID real:', response.conversation_id);
+            setSelectedConversation(prev => ({
+              ...prev,
+              id: response.conversation_id,
+              isNewConversation: false
+            }));
+          }
+          
+          // Actualizar el mensaje temporal con la respuesta del servidor
+          setMessages(prevMessages =>
+            prevMessages.map(msg =>
+              msg.id === tempMessageId
+                ? { ...response, status: 'sent', id: response.message_id }
+                : msg
+            )
+          );
+
+          // Actualizar la conversación con el último mensaje
           setSelectedConversation(prev => ({
             ...prev,
-            id: response.conversation_id,
-            isNewConversation: false
+            last_message: {
+              content: messageContent,
+              timestamp: response.timestamp,
+              sender_id: user.id
+            }
           }));
+
+          // Recargar conversaciones para actualizar la lista
+          loadConversations();
         }
-        
-        // Actualizar el mensaje temporal con la respuesta del servidor
-        setMessages(prevMessages =>
-          prevMessages.map(msg =>
-            msg.id === tempMessageId
-              ? { ...response, status: 'sent', id: response.message_id }
-              : msg
-          )
-        );
-
-        // Actualizar la conversación con el último mensaje
-        setSelectedConversation(prev => ({
-          ...prev,
-          last_message: {
-            content: messageContent,
-            timestamp: response.timestamp,
-            sender_id: user.id
-          }
-        }));
-
-        // Recargar conversaciones para actualizar la lista
-        loadConversations();
       } catch (error) {
         console.error('❌ Error enviando mensaje COMPLETO:', error);
         console.error('❌ Error message:', error.message);
