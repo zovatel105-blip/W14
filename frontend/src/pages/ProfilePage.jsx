@@ -1853,40 +1853,43 @@ const ProfilePage = () => {
                           Agregar red social
                         </button>
 
-                        {/* Enlaces Guardados - Como botones/cards bonitos */}
+                        {/* Enlaces Guardados - Como tarjetas coloridas similar a la referencia */}
                         {Object.entries(socialLinks).length > 0 && (
-                          <div className="grid grid-cols-2 gap-4 mb-4">
+                          <div className="grid grid-cols-2 gap-3">
                             {Object.entries(socialLinks).map(([linkId, linkData]) => {
-                              // Debug logging
-                              console.log('🔍 Rendering social link:', linkId, linkData);
-                              
                               if (!linkData) return null;
                               
                               const displayName = typeof linkData === 'object' ? linkData.name : linkId;
                               const url = typeof linkData === 'object' ? linkData.url : linkData;
-                              const color = typeof linkData === 'object' && linkData.color ? linkData.color : 'bg-gray-600';
                               
                               // Skip if no URL
                               if (!url || url.trim() === '') return null;
                               
-                              console.log('✅ Rendering link button:', displayName, url);
+                              // Obtener estilo de la plataforma
+                              const platformStyle = getPlatformStyle(displayName);
                               
                               return (
                                 <div key={linkId} className="relative group">
-                                  {/* Botón principal del enlace */}
+                                  {/* Tarjeta principal del enlace */}
                                   <a
                                     href={url.startsWith('http') ? url : `https://${url}`}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className={`block w-full p-4 rounded-2xl text-white font-semibold text-center relative overflow-hidden transition-transform hover:scale-105 ${
-                                      color.includes('gradient') ? `bg-gradient-to-r ${color}` : color
-                                    }`}
+                                    className={`block w-full h-24 rounded-2xl text-white font-bold relative overflow-hidden transition-transform hover:scale-105 shadow-lg bg-gradient-to-br ${platformStyle.gradient}`}
                                   >
-                                    <div className="flex items-center justify-between">
-                                      <span className="text-lg font-bold">{displayName}</span>
-                                      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                                      </svg>
+                                    <div className="h-full flex flex-col justify-between p-4">
+                                      {/* Ícono de enlace externo en esquina superior derecha */}
+                                      <div className="flex justify-end">
+                                        <svg className="w-4 h-4 opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                                        </svg>
+                                      </div>
+                                      
+                                      {/* Contenido principal */}
+                                      <div className="flex items-center gap-2">
+                                        <span className="text-lg">{platformStyle.icon}</span>
+                                        <span className="text-sm font-bold leading-tight">{displayName}</span>
+                                      </div>
                                     </div>
                                   </a>
                                   
@@ -1896,7 +1899,7 @@ const ProfilePage = () => {
                                       e.preventDefault();
                                       handleRemoveSocialLink(linkId);
                                     }}
-                                    className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-xs"
+                                    className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-xs shadow-lg"
                                   >
                                     ×
                                   </button>
