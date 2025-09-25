@@ -40,10 +40,11 @@ const FeedPage = () => {
   // Load polls from backend
   useEffect(() => {
     const loadPolls = async () => {
-      if (!isAuthenticated) {
-        setIsLoading(false);
-        return;
-      }
+      // TEMPORAL: Force load polls regardless of auth state to test mentions
+      // if (!isAuthenticated) {
+      //   setIsLoading(false);
+      //   return;
+      // }
 
       try {
         setIsLoading(true);
