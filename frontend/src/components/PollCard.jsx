@@ -719,6 +719,7 @@ const PollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, fullScreen
           </div>
 
           {/* Mentioned Users Banners - Positioned after title, before content */}
+          {console.log('🎯 PollCard render:', poll.title, 'has mentions:', !!(poll.mentioned_users && poll.mentioned_users.length > 0)) || null}
           {poll.mentioned_users && poll.mentioned_users.length > 0 && (
             <div className="px-4 pb-2 space-y-1">
               {poll.mentioned_users.slice(0, 3).map((mentionedUser, index) => (
