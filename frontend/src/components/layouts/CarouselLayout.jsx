@@ -184,7 +184,7 @@ const CarouselLayout = ({ poll, onVote, isActive }) => {
               {isActive && option.mentioned_users && option.mentioned_users.length > 0 && (
                 <div className="absolute bottom-32 left-4 right-4 z-10">
                   <div className="flex flex-wrap gap-1 items-center justify-center mb-2">
-                    <span className="text-xs text-white/70 mr-1">Menciona a:</span>
+
                     {option.mentioned_users.slice(0, 3).map((mentionedUser, index) => (
                       <div key={mentionedUser.id || index} className="flex items-center bg-white/20 px-2 py-1 rounded-full backdrop-blur-sm">
                         <img
