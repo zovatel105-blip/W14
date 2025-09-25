@@ -473,7 +473,7 @@ const PollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, fullScreen
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.3 }}
       >
-        <Card className="w-full h-full max-h-[90vh] group bg-white/95 backdrop-blur-sm border border-white/20 shadow-2xl overflow-hidden flex flex-col rounded-xl">
+        <Card className="w-full h-full max-h-[90vh] group bg-white/95 backdrop-blur-sm border border-white/20 shadow-2xl overflow-hidden flex flex-col rounded-xl relative">
           <CardContent className="p-0 flex flex-col h-full">
             {/* Header - Compact for full screen */}
             <div className="flex items-center justify-between p-4 pb-3 flex-shrink-0 bg-white/90 backdrop-blur-sm">
