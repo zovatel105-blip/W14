@@ -766,9 +766,16 @@ const PollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, fullScreen
           {poll.mentioned_users && poll.mentioned_users.length > 0 && (
             <div className="px-4 pb-3 space-y-2">
               {poll.mentioned_users.slice(0, 3).map((mentionedUser, index) => (
-                <div 
-                  key={mentionedUser.id || index} 
-                  className="flex items-center bg-gray-900 bg-opacity-90 rounded-lg px-4 py-2.5"
+                <button
+                  key={mentionedUser.id || index}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    const username = mentionedUser.username || mentionedUser.display_name?.toLowerCase().replace(/\s+/g, '_');
+                    if (username) {
+                      navigate(`/profile/${username}`);
+                    }
+                  }}
+                  className="flex items-center bg-gray-900 bg-opacity-90 rounded-lg px-4 py-2.5 w-full cursor-pointer hover:bg-opacity-80 transition-all duration-200"
                 >
                   <img
                     src={mentionedUser.avatar_url || '/default-avatar.png'}
@@ -781,7 +788,7 @@ const PollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, fullScreen
                   <span className="text-white text-sm font-medium">
                     {mentionedUser.display_name || mentionedUser.username}
                   </span>
-                </div>
+                </button>
               ))}
               {poll.mentioned_users.length > 3 && (
                 <div className="flex items-center bg-gray-900 bg-opacity-90 rounded-lg px-4 py-2.5">
