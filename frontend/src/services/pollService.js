@@ -216,7 +216,8 @@ class PollService {
       category: backendPoll.category,
       tags: backendPoll.tags || [],
       is_featured: backendPoll.is_featured,
-      layout: backendPoll.layout  // ✅ CRITICAL FIX: Include layout field for LayoutRenderer
+      layout: backendPoll.layout,  // ✅ CRITICAL FIX: Include layout field for LayoutRenderer
+      mentioned_users: backendPoll.mentioned_users || []  // ✅ CRITICAL FIX: Include mentioned_users for avatar display
     };
   }
 
