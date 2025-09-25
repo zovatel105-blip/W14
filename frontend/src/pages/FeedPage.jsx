@@ -49,6 +49,10 @@ const FeedPage = () => {
         setIsLoading(true);
         setError(null);
         const pollsData = await pollService.getPollsForFrontend({ limit: 30 });
+        console.log('🔍 FeedPage loaded polls:', pollsData.map(p => ({
+          title: p.title, 
+          mentioned_users: p.mentioned_users ? p.mentioned_users.length : 0
+        })));
         setPolls(pollsData);
       } catch (err) {
         console.error('Error loading polls:', err);
