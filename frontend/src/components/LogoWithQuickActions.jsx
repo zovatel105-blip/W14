@@ -133,15 +133,7 @@ const LogoWithQuickActions = ({ size = 32, className = "" }) => {
           }`} 
         />
         
-        {/* Indicador visual de carga durante long press - ahora blanco */}
-        {isPressed && (
-          <div 
-            className="absolute inset-0 border-2 border-white rounded-full"
-            style={{
-              animation: 'pulse 0.6s ease-out infinite'
-            }}
-          />
-        )}
+        {/* Indicador de carga eliminado para quitar anillo */}
       </div>
 
       {/* Menú de acciones rápidas */}
