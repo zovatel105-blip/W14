@@ -46,12 +46,24 @@ class PollService {
     if (featured !== null) params.append('featured', featured.toString());
 
     try {
-      const response = await fetch(`${this.baseURL}/polls?${params}`, {
+      const url = `${this.baseURL}/polls?${params}`;
+      const headers = this.getAuthHeaders();
+      console.log('🌐 API Call:', url, 'Headers:', headers);
+      
+      const response = await fetch(url, {
         method: 'GET',
-        headers: this.getAuthHeaders(),
+        headers: headers,
       });
 
-      return await this.handleResponse(response);
+      const data = await this.handleResponse(response);
+      console.log('📊 API Response:', data.length, 'polls received. First 3:', 
+        data.slice(0, 3).map(p => ({
+          title: p.title,
+          mentioned_users: p.mentioned_users ? p.mentioned_users.length : 0
+        }))
+      );
+      
+      return data;
     } catch (error) {
       console.error('Error fetching polls:', error);
       throw error;
