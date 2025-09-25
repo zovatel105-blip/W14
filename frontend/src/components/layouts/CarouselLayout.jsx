@@ -186,29 +186,32 @@ const CarouselLayout = ({ poll, onVote, isActive }) => {
               {isActive && option.mentioned_users && option.mentioned_users.length > 0 && (
                 <div className="absolute bottom-32 left-4 right-4 z-10">
                   <div className="flex flex-wrap gap-1 items-center justify-center mb-2">
-
                     {option.mentioned_users.slice(0, 3).map((mentionedUser, index) => (
-                      <div key={mentionedUser.id || index} className="flex items-center bg-white/20 px-2 py-1 rounded-full backdrop-blur-sm">
+                      <button
+                        key={mentionedUser.id || index}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          const username = mentionedUser.username || mentionedUser.display_name?.toLowerCase().replace(/\s+/g, '_');
+                          if (username) {
+                            navigate(`/profile/${username}`);
+                          }
+                        }}
+                        className="cursor-pointer hover:scale-110 transition-transform duration-200"
+                      >
                         <img
                           src={mentionedUser.avatar_url || '/default-avatar.png'}
                           alt={`@${mentionedUser.username || mentionedUser.display_name}`}
-                          className="w-4 h-4 rounded-full mr-1 border border-white/50"
+                          className="w-6 h-6 rounded-full border-2 border-white/70 shadow-sm hover:border-white"
                           onError={(e) => {
                             e.target.src = '/default-avatar.png';
                           }}
                         />
-                        <span className="text-xs text-white font-medium">
-                          {mentionedUser.display_name || mentionedUser.username}
-                        </span>
-                      </div>
+                      </button>
                     ))}
                     {option.mentioned_users.length > 3 && (
-                      <div className="flex items-center bg-white/20 px-2 py-1 rounded-full backdrop-blur-sm">
-                        <div className="w-4 h-4 rounded-full bg-white/30 flex items-center justify-center mr-1">
-                          <span className="text-xs text-white font-bold">+</span>
-                        </div>
-                        <span className="text-xs text-white/90">
-                          {option.mentioned_users.length - 3} más
+                      <div className="w-6 h-6 rounded-full bg-white/30 flex items-center justify-center border-2 border-white/70 backdrop-blur-sm">
+                        <span className="text-xs text-white font-bold">
+                          +{option.mentioned_users.length - 3}
                         </span>
                       </div>
                     )}
