@@ -13,28 +13,19 @@ const CustomLogo = ({ size = 24, className = "" }) => {
         background: 'transparent'
       }}
     >
-      {/* Logo SVG con líneas cruzadas verde y azul formando una X */}
-      <svg
+      {/* Logo exacto como fue subido */}
+      <img
+        src="https://customer-assets.emergentagent.com/job_socialpoll-1/artifacts/48jkqjr5_file_00000000d10061f9aa0a9323827dcaf4.png"
+        alt="Logo"
         width={size}
         height={size}
-        viewBox="0 0 100 100"
-        xmlns="http://www.w3.org/2000/svg"
-        style={{ display: 'block' }}
-      >
-        {/* Línea verde - diagonal de arriba izquierda a abajo derecha */}
-        <path
-          d="M15 15 L85 85 L80 90 L10 20 Z"
-          fill="#00ff00"
-          style={{ filter: 'drop-shadow(0 0 4px #00ff0070)' }}
-        />
-        
-        {/* Línea azul - diagonal de arriba derecha a abajo izquierda */}
-        <path
-          d="M85 15 L15 85 L20 90 L90 20 Z"
-          fill="#00aaff"
-          style={{ filter: 'drop-shadow(0 0 4px #00aaff70)' }}
-        />
-      </svg>
+        style={{
+          display: 'block',
+          objectFit: 'contain',
+          maxWidth: '100%',
+          maxHeight: '100%'
+        }}
+      />
     </div>
   );
 };
