@@ -14,7 +14,7 @@ from datetime import datetime, timedelta
 # Get backend URL - use external URL from frontend/.env
 def get_backend_url():
     # Use external URL as configured in frontend/.env
-    return "https://poll-mention-fix.preview.emergentagent.com/api"
+    return "https://poll-avatar-debug.preview.emergentagent.com/api"
 
 def get_mobile_headers():
     """Get headers that simulate mobile device requests"""
@@ -25,8 +25,8 @@ def get_mobile_headers():
         'Accept-Encoding': 'gzip, deflate, br',
         'Connection': 'keep-alive',
         'Content-Type': 'application/json',
-        'Origin': 'https://poll-mention-fix.preview.emergentagent.com',
-        'Referer': 'https://poll-mention-fix.preview.emergentagent.com/',
+        'Origin': 'https://poll-avatar-debug.preview.emergentagent.com',
+        'Referer': 'https://poll-avatar-debug.preview.emergentagent.com/',
         'Sec-Fetch-Dest': 'empty',
         'Sec-Fetch-Mode': 'cors',
         'Sec-Fetch-Site': 'same-origin'
