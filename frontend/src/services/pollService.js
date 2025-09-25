@@ -219,6 +219,15 @@ class PollService {
       layout: backendPoll.layout,  // ✅ CRITICAL FIX: Include layout field for LayoutRenderer
       mentioned_users: backendPoll.mentioned_users || []  // ✅ CRITICAL FIX: Include mentioned_users for avatar display
     };
+    
+    // 🚨 DEBUG: Log transformation
+    if (backendPoll.mentioned_users && backendPoll.mentioned_users.length > 0) {
+      console.log('🔄 pollService Transform:', {
+        pollTitle: backendPoll.title,
+        backendMentions: backendPoll.mentioned_users,
+        transformedMentions: backendPoll.mentioned_users || []
+      });
+    }
   }
 
   // Normalize media URLs - convert relative to absolute
