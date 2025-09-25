@@ -732,6 +732,40 @@ const PollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, fullScreen
             </h2>
           </div>
 
+          {/* Mentioned Users Banners - Positioned after title, before content */}
+          {poll.mentioned_users && poll.mentioned_users.length > 0 && (
+            <div className="px-4 pb-2 space-y-1">
+              {poll.mentioned_users.slice(0, 3).map((mentionedUser, index) => (
+                <div 
+                  key={mentionedUser.id || index} 
+                  className="flex items-center bg-gray-900 bg-opacity-90 rounded-lg px-3 py-2"
+                >
+                  <img
+                    src={mentionedUser.avatar_url || '/default-avatar.png'}
+                    alt={`@${mentionedUser.username || mentionedUser.display_name}`}
+                    className="w-8 h-8 rounded-full border-2 border-white shadow-sm mr-3"
+                    onError={(e) => {
+                      e.target.src = '/default-avatar.png';
+                    }}
+                  />
+                  <span className="text-white text-sm font-medium">
+                    {mentionedUser.display_name || mentionedUser.username}
+                  </span>
+                </div>
+              ))}
+              {poll.mentioned_users.length > 3 && (
+                <div className="flex items-center bg-gray-900 bg-opacity-90 rounded-lg px-3 py-2">
+                  <div className="w-8 h-8 rounded-full bg-gray-500 flex items-center justify-center text-xs text-white font-bold mr-3 border-2 border-white">
+                    +{poll.mentioned_users.length - 3}
+                  </div>
+                  <span className="text-white text-sm font-medium">
+                    más usuarios mencionados
+                  </span>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Media Grid - Similar to second reference image */}
           <div className="px-4 pb-4">
             <div className={`grid ${getLayoutGridClass()}`} style={getGridStyle()}>
