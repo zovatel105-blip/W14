@@ -220,15 +220,6 @@ class PollService {
       mentioned_users: backendPoll.mentioned_users || []  // ✅ CRITICAL FIX: Include mentioned_users for avatar display
     };
     
-    // 🚨 DEBUG: Log transformation
-    if (backendPoll.mentioned_users && backendPoll.mentioned_users.length > 0) {
-      console.log('🔄 pollService Transform:', {
-        pollTitle: backendPoll.title,
-        backendMentions: backendPoll.mentioned_users,
-        transformedMentions: transformedPoll.mentioned_users
-      });
-    }
-    
     return transformedPoll;
   }
 
