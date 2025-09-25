@@ -4193,6 +4193,28 @@ async def get_polls(
                 if not thumbnail_url and media_url and option.get("media_type") == "video":
                     thumbnail_url = await get_thumbnail_for_media_url(media_url)
                 
+                # Resolve mentioned users for this option
+                option_mentioned_users_data = []
+                if option.get("mentioned_users"):
+                    option_mentioned_user_ids = option.get("mentioned_users", [])
+                    if option_mentioned_user_ids:
+                        try:
+                            option_mentioned_cursor = db.users.find({"id": {"$in": option_mentioned_user_ids}})
+                            option_mentioned_list = await option_mentioned_cursor.to_list(len(option_mentioned_user_ids))
+                            
+                            option_mentioned_users_data = [
+                                {
+                                    "id": user["id"],
+                                    "username": user["username"],
+                                    "display_name": user.get("display_name"),
+                                    "avatar_url": user.get("avatar_url")
+                                } 
+                                for user in option_mentioned_list
+                            ]
+                        except Exception as e:
+                            print(f"DEBUG: Error resolving mentioned users for option {option['id']}: {e}")
+                            option_mentioned_users_data = []
+                
                 option_dict = {
                     "id": option["id"],
                     "text": option["text"],
@@ -4204,7 +4226,7 @@ async def get_polls(
                         "verified": option_user.get("is_verified", False),
                         "followers": "1K"  # Placeholder
                     },
-                    "mentioned_users": option.get("mentioned_users", []),  # Include mentioned users
+                    "mentioned_users": option_mentioned_users_data,  # ✅ CRITICAL FIX: Include resolved mentioned users for each option
                     "media": {
                         "type": option.get("media_type"),
                         "url": media_url,
