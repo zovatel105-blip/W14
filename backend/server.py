@@ -4619,22 +4619,23 @@ async def get_user_mentioned_polls(
             poll_response = PollResponse(
                 id=poll_data["id"],
                 title=poll_data["title"],
+                author=author,
                 description=poll_data.get("description", ""),
-                authorUser=author,
-                author_id=poll_data["author_id"],
                 options=options,
-                totalVotes=poll_data.get("total_votes", 0),
-                isPublic=poll_data.get("is_public", True),
-                userVoted=user_votes_dict.get(poll_data["id"]) is not None,
-                userVote=user_votes_dict.get(poll_data["id"]),
+                total_votes=poll_data.get("total_votes", 0),
                 likes=poll_data.get("likes", 0),
-                liked=poll_data["id"] in user_likes_set,
                 shares=poll_data.get("shares", 0),
                 comments_count=poll_data.get("comments_count", 0),
-                createdAt=poll_data.get("created_at"),
+                music=None,  # Could add music info later
+                user_vote=user_votes_dict.get(poll_data["id"]),
+                user_liked=poll_data["id"] in user_likes_set,
+                is_featured=poll_data.get("is_featured", False),
+                tags=poll_data.get("tags", []),
+                category=poll_data.get("category"),
+                mentioned_users=poll_mentioned_users,
                 layout=poll_data.get("layout", "carousel"),
-                is_following=following_dict.get(poll_data["author_id"]) is not None,
-                mentioned_users=poll_mentioned_users
+                created_at=poll_data.get("created_at"),
+                time_ago=calculate_time_ago(poll_data["created_at"]) if poll_data.get("created_at") else "hace un momento"
             )
             result.append(poll_response)
         
