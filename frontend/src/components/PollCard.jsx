@@ -530,45 +530,21 @@ const PollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, fullScreen
                 </div>
               )}
               
-              {/* Mentioned Users Display - Overlay Banners */}
-              {console.log('🚨 PollCard Debug:', {
-                pollTitle: poll.title,
-                pollId: poll.id,
-                mentionedUsers: poll.mentioned_users,
-                hasMentions: poll.mentioned_users && poll.mentioned_users.length > 0
-              }) || null}
-              {poll.mentioned_users && poll.mentioned_users.length > 0 && (
-                <div className="absolute top-4 left-4 z-10 space-y-2">
-                  {poll.mentioned_users.slice(0, 3).map((mentionedUser, index) => (
-                    <div 
-                      key={mentionedUser.id || index} 
-                      className="flex items-center bg-black bg-opacity-75 rounded-full px-3 py-2 min-w-[120px] max-w-[200px]"
-                    >
-                      <img
-                        src={mentionedUser.avatar_url || '/default-avatar.png'}
-                        alt={`@${mentionedUser.username || mentionedUser.display_name}`}
-                        className="w-6 h-6 rounded-full border border-white shadow-sm mr-2"
-                        onError={(e) => {
-                          e.target.src = '/default-avatar.png';
-                        }}
-                      />
-                      <span className="text-white text-sm font-medium truncate">
-                        {mentionedUser.display_name || mentionedUser.username}
-                      </span>
-                    </div>
-                  ))}
-                  {poll.mentioned_users.length > 3 && (
-                    <div className="flex items-center bg-black bg-opacity-75 rounded-full px-3 py-2">
-                      <div className="w-6 h-6 rounded-full bg-gray-400 flex items-center justify-center text-xs text-white font-bold mr-2">
-                        +{poll.mentioned_users.length - 3}
-                      </div>
-                      <span className="text-white text-sm font-medium">
-                        más usuarios
-                      </span>
-                    </div>
-                  )}
+              {/* Mentioned Users Display - Overlay Banners - SIMPLE TEST */}
+              {poll.mentioned_users && poll.mentioned_users.length > 0 ? (
+                <div style={{
+                  position: 'absolute', 
+                  top: '10px', 
+                  left: '10px', 
+                  zIndex: 999, 
+                  backgroundColor: 'red',
+                  color: 'white',
+                  padding: '5px',
+                  fontSize: '12px'
+                }}>
+                  TEST MENTION: {poll.mentioned_users.length} usuarios
                 </div>
-              )}
+              ) : null}
 
 
             </div>
