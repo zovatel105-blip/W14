@@ -166,7 +166,7 @@ class PollService {
 
   // Transform backend poll data to frontend format
   transformPollData(backendPoll) {
-    return {
+    const transformedPoll = {
       id: backendPoll.id,
       title: backendPoll.title,
       author: {
@@ -225,7 +225,7 @@ class PollService {
       console.log('🔄 pollService Transform:', {
         pollTitle: backendPoll.title,
         backendMentions: backendPoll.mentioned_users,
-        transformedMentions: backendPoll.mentioned_users || []
+        transformedMentions: transformedPoll.mentioned_users
       });
     }
     
