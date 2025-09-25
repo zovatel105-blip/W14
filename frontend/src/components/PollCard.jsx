@@ -530,21 +530,7 @@ const PollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, fullScreen
                 </div>
               )}
               
-              {/* Mentioned Users Display - Overlay Banners - SIMPLE TEST */}
-              {poll.mentioned_users && poll.mentioned_users.length > 0 ? (
-                <div style={{
-                  position: 'absolute', 
-                  top: '10px', 
-                  left: '10px', 
-                  zIndex: 999, 
-                  backgroundColor: 'red',
-                  color: 'white',
-                  padding: '5px',
-                  fontSize: '12px'
-                }}>
-                  TEST MENTION: {poll.mentioned_users.length} usuarios
-                </div>
-              ) : null}
+
 
 
             </div>
