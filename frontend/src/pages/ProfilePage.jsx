@@ -1049,15 +1049,7 @@ const ProfilePage = () => {
 
   const likedPolls = polls.filter(poll => poll.userLiked);
   
-  // Real mentions - polls where user is actually mentioned in options or poll
-  const mentionedPolls = polls.filter(poll => 
-    // Check if user is mentioned in the poll itself
-    poll.mentioned_users?.includes(displayUser?.id) ||
-    // Check if user is mentioned in any of the options
-    poll.options.some(option => 
-      option.mentioned_users?.includes(displayUser?.id)
-    )
-  );
+  // Mentioned polls are now loaded from API via mentionedPolls state
   
 
   
