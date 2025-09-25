@@ -212,6 +212,7 @@ class PollService {
         user: option.user,
         text: option.text,
         votes: option.votes,
+        mentioned_users: option.mentioned_users || [],  // ✅ CRITICAL FIX: Include option-specific mentioned_users
         media: option.media ? {
           ...option.media,
           url: this.normalizeMediaUrl(option.media.url),
