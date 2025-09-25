@@ -496,6 +496,70 @@ const ProfilePage = () => {
     loadSavedPolls();
   }, [authUser, isOwnProfile]);
 
+  // Load mentioned polls when user changes
+  useEffect(() => {
+    const loadMentionedPolls = async () => {
+      if (!authUser?.id && !userId) {
+        setMentionedPolls([]);
+        setMentionedPollsLoading(false);
+        return;
+      }
+
+      setMentionedPollsLoading(true);
+      try {
+        // Determine target user info
+        let targetUserId;
+        
+        if (userId && viewedUser) {
+          // Viewing another user's profile - use viewedUser data
+          targetUserId = viewedUser.id;
+        } else if (!userId && authUser) {
+          // Viewing own profile - use authUser data
+          targetUserId = authUser.id;
+        } else if (userId && !viewedUser) {
+          // Still loading viewedUser data, return early
+          setMentionedPollsLoading(false);
+          return;
+        }
+
+        console.log('Loading mentioned polls for user:', targetUserId);
+        const mentionedPollsData = await pollService.getUserMentionedPolls(targetUserId, 50, 0);
+        
+        console.log('Mentioned polls loaded:', mentionedPollsData.length);
+        setMentionedPolls(mentionedPollsData);
+      } catch (error) {
+        console.error('Error loading mentioned polls:', error);
+        
+        // Fallback: if API fails, filter from existing polls
+        if (polls.length > 0) {
+          const displayUser = viewedUser || authUser;
+          const fallbackMentions = polls.filter(poll => 
+            // Check if user is mentioned in the poll itself (now checking object structure)
+            poll.mentioned_users?.some(user => user.id === displayUser?.id) ||
+            // Check if user is mentioned in any of the options (now checking object structure)  
+            poll.options.some(option => 
+              option.mentioned_users?.some(user => user.id === displayUser?.id)
+            )
+          );
+          console.log('Using fallback mentioned polls:', fallbackMentions.length);
+          setMentionedPolls(fallbackMentions);
+        } else {
+          setMentionedPolls([]);
+        }
+        
+        toast({
+          title: "Información",
+          description: "No se pudieron cargar las menciones desde el servidor. Mostrando datos locales.",
+          variant: "default",
+        });
+      } finally {
+        setMentionedPollsLoading(false);
+      }
+    };
+
+    loadMentionedPolls();
+  }, [authUser?.id, authUser?.username, userId, viewedUser, polls, toast]);
+
   // Load user stories status
   useEffect(() => {
     const loadUserStories = async () => {
