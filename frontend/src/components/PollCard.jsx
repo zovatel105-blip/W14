@@ -712,7 +712,7 @@ const PollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, fullScreen
       whileHover={{ y: -4 }}
       transition={{ duration: 0.3 }}
     >
-      <Card className="group hover:shadow-2xl transition-all duration-500 transform bg-gradient-to-br from-white to-gray-50 border-0 shadow-lg overflow-hidden">
+      <Card className="group hover:shadow-2xl transition-all duration-500 transform bg-gradient-to-br from-white to-gray-50 border-0 shadow-lg overflow-hidden relative">
         <CardContent className="p-0">
           {/* Header */}
           <div className="flex items-center justify-between p-4 pb-2">
