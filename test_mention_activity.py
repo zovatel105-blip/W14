@@ -48,35 +48,29 @@ def create_poll_with_mention(base_url, token, mentioned_user_id, mentioned_user_
     }
     
     poll_data = {
-        "question": f"¿Cuál prefieres para @{mentioned_user_username}?",
         "title": f"Encuesta de prueba para menciones - {datetime.now().strftime('%H:%M:%S')}",
+        "description": f"¿Cuál prefieres para @{mentioned_user_username}?",
         "options": [
             {
                 "text": "Pizza",
-                "image_url": None,
-                "video_url": None,
+                "media_type": None,
+                "media_url": None,
+                "thumbnail_url": None,
                 "mentioned_users": []
             },
             {
                 "text": f"Hamburguesa (recomendado por @{mentioned_user_username})",
-                "image_url": None,
-                "video_url": None,
-                "mentioned_users": [
-                    {
-                        "id": mentioned_user_id,
-                        "username": mentioned_user_username
-                    }
-                ]
+                "media_type": None, 
+                "media_url": None,
+                "thumbnail_url": None,
+                "mentioned_users": [mentioned_user_id]  # Solo IDs como strings
             }
         ],
-        "general_mentioned_users": [
-            {
-                "id": mentioned_user_id,
-                "username": mentioned_user_username
-            }
-        ],
-        "music": None,
-        "layout": "grid"
+        "mentioned_users": [mentioned_user_id],  # Menciones generales del poll
+        "music_id": None,
+        "layout": "grid",
+        "tags": [],
+        "category": None
     }
     
     response = requests.post(f"{base_url}/polls", json=poll_data, headers=headers, timeout=10)
