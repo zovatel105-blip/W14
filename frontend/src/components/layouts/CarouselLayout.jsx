@@ -180,6 +180,40 @@ const CarouselLayout = ({ poll, onVote, isActive }) => {
                 <div className="absolute inset-0 ring-2 ring-green-400 ring-inset"></div>
               )}
 
+              {/* Mentioned Users - Encima de la descripción de cada opción */}
+              {isActive && poll.mentioned_users && poll.mentioned_users.length > 0 && (
+                <div className="absolute bottom-32 left-4 right-4 z-10">
+                  <div className="flex flex-wrap gap-1 items-center justify-center mb-2">
+                    <span className="text-xs text-white/70 mr-1">Menciona a:</span>
+                    {poll.mentioned_users.slice(0, 3).map((mentionedUser, index) => (
+                      <div key={mentionedUser.id || index} className="flex items-center bg-white/20 px-2 py-1 rounded-full backdrop-blur-sm">
+                        <img
+                          src={mentionedUser.avatar_url || '/default-avatar.png'}
+                          alt={`@${mentionedUser.username || mentionedUser.display_name}`}
+                          className="w-4 h-4 rounded-full mr-1 border border-white/50"
+                          onError={(e) => {
+                            e.target.src = '/default-avatar.png';
+                          }}
+                        />
+                        <span className="text-xs text-white font-medium">
+                          {mentionedUser.display_name || mentionedUser.username}
+                        </span>
+                      </div>
+                    ))}
+                    {poll.mentioned_users.length > 3 && (
+                      <div className="flex items-center bg-white/20 px-2 py-1 rounded-full backdrop-blur-sm">
+                        <div className="w-4 h-4 rounded-full bg-white/30 flex items-center justify-center mr-1">
+                          <span className="text-xs text-white font-bold">+</span>
+                        </div>
+                        <span className="text-xs text-white/90">
+                          {poll.mentioned_users.length - 3} más
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
               {/* Option Description - Only show when active (TikTok scroll) */}
               {isActive && option.text && (
                 <div className="absolute bottom-24 left-4 right-4 z-10">
