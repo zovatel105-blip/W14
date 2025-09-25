@@ -228,6 +228,8 @@ class PollService {
         transformedMentions: backendPoll.mentioned_users || []
       });
     }
+    
+    return transformedPoll;
   }
 
   // Normalize media URLs - convert relative to absolute
