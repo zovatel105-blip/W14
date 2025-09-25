@@ -96,6 +96,9 @@ const ActivityPage = () => {
       case 'vote':
         return `Votó por: "${activity.vote_option}" en "${activity.content_preview}"`;
       case 'mention':
+        if (activity.mention_type === 'option' && activity.mention_option) {
+          return `Te mencionó en la opción: "${activity.mention_option}" en "${activity.content_preview}"`;
+        }
         return `Te mencionó en: "${activity.content_preview || 'una publicación'}"`;
       default:
         return activity.content_preview || 'Actividad en tu contenido';
