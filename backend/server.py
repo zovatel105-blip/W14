@@ -2188,7 +2188,7 @@ async def search_users_advanced(query: str, current_user_id: str, limit: int):
             "username": user["username"],
             "display_name": user.get("display_name", ""),
             "bio": user.get("bio", "")[:100] + "..." if user.get("bio", "") and len(user.get("bio", "")) > 100 else user.get("bio", ""),
-            "avatar": user.get("avatar"),
+            "avatar": user.get("avatar_url"),  # Usar avatar_url en lugar de avatar
             "followers_count": followers_count,
             "is_following": is_following,
             "relevance_score": relevance_score,
