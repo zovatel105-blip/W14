@@ -2156,7 +2156,7 @@ async def search_users_advanced(query: str, current_user_id: str, limit: int):
         relevance_score = max(username_sim, display_name_sim, bio_sim)
         
         # Get user profile for additional data
-        profile = await db.user_profiles.find_one({"user_id": user["id"]})
+        profile = await db.user_profiles.find_one({"id": user["id"]})
         followers_count = profile.get("followers_count", 0) if profile else 0
         
         # Check if current user follows this user
