@@ -114,6 +114,54 @@ const FeedPage = () => {
     loadPolls();
   }, [isAuthenticated, toast]);
 
+  // Preload more content when user is near the end
+  const loadMorePolls = async () => {
+    if (isLoadingMore || !hasMoreContent) return;
+
+    console.log('🔄 Loading more polls - current page:', currentPage);
+    setIsLoadingMore(true);
+
+    try {
+      const nextPage = currentPage + 1;
+      const pollsData = await pollService.getPollsForFrontend({ 
+        limit: 20, // Load 20 more polls
+        offset: nextPage * 30  // Skip already loaded polls (initial 30 + 20*page)
+      });
+
+      console.log('📊 Additional polls loaded:', pollsData.length);
+
+      if (pollsData.length === 0) {
+        setHasMoreContent(false);
+        console.log('🏁 No more content available');
+        return;
+      }
+
+      // Filter out duplicates in case there's overlap
+      const existingIds = new Set(polls.map(poll => poll.id));
+      const newPolls = pollsData.filter(poll => !existingIds.has(poll.id));
+
+      if (newPolls.length > 0) {
+        setPolls(prevPolls => [...prevPolls, ...newPolls]);
+        setCurrentPage(nextPage);
+        console.log('✅ Added', newPolls.length, 'new polls. Total polls:', polls.length + newPolls.length);
+      } else {
+        console.log('⚠️ No new polls to add (all duplicates)');
+      }
+
+      // If we got fewer than requested, we're probably near the end
+      if (pollsData.length < 20) {
+        setHasMoreContent(false);
+        console.log('🏁 Received fewer polls than requested - marking as end of content');
+      }
+
+    } catch (error) {
+      console.error('❌ Error loading more polls:', error);
+      // Don't show error toast to user, just silently fail preloading
+    } finally {
+      setIsLoadingMore(false);
+    }
+  };
+
   // Handle navigation state for pre-selected audio
   useEffect(() => {
     if (location.state?.createPoll) {
