@@ -2211,13 +2211,13 @@ async def search_posts_advanced(query: str, current_user_id: str, limit: int):
             {"content": search_regex},
             {"title": search_regex}
         ]
-    }).limit(limit * 2).to_list(limit * 2)
+    }).limit(limit * config.SEARCH_CONFIG['FUZZY_SEARCH_MULTIPLIER']).to_list(limit * config.SEARCH_CONFIG['FUZZY_SEARCH_MULTIPLIER'])
     
     results = []
     for post in posts:
-        # Calculate relevance score
-        content_sim = calculate_similarity(query, post.get("content", ""))
-        title_sim = calculate_similarity(query, post.get("title", ""))
+        # Calculate relevance score with configurable multipliers
+        content_sim = calculate_similarity(query, post.get("content", "")) * config.SEARCH_CONFIG['MULTIPLIERS']['CONTENT_MATCH']
+        title_sim = calculate_similarity(query, post.get("title", "")) * config.SEARCH_CONFIG['MULTIPLIERS']['TITLE_MATCH']
         relevance_score = max(content_sim, title_sim)
         
         # Get engagement metrics
