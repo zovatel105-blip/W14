@@ -483,7 +483,7 @@ const SearchPage = () => {
             </div>
           </div>
         ) : hasSearched ? (
-          /* Cyberpunk No Results */}
+          /* Cyberpunk No Results */
           <div className="text-center py-20">
             <div className="relative inline-flex items-center justify-center w-24 h-24 mb-8">
               {/* Error/glitch effect */}
