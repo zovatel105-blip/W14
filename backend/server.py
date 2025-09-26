@@ -4421,7 +4421,7 @@ async def get_polls(
             description=poll_data.get("description"),
             options=options,
             total_votes=poll_data["total_votes"],
-            likes=poll_data["likes"],
+            likes=len(poll_data["likes"]) if isinstance(poll_data["likes"], list) else poll_data["likes"],
             shares=poll_data["shares"],
             comments_count=poll_data["comments_count"],
             music=music_info,  # Include music information
