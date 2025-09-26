@@ -567,6 +567,18 @@ const FeedPage = () => {
       </>
     );
   }
+  
+  // DEBUG: Log polls state before empty check
+  console.log('🚨 DEBUG: Checking polls state before empty check:');
+  console.log('📊 Current polls.length:', polls.length);
+  console.log('🔍 Current polls sample:', polls.slice(0, 3).map(p => ({ 
+    id: p?.id, 
+    title: p?.title, 
+    author: p?.author?.username || p?.authorUser?.username,
+    type: typeof p
+  })));
+  console.log('💾 isLoading:', isLoading, 'error:', error);
+  
   if (polls.length === 0) {
     return (
       <>
