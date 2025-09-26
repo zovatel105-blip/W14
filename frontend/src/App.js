@@ -120,7 +120,6 @@ function AppContent() {
             <Route path="/messages/activity" element={<ActivityPage />} />
             <Route path="/messages/requests" element={<RequestsPage />} />
             <Route path="/profile/:userId?" element={<ProfilePage />} />
-            <Route path="/post/:postId" element={<PostDetailPage />} />
             <Route path="/notifications" element={<NotificationsPage />} />
             <Route path="/settings" element={<SettingsPage />} />
             <Route path="/audio/:audioId" element={<AudioDetailPage />} />
