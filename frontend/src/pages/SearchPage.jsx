@@ -420,8 +420,8 @@ const SearchPage = () => {
         ) : isLoading ? (
           <div className="text-center py-20">
             <div className="inline-flex items-center justify-center w-12 h-12 border-2 border-gray-300 border-t-green-500 rounded-full animate-spin mb-4"></div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">Buscando...</h3>
-            <p className="text-gray-600">Encontrando los mejores resultados</p>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">{SEARCH_CONFIG.UI.LOADING_MESSAGE}</h3>
+            <p className="text-gray-600">{SEARCH_CONFIG.UI.LOADING_SUBTITLE}</p>
           </div>
         ) : searchResults.length > 0 ? (
           /* Clean Search Results */
