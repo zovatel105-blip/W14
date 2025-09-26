@@ -2065,12 +2065,22 @@ def extract_hashtags_from_text(text):
 @api_router.get("/search/universal")
 async def universal_search(
     q: str = "",
-    filter_type: str = "all",  # all, users, posts, hashtags, sounds
-    sort_by: str = "relevance",  # relevance, popularity, recent
-    limit: int = 20,
+    filter_type: str = config.SEARCH_CONFIG['DEFAULT_FILTER'],
+    sort_by: str = config.SEARCH_CONFIG['DEFAULT_SORT'],
+    limit: int = config.SEARCH_CONFIG['DEFAULT_SEARCH_LIMIT'],
     current_user: UserResponse = Depends(get_current_user)
 ):
     """Universal search across all content types"""
+    # Validate query parameters
+    if limit > config.SEARCH_CONFIG['MAX_SEARCH_LIMIT']:
+        limit = config.SEARCH_CONFIG['MAX_SEARCH_LIMIT']
+    
+    if filter_type not in config.SEARCH_CONFIG['AVAILABLE_FILTERS']:
+        filter_type = config.SEARCH_CONFIG['DEFAULT_FILTER']
+    
+    if sort_by not in config.SEARCH_CONFIG['AVAILABLE_SORTS']:
+        sort_by = config.SEARCH_CONFIG['DEFAULT_SORT']
+    
     # Validate and clean query parameter
     if not q or not q.strip():
         return {
@@ -2080,7 +2090,14 @@ async def universal_search(
             "trending": await get_trending_content(current_user.id)
         }
     
-    query = q.strip().lower()
+    query = q.strip()
+    if len(query) < config.SEARCH_CONFIG['MIN_QUERY_LENGTH']:
+        return {"success": True, "results": [], "message": "Query too short"}
+    
+    if len(query) > config.SEARCH_CONFIG['MAX_QUERY_LENGTH']:
+        return {"success": False, "error": "Query too long"}
+        
+    query_lower = query.lower()
     results = []
     
     try:
