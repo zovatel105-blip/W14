@@ -2165,10 +2165,10 @@ async def search_users_advanced(query: str, current_user_id: str, limit: int):
     
     results = []
     for user in users:
-        # Calculate relevance score
-        username_sim = calculate_similarity(query, user.get("username", ""))
-        display_name_sim = calculate_similarity(query, user.get("display_name", ""))
-        bio_sim = calculate_similarity(query, user.get("bio", "")) * 0.5
+        # Calculate relevance score with configurable multipliers
+        username_sim = calculate_similarity(query, user.get("username", "")) * config.SEARCH_CONFIG['MULTIPLIERS']['USERNAME_MATCH']
+        display_name_sim = calculate_similarity(query, user.get("display_name", "")) * config.SEARCH_CONFIG['MULTIPLIERS']['DISPLAY_NAME_MATCH']
+        bio_sim = calculate_similarity(query, user.get("bio", "")) * config.SEARCH_CONFIG['MULTIPLIERS']['BIO_MATCH']
         
         relevance_score = max(username_sim, display_name_sim, bio_sim)
         
