@@ -2475,7 +2475,7 @@ async def get_trending_content(current_user_id: str):
                 "author": {
                     "username": author.get("username", "") if author else "",
                     "display_name": author.get("display_name", "") if author else "",
-                    "avatar": author.get("avatar") if author else None
+                    "avatar": author.get("avatar_url") if author else None  # Usar avatar_url en lugar de avatar
                 },
                 "created_at": post.get("created_at", "")
             })
