@@ -858,7 +858,18 @@ const TikTokScrollView = ({
       
       setActiveIndex(newIndex);
     }
-  }, [activeIndex, polls.length]);
+
+    // PRELOAD LOGIC: Load more content when near the end
+    if (onLoadMore && hasMoreContent && !isLoadingMore) {
+      const remainingItems = polls.length - newIndex;
+      const preloadThreshold = 5; // Start loading when 5 items remaining
+
+      if (remainingItems <= preloadThreshold) {
+        console.log(`🔄 PRELOAD: ${remainingItems} items remaining, triggering preload`);
+        onLoadMore();
+      }
+    }
+  }, [activeIndex, polls.length, onLoadMore, hasMoreContent, isLoadingMore]);
 
   // Enhanced scroll listener with optimized debouncing
   useEffect(() => {
