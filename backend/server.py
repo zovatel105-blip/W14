@@ -2445,7 +2445,7 @@ async def search_autocomplete(
     current_user: UserResponse = Depends(get_current_user)
 ):
     """Real-time autocomplete suggestions"""
-    if len(q) < 2:
+    if not q or len(q.strip()) < 2:
         return {"suggestions": []}
     
     query = q.lower().strip()
