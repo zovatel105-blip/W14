@@ -45,11 +45,11 @@ const SearchPage = () => {
   }, []);
 
   const tabs = [
-    { id: 'all', label: 'Todo', icon: Sparkles, color: 'from-purple-500 to-pink-500', description: 'Buscar en todo' },
-    { id: 'users', label: 'Usuarios', icon: User, color: 'from-blue-500 to-cyan-500', description: 'Encuentra personas' },
-    { id: 'posts', label: 'Posts', icon: PostsIcon, color: 'from-green-500 to-emerald-500', description: 'Descubre contenido' },
-    { id: 'hashtags', label: 'Hashtags', icon: Hash, color: 'from-orange-500 to-red-500', description: 'Trending topics' },
-    { id: 'sounds', label: 'Sonidos', icon: Music, color: 'from-indigo-500 to-purple-500', description: 'Audio popular' },
+    { id: 'all', label: 'Todo', icon: Sparkles, description: 'Buscar en todo' },
+    { id: 'users', label: 'Usuarios', icon: User, description: 'Encuentra personas' },
+    { id: 'posts', label: 'Posts', icon: PostsIcon, description: 'Descubre contenido' },
+    { id: 'hashtags', label: 'Hashtags', icon: Hash, description: 'Trending topics' },
+    { id: 'sounds', label: 'Sonidos', icon: Music, description: 'Audio popular' },
   ];
 
   const updateURLParams = (query, filter) => {
