@@ -529,6 +529,20 @@ const SearchPage = () => {
         .hover\\:scale-102:hover {
           transform: scale(1.02);
         }
+        .drop-shadow-glow {
+          filter: drop-shadow(0 0 8px rgba(34, 211, 238, 0.6));
+        }
+        @keyframes spin-reverse {
+          from {
+            transform: rotate(360deg);
+          }
+          to {
+            transform: rotate(0deg);
+          }
+        }
+        .animate-spin-reverse {
+          animation: spin-reverse 1s linear infinite;
+        }
       `}</style>
     </div>
   );
