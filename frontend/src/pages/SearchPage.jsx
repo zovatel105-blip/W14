@@ -210,10 +210,17 @@ const SearchPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-blue-50/30">
-      {/* Logo fijo SIEMPRE VISIBLE - Como en FeedPage */}
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute top-10 left-10 w-72 h-72 bg-cyan-500/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-10 right-10 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+        <div className="absolute top-1/2 left-1/2 w-80 h-80 bg-pink-500/10 rounded-full blur-3xl animate-pulse delay-500 transform -translate-x-1/2 -translate-y-1/2"></div>
+      </div>
+
+      {/* Logo fijo SIEMPRE VISIBLE - Estilo oscuro */}
       <div 
-        className="fixed top-4 right-4 z-[9999] flex items-center justify-center w-10 h-10 rounded-full bg-white/95 backdrop-blur-md border border-white/60 shadow-lg hover:scale-110 transition-transform duration-300"
+        className="fixed top-4 right-4 z-[9999] flex items-center justify-center w-10 h-10 rounded-full bg-black/40 backdrop-blur-md border border-cyan-500/30 shadow-2xl hover:scale-110 hover:border-cyan-400/50 transition-all duration-300"
         style={{ 
           position: 'fixed',
           top: '16px',
@@ -224,51 +231,66 @@ const SearchPage = () => {
         <LogoWithQuickActions size={32} />
       </div>
 
-      {/* Modern Header with Glassmorphism */}
-      <div className="bg-white/80 backdrop-blur-xl border-b border-white/20 sticky top-0 z-50 shadow-lg">
+      {/* Futuristic Header with Neon Effects */}
+      <div className="bg-black/30 backdrop-blur-2xl border-b border-cyan-500/20 sticky top-0 z-50 shadow-2xl relative">
+        {/* Neon glow line */}
+        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500 to-transparent"></div>
+        
         <div className="max-w-6xl mx-auto px-3 sm:px-6 py-4 sm:py-6">
           <div className="flex items-center gap-4 sm:gap-6">
             <button
               onClick={() => navigate(-1)}
-              className="p-3 hover:bg-black/5 rounded-2xl transition-all duration-300 flex-shrink-0 group hover:scale-110 active:scale-95"
+              className="p-3 hover:bg-cyan-500/10 rounded-xl transition-all duration-300 flex-shrink-0 group hover:scale-110 active:scale-95 border border-slate-700/50 hover:border-cyan-500/30"
             >
-              <ArrowLeft size={22} className="text-gray-700 group-hover:text-black transition-colors" />
+              <ArrowLeft size={22} className="text-slate-400 group-hover:text-cyan-400 transition-colors" />
             </button>
             
             <div className="flex-1 relative">
-              {/* Enhanced Search Input */}
+              {/* Futuristic Search Input */}
               <div className="relative group">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-500/20 to-purple-500/20 rounded-2xl blur-xl opacity-0 group-focus-within:opacity-100 transition-opacity duration-500"></div>
-                <div className="relative">
-                  <Search size={20} className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 z-10 group-focus-within:text-blue-500 transition-colors" />
+                {/* Animated border glow */}
+                <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500/50 via-purple-500/50 to-pink-500/50 rounded-2xl blur opacity-0 group-focus-within:opacity-100 transition-opacity duration-500 animate-pulse"></div>
+                
+                <div className="relative bg-slate-800/90 backdrop-blur-sm rounded-xl border border-slate-600/50 group-focus-within:border-cyan-500/50 transition-all duration-300">
+                  {/* Search icon with glow effect */}
+                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2 z-10">
+                    <Search size={20} className="text-slate-400 group-focus-within:text-cyan-400 transition-colors duration-300" />
+                    <Search size={20} className="absolute inset-0 text-cyan-400 opacity-0 group-focus-within:opacity-50 blur-sm transition-opacity duration-300" />
+                  </div>
                   
                   {searchQuery && (
                     <button
                       onClick={clearSearch}
-                      className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-red-500 z-10 p-1 rounded-full hover:bg-red-50 transition-all duration-200"
+                      className="absolute right-4 top-1/2 transform -translate-y-1/2 text-slate-400 hover:text-red-400 z-10 p-1 rounded-full hover:bg-red-500/10 transition-all duration-200 group/clear"
                     >
                       <X size={18} />
+                      <X size={18} className="absolute inset-0 text-red-400 opacity-0 group-hover/clear:opacity-50 blur-sm transition-opacity duration-200" />
                     </button>
                   )}
                   
                   <input
                     ref={searchInputRef}
                     type="text"
-                    placeholder="¿Qué estás buscando hoy? ✨"
+                    placeholder="🔍 Buscar en el universo digital..."
                     value={searchQuery}
                     onChange={handleInputChange}
                     onFocus={handleInputFocus}
                     onBlur={handleInputBlur}
                     onKeyDown={handleKeyDown}
-                    className="w-full pl-12 pr-12 py-4 sm:py-5 bg-white/90 backdrop-blur-sm rounded-2xl border-2 border-gray-200/50 focus:border-blue-400/60 focus:ring-4 focus:ring-blue-100/50 transition-all duration-300 text-sm sm:text-base font-medium placeholder-gray-400 shadow-lg hover:shadow-xl focus:shadow-2xl"
+                    className="w-full pl-12 pr-12 py-4 sm:py-5 bg-transparent text-white placeholder-slate-400 border-0 focus:ring-0 focus:outline-none text-sm sm:text-base font-medium tracking-wide"
                     autoFocus
                   />
+                  
+                  {/* Typing indicator */}
+                  {searchQuery && (
+                    <div className="absolute bottom-0 left-4 right-4 h-px bg-gradient-to-r from-transparent via-cyan-500 to-transparent animate-pulse"></div>
+                  )}
                 </div>
               </div>
               
               {isAutocompleteLoading && (
                 <div className="absolute right-14 top-1/2 transform -translate-y-1/2">
-                  <div className="w-5 h-5 border-2 border-blue-300 border-t-blue-600 rounded-full animate-spin"></div>
+                  <div className="w-5 h-5 border-2 border-slate-600 border-t-cyan-400 rounded-full animate-spin"></div>
                 </div>
               )}
               
