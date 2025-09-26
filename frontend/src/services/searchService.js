@@ -21,7 +21,7 @@ class SearchService {
   }
 
   // Search polls/posts
-  async searchPosts(query, limit = 20, offset = 0) {
+  async searchPosts(query, limit = SEARCH_CONFIG.LIMITS.SEARCH_RESULTS, offset = 0) {
     try {
       const params = new URLSearchParams({
         query,
