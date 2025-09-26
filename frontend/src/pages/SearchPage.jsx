@@ -9,6 +9,7 @@ import AutocompleteDropdown from '../components/search/AutocompleteDropdown';
 import DiscoverySection from '../components/search/DiscoverySection';
 import PostsIcon from '../components/icons/PostsIcon';
 import LogoWithQuickActions from '../components/LogoWithQuickActions';
+import SEARCH_CONFIG from '../config/searchConfig';
 
 const SearchPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
