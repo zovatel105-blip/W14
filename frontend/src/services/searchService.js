@@ -183,7 +183,7 @@ class SearchService {
   }
 
   // Get autocomplete suggestions
-  async getAutocomplete(query, limit = 10) {
+  async getAutocomplete(query, limit = SEARCH_CONFIG.LIMITS.AUTOCOMPLETE_RESULTS) {
     try {
       const params = new URLSearchParams({
         q: query,  // Backend expects 'q' not 'query'
