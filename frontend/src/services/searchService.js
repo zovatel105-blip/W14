@@ -178,7 +178,7 @@ class SearchService {
   async getAutocomplete(query, limit = 10) {
     try {
       const params = new URLSearchParams({
-        query,
+        q: query,  // Backend expects 'q' not 'query'
         limit: limit.toString()
       });
 
