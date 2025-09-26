@@ -4153,9 +4153,23 @@ async def get_user_uploads(
 
 # =============  POLL ENDPOINTS =============
 
-def calculate_time_ago(created_at: datetime) -> str:
-    """Calculate time ago string from datetime"""
+def calculate_time_ago(created_at) -> str:
+    """Calculate time ago string from datetime or string"""
+    from datetime import datetime
+    import dateutil.parser
+    
     now = datetime.utcnow()
+    
+    # Handle both datetime objects and ISO string formats
+    if isinstance(created_at, str):
+        try:
+            created_at = dateutil.parser.parse(created_at).replace(tzinfo=None)
+        except Exception:
+            # Fallback if parsing fails
+            return "hace un tiempo"
+    elif created_at is None:
+        return "fecha desconocida"
+    
     diff = now - created_at
     
     if diff.days > 0:
