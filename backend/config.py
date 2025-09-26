@@ -98,6 +98,56 @@ class Config:
     MIN_PASSWORD_LENGTH = 8
     MAX_BIO_LENGTH = 160
     
+    # Search Configuration
+    SEARCH_CONFIG = {
+        # Search limits and pagination
+        'DEFAULT_SEARCH_LIMIT': int(os.getenv("SEARCH_DEFAULT_LIMIT", "20")),
+        'MAX_SEARCH_LIMIT': int(os.getenv("SEARCH_MAX_LIMIT", "100")),
+        'DEFAULT_AUTOCOMPLETE_LIMIT': int(os.getenv("AUTOCOMPLETE_DEFAULT_LIMIT", "10")),
+        'MAX_AUTOCOMPLETE_LIMIT': int(os.getenv("AUTOCOMPLETE_MAX_LIMIT", "25")),
+        
+        # Search validation
+        'MIN_QUERY_LENGTH': int(os.getenv("SEARCH_MIN_QUERY_LENGTH", "1")),
+        'MAX_QUERY_LENGTH': int(os.getenv("SEARCH_MAX_QUERY_LENGTH", "100")),
+        'MIN_AUTOCOMPLETE_LENGTH': int(os.getenv("SEARCH_MIN_AUTOCOMPLETE_LENGTH", "2")),
+        
+        # Relevance scoring thresholds
+        'MIN_RELEVANCE_SCORE': float(os.getenv("SEARCH_MIN_RELEVANCE_SCORE", "0.2")),
+        'HIGH_RELEVANCE_THRESHOLD': float(os.getenv("SEARCH_HIGH_RELEVANCE_THRESHOLD", "0.8")),
+        'MEDIUM_RELEVANCE_THRESHOLD': float(os.getenv("SEARCH_MEDIUM_RELEVANCE_THRESHOLD", "0.5")),
+        
+        # Search multipliers for different types
+        'MULTIPLIERS': {
+            'EXACT_MATCH': float(os.getenv("SEARCH_EXACT_MATCH_MULTIPLIER", "2.0")),
+            'USERNAME_MATCH': float(os.getenv("SEARCH_USERNAME_MULTIPLIER", "1.5")),
+            'DISPLAY_NAME_MATCH': float(os.getenv("SEARCH_DISPLAY_NAME_MULTIPLIER", "1.2")),
+            'BIO_MATCH': float(os.getenv("SEARCH_BIO_MULTIPLIER", "0.5")),
+            'CONTENT_MATCH': float(os.getenv("SEARCH_CONTENT_MULTIPLIER", "1.0")),
+            'TITLE_MATCH': float(os.getenv("SEARCH_TITLE_MULTIPLIER", "1.3")),
+            'HASHTAG_MATCH': float(os.getenv("SEARCH_HASHTAG_MULTIPLIER", "1.1")),
+        },
+        
+        # Time-based search configuration
+        'TRENDING_DAYS': int(os.getenv("SEARCH_TRENDING_DAYS", "7")),
+        'RECENT_DAYS': int(os.getenv("SEARCH_RECENT_DAYS", "30")),
+        
+        # Cache configuration
+        'ENABLE_SEARCH_CACHE': os.getenv("SEARCH_ENABLE_CACHE", "true").lower() == "true",
+        'CACHE_TTL_SECONDS': int(os.getenv("SEARCH_CACHE_TTL", "300")),  # 5 minutes
+        
+        # Performance limits
+        'MAX_FUZZY_RESULTS': int(os.getenv("SEARCH_MAX_FUZZY_RESULTS", "50")),
+        'FUZZY_SEARCH_MULTIPLIER': int(os.getenv("SEARCH_FUZZY_MULTIPLIER", "2")),
+        
+        # Sort options
+        'DEFAULT_SORT': os.getenv("SEARCH_DEFAULT_SORT", "relevance"),
+        'AVAILABLE_SORTS': ["relevance", "popularity", "recent"],
+        
+        # Filter options
+        'DEFAULT_FILTER': os.getenv("SEARCH_DEFAULT_FILTER", "all"),
+        'AVAILABLE_FILTERS': ["all", "users", "posts", "hashtags", "sounds"],
+    }
+    
     @classmethod
     def create_upload_directories(cls):
         """Create upload directories if they don't exist"""
