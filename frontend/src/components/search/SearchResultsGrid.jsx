@@ -18,7 +18,8 @@ const SearchResultsGrid = ({ results = [], onItemClick }) => {
         navigate(`/profile/${result.username}`);
         break;
       case 'post':
-        navigate(`/post/${result.id}`);
+        // Navigate to feed with the specific post ID as URL parameter
+        navigate(`/feed?post=${result.id}`);
         break;
       case 'hashtag':
         navigate(`/search?q=${encodeURIComponent(result.hashtag)}&filter=hashtags`);
