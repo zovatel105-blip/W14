@@ -81,7 +81,12 @@ const SearchPage = () => {
     setHasSearched(true);
     
     try {
-      const response = await searchService.universalSearch(query, filter, 'popularity', 50);
+      const response = await searchService.universalSearch(
+        query, 
+        filter, 
+        SEARCH_CONFIG.SORT_OPTIONS.DEFAULT, 
+        SEARCH_CONFIG.LIMITS.SEARCH_RESULTS
+      );
       setSearchResults(response.results || []);
       
       // Also load discovery content for empty states
