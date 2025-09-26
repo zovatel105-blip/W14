@@ -73,7 +73,7 @@ class SearchService {
   }
 
   // Search audio/music
-  async searchAudio(query, limit = 20, offset = 0) {
+  async searchAudio(query, limit = SEARCH_CONFIG.LIMITS.SEARCH_RESULTS, offset = 0) {
     try {
       const params = new URLSearchParams({
         query,
