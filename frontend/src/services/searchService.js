@@ -150,8 +150,8 @@ class SearchService {
   async universalSearch(query, filter = 'all', sortBy = 'popularity', limit = 20, offset = 0) {
     try {
       const params = new URLSearchParams({
-        query,
-        filter,
+        q: query,  // Backend expects 'q' not 'query'
+        filter_type: filter,  // Backend expects 'filter_type'
         sort_by: sortBy,
         limit: limit.toString(),
         offset: offset.toString()
