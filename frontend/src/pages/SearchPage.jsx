@@ -263,7 +263,7 @@ const SearchPage = () => {
                   <input
                     ref={searchInputRef}
                     type="text"
-                    placeholder="Buscar"
+                    placeholder={SEARCH_CONFIG.UI.SEARCH_PLACEHOLDER}
                     value={searchQuery}
                     onChange={handleInputChange}
                     onFocus={handleInputFocus}
@@ -271,6 +271,7 @@ const SearchPage = () => {
                     onKeyDown={handleKeyDown}
                     className="w-full pl-10 pr-10 py-3 bg-transparent text-gray-900 placeholder-gray-500 border-0 focus:ring-0 focus:outline-none text-base"
                     autoFocus
+                    maxLength={SEARCH_CONFIG.VALIDATION.MAX_QUERY_LENGTH}
                   />
                 </div>
               </div>
