@@ -76,7 +76,7 @@ const SearchResultsGrid = ({ results = [], onItemClick }) => {
               {post.title}
             </h3>
           )}
-          {post.content && (
+          {post.content && post.content.trim() && (
             <p className="text-xs leading-tight line-clamp-2 opacity-90 drop-shadow-md">
               {post.content}
             </p>
