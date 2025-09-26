@@ -156,8 +156,8 @@ const SearchPage = () => {
   };
 
   const handleInputFocus = () => {
-    if (searchQuery.length >= 2) {
-      setShowAutocomplete(true);
+    if (searchQuery.length >= SEARCH_CONFIG.VALIDATION.MIN_AUTOCOMPLETE_LENGTH) {
+      setShowAutocomplete(SEARCH_CONFIG.FEATURES.ENABLE_AUTOCOMPLETE);
     }
   };
 
