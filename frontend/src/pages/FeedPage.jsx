@@ -73,7 +73,7 @@ const FeedPage = () => {
             console.log('⚠️ Post not found in feed, loading individual post...');
             // If post not found in feed, load it individually
             try {
-              const specificPost = await pollService.getPoll(postId);
+              const specificPost = await pollService.getPollById(postId);
               if (specificPost) {
                 // Add the specific post to the beginning of the array
                 const updatedPolls = [specificPost, ...pollsData];
