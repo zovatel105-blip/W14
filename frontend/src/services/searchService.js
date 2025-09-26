@@ -99,7 +99,7 @@ class SearchService {
   }
 
   // Get trending hashtags
-  async getTrendingHashtags(limit = 20) {
+  async getTrendingHashtags(limit = SEARCH_CONFIG.LIMITS.DISCOVERY_TRENDING) {
     try {
       const params = new URLSearchParams({
         limit: limit.toString()
