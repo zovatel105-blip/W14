@@ -452,7 +452,7 @@ const SearchPage = () => {
             <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-6">
               <Search size={24} className="text-gray-400" />
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Sin resultados</h3>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">{SEARCH_CONFIG.UI.NO_RESULTS_TITLE}</h3>
             <p className="text-gray-600 mb-8 max-w-md mx-auto">
               No encontramos nada para "{searchQuery}". Intenta con otros términos.
             </p>
