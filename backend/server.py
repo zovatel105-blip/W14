@@ -2429,7 +2429,7 @@ async def get_search_suggestions_helper(current_user_id: str = None):
                     "id": user["id"],
                     "username": user["username"],
                     "display_name": user.get("display_name", ""),
-                    "avatar": user.get("avatar"),
+                    "avatar": user.get("avatar_url"),  # Usar avatar_url en lugar de avatar
                     "followers_count": profile.get("followers_count", 0)
                 })
         
