@@ -435,16 +435,10 @@ const SearchPage = () => {
             </div>
             
             {/* TikTok Style Results Grid */}
-            <div className="grid grid-cols-2 gap-4">
-              {searchResults.map((result, index) => (
-                <div key={`${result.type}-${result.id}-${index}`} className="bg-white rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-200 group cursor-pointer">
-                  <SearchResultItem
-                    result={result}
-                    onItemClick={handleResultClick}
-                  />
-                </div>
-              ))}
-            </div>
+            <SearchResultsGrid 
+              results={searchResults} 
+              onItemClick={handleResultClick}
+            />
           </div>
         ) : hasSearched ? (
           /* Clean No Results */
