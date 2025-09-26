@@ -123,7 +123,7 @@ class SearchService {
   }
 
   // Comprehensive search (all types)
-  async searchAll(query, limit = 20, offset = 0) {
+  async searchAll(query, limit = SEARCH_CONFIG.LIMITS.SEARCH_RESULTS, offset = 0) {
     try {
       const params = new URLSearchParams({
         query,
