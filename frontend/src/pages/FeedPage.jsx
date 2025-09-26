@@ -628,6 +628,7 @@ const FeedPage = () => {
           onExitTikTok={handleExitTikTok}
           onCreatePoll={handleCreatePoll}
           showLogo={false}
+          initialIndex={initialIndex}
         />
       </>
     );
