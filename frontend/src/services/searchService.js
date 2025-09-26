@@ -145,6 +145,84 @@ class SearchService {
       throw error;
     }
   }
+
+  // Universal search with filter support
+  async universalSearch(query, filter = 'all', sortBy = 'popularity', limit = 20, offset = 0) {
+    try {
+      const params = new URLSearchParams({
+        query,
+        filter,
+        sort_by: sortBy,
+        limit: limit.toString(),
+        offset: offset.toString()
+      });
+
+      const response = await fetch(`${this.baseURL}/search/universal?${params}`, {
+        method: 'GET',
+        headers: this.getAuthHeaders()
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Universal search error:', error);
+      throw error;
+    }
+  }
+
+  // Get autocomplete suggestions
+  async getAutocomplete(query, limit = 10) {
+    try {
+      const params = new URLSearchParams({
+        query,
+        limit: limit.toString()
+      });
+
+      const response = await fetch(`${this.baseURL}/search/autocomplete?${params}`, {
+        method: 'GET',
+        headers: this.getAuthHeaders()
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Autocomplete error:', error);
+      throw error;
+    }
+  }
+
+  // Get search suggestions for discovery
+  async getSearchSuggestions() {
+    try {
+      const response = await fetch(`${this.baseURL}/search/suggestions`, {
+        method: 'GET',
+        headers: this.getAuthHeaders()
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Search suggestions error:', error);
+      // Return mock data if service fails
+      return {
+        trending_posts: [],
+        suggested_users: [],
+        trending_hashtags: []
+      };
+    }
+  }
 }
 
 export default new SearchService();
