@@ -9,13 +9,11 @@ from config import config
 
 load_dotenv()
 
-# Password hashing with bcrypt length limit handling
+# Password hashing with argon2 (more robust than bcrypt)
 pwd_context = CryptContext(
-    schemes=["bcrypt"], 
+    schemes=["argon2", "bcrypt"], 
     deprecated="auto",
-    bcrypt__default_rounds=12,
-    bcrypt__max_rounds=15,
-    bcrypt__default_ident="2b"
+    argon2__default_rounds=3
 )
 
 # JWT settings from configuration
