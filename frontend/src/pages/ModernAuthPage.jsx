@@ -204,11 +204,8 @@ const ModernAuthPage = () => {
       <div className="flex-1 flex items-center justify-center px-4 py-8 relative z-10">
         <div className="w-full max-w-sm mx-auto">
           
-          {/* App Logo/Brand */}
+          {/* Header without logo */}
           <div className="text-center mb-8">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-pink-500 via-purple-500 to-indigo-500 rounded-2xl mb-6 shadow-lg">
-              <span className="text-white text-3xl font-bold">V</span>
-            </div>
             <h1 className="text-2xl font-bold text-gray-900 mb-2">
               {isLogin ? 'Iniciar Sesión' : 'Crear Cuenta'}
             </h1>
