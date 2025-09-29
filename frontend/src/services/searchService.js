@@ -231,6 +231,91 @@ class SearchService {
       };
     }
   }
+
+  // Get recent searches for current user
+  async getRecentSearches(limit = 10) {
+    try {
+      const response = await fetch(`${this.baseURL}/search/recent?limit=${limit}`, {
+        method: 'GET',
+        headers: this.getAuthHeaders()
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Recent searches error:', error);
+      return { recent_searches: [] };
+    }
+  }
+
+  // Save search query to recent searches
+  async saveRecentSearch(query, searchType = 'general') {
+    try {
+      const response = await fetch(`${this.baseURL}/search/recent`, {
+        method: 'POST',
+        headers: this.getAuthHeaders(),
+        body: JSON.stringify({ 
+          query: query.trim(), 
+          search_type: searchType 
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Save recent search error:', error);
+      // Fail silently for recent searches
+      return null;
+    }
+  }
+
+  // Delete a specific recent search
+  async deleteRecentSearch(searchId) {
+    try {
+      const response = await fetch(`${this.baseURL}/search/recent/${searchId}`, {
+        method: 'DELETE',
+        headers: this.getAuthHeaders()
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Delete recent search error:', error);
+      throw error;
+    }
+  }
+
+  // Get recommended content ("You may like")
+  async getRecommendedContent(limit = 10) {
+    try {
+      const response = await fetch(`${this.baseURL}/feed/recommendations?limit=${limit}`, {
+        method: 'GET',
+        headers: this.getAuthHeaders()
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Recommended content error:', error);
+      return { recommendations: [] };
+    }
+  }
 }
 
 export default new SearchService();
