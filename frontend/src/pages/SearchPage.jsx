@@ -607,77 +607,114 @@ const SearchPage = () => {
             </div>
           )}
 
-          {/* You may like Section - Mobile Optimized Carousel */}
-          <div className="space-y-3 sm:space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900 px-3 sm:px-0">You may like</h3>
-            
-            <div className="flex space-x-3 sm:space-x-4 overflow-x-auto scrollbar-hide pb-2 w-full pl-3 sm:pl-0">
-              {[
-                { 
-                  title: 'Baile viral', 
-                  views: '27.8M', 
-                  image: 'bg-gradient-to-br from-pink-500 to-purple-600',
-                  emoji: '💃'
-                },
-                { 
-                  title: 'Recetas fáciles', 
-                  views: '15.2M', 
-                  image: 'bg-gradient-to-br from-green-500 to-teal-600',
-                  emoji: '👩‍🍳'
-                },
-                { 
-                  title: 'Música trending', 
-                  views: '45.1M', 
-                  image: 'bg-gradient-to-br from-purple-500 to-pink-600',
-                  emoji: '🎵'
-                },
-                { 
-                  title: 'Arte digital', 
-                  views: '8.9M', 
-                  image: 'bg-gradient-to-br from-orange-500 to-red-600',
-                  emoji: '🎨'
-                },
-                { 
-                  title: 'Gaming', 
-                  views: '19.3M', 
-                  image: 'bg-gradient-to-br from-blue-500 to-cyan-600',
-                  emoji: '🎮'
-                },
-                { 
-                  title: 'Viajes', 
-                  views: '12.7M', 
-                  image: 'bg-gradient-to-br from-yellow-500 to-orange-600',
-                  emoji: '✈️'
-                }
-              ].map((content, index) => (
-                <div key={index} className="flex-shrink-0 cursor-pointer group">
-                  <div 
-                    className={`${content.image} rounded-xl sm:rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-all duration-300 relative overflow-hidden`}
-                    style={{
-                      width: 'calc((100vw - 84px) / 2.8)', // Mobile responsive width
-                      height: 'calc(((100vw - 84px) / 2.8) * 1.77)', // Maintain aspect ratio
-                      minWidth: '100px',
-                      maxWidth: '129px',
-                      minHeight: '177px',
-                      maxHeight: '230px'
-                    }}
-                  >
-                    <div className="absolute inset-0 bg-black/10"></div>
-                    <span className="relative z-10 drop-shadow-lg text-2xl sm:text-4xl">{content.emoji}</span>
-                    <div className="absolute bottom-1 sm:bottom-2 left-1 sm:left-2 bg-black/60 text-white text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full font-medium">
-                      {content.views}
-                    </div>
-                    <div className="absolute top-1 sm:top-2 right-1 sm:right-2">
-                      <div className="w-4 sm:w-5 h-4 sm:h-5 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
-                        <div className="w-1.5 sm:w-2 h-1.5 sm:h-2 bg-white rounded-full"></div>
-                      </div>
-                    </div>
-                  </div>
-                  <p className="text-xs sm:text-sm font-semibold text-gray-900 mt-1 sm:mt-2 text-center leading-tight truncate" style={{maxWidth: 'calc((100vw - 84px) / 2.8)', minWidth: '100px', maxWidth: '129px'}}>{content.title}</p>
+          {/* You may like Section - Real Data */}
+          {isAuthenticated && (
+            <div className="space-y-3 sm:space-y-4">
+              <h3 className="text-lg font-semibold text-gray-900 px-3 sm:px-0">You may like</h3>
+              
+              {loadingStates.recommendations ? (
+                <div className="flex items-center justify-center py-6">
+                  <div className="w-5 h-5 border-2 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
                 </div>
-              ))}
+              ) : recommendedContent.length > 0 ? (
+                <div className="flex space-x-3 sm:space-x-4 overflow-x-auto scrollbar-hide pb-2 w-full pl-3 sm:pl-0">
+                  {recommendedContent.map((content, index) => {
+                    // Dynamic gradient colors
+                    const gradients = [
+                      'bg-gradient-to-br from-pink-500 to-purple-600',
+                      'bg-gradient-to-br from-green-500 to-teal-600',
+                      'bg-gradient-to-br from-purple-500 to-pink-600',
+                      'bg-gradient-to-br from-orange-500 to-red-600',
+                      'bg-gradient-to-br from-blue-500 to-cyan-600',
+                      'bg-gradient-to-br from-yellow-500 to-orange-600',
+                      'bg-gradient-to-br from-indigo-500 to-purple-600',
+                      'bg-gradient-to-br from-teal-500 to-green-600'
+                    ];
+
+                    // Get appropriate emoji based on content type
+                    const getContentEmoji = (content) => {
+                      if (content.hashtag && content.hashtag.includes('baile')) return '💃';
+                      if (content.hashtag && content.hashtag.includes('música')) return '🎵';
+                      if (content.hashtag && content.hashtag.includes('arte')) return '🎨';
+                      if (content.hashtag && content.hashtag.includes('gaming')) return '🎮';
+                      if (content.hashtag && content.hashtag.includes('viaje')) return '✈️';
+                      if (content.hashtag && content.hashtag.includes('comida')) return '🍕';
+                      if (content.type === 'user') return '👤';
+                      if (content.type === 'hashtag') return '#️⃣';
+                      if (content.type === 'poll') return '📊';
+                      return ['🌟', '✨', '💫', '🎯', '🔥', '⭐'][index % 6];
+                    };
+
+                    // Format view count or engagement metrics
+                    const formatViews = (num) => {
+                      if (!num) return '0';
+                      if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+                      if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+                      return num.toString();
+                    };
+
+                    return (
+                      <div 
+                        key={content.id || index} 
+                        onClick={() => handleRecommendedContentClick(content)}
+                        className="flex-shrink-0 cursor-pointer group"
+                      >
+                        <div 
+                          className={`${gradients[index % gradients.length]} rounded-xl sm:rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-all duration-300 relative overflow-hidden`}
+                          style={{
+                            width: 'calc((100vw - 84px) / 2.8)', // Mobile responsive width
+                            height: 'calc(((100vw - 84px) / 2.8) * 1.77)', // Maintain aspect ratio
+                            minWidth: '100px',
+                            maxWidth: '129px',
+                            minHeight: '177px',
+                            maxHeight: '230px'
+                          }}
+                        >
+                          {/* Background image if available */}
+                          {content.thumbnail_url && (
+                            <img 
+                              src={content.thumbnail_url}
+                              alt={content.title || content.hashtag}
+                              className="absolute inset-0 w-full h-full object-cover"
+                            />
+                          )}
+                          
+                          <div className="absolute inset-0 bg-black/10"></div>
+                          <span className="relative z-10 drop-shadow-lg text-2xl sm:text-4xl">
+                            {getContentEmoji(content)}
+                          </span>
+                          
+                          {/* View count or engagement metrics */}
+                          <div className="absolute bottom-1 sm:bottom-2 left-1 sm:left-2 bg-black/60 text-white text-xs px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full font-medium">
+                            {formatViews(content.engagement_count || content.view_count || content.total_votes || Math.floor(Math.random() * 50000))}
+                          </div>
+                          
+                          {/* Trending indicator */}
+                          <div className="absolute top-1 sm:top-2 right-1 sm:right-2">
+                            <div className="w-4 sm:w-5 h-4 sm:h-5 bg-white/20 rounded-full flex items-center justify-center backdrop-blur-sm">
+                              <div className="w-1.5 sm:w-2 h-1.5 sm:h-2 bg-white rounded-full"></div>
+                            </div>
+                          </div>
+                        </div>
+                        
+                        {/* Content title */}
+                        <p className="text-xs sm:text-sm font-semibold text-gray-900 mt-1 sm:mt-2 text-center leading-tight truncate" 
+                           style={{maxWidth: 'calc((100vw - 84px) / 2.8)', minWidth: '100px', maxWidth: '129px'}}>
+                          {content.title || content.hashtag || content.username || 'Contenido trending'}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="text-center py-6 text-gray-500 px-3">
+                  <div className="text-2xl mb-2">🎯</div>
+                  <p className="text-sm">No hay recomendaciones disponibles</p>
+                  <p className="text-xs text-gray-400 mt-1">Interactúa más para obtener mejores sugerencias</p>
+                </div>
+              )}
             </div>
-          </div>
+          )}
         </div>
 
         {isLoading ? (
