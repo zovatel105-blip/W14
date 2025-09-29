@@ -365,73 +365,83 @@ const SearchPage = () => {
             </div>
           </div>
 
-          {/* Stories Section - Redesigned to match reference */}
-          <div className="space-y-3 sm:space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900 px-3 sm:px-0">Stories</h3>
+          {/* Stories Section - Matching reference design */}
+          <div className="space-y-4 px-3 sm:px-0">
+            <h3 className="text-2xl font-bold text-gray-900">Stories</h3>
             
-            <div className="flex space-x-3 sm:space-x-4 overflow-x-auto scrollbar-hide pb-2 w-full pl-3 sm:pl-0">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
               {[
                 { 
                   name: 'Pink', 
                   avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b47c?w=400&h=400&fit=crop&crop=face',
-                  background: 'https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?w=300&h=400&fit=crop'
+                  background: 'bg-gradient-to-br from-pink-400 via-pink-500 to-purple-600',
+                  decoration: '🍩'
                 },
                 { 
                   name: 'Jessie', 
                   avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face',
-                  background: 'https://images.unsplash.com/photo-1544717297-fa95b6ee9643?w=300&h=400&fit=crop'
+                  background: 'bg-gradient-to-br from-emerald-500 via-teal-600 to-cyan-800',
+                  decoration: '💃'
                 },
                 { 
                   name: 'Alex', 
                   avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face',
-                  background: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=300&h=400&fit=crop'
+                  background: 'bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-600',
+                  decoration: '🍩'
                 },
                 { 
                   name: 'Maria', 
                   avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop&crop=face',
-                  background: 'https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?w=300&h=400&fit=crop'
+                  background: 'bg-gradient-to-br from-orange-400 via-red-500 to-pink-600',
+                  decoration: '🎨'
                 },
                 { 
                   name: 'Carlos', 
                   avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&crop=face',
-                  background: 'https://images.unsplash.com/photo-1511367461989-f85a21fda167?w=300&h=400&fit=crop'
+                  background: 'bg-gradient-to-br from-violet-500 via-purple-600 to-indigo-700',
+                  decoration: '🎵'
                 }
               ].map((story, index) => (
-                <div key={index} className="flex-shrink-0 cursor-pointer group relative">
-                  {/* Story Card - Large format like reference */}
+                <div key={index} className="cursor-pointer group relative">
+                  {/* Story Card - Large format matching reference */}
                   <div 
-                    className="relative rounded-2xl overflow-hidden shadow-lg group-hover:scale-105 transition-all duration-300"
+                    className={`relative rounded-2xl overflow-hidden shadow-xl group-hover:scale-[1.02] transition-all duration-300 ${story.background} flex items-center justify-center`}
                     style={{
-                      width: '120px',
-                      height: '160px',
-                      backgroundImage: `url(${story.background})`,
-                      backgroundSize: 'cover',
-                      backgroundPosition: 'center'
+                      aspectRatio: '3/4',
+                      minHeight: '200px'
                     }}
                   >
-                    {/* Gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                    {/* Background pattern overlay */}
+                    <div className="absolute inset-0 bg-black/10"></div>
                     
-                    {/* User avatar at bottom */}
-                    <div className="absolute bottom-3 left-1/2 transform -translate-x-1/2">
-                      <div className="relative">
-                        <img 
-                          src={story.avatar}
-                          alt={story.name}
-                          className="w-10 h-10 rounded-full border-2 border-white shadow-lg"
-                        />
-                        {/* Plus icon for first story */}
+                    {/* Decorative content in center */}
+                    <div className="text-6xl opacity-80 drop-shadow-lg">
+                      {story.decoration}
+                    </div>
+                    
+                    {/* Bottom gradient for avatar area */}
+                    <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+                    
+                    {/* User avatar container */}
+                    <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
+                      <div className="relative mb-2">
+                        <div className="w-12 h-12 rounded-full bg-white p-0.5">
+                          <img 
+                            src={story.avatar}
+                            alt={story.name}
+                            className="w-full h-full rounded-full object-cover"
+                          />
+                        </div>
+                        {/* Red plus icon for first story (matching reference) */}
                         {index === 0 && (
-                          <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-blue-500 rounded-full border-2 border-white flex items-center justify-center shadow-lg">
-                            <span className="text-white text-xs font-bold">+</span>
+                          <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-red-500 rounded-full border-2 border-white flex items-center justify-center shadow-lg">
+                            <span className="text-white text-xs font-bold leading-none">+</span>
                           </div>
                         )}
                       </div>
-                    </div>
-                    
-                    {/* User name */}
-                    <div className="absolute bottom-0 left-0 right-0 text-center pb-1">
-                      <p className="text-white text-xs font-semibold drop-shadow-lg">{story.name}</p>
+                      
+                      {/* User name */}
+                      <p className="text-white text-sm font-semibold drop-shadow-lg">{story.name}</p>
                     </div>
                   </div>
                 </div>
