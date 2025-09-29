@@ -502,102 +502,110 @@ const SearchPage = () => {
             </div>
           )}
 
-          {/* Stories Section - Horizontal Carousel matching reference */}
-          <div className="space-y-4">
-            <h3 className="text-2xl font-bold text-gray-900 px-4">Stories</h3>
-            
-            {/* Horizontal Scrolling Carousel */}
-            <div className="flex space-x-4 overflow-x-auto scrollbar-hide pb-2 px-4">
-              {[
-                { 
-                  name: 'Pink', 
-                  avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b47c?w=400&h=400&fit=crop&crop=face',
-                  background: 'bg-gradient-to-br from-pink-400 via-pink-500 to-purple-600',
-                  decoration: '🍩'
-                },
-                { 
-                  name: 'Jessie', 
-                  avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face',
-                  background: 'bg-gradient-to-br from-emerald-500 via-teal-600 to-cyan-800',
-                  decoration: '💃'
-                },
-                { 
-                  name: 'Alex', 
-                  avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face',
-                  background: 'bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-600',
-                  decoration: '🍩'
-                },
-                { 
-                  name: 'Maria', 
-                  avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop&crop=face',
-                  background: 'bg-gradient-to-br from-orange-400 via-red-500 to-pink-600',
-                  decoration: '🎨'
-                },
-                { 
-                  name: 'Carlos', 
-                  avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&crop=face',
-                  background: 'bg-gradient-to-br from-violet-500 via-purple-600 to-indigo-700',
-                  decoration: '🎵'
-                },
-                { 
-                  name: 'Ana', 
-                  avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=face',
-                  background: 'bg-gradient-to-br from-yellow-400 via-orange-500 to-red-600',
-                  decoration: '🌟'
-                },
-                { 
-                  name: 'Luis', 
-                  avatar: 'https://images.unsplash.com/photo-1507591064344-4c6ce005b128?w=400&h=400&fit=crop&crop=face',
-                  background: 'bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-700',
-                  decoration: '🎮'
-                }
-              ].map((story, index) => (
-                <div key={index} className="flex-shrink-0 cursor-pointer group relative">
-                  {/* Story Card - Small size carousel format */}
-                  <div 
-                    className={`relative rounded-2xl overflow-hidden shadow-lg group-hover:scale-105 transition-all duration-300 ${story.background} flex items-center justify-center`}
-                    style={{
-                      width: '120px',
-                      height: '160px'
-                    }}
-                  >
-                    {/* Background pattern overlay */}
-                    <div className="absolute inset-0 bg-black/10"></div>
-                    
-                    {/* Decorative content in center */}
-                    <div className="text-4xl opacity-80 drop-shadow-lg">
-                      {story.decoration}
-                    </div>
-                    
-                    {/* Bottom gradient for avatar area */}
-                    <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
-                    
-                    {/* User avatar container */}
-                    <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
-                      <div className="relative mb-1">
-                        <div className="w-9 h-9 rounded-full bg-white p-0.5">
-                          <img 
-                            src={story.avatar}
-                            alt={story.name}
-                            className="w-full h-full rounded-full object-cover"
-                          />
-                        </div>
-                        {/* Red plus icon for first story (matching reference) */}
-                        {index === 0 && (
-                          <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-red-500 rounded-full border-2 border-white flex items-center justify-center shadow-lg">
-                            <span className="text-white text-xs font-bold leading-none">+</span>
-                          </div>
-                        )}
-                      </div>
-                      
-                      {/* User name */}
-                      <p className="text-white text-xs font-semibold drop-shadow-lg text-center leading-tight">{story.name}</p>
-                    </div>
-                  </div>
+          {/* Stories Section - Real Data */}
+          {isAuthenticated && (
+            <div className="space-y-4">
+              <h3 className="text-2xl font-bold text-gray-900 px-4">Stories</h3>
+              
+              {loadingStates.stories ? (
+                <div className="flex items-center justify-center py-8">
+                  <div className="w-6 h-6 border-2 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
                 </div>
-              ))}
+              ) : stories.length > 0 ? (
+                /* Horizontal Scrolling Carousel with Real Data */
+                <div className="flex space-x-4 overflow-x-auto scrollbar-hide pb-2 px-4">
+                  {stories.map((story, index) => {
+                    // Generate gradient colors based on story content or user
+                    const gradients = [
+                      'bg-gradient-to-br from-pink-400 via-pink-500 to-purple-600',
+                      'bg-gradient-to-br from-emerald-500 via-teal-600 to-cyan-800',
+                      'bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-600',
+                      'bg-gradient-to-br from-orange-400 via-red-500 to-pink-600',
+                      'bg-gradient-to-br from-violet-500 via-purple-600 to-indigo-700',
+                      'bg-gradient-to-br from-yellow-400 via-orange-500 to-red-600',
+                      'bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-700'
+                    ];
+                    
+                    const emojis = ['🎵', '💃', '🎨', '🌟', '🎮', '📸', '✨'];
+                    
+                    return (
+                      <div 
+                        key={story.id} 
+                        onClick={() => handleStoryClick(story)}
+                        className="flex-shrink-0 cursor-pointer group relative"
+                      >
+                        {/* Story Card - Small size carousel format */}
+                        <div 
+                          className={`relative rounded-2xl overflow-hidden shadow-lg group-hover:scale-105 transition-all duration-300 ${gradients[index % gradients.length]} flex items-center justify-center`}
+                          style={{
+                            width: '120px',
+                            height: '160px'
+                          }}
+                        >
+                          {/* Background image if available */}
+                          {story.thumbnail_url && (
+                            <img 
+                              src={story.thumbnail_url}
+                              alt={story.user?.display_name || 'Story'}
+                              className="absolute inset-0 w-full h-full object-cover"
+                            />
+                          )}
+                          
+                          {/* Background pattern overlay */}
+                          <div className="absolute inset-0 bg-black/20"></div>
+                          
+                          {/* Decorative content in center (if no image) */}
+                          {!story.thumbnail_url && (
+                            <div className="text-4xl opacity-80 drop-shadow-lg">
+                              {emojis[index % emojis.length]}
+                            </div>
+                          )}
+                          
+                          {/* Bottom gradient for avatar area */}
+                          <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black/70 via-black/30 to-transparent"></div>
+                          
+                          {/* Story status indicator */}
+                          {!story.viewed && (
+                            <div className="absolute top-2 left-2 w-2 h-2 bg-blue-500 rounded-full"></div>
+                          )}
+                          
+                          {/* User avatar container */}
+                          <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex flex-col items-center">
+                            <div className="relative mb-1">
+                              <div className="w-9 h-9 rounded-full bg-white p-0.5">
+                                <img 
+                                  src={story.user?.avatar_url || '/default-avatar.png'}
+                                  alt={story.user?.display_name || 'User'}
+                                  className="w-full h-full rounded-full object-cover"
+                                />
+                              </div>
+                              {/* Red plus icon for add story (first item if it's user's story) */}
+                              {index === 0 && story.is_own_story && (
+                                <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-red-500 rounded-full border-2 border-white flex items-center justify-center shadow-lg">
+                                  <span className="text-white text-xs font-bold leading-none">+</span>
+                                </div>
+                              )}
+                            </div>
+                            
+                            {/* User name */}
+                            <p className="text-white text-xs font-semibold drop-shadow-lg text-center leading-tight max-w-[100px] truncate">
+                              {story.user?.display_name || story.user?.username || 'Usuario'}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              ) : (
+                <div className="text-center py-8 text-gray-500 px-4">
+                  <div className="text-3xl mb-2">📖</div>
+                  <p className="text-sm">No hay stories disponibles</p>
+                  <p className="text-xs text-gray-400 mt-1">Sigue a más usuarios para ver sus stories</p>
+                </div>
+              )}
             </div>
-          </div>
+          )}
 
           {/* You may like Section - Mobile Optimized Carousel */}
           <div className="space-y-3 sm:space-y-4">
