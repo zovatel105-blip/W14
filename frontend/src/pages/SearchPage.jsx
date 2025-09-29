@@ -445,48 +445,62 @@ const SearchPage = () => {
       <div className="w-full">
         {/* Content Sections - Always visible - Mobile Optimized */}
         <div className="flex-1 px-0 sm:px-2 py-6 space-y-6 sm:space-y-8 w-full">
-          {/* Recent Searches Section - Mobile Optimized */}
-          <div className="space-y-3 sm:space-y-4 px-3 sm:px-0">
-            <div className="flex items-center justify-between">
-              <h3 className="text-lg font-semibold text-gray-900">Búsquedas recientes</h3>
-              <button className="text-sm text-gray-500 hover:text-gray-700">Ver más</button>
-            </div>
-            
-            <div className="space-y-3">
-              <div className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
-                <div className="w-5 h-5 text-gray-400">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <circle cx="12" cy="12" r="10"/>
-                    <polyline points="12,6 12,12 16,14"/>
-                  </svg>
-                </div>
-                <span className="text-gray-700 flex-1">@usuario123</span>
-                <button className="w-4 h-4 text-gray-400 hover:text-gray-600">
-                  <X size={16} />
-                </button>
+          {/* Recent Searches Section - Real Data */}
+          {isAuthenticated && (
+            <div className="space-y-3 sm:space-y-4 px-3 sm:px-0">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-gray-900">Búsquedas recientes</h3>
+                {recentSearches.length > 0 && (
+                  <button 
+                    onClick={loadRecentSearches}
+                    className="text-sm text-gray-500 hover:text-gray-700"
+                  >
+                    Actualizar
+                  </button>
+                )}
               </div>
               
-              <div className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
-                <div className="w-5 h-5 text-gray-400">
-                  <Music size={16} />
+              {loadingStates.recentSearches ? (
+                <div className="flex items-center justify-center py-4">
+                  <div className="w-5 h-5 border-2 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
                 </div>
-                <span className="text-gray-700 flex-1">música viral</span>
-                <button className="w-4 h-4 text-gray-400 hover:text-gray-600">
-                  <X size={16} />
-                </button>
-              </div>
-              
-              <div className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer">
-                <div className="w-5 h-5 text-gray-400">
-                  <Hash size={16} />
+              ) : recentSearches.length > 0 ? (
+                <div className="space-y-2">
+                  {recentSearches.map((recentSearch) => {
+                    const IconComponent = getSearchTypeIcon(recentSearch.search_type);
+                    return (
+                      <div 
+                        key={recentSearch.id}
+                        onClick={() => handleRecentSearchClick(recentSearch)}
+                        className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer group"
+                      >
+                        <div className="w-5 h-5 text-gray-400">
+                          <IconComponent size={16} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <span className="text-gray-700 truncate block">{recentSearch.query}</span>
+                          <span className="text-xs text-gray-400">
+                            {new Date(recentSearch.created_at).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <button 
+                          onClick={(e) => handleDeleteRecentSearch(recentSearch.id, e)}
+                          className="w-4 h-4 text-gray-400 hover:text-gray-600 opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <X size={16} />
+                        </button>
+                      </div>
+                    );
+                  })}
                 </div>
-                <span className="text-gray-700 flex-1">#trending</span>
-                <button className="w-4 h-4 text-gray-400 hover:text-gray-600">
-                  <X size={16} />
-                </button>
-              </div>
+              ) : (
+                <div className="text-center py-4 text-gray-500">
+                  <Clock size={24} className="mx-auto mb-2 opacity-50" />
+                  <p className="text-sm">No hay búsquedas recientes</p>
+                </div>
+              )}
             </div>
-          </div>
+          )}
 
           {/* Stories Section - Horizontal Carousel matching reference */}
           <div className="space-y-4">
