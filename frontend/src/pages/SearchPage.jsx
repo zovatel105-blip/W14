@@ -269,6 +269,65 @@ const SearchPage = () => {
     console.log('Result clicked:', result);
   };
 
+  // Handle recent search click
+  const handleRecentSearchClick = async (recentSearch) => {
+    setSearchQuery(recentSearch.query);
+    setActiveTab(recentSearch.search_type || 'all');
+    await handleSearch(recentSearch.query, recentSearch.search_type || 'all');
+  };
+
+  // Handle delete recent search
+  const handleDeleteRecentSearch = async (searchId, event) => {
+    event.stopPropagation(); // Prevent triggering the search
+    try {
+      await searchService.deleteRecentSearch(searchId);
+      setRecentSearches(prev => prev.filter(search => search.id !== searchId));
+      toast({
+        title: "Búsqueda eliminada",
+        description: "La búsqueda ha sido eliminada del historial.",
+      });
+    } catch (error) {
+      console.error('Error deleting recent search:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo eliminar la búsqueda.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  // Handle story click
+  const handleStoryClick = (story) => {
+    // Navigate to story view or open story modal
+    console.log('Story clicked:', story);
+    // TODO: Implement story viewing functionality
+  };
+
+  // Handle recommended content click
+  const handleRecommendedContentClick = (content) => {
+    // Navigate to content or perform search
+    if (content.type === 'hashtag') {
+      setSearchQuery(content.hashtag);
+      setActiveTab('hashtags');
+      handleSearch(content.hashtag, 'hashtags');
+    } else if (content.type === 'user') {
+      navigate(`/profile/${content.username}`);
+    } else if (content.type === 'poll') {
+      navigate(`/poll/${content.id}`);
+    }
+  };
+
+  // Get icon for search type
+  const getSearchTypeIcon = (searchType) => {
+    switch (searchType) {
+      case 'users': return User;
+      case 'hashtags': return Hash;
+      case 'sounds': return Music;
+      case 'posts': return PostsIcon;
+      default: return Search;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white">
 
