@@ -322,13 +322,15 @@ const SearchPage = () => {
         console.log('Complete polls fetched:', completePolls.length);
         
         if (completePolls.length > 0) {
+          console.log('Opening TikTokScrollView with polls:', completePolls);
           setTikTokViewPosts(completePolls);
           setCurrentTikTokIndex(clickedIndex >= 0 ? clickedIndex : 0);
           setShowTikTokView(true);
         } else {
+          console.error('No complete polls fetched. Post IDs were:', postIds);
           toast({
             title: "Error",
-            description: "No se pudieron cargar las publicaciones.",
+            description: "No se pudieron cargar las publicaciones completas.",
             variant: "destructive",
           });
         }
