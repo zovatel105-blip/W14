@@ -47,15 +47,24 @@ const SearchResultsGrid = ({ results = [], onItemClick }) => {
       className="relative bg-black rounded-lg overflow-hidden cursor-pointer group aspect-[3/4] shadow-lg hover:shadow-xl transition-all duration-300"
     >
       {/* Background Image or Video Thumbnail */}
-      {(post.image_url || post.thumbnail_url) ? (
+      {(post.image_url || post.thumbnail_url || post.images?.[0]?.url || post.media_url) ? (
         <img 
-          src={post.image_url || post.thumbnail_url} 
-          alt={post.title}
+          src={post.image_url || post.thumbnail_url || post.images?.[0]?.url || post.media_url} 
+          alt={post.title || post.content || 'Post'}
           className="absolute inset-0 w-full h-full object-cover"
+          onError={(e) => {
+            // Fallback to gradient background if image fails to load
+            e.target.style.display = 'none';
+            e.target.nextSibling.style.display = 'block';
+          }}
         />
-      ) : (
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-600 via-blue-600 to-teal-600"></div>
-      )}
+      ) : null}
+      
+      {/* Fallback gradient background */}
+      <div 
+        className="absolute inset-0 bg-gradient-to-br from-purple-600 via-blue-600 to-teal-600"
+        style={{ display: (post.image_url || post.thumbnail_url || post.images?.[0]?.url || post.media_url) ? 'none' : 'block' }}
+      ></div>
       
       {/* Dark overlay */}
       <div className="absolute inset-0 bg-black/20 group-hover:bg-black/30 transition-colors duration-300"></div>
