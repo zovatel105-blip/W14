@@ -482,7 +482,7 @@ const SearchPage = () => {
     navigate('/create');
   };
 
-  const handleUpdatePoll = (pollId, updates) => {
+  const handleTikTokUpdatePoll = (pollId, updates) => {
     // Update poll in the list
     setTikTokViewPosts(prev => prev.map(poll => 
       poll.id === pollId ? { ...poll, ...updates } : poll
