@@ -8,27 +8,28 @@ const SearchResultsGrid = ({ results = [], onItemClick }) => {
   const navigate = useNavigate();
 
   const handleItemClick = (result) => {
+    // Always call the callback first - SearchPage will handle navigation
     if (onItemClick) {
       onItemClick(result);
-    }
-    
-    // Navigate based on result type
-    switch (result.type) {
-      case 'user':
-        navigate(`/profile/${result.username}`);
-        break;
-      case 'post':
-        // Navigate to feed with the specific post ID as URL parameter
-        navigate(`/feed?post=${result.id}`);
-        break;
-      case 'hashtag':
-        navigate(`/search?q=${encodeURIComponent(result.hashtag)}&filter=hashtags`);
-        break;
-      case 'sound':
-        navigate(`/audio/${result.id}`);
-        break;
-      default:
-        break;
+    } else {
+      // Fallback navigation if no callback provided
+      switch (result.type) {
+        case 'user':
+          navigate(`/profile/${result.username}`);
+          break;
+        case 'post':
+          // Navigate to feed with the specific post ID as URL parameter
+          navigate(`/feed?post=${result.id}`);
+          break;
+        case 'hashtag':
+          navigate(`/search?q=${encodeURIComponent(result.hashtag)}&filter=hashtags`);
+          break;
+        case 'sound':
+          navigate(`/audio/${result.id}`);
+          break;
+        default:
+          break;
+      }
     }
   };
 
