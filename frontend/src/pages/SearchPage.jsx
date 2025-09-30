@@ -477,7 +477,7 @@ const SearchPage = () => {
     }
   };
 
-  const handleCreatePoll = () => {
+  const handleTikTokCreatePoll = () => {
     // Navigate to create poll page
     navigate('/create');
   };
