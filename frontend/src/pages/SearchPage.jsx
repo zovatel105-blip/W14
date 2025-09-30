@@ -362,6 +362,138 @@ const SearchPage = () => {
     setCurrentTikTokIndex(0);
   };
 
+  // TikTokScrollView callbacks
+  const handleVote = async (pollId, optionIndex) => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001'}/api/polls/${pollId}/vote`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ option_index: optionIndex })
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        // Update the poll in the list
+        setTikTokViewPosts(prev => prev.map(poll => 
+          poll.id === pollId ? { ...poll, ...result } : poll
+        ));
+      }
+    } catch (error) {
+      console.error('Error voting:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo registrar tu voto.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleLike = async (pollId) => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001'}/api/polls/${pollId}/like`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        // Update the poll in the list
+        setTikTokViewPosts(prev => prev.map(poll => 
+          poll.id === pollId ? { ...poll, isLiked: result.liked, likesCount: result.likes_count } : poll
+        ));
+      }
+    } catch (error) {
+      console.error('Error liking poll:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo dar like.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleShare = async (pollId) => {
+    try {
+      // Simple share functionality
+      if (navigator.share) {
+        await navigator.share({
+          title: 'VotaTok - Poll',
+          text: 'Mira este poll en VotaTok',
+          url: `${window.location.origin}/poll/${pollId}`
+        });
+      } else {
+        // Fallback: copy to clipboard
+        await navigator.clipboard.writeText(`${window.location.origin}/poll/${pollId}`);
+        toast({
+          title: "Enlace copiado",
+          description: "El enlace se copió al portapapeles.",
+        });
+      }
+    } catch (error) {
+      console.error('Error sharing poll:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo compartir el poll.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleComment = (pollId) => {
+    // For now, just log - comment modal would be handled by TikTokScrollView
+    console.log('Opening comments for poll:', pollId);
+  };
+
+  const handleSave = async (pollId) => {
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001'}/api/polls/${pollId}/save`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        toast({
+          title: result.saved ? "Poll guardado" : "Poll removido",
+          description: result.saved ? "Se guardó en tu colección." : "Se removió de tu colección.",
+        });
+      }
+    } catch (error) {
+      console.error('Error saving poll:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo guardar el poll.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleCreatePoll = () => {
+    // Navigate to create poll page
+    navigate('/create');
+  };
+
+  const handleUpdatePoll = (pollId, updates) => {
+    // Update poll in the list
+    setTikTokViewPosts(prev => prev.map(poll => 
+      poll.id === pollId ? { ...poll, ...updates } : poll
+    ));
+  };
+
+  const handleDeletePoll = (pollId) => {
+    // Remove poll from the list
+    setTikTokViewPosts(prev => prev.filter(poll => poll.id !== pollId));
+  };
+
   // Handle recent search click
   const handleRecentSearchClick = async (recentSearch) => {
     setSearchQuery(recentSearch.query);
