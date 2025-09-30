@@ -298,7 +298,7 @@ const SearchPage = () => {
         const completePolls = [];
         for (const postId of postIds) {
           try {
-            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/polls/${postId}`, {
+            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001'}/api/polls/${postId}`, {
               headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`,
                 'Content-Type': 'application/json'
