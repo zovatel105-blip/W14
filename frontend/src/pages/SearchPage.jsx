@@ -445,7 +445,7 @@ const SearchPage = () => {
     }
   };
 
-  const handleComment = (pollId) => {
+  const handleTikTokComment = (pollId) => {
     // For now, just log - comment modal would be handled by TikTokScrollView
     console.log('Opening comments for poll:', pollId);
   };
