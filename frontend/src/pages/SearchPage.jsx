@@ -415,7 +415,7 @@ const SearchPage = () => {
         variant: "destructive",
       });
     }
-  };
+  }, [toast]);
 
   const handleTikTokShare = async (pollId) => {
     try {
