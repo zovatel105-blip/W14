@@ -391,7 +391,7 @@ const SearchPage = () => {
     }
   };
 
-  const handleLike = async (pollId) => {
+  const handleTikTokLike = async (pollId) => {
     try {
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001'}/api/polls/${pollId}/like`, {
         method: 'POST',
