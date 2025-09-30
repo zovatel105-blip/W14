@@ -363,7 +363,7 @@ const SearchPage = () => {
   };
 
   // TikTokScrollView callbacks
-  const handleVote = async (pollId, optionIndex) => {
+  const handleTikTokVote = async (pollId, optionIndex) => {
     try {
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001'}/api/polls/${pollId}/vote`, {
         method: 'POST',
