@@ -449,7 +449,7 @@ const SearchPage = () => {
     console.log('Opening comments for poll:', pollId);
   }, []);
 
-  const handleTikTokSave = async (pollId) => {
+  const handleTikTokSave = useCallback(async (pollId) => {
     try {
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001'}/api/polls/${pollId}/save`, {
         method: 'POST',
