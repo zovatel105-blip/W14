@@ -453,10 +453,11 @@ const SearchPage = () => {
 
       {/* Clean Content Area - TikTok Style - Full Width */}
       <div className="w-full">
-        {/* Content Sections - Always visible - Mobile Optimized */}
-        <div className="flex-1 px-0 sm:px-2 py-6 space-y-6 sm:space-y-8 w-full">
-          {/* Recent Searches Section - Real Data */}
-          {isAuthenticated && (
+        {/* Content Sections - Only show when NOT searching */}
+        {!hasSearched && (
+          <div className="flex-1 px-0 sm:px-2 py-6 space-y-6 sm:space-y-8 w-full">
+            {/* Recent Searches Section - Real Data */}
+            {isAuthenticated && (
             <div className="space-y-3 sm:space-y-4 px-3 sm:px-0">
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold text-gray-900">Búsquedas recientes</h3>
