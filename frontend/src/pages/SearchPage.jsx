@@ -474,7 +474,7 @@ const SearchPage = () => {
         variant: "destructive",
       });
     }
-  };
+  }, [toast]);
 
   const handleTikTokCreatePoll = () => {
     // Navigate to create poll page
