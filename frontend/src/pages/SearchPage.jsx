@@ -488,10 +488,10 @@ const SearchPage = () => {
     ));
   }, []);
 
-  const handleTikTokDeletePoll = (pollId) => {
+  const handleTikTokDeletePoll = useCallback((pollId) => {
     // Remove poll from the list
     setTikTokViewPosts(prev => prev.filter(poll => poll.id !== pollId));
-  };
+  }, []);
 
   // Handle recent search click
   const handleRecentSearchClick = async (recentSearch) => {
