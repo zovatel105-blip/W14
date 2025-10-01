@@ -481,12 +481,12 @@ const SearchPage = () => {
     navigate('/create');
   }, [navigate]);
 
-  const handleTikTokUpdatePoll = (pollId, updates) => {
+  const handleTikTokUpdatePoll = useCallback((pollId, updates) => {
     // Update poll in the list
     setTikTokViewPosts(prev => prev.map(poll => 
       poll.id === pollId ? { ...poll, ...updates } : poll
     ));
-  };
+  }, []);
 
   const handleTikTokDeletePoll = (pollId) => {
     // Remove poll from the list
