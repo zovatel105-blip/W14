@@ -48,6 +48,7 @@ const SettingsPage = () => {
     two_factor_enabled: false
   });
   const [loading, setLoading] = useState(false);
+  const [savingField, setSavingField] = useState(null);
   const [modalsOpen, setModalsOpen] = useState({
     editProfile: false,
     changePassword: false
