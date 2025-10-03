@@ -62,29 +62,69 @@ const CommentSection = ({
     }
   };
 
-  // Agregar nuevo comentario
+  // Agregar nuevo comentario con optimistic UI
   const handleAddComment = async (content, parentId = null) => {
     if (!content.trim() || submitting || !isAuthenticated) return;
     
     setSubmitting(true);
     
+    // Create optimistic comment
+    const optimisticComment = {
+      id: `temp-${Date.now()}`,
+      content: content.trim(),
+      user: {
+        id: user.id,
+        username: user.username,
+        display_name: user.display_name,
+        avatar_url: user.avatar_url
+      },
+      created_at: new Date().toISOString(),
+      likes_count: 0,
+      replies: [],
+      parent_id: parentId,
+      is_liked: false,
+      status: 'sending' // Mark as sending
+    };
+    
+    // Optimistic update
+    if (parentId) {
+      setComments(prev => prev.map(comment => {
+        if (comment.id === parentId) {
+          return {
+            ...comment,
+            replies: [...comment.replies, optimisticComment]
+          };
+        }
+        return comment;
+      }));
+    } else {
+      setComments(prev => [optimisticComment, ...prev]);
+    }
+    
     try {
       const newComment = await commentService.addCommentForFrontend(pollId, content.trim(), parentId);
       
+      // Replace optimistic comment with real one
       if (parentId) {
-        // Si es una respuesta, agregar a las replies del comentario padre
         setComments(prev => prev.map(comment => {
           if (comment.id === parentId) {
             return {
               ...comment,
-              replies: [...comment.replies, newComment]
+              replies: comment.replies.map(reply => 
+                reply.id === optimisticComment.id 
+                  ? { ...newComment, status: 'sent' }
+                  : reply
+              )
             };
           }
           return comment;
         }));
       } else {
-        // Si es un comentario principal, agregar al inicio
-        setComments(prev => [newComment, ...prev]);
+        setComments(prev => prev.map(comment => 
+          comment.id === optimisticComment.id 
+            ? { ...newComment, status: 'sent' }
+            : comment
+        ));
       }
       
       setShowNewCommentForm(false);
@@ -95,6 +135,22 @@ const CommentSection = ({
       });
     } catch (err) {
       console.error('Error adding comment:', err);
+      
+      // Rollback optimistic update
+      if (parentId) {
+        setComments(prev => prev.map(comment => {
+          if (comment.id === parentId) {
+            return {
+              ...comment,
+              replies: comment.replies.filter(reply => reply.id !== optimisticComment.id)
+            };
+          }
+          return comment;
+        }));
+      } else {
+        setComments(prev => prev.filter(comment => comment.id !== optimisticComment.id));
+      }
+      
       toast({
         title: "Error al agregar comentario",
         description: err.message || "No se pudo agregar el comentario. Intenta de nuevo.",
