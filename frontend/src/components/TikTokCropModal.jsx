@@ -11,9 +11,12 @@ const TikTokCropModal = ({
   onClose = () => {},
   onSave = () => {},
   imageFile = null,
+  videoFile = null, // New: support for video cropping
   aspectRatio = 9/16, // TikTok aspect ratio by default
-  title = 'Ajustar Imagen',
-  cropShape = 'rect' // 'rect' or 'round'
+  title = 'Ajustar Contenido',
+  cropShape = 'rect', // 'rect' or 'round'
+  allowResize = true, // Allow aspect ratio changes
+  showFilters = true // Show TikTok-style filters
 }) => {
   const [imageSrc, setImageSrc] = useState('');
   const [transform, setTransform] = useState({
