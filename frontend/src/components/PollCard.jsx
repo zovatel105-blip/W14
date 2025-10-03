@@ -825,11 +825,11 @@ const PollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, fullScreen
           </div>
 
           {/* Social Proof Badge */}
-          {socialProof && (
+          {currentSocialProof && (
             <div className="px-4 pb-3">
               <SocialProofBadge 
                 pollId={poll.id}
-                socialProof={socialProof}
+                socialProof={currentSocialProof}
                 onLoadProof={getSocialProof}
               />
             </div>
