@@ -229,6 +229,13 @@ const Comment = ({
               {comment.is_edited && (
                 <span className="text-xs text-gray-400 bg-gray-50 px-2 py-1 rounded-full">editado</span>
               )}
+              
+              {comment.status === 'sending' && (
+                <span className="text-xs text-orange-500 bg-orange-50 px-2 py-1 rounded-full flex items-center gap-1">
+                  <Loader2 className="w-3 h-3 animate-spin" />
+                  Enviando...
+                </span>
+              )}
             </div>
             
             {/* Contenido del comentario */}
