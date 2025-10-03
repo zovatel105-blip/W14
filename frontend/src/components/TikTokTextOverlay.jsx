@@ -30,14 +30,14 @@ const TikTokTextOverlay = ({
   const [activeTab, setActiveTab] = useState('font');
   const textRef = useRef(null);
 
-  // TikTok-style font options
+  // TikTok-style font options with Google Fonts
   const tiktokFonts = [
-    { name: 'Classic', family: 'Arial, sans-serif', preview: 'Aa' },
-    { name: 'Typewriter', family: 'Courier New, monospace', preview: 'Aa' },
+    { name: 'Classic', family: 'Inter, sans-serif', preview: 'Aa' },
     { name: 'Handwriting', family: 'Kalam, cursive', preview: 'Aa' },
-    { name: 'Bold Sans', family: 'Inter, sans-serif', preview: 'Aa' },
-    { name: 'Serif', family: 'Playfair Display, serif', preview: 'Aa' },
-    { name: 'Comic', family: 'Comic Sans MS, cursive', preview: 'Aa' }
+    { name: 'Elegant', family: 'Playfair Display, serif', preview: 'Aa' },
+    { name: 'Mono', family: 'Roboto Mono, monospace', preview: 'Aa' },
+    { name: 'Script', family: 'Dancing Script, cursive', preview: 'Aa' },
+    { name: 'Fun', family: 'Fredoka, sans-serif', preview: 'Aa' }
   ];
 
   // TikTok-style color presets
