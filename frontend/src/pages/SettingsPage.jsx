@@ -88,19 +88,21 @@ const SettingsPage = () => {
   }, [user]);
 
   const handleSettingsChange = async (field, value) => {
-    setLoading(true);
+    // Optimistic update - update UI immediately
+    const previousValue = settings[field];
+    setSettings(prev => ({ ...prev, [field]: value }));
     
     try {
-      const updatedUser = await apiRequest('/api/auth/settings', {
-        method: 'PUT',
+      // Use PATCH for partial updates
+      const updatedUser = await apiRequest('/api/users/settings', {
+        method: 'PATCH',
         body: JSON.stringify({ [field]: value })
       });
 
-      // Update local settings state
-      setSettings(prev => ({ ...prev, [field]: value }));
-      
-      // Update user context with new data
-      await refreshUser();
+      // Update user context with new data if needed
+      if (updatedUser) {
+        await refreshUser();
+      }
       
       toast({
         title: "Configuración actualizada",
@@ -110,13 +112,15 @@ const SettingsPage = () => {
       
     } catch (error) {
       console.error('Error updating settings:', error);
+      
+      // Revert optimistic update on error
+      setSettings(prev => ({ ...prev, [field]: previousValue }));
+      
       toast({
-        title: "Error de servidor",
-        description: error.message || "No se pudo actualizar la configuración",
+        title: "Error al guardar",
+        description: error.message || "No se pudo actualizar la configuración. Intenta de nuevo.",
         variant: "destructive"
       });
-    } finally {
-      setLoading(false);
     }
   };
 
