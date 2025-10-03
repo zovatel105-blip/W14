@@ -77,13 +77,39 @@ const TikTokProfileGrid = ({ polls, onPollClick, onUpdatePoll, onDeletePoll, cur
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, delay: index * 0.05 }}
           >
-            {/* Render the actual layout as it appears in the feed */}
-            <div className="w-full h-full">
-              <LayoutRenderer 
-                poll={poll} 
-                onVote={handleDummyVote} 
-                isActive={false} // Not active in profile grid
-              />
+            {/* Thumbnail or static image representation */}
+            <div className="w-full h-full relative bg-gray-100">
+              {(() => {
+                const thumbnail = getPostThumbnail(poll);
+                const isVideo = hasVideoContent(poll);
+                
+                if (thumbnail) {
+                  return (
+                    <img
+                      src={uploadService.getPublicUrl(thumbnail, { width: 300, height: 400, quality: 70 })}
+                      alt={poll.title || 'Post thumbnail'}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        // Fallback to layout renderer if thumbnail fails
+                        e.target.style.display = 'none';
+                        e.target.nextSibling.style.display = 'block';
+                      }}
+                    />
+                  );
+                }
+                
+                // Fallback: Render static version of layout
+                return (
+                  <div className="w-full h-full" style={{ display: thumbnail ? 'none' : 'block' }}>
+                    <LayoutRenderer 
+                      poll={poll} 
+                      onVote={handleDummyVote} 
+                      isActive={false} // Not active in profile grid
+                      disableVideo={true} // Prevent video autoplay
+                    />
+                  </div>
+                );
+              })()}
             </div>
 
             {/* Dark overlay for better text visibility */}
