@@ -217,12 +217,20 @@ const TikTokCropModal = ({
 
     if (!ctx) return null;
 
-    // Set canvas size based on desired aspect ratio
+    // Set canvas size based on desired aspect ratio and shape
     const containerWidth = container.clientWidth;
     const containerHeight = container.clientHeight;
     
-    canvas.width = containerWidth;
-    canvas.height = containerHeight;
+    // For round crops (avatars), use square dimensions
+    if (cropShape === 'round') {
+      const size = Math.min(containerWidth, containerHeight);
+      canvas.width = size;
+      canvas.height = size;
+    } else {
+      // For rectangular crops, maintain aspect ratio
+      canvas.width = containerWidth;
+      canvas.height = containerHeight;
+    }
 
     // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
