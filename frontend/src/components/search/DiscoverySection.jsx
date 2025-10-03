@@ -170,7 +170,7 @@ const DiscoverySection = ({
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {trendingHashtags.slice(0, 6).map((hashtag, index) => (
               <div
-                key={index}
+                key={hashtag.hashtag || `hashtag-${index}`}
                 onClick={() => navigate(`/search?q=${encodeURIComponent(hashtag.hashtag)}&filter=hashtags`)}
                 className="bg-white rounded-lg border border-gray-200 p-3 hover:shadow-md transition-shadow cursor-pointer"
               >
