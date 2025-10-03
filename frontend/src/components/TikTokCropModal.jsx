@@ -18,7 +18,8 @@ const TikTokCropModal = ({
   allowResize = true, // Allow aspect ratio changes
   showFilters = true // Show TikTok-style filters
 }) => {
-  const [imageSrc, setImageSrc] = useState('');
+  const [mediaSrc, setMediaSrc] = useState('');
+  const [isVideo, setIsVideo] = useState(false);
   const [transform, setTransform] = useState({
     scale: 1,
     translateX: 0,
@@ -28,6 +29,26 @@ const TikTokCropModal = ({
   const [isDragging, setIsDragging] = useState(false);
   const [lastPanPoint, setLastPanPoint] = useState({ x: 0, y: 0 });
   const [lastDistance, setLastDistance] = useState(0);
+  const [currentAspectRatio, setCurrentAspectRatio] = useState(aspectRatio);
+  const [selectedFilter, setSelectedFilter] = useState('none');
+  
+  // TikTok-style aspect ratio presets
+  const aspectRatios = [
+    { name: 'TikTok', ratio: 9/16, icon: '9:16' },
+    { name: 'Square', ratio: 1, icon: '1:1' },
+    { name: 'Widescreen', ratio: 16/9, icon: '16:9' },
+    { name: 'Story', ratio: 9/16, icon: '9:16' }
+  ];
+  
+  // TikTok-style filters
+  const filters = [
+    { name: 'None', value: 'none', css: '' },
+    { name: 'Vintage', value: 'vintage', css: 'sepia(0.5) contrast(1.2)' },
+    { name: 'Cool', value: 'cool', css: 'hue-rotate(180deg) saturate(1.3)' },
+    { name: 'Warm', value: 'warm', css: 'hue-rotate(30deg) saturate(1.2)' },
+    { name: 'B&W', value: 'bw', css: 'grayscale(1)' },
+    { name: 'Pop', value: 'pop', css: 'contrast(1.5) saturate(1.8)' }
+  ];
   
   const containerRef = useRef(null);
   const imageRef = useRef(null);
