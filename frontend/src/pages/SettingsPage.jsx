@@ -93,10 +93,11 @@ const SettingsPage = () => {
     setSettings(prev => ({ ...prev, [field]: value }));
     
     try {
-      // Use PATCH for partial updates
-      const updatedUser = await apiRequest('/api/users/settings', {
-        method: 'PATCH',
-        body: JSON.stringify({ [field]: value })
+      // Use PUT for settings updates (backend endpoint)
+      const settingsUpdate = { [field]: value };
+      const updatedUser = await apiRequest('/api/auth/settings', {
+        method: 'PUT',
+        body: JSON.stringify(settingsUpdate)
       });
 
       // Update user context with new data if needed
