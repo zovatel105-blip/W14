@@ -33,7 +33,7 @@ const AutocompleteDropdown = ({
     <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-lg shadow-lg mt-1 max-h-80 overflow-y-auto z-50">
       {suggestions.map((suggestion, index) => (
         <div
-          key={`${suggestion.type}-${index}`}
+          key={`${suggestion.type}-${suggestion.id || suggestion.username || suggestion.hashtag || index}`}
           onClick={() => onSuggestionClick(suggestion)}
           className={`group flex items-center px-4 py-3 hover:bg-gray-50 cursor-pointer transition-colors ${
             index === selectedIndex ? 'bg-gray-50 border-l-2 border-green-500' : ''
