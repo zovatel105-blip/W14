@@ -119,7 +119,7 @@ const MusicDisplay = ({ music, className = '', compact = false, showPlayer = tru
         <div className="hidden sm:flex items-center gap-0.5 h-8">
           {music.waveform?.slice(0, 12).map((height, index) => (
             <div
-              key={index}
+              key={`waveform-${music.id || 'default'}-${index}`}
               className={cn(
                 "w-1 bg-white/60 rounded-full transition-all duration-100",
                 isPlaying && "animate-pulse"
