@@ -1205,27 +1205,11 @@ const MessagesMainPage = () => {
                 <div key={message.id} className={`flex ${isOwnMessage ? 'justify-end' : 'justify-start'} mb-4`}>
                   <div className={`flex items-end space-x-2 max-w-xs lg:max-w-md ${isOwnMessage ? 'flex-row-reverse space-x-reverse' : ''}`}>
                     {/* Avatar para mensajes de otros usuarios */}
-                    {showAvatar && !isOwnMessage && (
-                      <div className="w-8 h-8 rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0">
-                        {message.sender?.avatar_url ? (
-                          <img 
-                            src={message.sender.avatar_url} 
-                            alt="Avatar" 
-                            className="w-full h-full rounded-full object-cover"
-                            onError={(e) => {
-                              // Fallback to initials on image error
-                              e.target.style.display = 'none';
-                              e.target.nextSibling.style.display = 'flex';
-                            }}
-                          />
-                        ) : null}
-                        <span 
-                          className="text-sm font-semibold text-gray-600 w-full h-full flex items-center justify-center"
-                          style={{ display: message.sender?.avatar_url ? 'none' : 'flex' }}
-                        >
-                          {message.sender?.display_name?.charAt(0) || message.sender?.username?.charAt(0) || '👤'}
-                        </span>
-                      </div>
+                    {showAvatar && !isOwnMessage && renderAvatar(
+                      message.sender?.avatar_url, 
+                      message.sender?.display_name, 
+                      message.sender?.username,
+                      'w-8 h-8'
                     )}
                     
                     {/* Spacer cuando no se muestra avatar */}
