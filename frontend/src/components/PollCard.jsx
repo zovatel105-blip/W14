@@ -557,9 +557,31 @@ const PollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, fullScreen
 
             {/* Poll Title - Compact */}
             <div className="px-4 pb-3 flex-shrink-0 bg-white/90 backdrop-blur-sm">
-              <h2 className="text-base font-bold text-gray-900 leading-tight line-clamp-2">
-                {poll.title}
+              <h2 
+                className="text-base font-bold text-gray-900 leading-tight line-clamp-2 cursor-pointer hover:text-blue-600 transition-colors"
+                onClick={toggleHashtags}
+              >
+                {cleanTitle || poll.title}
               </h2>
+              
+              {/* Hashtags that appear when title is clicked */}
+              {showHashtags && hashtags.length > 0 && (
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {hashtags.map((tag, index) => (
+                    <span
+                      key={index}
+                      className="inline-block px-2 py-1 bg-blue-100 hover:bg-blue-200 text-blue-800 text-xs font-medium rounded-full cursor-pointer transition-colors"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        // Navigate to hashtag search
+                        navigate(`/search?q=${encodeURIComponent(tag)}&filter=hashtags`);
+                      }}
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
               
               {/* Option Descriptions Summary */}
               {poll.options && poll.options.some(opt => opt.text && opt.text.trim()) && (
