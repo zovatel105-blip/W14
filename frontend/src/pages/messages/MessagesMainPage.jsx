@@ -64,6 +64,38 @@ const MessagesMainPage = () => {
     return response.json();
   };
 
+  // Helper function for avatar rendering with error handling
+  const renderAvatar = (avatarUrl, displayName, username, size = 'w-8 h-8') => {
+    const fallbackText = displayName?.charAt(0) || username?.charAt(0) || '👤';
+    
+    return (
+      <div className={`${size} rounded-full bg-gray-200 flex items-center justify-center flex-shrink-0 relative overflow-hidden`}>
+        {avatarUrl ? (
+          <>
+            <img 
+              src={avatarUrl} 
+              alt="Avatar" 
+              className="w-full h-full rounded-full object-cover"
+              onError={(e) => {
+                console.warn('Avatar failed to load:', avatarUrl);
+                e.target.style.display = 'none';
+                const fallback = e.target.parentNode.querySelector('.avatar-fallback');
+                if (fallback) fallback.style.display = 'flex';
+              }}
+            />
+            <div className="avatar-fallback w-full h-full rounded-full flex items-center justify-center text-sm font-semibold text-gray-600" style={{ display: 'none' }}>
+              {fallbackText}
+            </div>
+          </>
+        ) : (
+          <div className="w-full h-full rounded-full flex items-center justify-center text-sm font-semibold text-gray-600">
+            {fallbackText}
+          </div>
+        )}
+      </div>
+    );
+  };
+
   // Función para buscar usuarios
   const searchUsers = async (query) => {
     if (!query.trim()) {
