@@ -72,28 +72,22 @@ const Immersive3DCard = ({
   };
   
   const triggerRewardEffect = () => {
-    // Create particle explosion effect
-    const card = cardRef.current;
-    if (!card) return;
-    
+    // Create particle explosion effect using React state
+    const newParticles = [];
     for (let i = 0; i < 15; i++) {
-      const particle = document.createElement('div');
-      particle.className = 'absolute w-2 h-2 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full pointer-events-none';
-      particle.style.left = Math.random() * 100 + '%';
-      particle.style.top = Math.random() * 100 + '%';
-      particle.style.zIndex = '1000';
-      
-      card.appendChild(particle);
-      
-      // Animate particle
-      particle.animate([
-        { transform: 'scale(0) translateY(0px)', opacity: 1 },
-        { transform: 'scale(1) translateY(-100px)', opacity: 0 }
-      ], {
-        duration: 1000,
-        easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
-      }).onfinish = () => particle.remove();
+      newParticles.push({
+        id: `particle-${Date.now()}-${i}`,
+        left: Math.random() * 100,
+        top: Math.random() * 100,
+      });
     }
+    
+    setParticles(newParticles);
+    
+    // Remove particles after animation
+    setTimeout(() => {
+      setParticles([]);
+    }, 1000);
   };
   
   const getOptionPercentage = (option) => {
