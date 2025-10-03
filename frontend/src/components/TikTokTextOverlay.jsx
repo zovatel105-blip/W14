@@ -347,6 +347,7 @@ const TikTokTextOverlay = ({
 
         {/* CSS Animations */}
         <style jsx>{`
+          /* TikTok-style animations */
           @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
@@ -364,6 +365,31 @@ const TikTokTextOverlay = ({
           @keyframes zoomIn {
             from { transform: translate(-50%, -50%) scale(0); opacity: 0; }
             to { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+          }
+          @keyframes typewriter {
+            from { width: 0; }
+            to { width: 100%; }
+          }
+          
+          /* Enhanced scrollbar hiding */
+          .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+          }
+          .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+          }
+          
+          /* Smooth snap scrolling */
+          .snap-scroll {
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+            overscroll-behavior: none;
+            -webkit-overflow-scrolling: touch;
+          }
+          .snap-scroll > * {
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
           }
         `}</style>
       </motion.div>
