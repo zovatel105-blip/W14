@@ -443,16 +443,42 @@ const PollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, fullScreen
     return numValue.toString();
   };
 
-  const getPercentage = (votes) => {
-    if (poll.totalVotes === 0) return 0;
-    // Usar decimales para mayor precisión en las barras
-    return (votes / poll.totalVotes) * 100;
+  // YouTube-style normalized percentages that always total 100%
+  const getNormalizedPercentages = () => {
+    if (!poll.options || poll.options.length === 0 || poll.totalVotes === 0) {
+      return poll.options?.map(() => 0) || [];
+    }
+
+    // Calculate raw percentages
+    const rawPercentages = poll.options.map(option => (option.votes / poll.totalVotes) * 100);
+    
+    // Round all percentages
+    const roundedPercentages = rawPercentages.map(p => Math.round(p));
+    
+    // Calculate the difference from 100%
+    const currentTotal = roundedPercentages.reduce((sum, p) => sum + p, 0);
+    const difference = 100 - currentTotal;
+    
+    // Adjust the largest percentage to make total exactly 100%
+    if (difference !== 0 && roundedPercentages.length > 0) {
+      const maxIndex = rawPercentages.indexOf(Math.max(...rawPercentages));
+      roundedPercentages[maxIndex] = Math.max(0, roundedPercentages[maxIndex] + difference);
+    }
+    
+    return roundedPercentages;
   };
 
-  const getPercentageDisplay = (votes) => {
+  const normalizedPercentages = getNormalizedPercentages();
+
+  const getPercentage = (votes, optionIndex) => {
+    if (poll.totalVotes === 0) return 0;
+    return normalizedPercentages[optionIndex] || 0;
+  };
+
+  const getPercentageDisplay = (votes, optionIndex) => {
     if (poll.totalVotes === 0) return "0%";
-    const percentage = (votes / poll.totalVotes) * 100;
-    return `${percentage.toFixed(1)}%`;
+    const percentage = normalizedPercentages[optionIndex] || 0;
+    return `${percentage}%`;
   };
 
   const getWinningOption = () => {
