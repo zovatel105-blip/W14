@@ -1303,7 +1303,12 @@ const TikTokScrollView = ({
           scrollBehavior: 'smooth',
           WebkitOverflowScrolling: 'touch',
           scrollSnapType: 'y mandatory',
-          scrollSnapStop: 'always'
+          scrollSnapStop: 'always',
+          // Enhanced TikTok-style scrolling
+          scrollPaddingTop: '0px',
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none',
+          overscrollBehavior: 'none'
         }}
       >
         {preloadedPolls.map((poll, index) => (
