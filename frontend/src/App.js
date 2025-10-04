@@ -5,10 +5,7 @@ import NeuralNavigation from './components/NeuralNavigation';
 import ResponsiveLayout from './components/ResponsiveLayout';
 import FeedPage from './pages/FeedPage';
 import ExplorePage from './pages/ExplorePage';
-import ExploreDemo from './pages/ExploreDemo';
-import LiveBattleDemoPage from './pages/LiveBattleDemoPage';
-import FeedDemoPage from './pages/FeedDemoPage';
-import GridDemo from './pages/GridDemo';
+// Demo pages removed - using real implementations only
 import ProfilePage from './pages/ProfilePage';
 import NotificationsPage from './pages/NotificationsPage';
 import MessagesPage from './pages/MessagesPage';
