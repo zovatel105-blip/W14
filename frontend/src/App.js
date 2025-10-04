@@ -122,11 +122,7 @@ function AppContent() {
             <Route path="/following" element={<FollowingPage />} />
             <Route path="/test-supabase" element={<TestSupabasePage />} />
 
-            {/* Demo & Test Pages - Remove in production */}
-            <Route path="/explore-demo" element={<ExploreDemo />} />
-            <Route path="/battle-demo" element={<LiveBattleDemoPage />} />
-            <Route path="/feed-demo" element={<FeedDemoPage />} />
-            <Route path="/grid-demo" element={<GridDemo />} />
+            {/* Development Test Pages */}
             <Route path="/test-crop" element={<InlineCropTest />} />
           </Routes>
 
