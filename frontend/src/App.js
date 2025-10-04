@@ -25,7 +25,7 @@ import TestSupabasePage from './pages/TestSupabasePage';
 import FollowingPage from './pages/FollowingPage';
 import InlineCropTest from './components/InlineCropTest';
 import { Toaster } from './components/ui/toaster';
-import { createPoll } from './services/mockData';
+// Mock data imports removed - using real backend services
 import { useToast } from './hooks/use-toast';
 import { TikTokProvider, useTikTok } from './contexts/TikTokContext';
 
