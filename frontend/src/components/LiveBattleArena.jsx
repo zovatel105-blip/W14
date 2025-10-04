@@ -11,7 +11,7 @@ import { Avatar, AvatarImage, AvatarFallback } from './ui/avatar';
 import { Button } from './ui/button';
 import { Badge } from './ui/badge';
 import { Progress } from './ui/progress';
-import { mockPolls } from '../services/mockData';
+// Mock data removed - using real backend services
 import { useAuth } from '../contexts/AuthContext';
 import { useAddiction } from '../contexts/AddictionContext';
 import { useNavigate } from 'react-router-dom';
