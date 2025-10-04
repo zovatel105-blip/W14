@@ -23,8 +23,11 @@ class Config:
     def DB_NAME(self) -> str:
         return get_config_value("DB_NAME", "social_media_app")
     
-    # Security Configuration
-    SECRET_KEY: str = os.getenv("SECRET_KEY", "fallback-secret-key-for-development-only")
+    # Security Configuration - Con detección automática para SECRET_KEY
+    @property
+    def SECRET_KEY(self) -> str:
+        return get_config_value("SECRET_KEY", "fallback-secret-key-for-development-only")
+    
     JWT_ALGORITHM: str = os.getenv("JWT_ALGORITHM", "HS256")
     ACCESS_TOKEN_EXPIRE_MINUTES: int = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "1440"))
     
