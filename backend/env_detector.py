@@ -85,11 +85,17 @@ class EnvironmentDetector:
         
         # Si está en Kubernetes pero no hemos detectado Emergent, probablemente sea Emergent
         if env_info['is_kubernetes'] and not env_info['is_emergent']:
+            # Intenta obtener información de la cuenta desde variables de entorno
+            subdomain = (os.getenv('EMERGENT_SUBDOMAIN') or 
+                        os.getenv('EMERGENT_ACCOUNT') or 
+                        os.getenv('APP_NAME') or
+                        'default')
+            
             env_info.update({
                 'type': 'emergent',
                 'is_emergent': True,
-                'subdomain': os.getenv('EMERGENT_SUBDOMAIN'),
-                'account': os.getenv('EMERGENT_ACCOUNT')
+                'subdomain': subdomain,
+                'account': subdomain
             })
         
         return env_info
