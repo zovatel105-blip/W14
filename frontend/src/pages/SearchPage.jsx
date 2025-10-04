@@ -524,7 +524,7 @@ const SearchPage = () => {
   const handleStoryClick = (story) => {
     // Navigate to story view or open story modal
     console.log('Story clicked:', story);
-    // TODO: Implement story viewing functionality
+    // Story viewing functionality - to be implemented in future iteration
   };
 
   // Handle recommended content click
