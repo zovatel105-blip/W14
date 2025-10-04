@@ -40,6 +40,25 @@ function AppContent() {
   const navigate = useNavigate();
   const { isTikTokMode } = useTikTok();
   const { isAuthenticated, loading: authLoading } = useAuth();
+  const [configInitialized, setConfigInitialized] = useState(false);
+
+  // ✅ Inicializar configuración automática de entorno al inicio
+  useEffect(() => {
+    const initializeAppConfig = async () => {
+      try {
+        console.log('🚀 Inicializando configuración automática de entorno...');
+        await AppConfig.initialize();
+        setConfigInitialized(true);
+        console.log('✅ Configuración de entorno lista para usar');
+      } catch (error) {
+        console.error('❌ Error inicializando configuración:', error);
+        // Continúa con configuración de fallback
+        setConfigInitialized(true);
+      }
+    };
+
+    initializeAppConfig();
+  }, []);
 
   // 🎵 CLEANUP GLOBAL: Detener audio en navegación de rutas
   React.useEffect(() => {
