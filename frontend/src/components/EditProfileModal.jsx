@@ -184,7 +184,7 @@ const EditProfileModal = ({ isOpen, onClose, onProfileUpdate }) => {
         
         {/* Título completamente centrado en toda la pantalla */}
         <div className="flex-1 flex items-center justify-center">
-          <h1 className="text-lg font-semibold text-gray-900">Editar perfil</h1>
+          <h1 className="text-lg font-semibold text-gray-900 mt-1">Editar perfil</h1>
         </div>
       </div>
 
