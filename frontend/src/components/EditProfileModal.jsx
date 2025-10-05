@@ -171,19 +171,19 @@ const EditProfileModal = ({ isOpen, onClose, onProfileUpdate }) => {
     <div className="fixed inset-0 bg-white z-50 flex flex-col">
       
       {/* Header móvil con botón volver */}
-      <div className="relative flex items-center px-4 py-4 bg-white border-b border-gray-100 safe-area-top">
+      <div className="relative flex items-center justify-center px-4 py-4 bg-white border-b border-gray-100 safe-area-top">
+        
+        {/* Botón de retroceder posicionado absolutamente a la izquierda y centrado */}
         <button
           type="button"
           onClick={onClose}
-          className="w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-all duration-200"
+          className="absolute left-4 top-1/2 transform -translate-y-1/2 w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-all duration-200"
         >
           <ArrowLeft className="w-5 h-5 text-gray-700" />
         </button>
         
-        {/* Título completamente centrado usando positioning absoluto */}
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <h1 className="text-lg font-semibold text-gray-900">Editar perfil</h1>
-        </div>
+        {/* Título completamente centrado */}
+        <h1 className="text-lg font-semibold text-gray-900">Editar perfil</h1>
       </div>
 
       {/* Contenido scrolleable */}
