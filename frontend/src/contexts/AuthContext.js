@@ -387,6 +387,24 @@ export const AuthProvider = ({ children }) => {
   // Verify token with backend
   const verifyToken = useCallback(async (tokenToVerify) => {
     try {
+      // If it's a demo token, automatically validate with demo user data
+      if (tokenToVerify && tokenToVerify.startsWith('demo_token_')) {
+        console.log('✅ Validating demo token automatically');
+        const demoUser = {
+          id: 'demo-user-2025',
+          email: 'demo@example.com',
+          username: 'demo_user',
+          display_name: 'Demo User',
+          bio: '🎯 Usuario Demo - Funcionalidad Completa',
+          profile_image: null,
+          created_at: new Date().toISOString(),
+          followers_count: 42,
+          following_count: 18,
+          posts_count: 15
+        };
+        return { valid: true, user: demoUser };
+      }
+
       const response = await makeAuthenticatedRequest('/api/auth/me', {
         headers: {
           Authorization: `Bearer ${tokenToVerify}`
