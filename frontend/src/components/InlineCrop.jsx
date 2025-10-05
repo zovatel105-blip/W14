@@ -237,7 +237,7 @@ const InlineCrop = ({
       
       console.log('✅ Mouse hasChanges set to true - auto-save programado');
     }
-  }, [isActive, isInteracting, isDragging, lastTouch, lastDistance]);
+  }, [isActive, isInteracting, isDragging, lastTouch, lastDistance, autoSave]);
 
   // Handle end of interaction
   const handleEnd = useCallback(() => {
