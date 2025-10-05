@@ -198,7 +198,7 @@ const ContentPublishPage = () => {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-lg mx-auto px-4 py-6 space-y-6 pb-40">
+      <div className="max-w-lg mx-auto px-4 py-6 space-y-6 pb-24">
 
         {/* Content Preview - How it will look */}
         <div className="space-y-3">
