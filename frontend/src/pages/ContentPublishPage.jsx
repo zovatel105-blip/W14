@@ -381,6 +381,116 @@ const ContentPublishPage = () => {
         </div>
       </div>
 
+      {/* Hashtag Modal */}
+      {showHashtagModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-end">
+          <div className="bg-white w-full rounded-t-xl max-h-[80vh] overflow-hidden">
+            <div className="p-4 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold">Agregar Hashtags</h3>
+                <button
+                  onClick={() => setShowHashtagModal(false)}
+                  className="p-2 hover:bg-gray-100 rounded-full"
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+            <div className="p-4 space-y-4">
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  placeholder="Escribe un hashtag (sin #)"
+                  value={hashtagInput}
+                  onChange={(e) => setHashtagInput(e.target.value)}
+                  onKeyPress={handleHashtagKeyPress}
+                  className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+                <button
+                  onClick={handleAddHashtag}
+                  disabled={!hashtagInput.trim()}
+                  className="px-4 py-2 bg-blue-500 hover:bg-blue-600 disabled:bg-gray-300 text-white rounded-lg font-medium"
+                >
+                  Agregar
+                </button>
+              </div>
+              
+              {hashtagsList.length > 0 && (
+                <div className="space-y-2">
+                  <p className="text-sm text-gray-600 font-medium">Hashtags agregados:</p>
+                  <div className="flex flex-wrap gap-2">
+                    {hashtagsList.map((hashtag, index) => (
+                      <span 
+                        key={index} 
+                        className="bg-blue-50 text-blue-700 px-3 py-2 rounded-lg text-sm font-medium flex items-center gap-2"
+                      >
+                        #{hashtag}
+                        <button
+                          onClick={() => handleRemoveHashtag(hashtag)}
+                          className="text-blue-500 hover:text-blue-700"
+                        >
+                          ×
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Mention Modal */}
+      {showMentionModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-end">
+          <div className="bg-white w-full rounded-t-xl max-h-[80vh] overflow-hidden">
+            <div className="p-4 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-semibold">Mencionar Usuarios</h3>
+                <button
+                  onClick={() => setShowMentionModal(false)}
+                  className="p-2 hover:bg-gray-100 rounded-full"
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+            <div className="p-4 space-y-4">
+              <UserMentionInput
+                value={mentionInput}
+                onChange={setMentionInput}
+                onMentionSelect={handleMentionSelect}
+                placeholder="Buscar usuarios para mencionar..."
+                className="w-full"
+              />
+              
+              {mentionedUsers.length > 0 && (
+                <div className="space-y-2">
+                  <p className="text-sm text-gray-600 font-medium">Usuarios mencionados:</p>
+                  <div className="flex flex-wrap gap-2">
+                    {mentionedUsers.map((user) => (
+                      <span 
+                        key={user.id} 
+                        className="bg-green-50 text-green-700 px-3 py-2 rounded-lg text-sm font-medium flex items-center gap-2"
+                      >
+                        @{user.username}
+                        <button
+                          onClick={() => handleRemoveMention(user.id)}
+                          className="text-green-500 hover:text-green-700"
+                        >
+                          ×
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
