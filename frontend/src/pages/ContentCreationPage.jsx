@@ -302,15 +302,8 @@ const LayoutPreview = ({ layout, options = [], title, selectedMusic, onImageUplo
                         
                         <div className="text-center z-10">
                           <div className="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mb-4 mx-auto shadow-2xl">
-                            <ImageIcon className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
+                            <Plus className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
                           </div>
-                          
-                          <h3 className="text-white text-lg sm:text-xl font-bold mb-2">
-                            Opción {String.fromCharCode(65 + slotIndex)}
-                          </h3>
-                          <p className="text-gray-300 text-sm">
-                            Toca para subir imagen o video
-                          </p>
                         </div>
                       </div>
                     )}
