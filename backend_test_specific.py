@@ -12,7 +12,7 @@ from datetime import datetime
 
 # Get backend URL - use external URL from frontend/.env
 def get_backend_url():
-    return "https://mobile-first-6.preview.emergentagent.com/api"
+    return "https://circular-crop-tool.preview.emergentagent.com/api"
 
 def test_specific_endpoints():
     """Test the specific endpoints requested in the review"""

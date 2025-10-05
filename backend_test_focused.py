@@ -35,8 +35,8 @@ def get_mobile_headers():
         'Accept-Encoding': 'gzip, deflate, br',
         'Connection': 'keep-alive',
         'Content-Type': 'application/json',
-        'Origin': 'https://mobile-first-6.preview.emergentagent.com',
-        'Referer': 'https://mobile-first-6.preview.emergentagent.com/',
+        'Origin': 'https://circular-crop-tool.preview.emergentagent.com',
+        'Referer': 'https://circular-crop-tool.preview.emergentagent.com/',
         'Sec-Fetch-Dest': 'empty',
         'Sec-Fetch-Mode': 'cors',
         'Sec-Fetch-Site': 'same-origin'
