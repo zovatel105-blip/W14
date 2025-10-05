@@ -100,8 +100,6 @@ const ProfilePage = () => {
   const [showAddSocialModal, setShowAddSocialModal] = useState(false);
   const [newSocialName, setNewSocialName] = useState('');
   const [newSocialUrl, setNewSocialUrl] = useState('');
-  const [cropModalOpen, setCropModalOpen] = useState(false);
-  const [showAvatarMenu, setShowAvatarMenu] = useState(false);
   
   // Colores disponibles para las plataformas
   const availableColors = [
