@@ -109,6 +109,9 @@ export const AuthProvider = ({ children }) => {
 
   // Make authenticated API request
   const makeAuthenticatedRequest = useCallback(async (url, options = {}) => {
+    // Check if using demo token - if so, pass through to real backend
+    const isDemoToken = token && token.startsWith('demo_token_');
+    
     const backendUrl = getBackendUrl();
     const fullUrl = url.startsWith('http') ? url : `${backendUrl}${url}`;
     
@@ -116,6 +119,7 @@ export const AuthProvider = ({ children }) => {
       ...options,
       headers: {
         'Content-Type': 'application/json',
+        // For demo token, we'll still pass it but the backend will handle demo users
         ...(token && { Authorization: `Bearer ${token}` }),
         ...options.headers
       }
@@ -126,19 +130,18 @@ export const AuthProvider = ({ children }) => {
       config.body = JSON.stringify(config.body);
     }
 
-    // Debug logging para requests de mensajes
-    if (url.includes('/api/messages')) {
+    // Debug logging
+    if (url.includes('/api/messages') || isDemoToken) {
       console.log('🔍 DEBUG makeAuthenticatedRequest - URL:', fullUrl);
       console.log('🔍 DEBUG makeAuthenticatedRequest - Headers:', config.headers);
-      console.log('🔍 DEBUG makeAuthenticatedRequest - Body:', config.body);
-      console.log('🔍 DEBUG makeAuthenticatedRequest - Token length:', token?.length || 0);
+      console.log('🔍 DEBUG makeAuthenticatedRequest - Is Demo:', isDemoToken);
     }
 
     try {
       const response = await fetch(fullUrl, config);
       
-      // Handle 401 - token expired
-      if (response.status === 401) {
+      // Handle 401 - token expired (but not for demo users)
+      if (response.status === 401 && !isDemoToken) {
         clearAuthData();
         throw new Error('Session expired. Please login again.');
       }
