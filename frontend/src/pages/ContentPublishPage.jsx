@@ -175,7 +175,45 @@ const ContentPublishPage = () => {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-lg mx-auto px-4 py-8 space-y-8">
+      <div className="max-w-lg mx-auto px-4 py-6 space-y-6">
+
+        {/* Content Cover Preview */}
+        <div className="flex gap-4">
+          {/* Main cover image */}
+          <div className="w-24 h-32 bg-gray-200 rounded-lg overflow-hidden flex-shrink-0">
+            {contentData && contentData.options && contentData.options[0] ? (
+              contentData.options[0].media_type?.startsWith('image') ? (
+                <img 
+                  src={contentData.options[0].media_url} 
+                  alt="Cover"
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full bg-gray-800 flex items-center justify-center relative">
+                  <video 
+                    src={contentData.options[0].media_url}
+                    className="w-full h-full object-cover"
+                    muted
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-8 h-8 bg-black/50 rounded-full flex items-center justify-center">
+                      <div className="w-0 h-0 border-l-[6px] border-l-white border-t-[4px] border-t-transparent border-b-[4px] border-b-transparent ml-1"></div>
+                    </div>
+                  </div>
+                </div>
+              )
+            ) : (
+              <div className="w-full h-full bg-gray-300 flex items-center justify-center">
+                <span className="text-gray-500 text-xs">Cover</span>
+              </div>
+            )}
+          </div>
+
+          {/* Add more content button */}
+          <div className="w-24 h-32 border-2 border-dashed border-gray-300 rounded-lg flex items-center justify-center">
+            <div className="text-4xl text-gray-400">+</div>
+          </div>
+        </div>
 
         {/* Title Input */}
         <div className="space-y-3">
@@ -187,66 +225,73 @@ const ContentPublishPage = () => {
             className="w-full text-xl font-medium text-gray-900 placeholder-gray-400 border-0 outline-none resize-none bg-transparent"
             maxLength={200}
           />
+          <p className="text-sm text-gray-500">
+            Writing a long description can help get 3x more views on average.
+          </p>
           <div className="h-px bg-gray-200"></div>
         </div>
 
-        {/* Hashtags */}
-        <div className="flex items-center gap-4 py-4 border-b border-gray-100">
-          <div className="flex items-center gap-2 flex-1">
-            <Hash className="w-5 h-5 text-gray-600" />
-            <input
-              type="text"
-              placeholder="Hashtags"
-              value={hashtags}
-              onChange={(e) => setHashtags(e.target.value)}
-              className="flex-1 text-gray-900 placeholder-gray-600 border-0 outline-none bg-transparent"
-            />
-          </div>
-        </div>
+        {/* Hashtags Button */}
+        <button 
+          onClick={() => setShowHashtagModal(true)}
+          className="flex items-center gap-4 py-4 border-b border-gray-100 w-full text-left hover:bg-gray-50"
+        >
+          <Hash className="w-5 h-5 text-gray-600" />
+          <span className="flex-1 text-gray-900">
+            {hashtagsList.length > 0 
+              ? `${hashtagsList.length} hashtag${hashtagsList.length > 1 ? 's' : ''} selected`
+              : 'Hashtags'
+            }
+          </span>
+          <div className="text-gray-400">›</div>
+        </button>
 
-        {/* Mentions */}
-        <div className="space-y-3">
-          <div className="flex items-center gap-4 py-4 border-b border-gray-100">
-            <div className="flex items-center gap-2 flex-1">
-              <AtSign className="w-5 h-5 text-gray-600" />
-              <input
-                type="text"
-                placeholder="Mention"
-                value={mentionInputValue}
-                onChange={setMentionInputValue}
-                className="flex-1 text-gray-900 placeholder-gray-600 border-0 outline-none bg-transparent"
-              />
-            </div>
+        {/* Display selected hashtags */}
+        {hashtagsList.length > 0 && (
+          <div className="flex flex-wrap gap-2 px-9 -mt-2">
+            {hashtagsList.slice(0, 3).map((hashtag, index) => (
+              <span key={index} className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">
+                #{hashtag}
+              </span>
+            ))}
+            {hashtagsList.length > 3 && (
+              <span className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">
+                +{hashtagsList.length - 3} more
+              </span>
+            )}
           </div>
-          
-          {/* Display mentioned users */}
-          {mentionedUsers.length > 0 && (
-            <div className="flex flex-wrap gap-2 px-9">
-              {mentionedUsers.map((user) => (
-                <span
-                  key={user.id}
-                  className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm flex items-center gap-1"
-                >
-                  @{user.username}
-                  <button
-                    onClick={() => handleRemoveMention(user.id)}
-                    className="text-gray-500 hover:text-gray-700 ml-1"
-                  >
-                    ×
-                  </button>
-                </span>
-              ))}
-            </div>
-          )}
+        )}
 
-          <UserMentionInput
-            value={mentionInputValue}
-            onChange={setMentionInputValue}
-            onMentionSelect={handleMentionSelect}
-            placeholder=""
-            className="hidden"
-          />
-        </div>
+        {/* Mentions Button */}
+        <button 
+          onClick={() => setShowMentionModal(true)}
+          className="flex items-center gap-4 py-4 border-b border-gray-100 w-full text-left hover:bg-gray-50"
+        >
+          <AtSign className="w-5 h-5 text-gray-600" />
+          <span className="flex-1 text-gray-900">
+            {mentionedUsers.length > 0 
+              ? `${mentionedUsers.length} user${mentionedUsers.length > 1 ? 's' : ''} mentioned`
+              : 'Mention'
+            }
+          </span>
+          <div className="text-gray-400">›</div>
+        </button>
+
+        {/* Display mentioned users */}
+        {mentionedUsers.length > 0 && (
+          <div className="flex flex-wrap gap-2 px-9 -mt-2">
+            {mentionedUsers.slice(0, 3).map((user) => (
+              <span key={user.id} className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">
+                @{user.username}
+              </span>
+            ))}
+            {mentionedUsers.length > 3 && (
+              <span className="bg-gray-100 text-gray-700 px-3 py-1 rounded-full text-sm">
+                +{mentionedUsers.length - 3} more
+              </span>
+            )}
+          </div>
+        )}
 
         {/* Comments Toggle */}
         <div className="flex items-center justify-between py-4 border-b border-gray-100">
