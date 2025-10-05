@@ -1533,6 +1533,63 @@ const ProfilePage = () => {
     navigate('/settings');
   };
 
+  // Funciones para el crop de avatar
+  const handleAvatarButtonClick = () => {
+    setShowAvatarMenu(!showAvatarMenu);
+  };
+
+  const handleChangeAvatar = () => {
+    setCropModalOpen(true);
+    setShowAvatarMenu(false);
+  };
+
+  const handleCreateStory = () => {
+    setShowCreateStoryModal(true);
+    setShowAvatarMenu(false);
+  };
+
+  const handleAvatarCropped = async (croppedImageUrl, imageBlob) => {
+    try {
+      setLoading(true);
+      
+      // Convertir blob a FormData para enviar al backend
+      const formData = new FormData();
+      formData.append('avatar', imageBlob, 'avatar.png');
+
+      // Llamar al endpoint de actualización de avatar
+      const response = await updateUser({ avatar_url: croppedImageUrl });
+      
+      // Actualizar estado local inmediatamente para feedback visual
+      if (displayUser) {
+        setViewedUser(prev => ({
+          ...prev,
+          avatar_url: croppedImageUrl
+        }));
+      }
+
+      toast({
+        title: "¡Foto de perfil actualizada!",
+        description: "Tu nueva foto de perfil ha sido guardada exitosamente",
+        variant: "default"
+      });
+
+      // Recargar datos del perfil para asegurar sincronización
+      if (isOwnProfile) {
+        await loadUserProfile();
+      }
+
+    } catch (error) {
+      console.error('Error updating avatar:', error);
+      toast({
+        title: "Error al actualizar",
+        description: "No se pudo actualizar la foto de perfil. Inténtalo de nuevo.",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       {/* TikTok mode rendering - same as FeedPage */}
