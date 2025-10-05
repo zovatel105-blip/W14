@@ -314,7 +314,11 @@ const SearchResultsGrid = ({ results = [], onItemClick }) => {
   }, {});
 
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+    <div className="grid gap-3 sm:gap-4" 
+         style={{ 
+           gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
+           maxWidth: '100%'
+         }}>
       {results.map((result) => {
         const key = `${result.type}-${result.id}`;
         
