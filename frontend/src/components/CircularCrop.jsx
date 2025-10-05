@@ -31,21 +31,25 @@ const CircularCrop = ({ isOpen, onClose, onImageCropped, initialImage = null }) 
     img.crossOrigin = 'anonymous';
     img.onload = () => {
       setImage(img);
-      // Calcular escala inicial para que la imagen llene el círculo completo
+      // Calcular escala inicial para mostrar la imagen completa dentro del círculo
       const imageAspect = img.width / img.height;
       let initialScale;
       
-      if (imageAspect > 1) {
-        // Imagen más ancha que alta - escalar por altura
-        initialScale = CANVAS_SIZE / img.height;
+      // Asegurar que la imagen completa sea visible inicialmente
+      const canvasAspect = 1; // Canvas es cuadrado
+      if (imageAspect > canvasAspect) {
+        // Imagen más ancha - escalar por ancho para mostrar toda la imagen
+        initialScale = (CANVAS_SIZE * 0.8) / img.width; // 80% del canvas para mostrar imagen completa
       } else {
-        // Imagen más alta que ancha - escalar por ancho
-        initialScale = CANVAS_SIZE / img.width;
+        // Imagen más alta - escalar por altura para mostrar toda la imagen
+        initialScale = (CANVAS_SIZE * 0.8) / img.height; // 80% del canvas para mostrar imagen completa
       }
       
-      setScale(Math.max(initialScale, MIN_SCALE));
+      // Asegurar que la escala esté dentro de los límites pero priorizar mostrar imagen completa
+      const finalScale = Math.max(initialScale, MIN_SCALE);
+      setScale(finalScale);
       setPosition({ x: 0, y: 0 });
-      drawCanvas(img, Math.max(initialScale, MIN_SCALE), { x: 0, y: 0 });
+      drawCanvas(img, finalScale, { x: 0, y: 0 });
     };
     img.src = imageSrc;
   };
