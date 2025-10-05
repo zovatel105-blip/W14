@@ -240,7 +240,7 @@ const EditProfileModal = ({ isOpen, onClose, onProfileUpdate }) => {
               <div className="text-center">
                 <h2 className="text-xl font-medium text-gray-900 mb-2">Tu historia visual</h2>
                 <p className="text-sm text-gray-500 leading-relaxed max-w-sm">
-                  Una gran foto de perfil es tu primera oportunidad de causar una impresión memorable
+                  Toca tu foto de perfil para cambiarla. Es tu primera oportunidad de causar una impresión memorable
                 </p>
               </div>
             </div>
