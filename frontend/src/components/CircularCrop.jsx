@@ -260,22 +260,23 @@ const CircularCrop = ({ isOpen, onClose, onImageCropped, initialImage = null }) 
     tempCtx.imageSmoothingEnabled = true;
     tempCtx.imageSmoothingQuality = 'high';
 
-    // Calcular dimensiones de la imagen escalada
-    const scaledWidth = image.width * scale;
-    const scaledHeight = image.height * scale;
+    // Calcular dimensiones de la imagen escalada para alta resolución
+    const resolutionMultiplier = 2; // 2x para mejor calidad
+    const scaledWidth = image.width * scale * resolutionMultiplier;
+    const scaledHeight = image.height * scale * resolutionMultiplier;
 
-    // Posición de la imagen
-    const centerX = CANVAS_SIZE / 2;
-    const centerY = CANVAS_SIZE / 2;
-    const imageX = centerX - scaledWidth / 2 + position.x;
-    const imageY = centerY - scaledHeight / 2 + position.y;
+    // Posición de la imagen ajustada para alta resolución
+    const centerX = outputSize / 2;
+    const centerY = outputSize / 2;
+    const imageX = centerX - scaledWidth / 2 + (position.x * resolutionMultiplier);
+    const imageY = centerY - scaledHeight / 2 + (position.y * resolutionMultiplier);
 
-    // Crear círculo clip que ocupa todo el canvas
+    // Crear círculo clip que ocupa todo el canvas de alta resolución
     tempCtx.beginPath();
-    tempCtx.arc(CANVAS_SIZE / 2, CANVAS_SIZE / 2, CANVAS_SIZE / 2, 0, 2 * Math.PI);
+    tempCtx.arc(outputSize / 2, outputSize / 2, outputSize / 2, 0, 2 * Math.PI);
     tempCtx.clip();
 
-    // Dibujar la imagen completa escalada y posicionada
+    // Dibujar la imagen completa escalada y posicionada con alta calidad
     tempCtx.drawImage(image, imageX, imageY, scaledWidth, scaledHeight);
 
     // Convertir a blob con máxima calidad y llamar callback
