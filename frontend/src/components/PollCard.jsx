@@ -152,7 +152,7 @@ const MediaPreview = ({ media, isWinner, isSelected, onClick, percentage, option
           } : {}}
         />
         
-        {/* Enhanced Progress Bar - FORCE SHOW on ALL options with debug */}
+        {/* Enhanced Progress Bar - Only show when user has voted on mobile */}
         {shouldShowBars && (
           <motion.div 
             className={cn(
