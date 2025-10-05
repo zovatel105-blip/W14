@@ -197,6 +197,11 @@ const FastFeedPost = ({
                 e.target.src = '/placeholder.jpg';
                 setMediaLoaded(true);
               }}
+              style={option.transform ? {
+                objectPosition: `${option.transform.position?.x || 50}% ${option.transform.position?.y || 50}%`,
+                transform: `scale(${option.transform.scale || 1})`,
+                transformOrigin: 'center center'
+              } : {}}
             />
           </div>
         );
