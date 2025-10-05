@@ -13,7 +13,7 @@ from datetime import datetime
 
 def get_backend_url():
     """Get backend URL for testing - use external URL that frontend uses"""
-    return "https://circular-crop-tool.preview.emergentagent.com/api"
+    return "https://profile-crop-modal.preview.emergentagent.com/api"
 
 def test_auth_endpoints():
     """Test the auth endpoints that the new auth page will use"""
