@@ -245,8 +245,8 @@ const CarouselLayout = ({
                 <div className="absolute inset-0 ring-2 ring-blue-400/60 ring-inset"></div>
               )}
 
-              {/* Winner indicator - Only show when active and user has voted */}
-              {isActive && isWinner && poll.userVote && (
+              {/* Winner indicator - Only show when active and user has voted on mobile */}
+              {isActive && isMobile && isWinner && poll.userVote && (
                 <div className="absolute inset-0 ring-2 ring-green-400 ring-inset"></div>
               )}
 
