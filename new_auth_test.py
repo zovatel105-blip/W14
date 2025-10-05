@@ -13,7 +13,7 @@ from datetime import datetime
 
 def get_backend_url():
     """Get backend URL for testing - use external URL that frontend uses"""
-    return "https://visual-consistency-2.preview.emergentagent.com/api"
+    return "https://image-crop-fix-1.preview.emergentagent.com/api"
 
 def test_auth_endpoints():
     """Test the auth endpoints that the new auth page will use"""
