@@ -5226,13 +5226,17 @@ async def create_poll(
     # Create poll options
     options = []
     for i, option_data in enumerate(poll_data.options):
+        # 📱 MOBILE DEBUG: Log incoming transform data
+        media_transform = option_data.get("media_transform")
+        print(f"🔍 [BACKEND CROP DEBUG] Option {i}: media_transform = {media_transform}")
+        
         option = PollOption(
             user_id=current_user.id,  # For now, creator adds all options
             text=option_data["text"],
             media_type=option_data.get("media_type"),
             media_url=option_data.get("media_url"),
             thumbnail_url=option_data.get("thumbnail_url"),
-            media_transform=option_data.get("media_transform"),  # ✅ Include transform data
+            media_transform=media_transform,  # ✅ Include transform data
             mentioned_users=option_data.get("mentioned_users", [])
         )
         options.append(option)
