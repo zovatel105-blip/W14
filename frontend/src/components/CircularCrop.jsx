@@ -89,18 +89,18 @@ const CircularCrop = ({ isOpen, onClose, onImageCropped, initialImage = null }) 
     const scaledHeight = img.height * currentScale;
 
     // Posición centrada + offset del drag
-    const centerX = CANVAS_SIZE / 2;
-    const centerY = CANVAS_SIZE / 2;
+    const centerX = canvasSize / 2;
+    const centerY = canvasSize / 2;
     const imageX = centerX - scaledWidth / 2 + currentPosition.x;
     const imageY = centerY - scaledHeight / 2 + currentPosition.y;
 
     // Crear clipping path circular que ocupa todo el canvas
     ctx.save();
     ctx.beginPath();
-    ctx.arc(centerX, centerY, CANVAS_SIZE / 2, 0, 2 * Math.PI);
+    ctx.arc(centerX, centerY, canvasSize / 2, 0, 2 * Math.PI);
     ctx.clip();
 
-    // Dibujar imagen dentro del círculo
+    // Dibujar imagen con alta calidad dentro del círculo
     ctx.drawImage(img, imageX, imageY, scaledWidth, scaledHeight);
     
     ctx.restore();
@@ -109,7 +109,7 @@ const CircularCrop = ({ isOpen, onClose, onImageCropped, initialImage = null }) 
     ctx.strokeStyle = 'rgba(229, 231, 235, 0.8)';
     ctx.lineWidth = 3;
     ctx.beginPath();
-    ctx.arc(centerX, centerY, CANVAS_SIZE / 2 - 1.5, 0, 2 * Math.PI);
+    ctx.arc(centerX, centerY, canvasSize / 2 - 1.5, 0, 2 * Math.PI);
     ctx.stroke();
   }, [image, scale, position]);
 
