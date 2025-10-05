@@ -117,14 +117,15 @@ const CircularCrop = ({ isOpen, onClose, onImageCropped, initialImage = null }) 
       const imageAspect = image.width / image.height;
       let initialScale;
       
-      // Reset para mostrar imagen completa como inicialmente
-      const canvasAspect = 1; // Canvas es cuadrado
-      if (imageAspect > canvasAspect) {
-        // Imagen más ancha - escalar por ancho para mostrar toda la imagen
-        initialScale = (CANVAS_SIZE * 0.8) / image.width;
+      // Reset para mostrar imagen completa en formato 9:16
+      const targetAspect = 9/16; // 0.5625
+      
+      if (imageAspect <= targetAspect) {
+        // Imagen vertical o cuadrada - escalar por ancho para mostrar completa
+        initialScale = (CANVAS_SIZE * 0.7) / image.width;
       } else {
-        // Imagen más alta - escalar por altura para mostrar toda la imagen
-        initialScale = (CANVAS_SIZE * 0.8) / image.height;
+        // Imagen horizontal - escalar por altura para mostrar completa  
+        initialScale = (CANVAS_SIZE * 0.7) / image.height;
       }
       
       const newScale = Math.max(initialScale, MIN_SCALE);
