@@ -21,9 +21,9 @@ const GridLayout = ({
   const navigate = useNavigate();
   
   // Detect mobile device with window resize handling
-  const [isMobile, setIsMobile] = React.useState(window.innerWidth <= 768);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   
-  React.useEffect(() => {
+  useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
     };
