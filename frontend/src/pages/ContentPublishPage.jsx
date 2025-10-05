@@ -111,7 +111,7 @@ const ContentPublishPage = () => {
         description: null,
         options: contentData.options,
         music_id: contentData.music_id,
-        tags: parseHashtags(hashtags),
+        tags: hashtagsList.map(tag => tag.startsWith('#') ? tag : `#${tag}`),
         category: 'general',
         mentioned_users: [...new Set(allMentionedUsers)], // Remove duplicates
         video_playbook_settings: null,
