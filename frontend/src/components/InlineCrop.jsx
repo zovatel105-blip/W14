@@ -393,8 +393,8 @@ const InlineCrop = ({
         />
       </div>
       
-      {/* Instructions overlay */}
-      <div className="absolute bottom-4 left-4 right-4 bg-black/70 text-white text-sm p-3 rounded-lg z-40">
+      {/* Instructions overlay - Hidden on mobile devices */}
+      <div className="absolute bottom-4 left-4 right-4 bg-black/70 text-white text-sm p-3 rounded-lg z-40 hidden md:block">
         <div className="text-center">
           <p className="mb-1 font-medium">✋ Ajusta la imagen</p>
           <p className="text-xs opacity-80">
