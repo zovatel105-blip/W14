@@ -14,8 +14,13 @@ import os
 sys.path.append('/app/backend')
 
 # Importar las dependencias del backend
-from database_optimizer import db
+from motor.motor_asyncio import AsyncIOMotorClient
 from models import Poll, PollOption, Music
+import config
+
+# Crear conexión a MongoDB
+client = AsyncIOMotorClient(config.MONGO_URL)
+db = client[config.DB_NAME]
 
 async def create_test_posts():
     """Crear publicaciones de prueba con imágenes para testing de búsquedas"""
