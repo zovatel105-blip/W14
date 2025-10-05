@@ -143,15 +143,16 @@ const SearchResultsGrid = ({ results = [], onItemClick }) => {
   const UserCard = ({ user }) => (
     <div 
       onClick={() => handleItemClick(user)}
-      className="relative bg-white rounded-lg overflow-hidden cursor-pointer group aspect-[3/4] shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-200"
+      className="relative bg-white rounded-xl overflow-hidden cursor-pointer group shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100"
+      style={{ aspectRatio: '9/16' }} // Consistent rectangular vertical format
     >
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50"></div>
+      {/* Background - minimalist */}
+      <div className="absolute inset-0 bg-gray-50"></div>
       
-      {/* Content */}
+      {/* Content - centered and clean */}
       <div className="relative z-10 flex flex-col items-center justify-center h-full p-4 text-center">
-        {/* Avatar */}
-        <div className="w-20 h-20 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold overflow-hidden mb-3 group-hover:scale-110 transition-transform duration-300">
+        {/* Avatar - larger and clean */}
+        <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden mb-4 group-hover:scale-105 transition-transform duration-300 ring-2 ring-white shadow-sm">
           {user.avatar ? (
             <img 
               src={user.avatar} 
@@ -159,43 +160,38 @@ const SearchResultsGrid = ({ results = [], onItemClick }) => {
               className="w-full h-full object-cover"
             />
           ) : (
-            <User size={32} />
+            <User size={24} className="text-gray-400" />
           )}
         </div>
         
-        {/* User info */}
-        <div className="mb-2">
+        {/* User info - clean typography */}
+        <div className="mb-3 w-full">
           <div className="flex items-center justify-center space-x-1 mb-1">
-            <h3 className="text-sm font-bold text-gray-900 text-center line-clamp-1">
+            <h3 className="text-sm font-semibold text-gray-900 text-center truncate max-w-full">
               {user.display_name || user.username}
             </h3>
             {user.verified && (
-              <CheckCircle size={14} className="text-blue-500 flex-shrink-0" />
+              <CheckCircle size={12} className="text-blue-500 flex-shrink-0" />
             )}
           </div>
-          <p className="text-xs text-gray-500">@{user.username}</p>
+          <p className="text-xs text-gray-500 truncate">@{user.username}</p>
         </div>
         
-        {/* Bio */}
-        {user.bio && (
-          <p className="text-xs text-gray-600 text-center line-clamp-2 mb-3">
-            {user.bio}
+        {/* Followers - clean metric */}
+        <div className="mb-4">
+          <p className="text-xs text-gray-400">
+            {user.followers_count || 0} seguidores
           </p>
-        )}
+        </div>
         
-        {/* Followers */}
-        <p className="text-xs text-gray-500 mb-3">
-          {user.followers_count || 0} seguidores
-        </p>
-        
-        {/* Follow button */}
+        {/* Follow button - minimalist */}
         {!user.is_following && (
           <button
             onClick={(e) => {
               e.stopPropagation();
               // Handle follow
             }}
-            className="px-4 py-1.5 bg-blue-500 text-white text-xs font-medium rounded-full hover:bg-blue-600 transition-colors"
+            className="px-6 py-2 bg-black text-white text-xs font-medium rounded-full hover:bg-gray-800 transition-colors"
           >
             Seguir
           </button>
