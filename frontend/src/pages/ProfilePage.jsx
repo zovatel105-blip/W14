@@ -2187,18 +2187,6 @@ const ProfilePage = () => {
                           </div>
                         )}
 
-                        {/* Botón Guardar - Solo si hay enlaces agregados */}
-                        {Object.keys(socialLinks).length > 0 && (
-                          <div className="pt-6">
-                            <button
-                              onClick={handleSaveSocialLinks}
-                              disabled={savingSocialLinks}
-                              className="w-full bg-gradient-to-r from-purple-600 to-blue-600 text-white font-semibold py-3 px-6 rounded-xl hover:from-purple-700 hover:to-blue-700 transition-all duration-200 disabled:opacity-50"
-                            >
-                              {savingSocialLinks ? 'Guardando...' : 'Guardar Enlaces'}
-                            </button>
-                          </div>
-                        )}
                       </div>
 
                       {/* Información adicional */}
