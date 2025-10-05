@@ -489,10 +489,7 @@ const LayoutPreview = ({ layout, options = [], title, selectedMusic, onImageUplo
                         </>
                       )}
 
-                      {/* Letter identifier - top left */}
-                      <div className="absolute top-3 left-3 sm:top-4 sm:left-4 lg:top-6 lg:left-6 w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white font-bold text-sm sm:text-base lg:text-lg z-20">
-                        {String.fromCharCode(65 + slotIndex)}
-                      </div>
+                      {/* Letter identifier removed for cleaner UI */}
                     </div>
                   )}
                 </div>
