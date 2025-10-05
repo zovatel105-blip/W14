@@ -138,6 +138,7 @@ function AppContent() {
             <Route path="/moments" element={<MomentsPage />} />
             <Route path="/content-creation" element={<ContentCreationPage />} />
             <Route path="/create" element={<ContentCreationPage />} />
+            <Route path="/content-publish" element={<ContentPublishPage />} />
             <Route path="/following" element={<FollowingPage />} />
             <Route path="/test-supabase" element={<TestSupabasePage />} />
 
