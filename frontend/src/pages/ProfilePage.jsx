@@ -2045,8 +2045,8 @@ const ProfilePage = () => {
                     <div className="px-4 pt-2 pb-6">
                       {/* Header del Panel */}
                       <div className="text-center mb-6">
-                        <h3 className="text-lg font-semibold text-gray-900 mb-2">Mis Redes Sociales</h3>
-                        <p className="text-sm text-gray-600">Agrega cualquier red social o plataforma que uses</p>
+                        <h3 className="text-lg font-semibold text-gray-900 mb-2">Enlaces</h3>
+                        <p className="text-sm text-gray-600">Agrega tus redes</p>
                       </div>
                       
                       {/* Lista de Enlaces Agregados */}
