@@ -15969,6 +15969,10 @@ def main():
     print("\n🚨 TESTING CRÍTICO: Poll Mentions Functionality")
     test_results["poll_mentions_functionality"] = test_poll_mentions_functionality(base_url)
     
+    # PROFILE EDITING AND IMAGE UPLOAD TEST FOR EDITPROFILEMODAL CROP FEATURE
+    print("\n🎯 TESTING ESPECÍFICO: Profile Editing and Image Upload for EditProfileModal Crop Feature")
+    test_results["profile_editing_image_upload"] = test_profile_editing_and_image_upload(base_url)
+    
     # Final summary
     print("\n" + "=" * 80)
     print("📊 FINAL TEST RESULTS SUMMARY")
