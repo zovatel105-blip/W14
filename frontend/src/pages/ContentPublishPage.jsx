@@ -249,9 +249,9 @@ const ContentPublishPage = () => {
           </div>
         </div>
 
-        {/* Title Input */}
+        {/* Title Input with Hashtags and Mentions */}
         <div className="space-y-4">
-          <div className="space-y-2">
+          <div className="space-y-3">
             <input
               type="text"
               placeholder="Add a catchy title"
@@ -260,6 +260,79 @@ const ContentPublishPage = () => {
               className="w-full text-xl font-medium text-gray-900 placeholder-gray-400 border-0 outline-none resize-none bg-transparent leading-relaxed"
               maxLength={200}
             />
+            
+            {/* Hashtags and Mentions integrated with title */}
+            <div className="space-y-3">
+              {/* Display selected hashtags */}
+              {hashtagsList.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {hashtagsList.map((hashtag, index) => (
+                    <span 
+                      key={index} 
+                      className="bg-blue-50 text-blue-700 px-3 py-1.5 rounded-full text-sm font-medium flex items-center gap-1"
+                    >
+                      #{hashtag}
+                      <button
+                        onClick={() => handleRemoveHashtag(hashtag)}
+                        className="text-blue-500 hover:text-blue-700 ml-1"
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              {/* Display mentioned users */}
+              {mentionedUsers.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {mentionedUsers.map((user) => (
+                    <span 
+                      key={user.id} 
+                      className="bg-green-50 text-green-700 px-3 py-1.5 rounded-full text-sm font-medium flex items-center gap-1"
+                    >
+                      @{user.username}
+                      <button
+                        onClick={() => handleRemoveMention(user.id)}
+                        className="text-green-500 hover:text-green-700 ml-1"
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              {/* Add buttons for hashtags and mentions */}
+              <div className="flex gap-2">
+                <button 
+                  onClick={() => setShowHashtagModal(true)}
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm font-medium text-gray-700 transition-colors"
+                >
+                  <Hash className="w-4 h-4" />
+                  Hashtags
+                  {hashtagsList.length > 0 && (
+                    <span className="bg-blue-500 text-white text-xs px-1.5 py-0.5 rounded-full">
+                      {hashtagsList.length}
+                    </span>
+                  )}
+                </button>
+                
+                <button 
+                  onClick={() => setShowMentionModal(true)}
+                  className="flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 rounded-full text-sm font-medium text-gray-700 transition-colors"
+                >
+                  <AtSign className="w-4 h-4" />
+                  Mention
+                  {mentionedUsers.length > 0 && (
+                    <span className="bg-green-500 text-white text-xs px-1.5 py-0.5 rounded-full">
+                      {mentionedUsers.length}
+                    </span>
+                  )}
+                </button>
+              </div>
+            </div>
+            
             <div className="flex items-center justify-between">
               <p className="text-sm text-gray-500">
                 Writing a long description can help get 3x more views on average.
@@ -271,52 +344,6 @@ const ContentPublishPage = () => {
           </div>
           <div className="h-px bg-gray-200"></div>
         </div>
-
-        {/* Display selected hashtags */}
-        {hashtagsList.length > 0 && (
-          <div className="space-y-2">
-            <p className="text-sm text-gray-600 font-medium">Hashtags:</p>
-            <div className="flex flex-wrap gap-2">
-              {hashtagsList.map((hashtag, index) => (
-                <span 
-                  key={index} 
-                  className="bg-blue-50 text-blue-700 px-3 py-2 rounded-lg text-sm font-medium flex items-center gap-2"
-                >
-                  #{hashtag}
-                  <button
-                    onClick={() => handleRemoveHashtag(hashtag)}
-                    className="text-blue-500 hover:text-blue-700"
-                  >
-                    ×
-                  </button>
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Display mentioned users */}
-        {mentionedUsers.length > 0 && (
-          <div className="space-y-2">
-            <p className="text-sm text-gray-600 font-medium">Menciones:</p>
-            <div className="flex flex-wrap gap-2">
-              {mentionedUsers.map((user) => (
-                <span 
-                  key={user.id} 
-                  className="bg-green-50 text-green-700 px-3 py-2 rounded-lg text-sm font-medium flex items-center gap-2"
-                >
-                  @{user.username}
-                  <button
-                    onClick={() => handleRemoveMention(user.id)}
-                    className="text-green-500 hover:text-green-700"
-                  >
-                    ×
-                  </button>
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
 
         {/* Comments Toggle */}
         <div className="flex items-center justify-between py-4 border-b border-gray-100">
