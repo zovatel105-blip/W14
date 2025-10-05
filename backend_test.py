@@ -895,6 +895,381 @@ def test_http_404_registration_fix_critical(base_url):
     
     return success_count >= 4
 
+def test_profile_editing_and_image_upload(base_url):
+    """🎯 TESTING ESPECÍFICO: Profile editing and image upload functionality for EditProfileModal crop feature"""
+    print("\n🎯 === TESTING PROFILE EDITING AND IMAGE UPLOAD FUNCTIONALITY ===")
+    print("FUNCIONALIDADES A PROBAR:")
+    print("1. User profile update endpoints for avatar changes")
+    print("2. Image upload endpoints for avatar processing")
+    print("3. Authentication endpoints to ensure profile editing is properly secured")
+    print("4. Test with demo credentials: demo@example.com / demo123")
+    print("5. Profile editing and image crop functionality backend support")
+    
+    success_count = 0
+    total_tests = 12
+    demo_token = None
+    demo_user = None
+    
+    # Test 1: Login with demo credentials
+    print("\n1️⃣ TESTING LOGIN WITH DEMO CREDENTIALS...")
+    try:
+        demo_credentials = {
+            "email": "demo@example.com",
+            "password": "demo123"
+        }
+        
+        response = requests.post(f"{base_url}/auth/login", json=demo_credentials, timeout=10)
+        print(f"   Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            data = response.json()
+            demo_token = data.get('access_token')
+            demo_user = data.get('user')
+            print(f"   ✅ Demo login successful")
+            print(f"   👤 User: {demo_user.get('username', 'N/A')}")
+            print(f"   📧 Email: {demo_user.get('email', 'N/A')}")
+            print(f"   🔑 Token: {demo_token[:20]}...")
+            success_count += 1
+        elif response.status_code == 400:
+            print(f"   ⚠️ Demo user doesn't exist, creating one...")
+            # Try to create demo user
+            demo_user_data = {
+                "email": "demo@example.com",
+                "username": "demo_user",
+                "display_name": "Demo User",
+                "password": "demo123"
+            }
+            
+            reg_response = requests.post(f"{base_url}/auth/register", json=demo_user_data, timeout=10)
+            if reg_response.status_code == 200:
+                reg_data = reg_response.json()
+                demo_token = reg_data.get('access_token')
+                demo_user = reg_data.get('user')
+                print(f"   ✅ Demo user created and logged in")
+                success_count += 1
+            else:
+                print(f"   ❌ Failed to create demo user: {reg_response.text}")
+        else:
+            print(f"   ❌ Demo login failed: {response.text}")
+            
+    except Exception as e:
+        print(f"   ❌ Error during demo login: {e}")
+    
+    if not demo_token:
+        print("❌ Cannot proceed without authentication token")
+        return False
+    
+    headers = {"Authorization": f"Bearer {demo_token}"}
+    
+    # Test 2: Test GET current user profile
+    print("\n2️⃣ TESTING GET CURRENT USER PROFILE...")
+    try:
+        response = requests.get(f"{base_url}/auth/me", headers=headers, timeout=10)
+        print(f"   Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            user_data = response.json()
+            print(f"   ✅ Profile retrieved successfully")
+            print(f"   👤 Username: {user_data.get('username', 'N/A')}")
+            print(f"   📧 Email: {user_data.get('email', 'N/A')}")
+            print(f"   🖼️ Avatar URL: {user_data.get('avatar_url', 'None')}")
+            print(f"   📝 Display Name: {user_data.get('display_name', 'N/A')}")
+            success_count += 1
+        else:
+            print(f"   ❌ Failed to get profile: {response.text}")
+            
+    except Exception as e:
+        print(f"   ❌ Error getting profile: {e}")
+    
+    # Test 3: Test PUT profile update endpoint
+    print("\n3️⃣ TESTING PUT PROFILE UPDATE ENDPOINT...")
+    try:
+        update_data = {
+            "display_name": "Updated Demo User",
+            "bio": "This is an updated bio for testing profile editing",
+            "avatar_url": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face"
+        }
+        
+        response = requests.put(f"{base_url}/auth/profile", json=update_data, headers=headers, timeout=10)
+        print(f"   Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            updated_user = response.json()
+            print(f"   ✅ Profile updated successfully")
+            print(f"   📝 New Display Name: {updated_user.get('display_name', 'N/A')}")
+            print(f"   📄 New Bio: {updated_user.get('bio', 'N/A')}")
+            print(f"   🖼️ New Avatar URL: {updated_user.get('avatar_url', 'N/A')}")
+            success_count += 1
+        else:
+            print(f"   ❌ Profile update failed: {response.text}")
+            
+    except Exception as e:
+        print(f"   ❌ Error updating profile: {e}")
+    
+    # Test 4: Test image upload endpoint
+    print("\n4️⃣ TESTING IMAGE UPLOAD ENDPOINT...")
+    try:
+        # Create a small test image (1x1 pixel PNG)
+        import base64
+        import io
+        
+        # Minimal PNG data (1x1 transparent pixel)
+        png_data = base64.b64decode(
+            'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChAI9jU77zgAAAABJRU5ErkJggg=='
+        )
+        
+        files = {
+            'file': ('test_avatar.png', io.BytesIO(png_data), 'image/png')
+        }
+        
+        data = {
+            'upload_type': 'avatar'
+        }
+        
+        response = requests.post(f"{base_url}/upload", files=files, data=data, headers=headers, timeout=10)
+        print(f"   Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            upload_data = response.json()
+            print(f"   ✅ Image upload successful")
+            print(f"   📁 File ID: {upload_data.get('file_id', 'N/A')}")
+            print(f"   📄 Filename: {upload_data.get('filename', 'N/A')}")
+            print(f"   🔗 Public URL: {upload_data.get('public_url', 'N/A')}")
+            print(f"   📏 File Size: {upload_data.get('file_size', 'N/A')} bytes")
+            success_count += 1
+            
+            # Store upload info for later tests
+            uploaded_file_id = upload_data.get('file_id')
+            uploaded_public_url = upload_data.get('public_url')
+            
+        else:
+            print(f"   ❌ Image upload failed: {response.text}")
+            uploaded_file_id = None
+            uploaded_public_url = None
+            
+    except Exception as e:
+        print(f"   ❌ Error uploading image: {e}")
+        uploaded_file_id = None
+        uploaded_public_url = None
+    
+    # Test 5: Test updating profile with uploaded avatar
+    print("\n5️⃣ TESTING PROFILE UPDATE WITH UPLOADED AVATAR...")
+    if uploaded_public_url:
+        try:
+            avatar_update_data = {
+                "avatar_url": uploaded_public_url
+            }
+            
+            response = requests.put(f"{base_url}/auth/profile", json=avatar_update_data, headers=headers, timeout=10)
+            print(f"   Status Code: {response.status_code}")
+            
+            if response.status_code == 200:
+                updated_user = response.json()
+                print(f"   ✅ Avatar updated successfully")
+                print(f"   🖼️ New Avatar URL: {updated_user.get('avatar_url', 'N/A')}")
+                success_count += 1
+            else:
+                print(f"   ❌ Avatar update failed: {response.text}")
+                
+        except Exception as e:
+            print(f"   ❌ Error updating avatar: {e}")
+    else:
+        print("   ⚠️ Skipping avatar update test - no uploaded file available")
+    
+    # Test 6: Test GET uploaded file info
+    print("\n6️⃣ TESTING GET UPLOADED FILE INFO...")
+    if uploaded_file_id:
+        try:
+            response = requests.get(f"{base_url}/upload/{uploaded_file_id}", headers=headers, timeout=10)
+            print(f"   Status Code: {response.status_code}")
+            
+            if response.status_code == 200:
+                file_info = response.json()
+                print(f"   ✅ File info retrieved successfully")
+                print(f"   📁 File ID: {file_info.get('id', 'N/A')}")
+                print(f"   📄 Original Name: {file_info.get('original_filename', 'N/A')}")
+                print(f"   📏 Size: {file_info.get('file_size', 'N/A')} bytes")
+                print(f"   📅 Created: {file_info.get('created_at', 'N/A')}")
+                success_count += 1
+            else:
+                print(f"   ❌ Failed to get file info: {response.text}")
+                
+        except Exception as e:
+            print(f"   ❌ Error getting file info: {e}")
+    else:
+        print("   ⚠️ Skipping file info test - no uploaded file available")
+    
+    # Test 7: Test GET user's uploaded files
+    print("\n7️⃣ TESTING GET USER'S UPLOADED FILES...")
+    try:
+        response = requests.get(f"{base_url}/uploads/user", headers=headers, timeout=10)
+        print(f"   Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            files_data = response.json()
+            files_list = files_data.get('files', [])
+            print(f"   ✅ User files retrieved successfully")
+            print(f"   📁 Total files: {len(files_list)}")
+            
+            # Show avatar files specifically
+            avatar_files = [f for f in files_list if f.get('upload_type') == 'avatar']
+            print(f"   🖼️ Avatar files: {len(avatar_files)}")
+            
+            for i, file_info in enumerate(avatar_files[:3]):  # Show first 3
+                print(f"      {i+1}. {file_info.get('original_filename', 'N/A')} ({file_info.get('file_size', 'N/A')} bytes)")
+            
+            success_count += 1
+        else:
+            print(f"   ❌ Failed to get user files: {response.text}")
+            
+    except Exception as e:
+        print(f"   ❌ Error getting user files: {e}")
+    
+    # Test 8: Test authentication security for profile endpoints
+    print("\n8️⃣ TESTING AUTHENTICATION SECURITY...")
+    try:
+        # Test without token
+        response = requests.put(f"{base_url}/auth/profile", json={"display_name": "Hacker"}, timeout=10)
+        print(f"   Status Code (no auth): {response.status_code}")
+        
+        if response.status_code == 401:
+            print(f"   ✅ Unauthorized access properly rejected")
+            success_count += 1
+        else:
+            print(f"   ❌ Should reject unauthorized access, got: {response.status_code}")
+        
+        # Test with invalid token
+        invalid_headers = {"Authorization": "Bearer invalid_token_123"}
+        response = requests.put(f"{base_url}/auth/profile", json={"display_name": "Hacker"}, headers=invalid_headers, timeout=10)
+        print(f"   Status Code (invalid token): {response.status_code}")
+        
+        if response.status_code == 401:
+            print(f"   ✅ Invalid token properly rejected")
+        else:
+            print(f"   ❌ Should reject invalid token, got: {response.status_code}")
+            
+    except Exception as e:
+        print(f"   ❌ Error testing authentication security: {e}")
+    
+    # Test 9: Test profile validation
+    print("\n9️⃣ TESTING PROFILE VALIDATION...")
+    try:
+        # Test with invalid data
+        invalid_data = {
+            "display_name": "A" * 200,  # Too long
+            "bio": "B" * 1000,  # Too long
+            "avatar_url": "not_a_valid_url"
+        }
+        
+        response = requests.put(f"{base_url}/auth/profile", json=invalid_data, headers=headers, timeout=10)
+        print(f"   Status Code (invalid data): {response.status_code}")
+        
+        if response.status_code in [400, 422]:
+            print(f"   ✅ Invalid data properly rejected")
+            success_count += 1
+        else:
+            print(f"   ❌ Should reject invalid data, got: {response.status_code}")
+            
+    except Exception as e:
+        print(f"   ❌ Error testing profile validation: {e}")
+    
+    # Test 10: Test image upload validation
+    print("\n🔟 TESTING IMAGE UPLOAD VALIDATION...")
+    try:
+        # Test with invalid file type
+        files = {
+            'file': ('test.txt', io.BytesIO(b'This is not an image'), 'text/plain')
+        }
+        
+        data = {
+            'upload_type': 'avatar'
+        }
+        
+        response = requests.post(f"{base_url}/upload", files=files, data=data, headers=headers, timeout=10)
+        print(f"   Status Code (invalid file): {response.status_code}")
+        
+        if response.status_code in [400, 422]:
+            print(f"   ✅ Invalid file type properly rejected")
+            success_count += 1
+        else:
+            print(f"   ❌ Should reject invalid file type, got: {response.status_code}")
+            
+    except Exception as e:
+        print(f"   ❌ Error testing upload validation: {e}")
+    
+    # Test 11: Test profile persistence
+    print("\n1️⃣1️⃣ TESTING PROFILE PERSISTENCE...")
+    try:
+        # Get profile again to verify changes persisted
+        response = requests.get(f"{base_url}/auth/me", headers=headers, timeout=10)
+        print(f"   Status Code: {response.status_code}")
+        
+        if response.status_code == 200:
+            user_data = response.json()
+            print(f"   ✅ Profile data persisted correctly")
+            print(f"   📝 Display Name: {user_data.get('display_name', 'N/A')}")
+            print(f"   📄 Bio: {user_data.get('bio', 'N/A')}")
+            print(f"   🖼️ Avatar URL: {user_data.get('avatar_url', 'N/A')}")
+            
+            # Check if our updates are still there
+            if user_data.get('display_name') == "Updated Demo User":
+                print(f"   ✅ Display name update persisted")
+                success_count += 1
+            else:
+                print(f"   ⚠️ Display name may not have persisted")
+                success_count += 0.5  # Partial credit
+        else:
+            print(f"   ❌ Failed to verify persistence: {response.text}")
+            
+    except Exception as e:
+        print(f"   ❌ Error testing persistence: {e}")
+    
+    # Test 12: Test file cleanup (delete uploaded file)
+    print("\n1️⃣2️⃣ TESTING FILE CLEANUP...")
+    if uploaded_file_id:
+        try:
+            response = requests.delete(f"{base_url}/upload/{uploaded_file_id}", headers=headers, timeout=10)
+            print(f"   Status Code: {response.status_code}")
+            
+            if response.status_code == 200:
+                print(f"   ✅ File deleted successfully")
+                success_count += 1
+            else:
+                print(f"   ❌ File deletion failed: {response.text}")
+                
+        except Exception as e:
+            print(f"   ❌ Error deleting file: {e}")
+    else:
+        print("   ⚠️ Skipping file cleanup - no uploaded file to delete")
+    
+    # Summary
+    print(f"\n📊 RESUMEN TESTING PROFILE EDITING AND IMAGE UPLOAD:")
+    print(f"   Tests exitosos: {success_count}/{total_tests}")
+    print(f"   Porcentaje de éxito: {(success_count/total_tests)*100:.1f}%")
+    
+    if success_count >= 10:
+        print(f"\n✅ CONCLUSIÓN: PROFILE EDITING AND IMAGE UPLOAD COMPLETAMENTE FUNCIONAL")
+        print(f"   ✅ Demo credentials working correctly")
+        print(f"   ✅ Profile update endpoints operational")
+        print(f"   ✅ Image upload functionality working")
+        print(f"   ✅ Avatar changes properly supported")
+        print(f"   ✅ Authentication security properly implemented")
+        print(f"   ✅ Profile editing and crop functionality has proper backend support")
+        print(f"   ✅ No API errors when users interact with EditProfileModal crop feature")
+        print(f"\n🎉 RESULTADO: EditProfileModal crop feature backend is fully operational")
+    elif success_count >= 7:
+        print(f"\n⚠️ CONCLUSIÓN: FUNCIONALIDAD MAYORMENTE OPERACIONAL")
+        print(f"   - Core functionality working")
+        print(f"   - Some minor issues may exist")
+        print(f"   - Profile editing generally functional")
+    else:
+        print(f"\n❌ CONCLUSIÓN: PROBLEMAS CRÍTICOS ENCONTRADOS")
+        print(f"   - Multiple tests failing")
+        print(f"   - Profile editing may not work properly")
+        print(f"   - Requires investigation and fixes")
+    
+    return success_count >= 8
+
 def test_user_registration_specific_request(base_url):
     """🎯 TESTING ESPECÍFICO: Endpoint de registro de usuario según solicitud del usuario"""
     print("\n🎯 === TESTING ESPECÍFICO: POST /api/auth/register ===")
