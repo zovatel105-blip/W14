@@ -1195,14 +1195,14 @@ const ContentCreationPage = () => {
 
             {/* Layout Menu */}
             {showLayoutMenu && (
-              <div className="absolute right-full top-0 mr-2 sm:mr-3 w-16 sm:w-20 bg-gray-900 rounded-lg shadow-xl overflow-hidden z-50 border border-white/10">
+              <div className="absolute right-full top-0 mr-2 sm:mr-3 w-16 sm:w-20 bg-black/20 backdrop-blur-sm rounded-lg shadow-xl overflow-hidden z-50 border border-white/10">
                 <div className="py-2">
                   {LAYOUT_OPTIONS.map((layout) => (
                     <button
                       key={layout.id}
                       onClick={() => handleLayoutSelect(layout)}
-                      className={`w-full px-2 py-2 text-left hover:bg-gray-700 transition-colors ${
-                        selectedLayout.id === layout.id ? 'bg-gray-600 text-white' : 'text-gray-300'
+                      className={`w-full px-2 py-2 text-left hover:bg-white/10 transition-colors ${
+                        selectedLayout.id === layout.id ? 'bg-white/20 text-white' : 'text-gray-300'
                       }`}
                     >
                       <div className="flex items-center justify-center">
