@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { X, ZoomIn, ZoomOut, RotateCcw, CheckCircle, Upload } from 'lucide-react';
+import { cn } from '../lib/utils';
 
 const CircularCrop = ({ isOpen, onClose, onImageCropped, initialImage = null }) => {
   const canvasRef = useRef(null);
