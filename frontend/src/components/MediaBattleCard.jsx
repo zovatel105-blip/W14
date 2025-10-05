@@ -459,6 +459,11 @@ const RevolutionaryMediaOption = ({
           src={option.media?.url} 
           alt={option.text}
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+          style={option.media?.transform ? {
+            objectPosition: `${option.media.transform.position?.x || 50}% ${option.media.transform.position?.y || 50}%`,
+            transform: `scale(${option.media.transform.scale || 1}) ${option.media?.transform ? '' : 'group-hover:scale(1.1)'}`,
+            transformOrigin: 'center center'
+          } : {}}
         />
       )}
       
