@@ -15,10 +15,10 @@ const CircularCrop = ({ isOpen, onClose, onImageCropped, initialImage = null }) 
   const [loading, setLoading] = useState(false);
 
   // Configuración del crop circular
-  const CANVAS_SIZE = 300;
-  const CROP_SIZE = 300; // Círculo del mismo tamaño que el canvas
-  const MIN_SCALE = 0.5;
-  const MAX_SCALE = 3;
+  const CANVAS_SIZE = 330; // Aumentado de 300 a 330px para círculo más grande
+  const CROP_SIZE = 330; // Círculo del mismo tamaño que el canvas
+  const MIN_SCALE = 0.3; // Reducido para mostrar más imagen completa inicialmente
+  const MAX_SCALE = 4; // Aumentado para mejor control de zoom
 
   useEffect(() => {
     if (initialImage) {
