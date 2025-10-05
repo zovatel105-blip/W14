@@ -265,7 +265,16 @@ const InlineCrop = ({
     });
     
     setHasChanges(true);
-    console.log('✅ Wheel hasChanges set to true');
+    
+    // 🔥 NUEVO: Programar auto-guardado para wheel zoom
+    if (autoSaveTimeoutRef.current) {
+      clearTimeout(autoSaveTimeoutRef.current);
+    }
+    autoSaveTimeoutRef.current = setTimeout(() => {
+      autoSave();
+    }, 1500);
+    
+    console.log('✅ Wheel hasChanges set to true - auto-save programado');
   };
 
   // Always sync with savedTransform when it changes
