@@ -12,15 +12,15 @@ import UploadWidget from '../components/UploadWidget';
 import InlineCrop from '../components/InlineCrop';
 import config from '../config/config';
 
-// Layout Icon Components - Estilo minimalista con líneas blancas
+// Layout Icon Components - Estilo minimalista con fondo transparente difuminado
 const LayoutIcon = ({ type }) => {
-  const baseStyle = "w-6 h-6 border-2 border-white rounded-md flex items-center justify-center";
+  const baseStyle = "w-6 h-6 border-2 border-white rounded-md flex items-center justify-center bg-black/20 backdrop-blur-sm";
   
   switch (type) {
     case 'off':
       return (
         <div className={baseStyle}>
-          <div className="w-3 h-3 border border-white rounded-sm"></div>
+          {/* Sin cuadrado interior - solo el contenedor */}
         </div>
       );
     case 'vertical': // Lado a lado
