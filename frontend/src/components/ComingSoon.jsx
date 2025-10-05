@@ -44,13 +44,8 @@ const ComingSoon = () => {
             Have a mobile device? Try the full app now!
           </p>
           
-          <div className="space-y-2">
-            <div className="bg-black text-white px-6 py-3 rounded-md font-medium">
-              Access from mobile
-            </div>
-            <p className="text-gray-500 text-sm">
-              or resize your browser window
-            </p>
+          <div className="bg-black text-white px-6 py-3 rounded-md font-medium">
+            Access from mobile
           </div>
         </div>
 
