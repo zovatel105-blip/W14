@@ -2177,7 +2177,7 @@ const ProfilePage = () => {
                                   className={`flex-1 px-4 py-2 rounded-xl transition-colors ${
                                     !newSocialName.trim() || !newSocialUrl.trim() 
                                       ? 'bg-gray-300 text-gray-500 cursor-not-allowed' 
-                                      : 'bg-purple-600 text-white hover:bg-purple-700'
+                                      : 'bg-black text-white hover:bg-gray-800'
                                   }`}
                                 >
                                   Agregar
