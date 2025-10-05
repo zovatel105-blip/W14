@@ -81,11 +81,11 @@ const CircularCrop = ({ isOpen, onClose, onImageCropped, initialImage = null }) 
     
     ctx.restore();
 
-    // Dibujar borde del círculo (opcional, más sutil)
-    ctx.strokeStyle = '#ffffff';
-    ctx.lineWidth = 2;
+    // Dibujar borde del círculo con estilo claro
+    ctx.strokeStyle = 'rgba(229, 231, 235, 0.8)';
+    ctx.lineWidth = 3;
     ctx.beginPath();
-    ctx.arc(centerX, centerY, CANVAS_SIZE / 2 - 1, 0, 2 * Math.PI);
+    ctx.arc(centerX, centerY, CANVAS_SIZE / 2 - 1.5, 0, 2 * Math.PI);
     ctx.stroke();
   }, [image, scale, position]);
 
