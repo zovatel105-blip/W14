@@ -317,7 +317,7 @@ const CircularCrop = ({ isOpen, onClose, onImageCropped, initialImage = null }) 
               ref={canvasRef}
               width={CANVAS_SIZE}
               height={CANVAS_SIZE}
-              className="border border-gray-600 rounded-lg cursor-move touch-none"
+              className="cursor-move touch-none rounded-full"
               onMouseDown={handleMouseDown}
               onMouseMove={handleMouseMove}
               onMouseUp={handleMouseUp}
@@ -325,7 +325,11 @@ const CircularCrop = ({ isOpen, onClose, onImageCropped, initialImage = null }) 
               onTouchStart={handleTouchStart}
               onTouchMove={handleTouchMove}
               onTouchEnd={handleTouchEnd}
-              style={{ maxWidth: '90vw', maxHeight: '60vh' }}
+              style={{ 
+                maxWidth: '90vw', 
+                maxHeight: '60vh',
+                aspectRatio: '1/1'
+              }}
             />
             
             {/* Instrucciones */}
