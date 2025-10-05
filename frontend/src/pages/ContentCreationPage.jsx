@@ -496,7 +496,7 @@ const LayoutPreview = ({ layout, options = [], title, selectedMusic, onImageUplo
                               <Plus className="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 text-white" />
                             </div>
                             
-                            <h3 className="text-white text-xl sm:text-2xl lg:text-3xl font-bold mb-2 sm:mb-3 lg:mb-4">Opción {String.fromCharCode(65 + slotIndex)}</h3>
+                            {/* Title removed for cleaner UI */}
                           </div>
                         </>
                       )}
