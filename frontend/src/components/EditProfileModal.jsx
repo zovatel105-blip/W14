@@ -224,6 +224,15 @@ const EditProfileModal = ({ isOpen, onClose, onProfileUpdate }) => {
                 >
                   <Camera className="w-6 h-6 text-white" />
                 </button>
+                
+                {/* Input file oculto para selección directa */}
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileSelect}
+                  className="hidden"
+                />
               </div>
               
               {/* Texto inspiracional más grande */}
