@@ -200,53 +200,113 @@ const ContentPublishPage = () => {
       {/* Main Content */}
       <div className="max-w-lg mx-auto px-4 py-6 space-y-6 pb-40">
 
-        {/* Content Cover Preview */}
+        {/* Content Preview - How it will look */}
         <div className="space-y-3">
-          <div className="flex gap-4">
-            {/* Main cover image with label */}
-            <div className="relative">
-              <div className="w-32 h-40 bg-gray-200 rounded-xl overflow-hidden flex-shrink-0 shadow-sm">
-                {contentData && contentData.options && contentData.options[0] ? (
-                  contentData.options[0].media_type?.startsWith('image') ? (
-                    <img 
-                      src={contentData.options[0].media_url} 
-                      alt="Cover"
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-gray-800 flex items-center justify-center relative">
-                      <video 
-                        src={contentData.options[0].media_url}
-                        className="w-full h-full object-cover"
-                        muted
-                      />
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="w-10 h-10 bg-black/50 rounded-full flex items-center justify-center">
-                          <div className="w-0 h-0 border-l-[8px] border-l-white border-t-[5px] border-t-transparent border-b-[5px] border-b-transparent ml-1"></div>
+          <h3 className="text-sm font-medium text-gray-700 mb-3">Vista previa de tu publicación:</h3>
+          
+          <div className="bg-black rounded-2xl overflow-hidden shadow-lg" style={{ aspectRatio: '9/16', maxHeight: '400px' }}>
+            {contentData && contentData.options && contentData.options.length > 0 ? (
+              <div className="relative w-full h-full">
+                {/* Main content based on layout */}
+                {contentData.layout === 'vertical' && contentData.options.length >= 2 ? (
+                  /* Side by side layout */
+                  <div className="flex h-full">
+                    {contentData.options.slice(0, 2).map((option, index) => (
+                      <div key={index} className="flex-1 relative">
+                        {option.media_type?.startsWith('image') ? (
+                          <img 
+                            src={option.media_url} 
+                            alt={`Option ${index + 1}`}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-gray-800 flex items-center justify-center">
+                            <video 
+                              src={option.media_url}
+                              className="w-full h-full object-cover"
+                              muted
+                            />
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <div className="w-12 h-12 bg-black/50 rounded-full flex items-center justify-center">
+                                <div className="w-0 h-0 border-l-[10px] border-l-white border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent ml-1"></div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        {/* Option text overlay */}
+                        <div className="absolute bottom-4 left-4 right-4 bg-black/50 backdrop-blur-sm rounded-lg p-2">
+                          <p className="text-white text-sm font-medium">{option.text || `Opción ${index + 1}`}</p>
                         </div>
                       </div>
-                    </div>
-                  )
+                    ))}
+                  </div>
                 ) : (
-                  <div className="w-full h-full bg-gray-300 flex items-center justify-center">
-                    <span className="text-gray-500 text-sm">Cover</span>
+                  /* Single option or other layouts */
+                  <div className="relative w-full h-full">
+                    {contentData.options[0].media_type?.startsWith('image') ? (
+                      <img 
+                        src={contentData.options[0].media_url} 
+                        alt="Main content"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gray-800 flex items-center justify-center relative">
+                        <video 
+                          src={contentData.options[0].media_url}
+                          className="w-full h-full object-cover"
+                          muted
+                        />
+                        <div className="absolute inset-0 flex items-center justify-center">
+                          <div className="w-12 h-12 bg-black/50 rounded-full flex items-center justify-center">
+                            <div className="w-0 h-0 border-l-[10px] border-l-white border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent ml-1"></div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* Title overlay */}
+                    {title && (
+                      <div className="absolute bottom-20 left-4 right-4">
+                        <p className="text-white text-lg font-semibold leading-tight drop-shadow-lg">{title}</p>
+                      </div>
+                    )}
+                    
+                    {/* Hashtags overlay */}
+                    {hashtagsList.length > 0 && (
+                      <div className="absolute bottom-4 left-4 right-4">
+                        <div className="flex flex-wrap gap-1">
+                          {hashtagsList.slice(0, 3).map((hashtag, index) => (
+                            <span key={index} className="text-white text-sm opacity-90">
+                              #{hashtag}
+                            </span>
+                          ))}
+                          {hashtagsList.length > 3 && (
+                            <span className="text-white text-sm opacity-90">
+                              +{hashtagsList.length - 3} más
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 )}
+                
+                {/* Cover label */}
+                <div className="absolute top-3 left-3 bg-black/60 text-white text-xs px-2 py-1 rounded-md font-medium">
+                  Cover
+                </div>
               </div>
-              {/* Cover label */}
-              <div className="absolute top-2 left-2 bg-black/60 text-white text-sm px-2 py-1 rounded-md font-medium">
-                Cover
+            ) : (
+              <div className="w-full h-full bg-gray-800 flex items-center justify-center">
+                <div className="text-center text-gray-400">
+                  <div className="text-4xl mb-2">📱</div>
+                  <p className="text-sm">Vista previa de contenido</p>
+                </div>
               </div>
-            </div>
-
-            {/* Add more content button */}
-            <div className="w-32 h-40 border-2 border-dashed border-gray-300 rounded-xl flex items-center justify-center bg-gray-50 hover:bg-gray-100 transition-colors">
-              <div className="text-center">
-                <div className="text-5xl text-gray-400 mb-2">+</div>
-                <span className="text-gray-500 text-xs">Add more</span>
-              </div>
-            </div>
+            )}
           </div>
+          
+          <p className="text-xs text-gray-500 text-center">Así se verá tu publicación en el feed</p>
         </div>
 
         {/* Title Input with Hashtags and Mentions */}
