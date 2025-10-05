@@ -55,6 +55,34 @@ const EditProfileModal = ({ isOpen, onClose, onProfileUpdate }) => {
     });
   };
 
+  const handleCameraClick = () => {
+    setCropModalOpen(true);
+  };
+
+  const handleAvatarCropped = async (croppedImageUrl, imageBlob) => {
+    try {
+      // Actualizar los datos del formulario con la nueva imagen
+      setFormData(prev => ({
+        ...prev,
+        avatar_url: croppedImageUrl
+      }));
+
+      toast({
+        title: "¡Foto recortada!",
+        description: "Tu nueva foto de perfil está lista. No olvides guardar los cambios.",
+        variant: "default"
+      });
+
+    } catch (error) {
+      console.error('Error processing cropped image:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo procesar la imagen. Inténtalo de nuevo.",
+        variant: "destructive"
+      });
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
