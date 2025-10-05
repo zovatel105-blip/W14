@@ -247,13 +247,13 @@ const CircularCrop = ({ isOpen, onClose, onImageCropped, initialImage = null }) 
     // Dibujar la imagen completa escalada y posicionada
     tempCtx.drawImage(image, imageX, imageY, scaledWidth, scaledHeight);
 
-    // Convertir a blob y llamar callback
+    // Convertir a blob con máxima calidad y llamar callback
     tempCanvas.toBlob((blob) => {
       const croppedImageUrl = URL.createObjectURL(blob);
       onImageCropped(croppedImageUrl, blob);
       setLoading(false);
       onClose();
-    }, 'image/png', 0.9);
+    }, 'image/png', 1.0); // Calidad máxima 100% para evitar difuminación
   };
 
   const handleFileChange = (e) => {
