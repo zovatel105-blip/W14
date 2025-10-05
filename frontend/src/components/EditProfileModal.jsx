@@ -322,6 +322,13 @@ const EditProfileModal = ({ isOpen, onClose, onProfileUpdate }) => {
         </div>
       </div>
       
+      {/* Componente de crop circular */}
+      <CircularCrop
+        isOpen={cropModalOpen}
+        onClose={() => setCropModalOpen(false)}
+        onImageCropped={handleAvatarCropped}
+      />
+      
     </div>
   );
 };
