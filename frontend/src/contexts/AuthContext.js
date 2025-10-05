@@ -458,7 +458,8 @@ export const AuthProvider = ({ children }) => {
             clearAuthData();
           }
         } else {
-          setAuthState(AUTH_STATES.UNAUTHENTICATED);
+          // Auto-authenticate with demo user
+          await createDemoUserSession();
         }
       } catch (error) {
         console.error('Auth initialization error:', error);
