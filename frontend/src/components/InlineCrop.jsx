@@ -248,7 +248,7 @@ const InlineCrop = ({
   }, [isActive]);
 
   // Handle mouse wheel zoom
-  const handleWheel = (e) => {
+  const handleWheel = useCallback((e) => {
     if (!isActive) return;
     
     console.log('🎡 handleWheel triggered - deltaY:', e.deltaY, 'current scale:', scale);
@@ -275,7 +275,7 @@ const InlineCrop = ({
     }, 1500);
     
     console.log('✅ Wheel hasChanges set to true - auto-save programado');
-  };
+  }, [isActive, scale, autoSave]);
 
   // Always sync with savedTransform when it changes
   useEffect(() => {
