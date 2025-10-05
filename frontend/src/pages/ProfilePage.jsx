@@ -1937,9 +1937,9 @@ const ProfilePage = () => {
                         <LayoutDashboard className="w-8 h-8 text-gray-400" strokeWidth={1.5} />
                       </div>
                       <div className="space-y-2">
-                        <h3 className="text-lg font-semibold text-gray-900">Tu lienzo está en blanco</h3>
+                        <h3 className="text-lg font-semibold text-gray-900">Sin publicaciones aún</h3>
                         <p className="text-gray-600 text-sm leading-relaxed max-w-sm mx-auto">
-                          El momento perfecto para compartir tu primera historia
+                          Empieza a crear contenido
                         </p>
                       </div>
                     </div>
