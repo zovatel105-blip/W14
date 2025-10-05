@@ -282,6 +282,11 @@ const TikTokVotingCard = ({
                           src={option.media.thumbnail} 
                           alt={`Option ${optionNumber}`}
                           className="w-full h-full object-cover"
+                          style={option.media.transform ? {
+                            objectPosition: `${option.media.transform.position?.x || 50}% ${option.media.transform.position?.y || 50}%`,
+                            transform: `scale(${option.media.transform.scale || 1})`,
+                            transformOrigin: 'center center'
+                          } : {}}
                         />
                         <div className="absolute inset-0 bg-black/20 flex items-center justify-center">
                           <div className="w-8 h-8 bg-white/80 rounded-full flex items-center justify-center">
