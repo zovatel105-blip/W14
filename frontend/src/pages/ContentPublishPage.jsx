@@ -53,24 +53,29 @@ const ContentPublishPage = () => {
     if (!mentionedUsers.find(u => u.id === user.id)) {
       setMentionedUsers(prev => [...prev, user]);
     }
-    setMentionInputValue('');
+    setMentionInput('');
   };
 
   const handleRemoveMention = (userId) => {
     setMentionedUsers(prev => prev.filter(u => u.id !== userId));
   };
 
-  const parseHashtags = (hashtagText) => {
-    if (!hashtagText.trim()) return [];
-    
-    // Split by spaces or commas, filter out empty strings, and ensure they start with #
-    return hashtagText
-      .split(/[\s,]+/)
-      .filter(tag => tag.trim())
-      .map(tag => {
-        const cleanTag = tag.trim();
-        return cleanTag.startsWith('#') ? cleanTag : `#${cleanTag}`;
-      });
+  const handleAddHashtag = () => {
+    if (hashtagInput.trim() && !hashtagsList.includes(hashtagInput.trim())) {
+      setHashtagsList(prev => [...prev, hashtagInput.trim()]);
+      setHashtagInput('');
+    }
+  };
+
+  const handleRemoveHashtag = (hashtag) => {
+    setHashtagsList(prev => prev.filter(h => h !== hashtag));
+  };
+
+  const handleHashtagKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      handleAddHashtag();
+    }
   };
 
   const handleFinalPublish = async () => {
