@@ -220,11 +220,11 @@ const CircularCrop = ({ isOpen, onClose, onImageCropped, initialImage = null }) 
     
     setLoading(true);
     
-    // Crear canvas temporal para el crop
+    // Crear canvas temporal para el crop circular
     const tempCanvas = document.createElement('canvas');
     const tempCtx = tempCanvas.getContext('2d');
-    tempCanvas.width = CROP_SIZE;
-    tempCanvas.height = CROP_SIZE;
+    tempCanvas.width = CANVAS_SIZE;
+    tempCanvas.height = CANVAS_SIZE;
 
     // Calcular dimensiones de la imagen escalada
     const scaledWidth = image.width * scale;
@@ -236,23 +236,13 @@ const CircularCrop = ({ isOpen, onClose, onImageCropped, initialImage = null }) 
     const imageX = centerX - scaledWidth / 2 + position.x;
     const imageY = centerY - scaledHeight / 2 + position.y;
 
-    // Calcular qué parte de la imagen mostrar en el crop
-    const cropStartX = (CANVAS_SIZE - CROP_SIZE) / 2 - imageX;
-    const cropStartY = (CANVAS_SIZE - CROP_SIZE) / 2 - imageY;
-
-    // Crear círculo clip
+    // Crear círculo clip que ocupa todo el canvas
     tempCtx.beginPath();
-    tempCtx.arc(CROP_SIZE / 2, CROP_SIZE / 2, CROP_SIZE / 2, 0, 2 * Math.PI);
+    tempCtx.arc(CANVAS_SIZE / 2, CANVAS_SIZE / 2, CANVAS_SIZE / 2, 0, 2 * Math.PI);
     tempCtx.clip();
 
-    // Dibujar la porción recortada de la imagen
-    tempCtx.drawImage(
-      image,
-      cropStartX / scale, cropStartY / scale,
-      CROP_SIZE / scale, CROP_SIZE / scale,
-      0, 0,
-      CROP_SIZE, CROP_SIZE
-    );
+    // Dibujar la imagen completa escalada y posicionada
+    tempCtx.drawImage(image, imageX, imageY, scaledWidth, scaledHeight);
 
     // Convertir a blob y llamar callback
     tempCanvas.toBlob((blob) => {
