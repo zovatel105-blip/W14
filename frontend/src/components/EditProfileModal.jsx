@@ -55,8 +55,24 @@ const EditProfileModal = ({ isOpen, onClose, onProfileUpdate }) => {
     });
   };
 
+  // Referencia para el input file oculto
+  const fileInputRef = useRef(null);
+
   const handleCameraClick = () => {
-    setCropModalOpen(true);
+    // Abrir directamente el selector de archivos
+    fileInputRef.current?.click();
+  };
+
+  const handleFileSelect = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setTempImageForCrop(e.target.result);
+        setCropModalOpen(true);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   const handleAvatarCropped = async (croppedImageUrl, imageBlob) => {
