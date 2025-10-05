@@ -266,7 +266,10 @@ const CircularCrop = ({ isOpen, onClose, onImageCropped, initialImage = null }) 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-white z-50 flex flex-col">
+    <div className={cn(
+      "fixed inset-0 bg-white z-50 flex flex-col",
+      !isOpen && "hidden"
+    )}>
       
       {/* Header - Solo título centrado */}
       <div className="flex items-center justify-center py-6">
