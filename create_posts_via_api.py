@@ -17,7 +17,7 @@ def login_user():
     print("🔐 Haciendo login con usuario demo...")
     
     login_data = {
-        "username": DEMO_EMAIL,
+        "email": DEMO_EMAIL,
         "password": DEMO_PASSWORD
     }
     
