@@ -111,33 +111,25 @@ const SearchResultsGrid = ({ results = [], onItemClick }) => {
   const HashtagCard = ({ hashtag }) => (
     <div 
       onClick={() => handleItemClick(hashtag)}
-      className="relative bg-white rounded-xl overflow-hidden cursor-pointer group shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100"
-      style={{ aspectRatio: '9/16' }} // Consistent rectangular vertical format
+      className="relative bg-gradient-to-br from-blue-50 to-purple-50 overflow-hidden cursor-pointer group"
+      style={{ aspectRatio: '9/16' }}
     >
-      {/* Background - clean gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-purple-50"></div>
-      
-      {/* Content - centered and minimal */}
-      <div className="relative z-10 flex flex-col items-center justify-center h-full p-4 text-center">
-        {/* Hashtag icon - clean circle */}
-        <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4 group-hover:scale-105 transition-transform duration-300">
-          <Hash size={20} className="text-blue-600" />
+      {/* Content centrado */}
+      <div className="relative z-10 flex flex-col items-center justify-center h-full p-2 text-center">
+        {/* Hashtag icon */}
+        <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mb-2">
+          <Hash size={16} className="text-blue-600" />
         </div>
         
-        {/* Hashtag - clean typography */}
-        <h3 className="text-sm font-semibold mb-2 line-clamp-1 text-gray-900">
+        {/* Hashtag text */}
+        <h3 className="text-xs font-semibold text-gray-900 truncate w-full px-1">
           {hashtag.hashtag}
         </h3>
         
-        {/* Post count - subtle */}
-        <p className="text-xs text-gray-500 mb-4">
-          {hashtag.posts_count || 0} publicaciones
+        {/* Post count */}
+        <p className="text-[10px] text-gray-500">
+          {hashtag.posts_count || 0} posts
         </p>
-        
-        {/* Trending indicator */}
-        <div className="px-3 py-1 bg-blue-100 rounded-full">
-          <span className="text-xs font-medium text-blue-700">Trending</span>
-        </div>
       </div>
     </div>
   );
