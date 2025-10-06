@@ -939,7 +939,9 @@ const SearchPage = () => {
                 </div>
               ) : (
                 <div className="text-center py-6 text-gray-500 px-3">
-                  <div className="text-2xl mb-2">🎯</div>
+                  <div className="flex justify-center mb-2">
+                    <Target size={40} className="text-gray-400" strokeWidth={2} />
+                  </div>
                   <p className="text-sm">No hay recomendaciones disponibles</p>
                   <p className="text-xs text-gray-400 mt-1">Interactúa más para obtener mejores sugerencias</p>
                 </div>
