@@ -751,7 +751,8 @@ const SearchPage = () => {
                       'bg-gradient-to-br from-indigo-500 via-purple-600 to-pink-700'
                     ];
                     
-                    const emojis = ['🎵', '💃', '🎨', '🌟', '🎮', '📸', '✨'];
+                    const storyIcons = [Music, Heart, Palette, Star, Gamepad2, Camera, Sparkles];
+                    const StoryIcon = storyIcons[index % storyIcons.length];
                     
                     return (
                       <div 
