@@ -825,7 +825,9 @@ const SearchPage = () => {
                 </div>
               ) : (
                 <div className="text-center py-8 text-gray-500 px-4">
-                  <div className="text-3xl mb-2">📖</div>
+                  <div className="flex justify-center mb-2">
+                    <BookOpen size={48} className="text-gray-400" strokeWidth={2} />
+                  </div>
                   <p className="text-sm">No hay stories disponibles</p>
                   <p className="text-xs text-gray-400 mt-1">Sigue a más usuarios para ver sus stories</p>
                 </div>
