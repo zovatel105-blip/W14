@@ -314,9 +314,8 @@ const SearchResultsGrid = ({ results = [], onItemClick }) => {
   }, {});
 
   return (
-    <div className="grid gap-3 sm:gap-4" 
+    <div className="grid grid-cols-3 gap-1" 
          style={{ 
-           gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
            maxWidth: '100%'
          }}>
       {results.map((result) => {
