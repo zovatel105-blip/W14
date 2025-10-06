@@ -857,19 +857,22 @@ const SearchPage = () => {
                       'bg-gradient-to-br from-teal-500 to-green-600'
                     ];
 
-                    // Get appropriate emoji based on content type
-                    const getContentEmoji = (content) => {
-                      if (content.hashtag && content.hashtag.includes('baile')) return '💃';
-                      if (content.hashtag && content.hashtag.includes('música')) return '🎵';
-                      if (content.hashtag && content.hashtag.includes('arte')) return '🎨';
-                      if (content.hashtag && content.hashtag.includes('gaming')) return '🎮';
-                      if (content.hashtag && content.hashtag.includes('viaje')) return '✈️';
-                      if (content.hashtag && content.hashtag.includes('comida')) return '🍕';
-                      if (content.type === 'user') return '👤';
-                      if (content.type === 'hashtag') return '#️⃣';
-                      if (content.type === 'poll') return '📊';
-                      return ['🌟', '✨', '💫', '🎯', '🔥', '⭐'][index % 6];
+                    // Get appropriate icon based on content type
+                    const getContentIcon = (content) => {
+                      if (content.hashtag && content.hashtag.includes('baile')) return Heart;
+                      if (content.hashtag && content.hashtag.includes('música')) return Music;
+                      if (content.hashtag && content.hashtag.includes('arte')) return Palette;
+                      if (content.hashtag && content.hashtag.includes('gaming')) return Gamepad2;
+                      if (content.hashtag && content.hashtag.includes('viaje')) return Plane;
+                      if (content.hashtag && content.hashtag.includes('comida')) return Pizza;
+                      if (content.type === 'user') return User;
+                      if (content.type === 'hashtag') return Hash;
+                      if (content.type === 'poll') return BarChart3;
+                      const defaultIcons = [Star, Sparkles, Zap, Target, Flame, TrendingUp];
+                      return defaultIcons[index % defaultIcons.length];
                     };
+                    
+                    const ContentIcon = getContentIcon(content);
 
                     // Format view count or engagement metrics
                     const formatViews = (num) => {
