@@ -77,16 +77,13 @@ const SearchResultsGrid = ({ results = [], onItemClick }) => {
   const UserCard = ({ user }) => (
     <div 
       onClick={() => handleItemClick(user)}
-      className="relative bg-white rounded-xl overflow-hidden cursor-pointer group shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100"
-      style={{ aspectRatio: '9/16' }} // Consistent rectangular vertical format
+      className="relative bg-gray-50 overflow-hidden cursor-pointer group"
+      style={{ aspectRatio: '9/16' }}
     >
-      {/* Background - minimalist */}
-      <div className="absolute inset-0 bg-gray-50"></div>
-      
-      {/* Content - centered and clean */}
-      <div className="relative z-10 flex flex-col items-center justify-center h-full p-4 text-center">
-        {/* Avatar - larger and clean */}
-        <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden mb-4 group-hover:scale-105 transition-transform duration-300 ring-2 ring-white shadow-sm">
+      {/* Content centrado */}
+      <div className="relative z-10 flex flex-col items-center justify-center h-full p-2 text-center">
+        {/* Avatar */}
+        <div className="w-14 h-14 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden mb-2">
           {user.avatar ? (
             <img 
               src={user.avatar} 
@@ -94,42 +91,19 @@ const SearchResultsGrid = ({ results = [], onItemClick }) => {
               className="w-full h-full object-cover"
             />
           ) : (
-            <User size={24} className="text-gray-400" />
+            <User size={20} className="text-gray-400" />
           )}
         </div>
         
-        {/* User info - clean typography */}
-        <div className="mb-3 w-full">
-          <div className="flex items-center justify-center space-x-1 mb-1">
-            <h3 className="text-sm font-semibold text-gray-900 text-center truncate max-w-full">
-              {user.display_name || user.username}
-            </h3>
-            {user.verified && (
-              <CheckCircle size={12} className="text-blue-500 flex-shrink-0" />
-            )}
-          </div>
-          <p className="text-xs text-gray-500 truncate">@{user.username}</p>
-        </div>
-        
-        {/* Followers - clean metric */}
-        <div className="mb-4">
-          <p className="text-xs text-gray-400">
+        {/* Username */}
+        <div className="w-full px-1">
+          <p className="text-xs font-semibold text-gray-900 truncate">
+            {user.display_name || user.username}
+          </p>
+          <p className="text-[10px] text-gray-500 truncate">
             {user.followers_count || 0} seguidores
           </p>
         </div>
-        
-        {/* Follow button - minimalist */}
-        {!user.is_following && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              // Handle follow
-            }}
-            className="px-6 py-2 bg-black text-white text-xs font-medium rounded-full hover:bg-gray-800 transition-colors"
-          >
-            Seguir
-          </button>
-        )}
       </div>
     </div>
   );
