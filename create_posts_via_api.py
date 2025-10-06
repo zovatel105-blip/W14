@@ -24,8 +24,8 @@ def login_user():
     try:
         response = requests.post(
             f"{BACKEND_URL}/api/auth/login",
-            data=login_data,
-            headers={"Content-Type": "application/x-www-form-urlencoded"}
+            json=login_data,
+            headers={"Content-Type": "application/json"}
         )
         
         if response.status_code == 200:
