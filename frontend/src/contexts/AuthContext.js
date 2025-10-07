@@ -515,8 +515,8 @@ export const AuthProvider = ({ children }) => {
             clearAuthData();
           }
         } else {
-          // Auto-authenticate with demo user
-          await createDemoUserSession();
+          // No saved credentials, user needs to login manually
+          setAuthState(AUTH_STATES.UNAUTHENTICATED);
         }
       } catch (error) {
         console.error('Auth initialization error:', error);
