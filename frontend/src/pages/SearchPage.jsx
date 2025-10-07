@@ -603,7 +603,8 @@ const SearchPage = () => {
 
         {/* Filter Pills - Horizontal Scrollable */}
         {hasSearched && (
-          <div className="px-4 py-3 bg-white">
+          <div className="px-4 lg:px-6 xl:px-8 py-3 bg-white">
+            <div className="max-w-7xl mx-auto">
             <div className="flex space-x-3 overflow-x-auto scrollbar-hide pb-1">
               {/* Special category pills for different content types */}
               {[
