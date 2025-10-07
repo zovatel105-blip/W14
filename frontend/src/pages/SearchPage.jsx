@@ -820,7 +820,7 @@ const SearchPage = () => {
 
           {/* You may like Section - Real Data */}
           {isAuthenticated && (
-            <div className="space-y-3 sm:space-y-4 max-w-7xl mx-auto">
+            <div className="space-y-3 sm:space-y-4">
               <h3 className="text-lg font-semibold text-gray-900 px-3 sm:px-0">You may like</h3>
               
               {loadingStates.recommendations ? (
