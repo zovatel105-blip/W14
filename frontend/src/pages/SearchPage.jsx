@@ -941,8 +941,9 @@ const SearchPage = () => {
         ) : (searchResults.length > 0 || hasSearched) ? (
           /* Search Results - Image Grid Style */
           <div className="px-3 lg:px-6 xl:px-8 py-2">
-            {/* Results Grid - Responsive Layout: 2 cols mobile, 3 cols tablet, 4-6 cols desktop */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 lg:gap-3 xl:gap-4">
+            <div className="max-w-7xl mx-auto">
+              {/* Results Grid - Responsive Layout: 2 cols mobile, 3 cols tablet, 4-6 cols desktop */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 lg:gap-3 xl:gap-4">
               {(searchResults.length > 0 ? searchResults : [
                 // Sample data for demonstration
                 { id: '1', type: 'post', title: 'Dibujo de Mickey Mouse', image_url: 'https://via.placeholder.com/300x600/FF6B6B/FFFFFF?text=Mickey+Mouse', votes_count: 245 },
