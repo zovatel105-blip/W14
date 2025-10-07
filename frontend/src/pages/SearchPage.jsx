@@ -604,32 +604,43 @@ const SearchPage = () => {
         {/* Filter Pills - Horizontal Scrollable */}
         {hasSearched && (
           <div className="px-4 py-3 bg-white">
-            <div className="flex space-x-2 overflow-x-auto scrollbar-hide">
+            <div className="flex space-x-3 overflow-x-auto scrollbar-hide pb-1">
               {/* Special category pills for different content types */}
               {[
-                { id: 'disney', label: 'De disney', active: false },
-                { id: 'animated', label: 'Animados', active: false },
-                { id: 'characters', label: 'Personajes', active: true },
-                { id: 'art', label: 'Arte', active: false },
-                { id: 'drawings', label: 'Dibujos', active: false },
-                { id: 'anime', label: 'Anime', active: false },
-                { id: 'manga', label: 'Manga', active: false },
-              ].map((filter) => (
-                <button
-                  key={filter.id}
-                  onClick={() => {
-                    // Handle filter logic here
-                    setSearchQuery(prev => `${prev} ${filter.label.toLowerCase()}`);
-                  }}
-                  className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap flex-shrink-0 transition-colors ${
-                    filter.active
-                      ? 'bg-gray-900 text-white'
-                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                  }`}
-                >
-                  {filter.label}
-                </button>
-              ))}
+                { id: 'disney', label: 'De disney', icon: '🏰' },
+                { id: 'animated', label: 'Animados', icon: '🎬' },
+                { id: 'characters', label: 'Personajes', icon: '👤' },
+                { id: 'art', label: 'Arte', icon: '🎨' },
+                { id: 'drawings', label: 'Dibujos', icon: '✏️' },
+                { id: 'anime', label: 'Anime', icon: '🎌' },
+                { id: 'manga', label: 'Manga', icon: '📚' },
+                { id: 'cartoons', label: 'Caricaturas', icon: '🎭' },
+                { id: 'superheroes', label: 'Superhéroes', icon: '🦸‍♂️' },
+              ].map((filter) => {
+                const isActive = searchQuery.toLowerCase().includes(filter.label.toLowerCase());
+                return (
+                  <button
+                    key={filter.id}
+                    onClick={() => {
+                      if (isActive) {
+                        // Remove filter from search
+                        setSearchQuery(prev => prev.replace(filter.label.toLowerCase(), '').trim());
+                      } else {
+                        // Add filter to search
+                        setSearchQuery(prev => `${prev} ${filter.label.toLowerCase()}`.trim());
+                      }
+                    }}
+                    className={`inline-flex items-center space-x-2 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap flex-shrink-0 transition-all duration-200 border ${
+                      isActive
+                        ? 'bg-black text-white border-black shadow-sm'
+                        : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50 hover:border-gray-300'
+                    }`}
+                  >
+                    <span className="text-base">{filter.icon}</span>
+                    <span>{filter.label}</span>
+                  </button>
+                );
+              })}
             </div>
           </div>
         )}
