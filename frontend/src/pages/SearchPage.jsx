@@ -936,7 +936,7 @@ const SearchPage = () => {
           <div className="flex items-center justify-center py-20">
             <div className="w-8 h-8 border-2 border-gray-300 border-t-black rounded-full animate-spin"></div>
           </div>
-        ) : searchResults.length > 0 ? (
+        ) : (searchResults.length > 0 || hasSearched) ? (
           /* Search Results - Image Grid Style */
           <div className="px-3 py-2">
             {/* Results Grid - 2 Column Layout like the reference image */}
