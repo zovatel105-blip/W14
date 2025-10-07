@@ -937,15 +937,15 @@ const SearchPage = () => {
             <div className="w-8 h-8 border-2 border-gray-300 border-t-black rounded-full animate-spin"></div>
           </div>
         ) : searchResults.length > 0 ? (
-          /* Search Results - Image Grid Style */}
-          <div className="px-4 py-4">
+          /* Search Results - Image Grid Style */
+          <div className="px-3 py-2">
             {/* Results Grid - 2 Column Layout like the reference image */}
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-2 gap-2">
               {searchResults.map((result, index) => (
                 <div
                   key={`${result.type}-${result.id}-${index}`}
                   onClick={() => handleResultClick(result)}
-                  className="relative bg-white rounded-lg overflow-hidden shadow-sm cursor-pointer group"
+                  className="relative bg-white rounded-xl overflow-hidden cursor-pointer group transform transition-transform duration-200 hover:scale-[1.02]"
                 >
                   {/* Image Container */}
                   <div className="relative aspect-[3/4] bg-gray-100">
@@ -956,66 +956,111 @@ const SearchPage = () => {
                         alt={result.title || result.content || 'Result'}
                         className="w-full h-full object-cover"
                         onError={(e) => {
-                          e.target.src = '/api/placeholder/300/400';
+                          // Create a colored placeholder based on result type
+                          const placeholderColors = {
+                            post: 'bg-gradient-to-br from-blue-400 to-purple-500',
+                            user: 'bg-gradient-to-br from-green-400 to-blue-500',
+                            hashtag: 'bg-gradient-to-br from-pink-400 to-red-500',
+                            sound: 'bg-gradient-to-br from-yellow-400 to-orange-500'
+                          };
+                          e.target.style.display = 'none';
+                          const placeholder = e.target.parentElement.querySelector('.placeholder-div');
+                          if (placeholder) {
+                            placeholder.style.display = 'flex';
+                          }
                         }}
                       />
-                    ) : (
-                      <div className="w-full h-full bg-gradient-to-br from-purple-100 via-pink-50 to-blue-100 flex items-center justify-center">
-                        {result.type === 'user' && <User size={40} className="text-gray-400" />}
-                        {result.type === 'hashtag' && <Hash size={40} className="text-gray-400" />}
-                        {result.type === 'sound' && <Music size={40} className="text-gray-400" />}
-                        {result.type === 'post' && <div className="text-center">
-                          <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center mb-2">
-                            <Play size={20} className="text-gray-500" />
-                          </div>
-                          <p className="text-sm text-gray-600">{result.title || 'Contenido'}</p>
-                        </div>}
-                      </div>
-                    )}
+                    ) : null}
                     
-                    {/* Three dots menu button */}
+                    {/* Fallback placeholder */}
+                    <div className={`placeholder-div absolute inset-0 w-full h-full flex items-center justify-center ${
+                      !result.image_url && !result.thumbnail_url && !result.images?.[0]?.url && !result.media_url ? 'flex' : 'hidden'
+                    } ${
+                      result.type === 'post' ? 'bg-gradient-to-br from-blue-400 to-purple-500' :
+                      result.type === 'user' ? 'bg-gradient-to-br from-green-400 to-blue-500' :
+                      result.type === 'hashtag' ? 'bg-gradient-to-br from-pink-400 to-red-500' :
+                      'bg-gradient-to-br from-yellow-400 to-orange-500'
+                    }`}>
+                      <div className="text-center text-white">
+                        {result.type === 'user' && <User size={32} className="mx-auto mb-2" />}
+                        {result.type === 'hashtag' && <Hash size={32} className="mx-auto mb-2" />}
+                        {result.type === 'sound' && <Music size={32} className="mx-auto mb-2" />}
+                        {result.type === 'post' && <Play size={32} className="mx-auto mb-2" />}
+                        <p className="text-xs font-medium px-2">
+                          {result.title || result.content || result.username || result.hashtag || 'Contenido'}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    {/* Three dots menu button - Always visible on mobile, hover on desktop */}
                     <button 
                       onClick={(e) => {
                         e.stopPropagation();
-                        // Handle menu click
                         console.log('Menu clicked for:', result.id);
+                        // TODO: Implement menu dropdown with options like Save, Share, Report, etc.
                       }}
-                      className="absolute top-2 right-2 w-8 h-8 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="absolute top-3 right-3 w-8 h-8 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center transition-all duration-200 hover:bg-black/60 md:opacity-0 md:group-hover:opacity-100"
                     >
                       <div className="flex flex-col space-y-0.5">
-                        <div className="w-1 h-1 bg-white rounded-full"></div>
-                        <div className="w-1 h-1 bg-white rounded-full"></div>
-                        <div className="w-1 h-1 bg-white rounded-full"></div>
+                        <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
+                        <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
+                        <div className="w-1.5 h-1.5 bg-white rounded-full"></div>
                       </div>
                     </button>
                     
-                    {/* Content overlay for posts */}
+                    {/* Content overlay for posts - Stats at bottom */}
                     {result.type === 'post' && (
-                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-3">
-                        <div className="flex items-center text-white text-sm">
-                          <Play size={12} className="mr-1" fill="currentColor" />
-                          <span>{result.votes_count || result.views_count || '0'}</span>
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent p-3">
+                        <div className="flex items-center justify-between text-white">
+                          <div className="flex items-center space-x-2 text-sm">
+                            <div className="flex items-center">
+                              <Play size={12} className="mr-1" fill="currentColor" />
+                              <span>{result.votes_count || result.views_count || '0'}</span>
+                            </div>
+                            {result.likes_count && (
+                              <div className="flex items-center">
+                                <Heart size={12} className="mr-1" fill="currentColor" />
+                                <span>{result.likes_count}</span>
+                              </div>
+                            )}
+                          </div>
+                          <div className="text-xs opacity-75">
+                            {result.created_at && new Date(result.created_at).toLocaleDateString()}
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* User info for user results */}
+                    {result.type === 'user' && (
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
+                        <div className="text-white">
+                          <p className="font-medium text-sm">{result.display_name || result.username}</p>
+                          <p className="text-xs opacity-75">{result.followers_count || 0} seguidores</p>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* Hashtag info */}
+                    {result.type === 'hashtag' && (
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
+                        <div className="text-white">
+                          <p className="font-medium text-sm">{result.hashtag}</p>
+                          <p className="text-xs opacity-75">{result.posts_count || 0} publicaciones</p>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {/* Sound info */}
+                    {result.type === 'sound' && (
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-3">
+                        <div className="text-white">
+                          <p className="font-medium text-sm">{result.title}</p>
+                          <p className="text-xs opacity-75">{result.artist || 'Sonido original'}</p>
                         </div>
                       </div>
                     )}
                   </div>
-                  
-                  {/* Content Info - Only for non-post items */}
-                  {result.type !== 'post' && (
-                    <div className="p-3">
-                      <h3 className="font-medium text-gray-900 text-sm line-clamp-2">
-                        {result.type === 'user' && (result.display_name || result.username)}
-                        {result.type === 'hashtag' && result.hashtag}
-                        {result.type === 'sound' && result.title}
-                      </h3>
-                      
-                      <p className="text-xs text-gray-500 mt-1">
-                        {result.type === 'user' && `${result.followers_count || 0} seguidores`}
-                        {result.type === 'hashtag' && `${result.posts_count || 0} publicaciones`}
-                        {result.type === 'sound' && result.artist}
-                      </p>
-                    </div>
-                  )}
                 </div>
               ))}
             </div>
