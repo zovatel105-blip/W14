@@ -1079,7 +1079,7 @@ const SearchPage = () => {
           </div>
         ) : hasSearched ? (
           /* No Results */
-          <div className="text-center py-20 px-4">
+          <div className="text-center py-20 px-4 max-w-7xl mx-auto">
             <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4 mx-auto">
               <Search size={24} className="text-gray-400" />
             </div>
