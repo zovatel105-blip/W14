@@ -940,10 +940,9 @@ const SearchPage = () => {
           </div>
         ) : (searchResults.length > 0 || hasSearched) ? (
           /* Search Results - Image Grid Style */
-          <div className="w-full">
-            {/* Results Grid - Optimized spacing as per user request */}
-            <div className="px-[10vw] py-2">
-              <div className="grid grid-cols-2 gap-[10vw] sm:gap-8 md:gap-6 lg:gap-8">
+          <div className="px-2 py-2 w-full">
+            {/* Results Grid - Full Width Layout: Use entire horizontal space */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-10 2xl:grid-cols-12 gap-2">
               {(searchResults.length > 0 ? searchResults : [
                 // Sample data for demonstration
                 { id: '1', type: 'post', title: 'Dibujo de Mickey Mouse', image_url: 'https://via.placeholder.com/300x600/FF6B6B/FFFFFF?text=Mickey+Mouse', votes_count: 245 },
