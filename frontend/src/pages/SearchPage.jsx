@@ -922,39 +922,103 @@ const SearchPage = () => {
         )}
 
         {isLoading ? (
-          <div className="text-center py-20">
-            <div className="inline-flex items-center justify-center w-12 h-12 border-2 border-gray-300 border-t-green-500 rounded-full animate-spin mb-4"></div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">{SEARCH_CONFIG.UI.LOADING_MESSAGE}</h3>
-            <p className="text-gray-600">{SEARCH_CONFIG.UI.LOADING_SUBTITLE}</p>
+          <div className="flex items-center justify-center py-20">
+            <div className="w-8 h-8 border-2 border-gray-300 border-t-black rounded-full animate-spin"></div>
           </div>
         ) : searchResults.length > 0 ? (
-          /* Clean Search Results */
-          <div className="space-y-4 px-4 py-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-gray-600">
-                  {searchResults.length} resultado{searchResults.length !== 1 ? 's' : ''} para "{searchQuery}"
-                </p>
-              </div>
+          /* Search Results - Image Grid Style */}
+          <div className="px-4 py-4">
+            {/* Results Grid - 2 Column Layout like the reference image */}
+            <div className="grid grid-cols-2 gap-3">
+              {searchResults.map((result, index) => (
+                <div
+                  key={`${result.type}-${result.id}-${index}`}
+                  onClick={() => handleResultClick(result)}
+                  className="relative bg-white rounded-lg overflow-hidden shadow-sm cursor-pointer group"
+                >
+                  {/* Image Container */}
+                  <div className="relative aspect-[3/4] bg-gray-100">
+                    {/* Main Image */}
+                    {(result.image_url || result.thumbnail_url || result.images?.[0]?.url || result.media_url) ? (
+                      <img 
+                        src={result.image_url || result.thumbnail_url || result.images?.[0]?.url || result.media_url} 
+                        alt={result.title || result.content || 'Result'}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.target.src = '/api/placeholder/300/400';
+                        }}
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-purple-100 via-pink-50 to-blue-100 flex items-center justify-center">
+                        {result.type === 'user' && <User size={40} className="text-gray-400" />}
+                        {result.type === 'hashtag' && <Hash size={40} className="text-gray-400" />}
+                        {result.type === 'sound' && <Music size={40} className="text-gray-400" />}
+                        {result.type === 'post' && <div className="text-center">
+                          <div className="w-12 h-12 bg-gray-200 rounded-full flex items-center justify-center mb-2">
+                            <Play size={20} className="text-gray-500" />
+                          </div>
+                          <p className="text-sm text-gray-600">{result.title || 'Contenido'}</p>
+                        </div>}
+                      </div>
+                    )}
+                    
+                    {/* Three dots menu button */}
+                    <button 
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        // Handle menu click
+                        console.log('Menu clicked for:', result.id);
+                      }}
+                      className="absolute top-2 right-2 w-8 h-8 bg-black/50 hover:bg-black/70 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                    >
+                      <div className="flex flex-col space-y-0.5">
+                        <div className="w-1 h-1 bg-white rounded-full"></div>
+                        <div className="w-1 h-1 bg-white rounded-full"></div>
+                        <div className="w-1 h-1 bg-white rounded-full"></div>
+                      </div>
+                    </button>
+                    
+                    {/* Content overlay for posts */}
+                    {result.type === 'post' && (
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-3">
+                        <div className="flex items-center text-white text-sm">
+                          <Play size={12} className="mr-1" fill="currentColor" />
+                          <span>{result.votes_count || result.views_count || '0'}</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Content Info - Only for non-post items */}
+                  {result.type !== 'post' && (
+                    <div className="p-3">
+                      <h3 className="font-medium text-gray-900 text-sm line-clamp-2">
+                        {result.type === 'user' && (result.display_name || result.username)}
+                        {result.type === 'hashtag' && result.hashtag}
+                        {result.type === 'sound' && result.title}
+                      </h3>
+                      
+                      <p className="text-xs text-gray-500 mt-1">
+                        {result.type === 'user' && `${result.followers_count || 0} seguidores`}
+                        {result.type === 'hashtag' && `${result.posts_count || 0} publicaciones`}
+                        {result.type === 'sound' && result.artist}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              ))}
             </div>
-            
-            {/* TikTok Style Results Grid */}
-            <SearchResultsGrid 
-              results={searchResults} 
-              onItemClick={handleResultClick}
-            />
           </div>
         ) : hasSearched ? (
-          /* Clean No Results */
-          <div className="text-center py-20">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 rounded-full mb-6">
+          /* No Results */
+          <div className="text-center py-20 px-4">
+            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4 mx-auto">
               <Search size={24} className="text-gray-400" />
             </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">{SEARCH_CONFIG.UI.NO_RESULTS_TITLE}</h3>
-            <p className="text-gray-600 mb-8 max-w-md mx-auto">
-              No encontramos nada para "{searchQuery}". Intenta con otros términos.
+            <h3 className="text-lg font-medium text-gray-900 mb-2">No se encontraron resultados</h3>
+            <p className="text-gray-500 text-sm">
+              Intenta buscar algo diferente o revisa la ortografía
             </p>
-
           </div>
         ) : null}
       </div>
