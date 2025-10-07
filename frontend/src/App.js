@@ -107,11 +107,18 @@ function AppContent() {
     );
   }
 
-  // Check if we're on a page that doesn't require auth
-  const location = window.location.pathname;
-  const isDemoPage = false; // No more test pages
-
-  // Auth page removed - app now functions with automatic demo user authentication
+  // Check if user is authenticated
+  if (!isAuthenticated) {
+    return (
+      <div className="App relative">
+        <Routes>
+          <Route path="/auth" element={<AuthPage />} />
+          <Route path="*" element={<Navigate to="/auth" replace />} />
+        </Routes>
+        <Toaster />
+      </div>
+    );
+  }
 
   return (
     <ResponsiveLayout onCreatePoll={handleCreatePoll}>
@@ -120,6 +127,7 @@ function AppContent() {
             {/* Redirect root to feed */}
             <Route path="/" element={<Navigate to="/feed" replace />} />
             <Route path="/dashboard" element={<Navigate to="/feed" replace />} />
+            <Route path="/auth" element={<Navigate to="/feed" replace />} />
             
             {/* Main pages */}
             <Route path="/feed" element={<FeedPage />} />
