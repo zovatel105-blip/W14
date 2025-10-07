@@ -652,7 +652,7 @@ const SearchPage = () => {
       <div className="w-full">
         {/* Content Sections - Only show when NOT searching */}
         {!hasSearched && (
-          <div className="flex-1 px-0 sm:px-2 lg:px-6 xl:px-8 py-6 space-y-6 sm:space-y-8 w-full max-w-full">
+          <div className="flex-1 px-2 py-6 space-y-6 sm:space-y-8 w-full">
             {/* Recent Searches Section - Real Data */}
             {isAuthenticated && (
             <div className="space-y-3 sm:space-y-4 px-3 sm:px-0 max-w-7xl mx-auto">
