@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useSearchParams } from 'react-router-dom';
 import TikTokScrollView from '../components/TikTokScrollView';
-import OptimizedTikTokScrollView from '../components/OptimizedTikTokScrollView';
 import PollCard from '../components/PollCard';
 import CommentsModal from '../components/CommentsModal';
 import ShareModal from '../components/ShareModal';
