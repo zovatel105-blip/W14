@@ -137,10 +137,6 @@ function AppContent() {
             <Route path="/create" element={<ContentCreationPage />} />
             <Route path="/content-publish" element={<ContentPublishPage />} />
             <Route path="/following" element={<FollowingPage />} />
-            <Route path="/test-supabase" element={<TestSupabasePage />} />
-
-            {/* Development Test Pages */}
-            <Route path="/test-crop" element={<InlineCropTest />} />
           </Routes>
 
           <Toaster />
