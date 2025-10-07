@@ -1,4 +1,5 @@
 // Ultra-Addictive API Service
+import AppConfig from '../config/config';
 const API_BASE = process.env.REACT_APP_BACKEND_URL;
 
 class AddictionAPI {
