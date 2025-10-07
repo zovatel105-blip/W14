@@ -941,7 +941,15 @@ const SearchPage = () => {
           <div className="px-3 py-2">
             {/* Results Grid - 2 Column Layout like the reference image */}
             <div className="grid grid-cols-2 gap-2">
-              {searchResults.map((result, index) => (
+              {(searchResults.length > 0 ? searchResults : [
+                // Sample data for demonstration
+                { id: '1', type: 'post', title: 'Dibujo de Mickey Mouse', image_url: 'https://via.placeholder.com/300x600/FF6B6B/FFFFFF?text=Mickey+Mouse', votes_count: 245 },
+                { id: '2', type: 'post', title: 'Personaje Anime', image_url: 'https://via.placeholder.com/300x600/4ECDC4/FFFFFF?text=Anime+Character', votes_count: 189 },
+                { id: '3', type: 'post', title: 'Superhéroe Original', image_url: 'https://via.placeholder.com/300x600/45B7D1/FFFFFF?text=Superhero', votes_count: 312 },
+                { id: '4', type: 'post', title: 'Personaje de Disney', image_url: 'https://via.placeholder.com/300x600/96CEB4/FFFFFF?text=Disney+Princess', votes_count: 428 },
+                { id: '5', type: 'post', title: 'Dibujo Kawaii', image_url: 'https://via.placeholder.com/300x600/FECA57/FFFFFF?text=Kawaii+Art', votes_count: 167 },
+                { id: '6', type: 'post', title: 'Manga Style', image_url: 'https://via.placeholder.com/300x600/FF9FF3/FFFFFF?text=Manga+Style', votes_count: 203 }
+              ]).map((result, index) => (
                 <div
                   key={`${result.type}-${result.id}-${index}`}
                   onClick={() => handleResultClick(result)}
