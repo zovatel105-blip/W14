@@ -177,13 +177,13 @@ const InlineCrop = ({
         setLastTouch({ x: touch.clientX, y: touch.clientY });
         setHasChanges(true);
         
-        // 🔥 NUEVO: Programar auto-guardado después de 1.5 segundos de inactividad
+        // 🔥 MEJORADO: Auto-guardado más rápido para mejor UX
         if (autoSaveTimeoutRef.current) {
           clearTimeout(autoSaveTimeoutRef.current);
         }
         autoSaveTimeoutRef.current = setTimeout(() => {
           autoSave();
-        }, 1500); // Auto-guardar después de 1.5 segundos sin movimiento
+        }, 800); // Reducido a 0.8 segundos para guardar más rápido
         
         console.log('✅ hasChanges set to true - auto-save programado en 1.5s');
         
