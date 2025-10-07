@@ -826,7 +826,7 @@ const SearchPage = () => {
                   <div className="w-5 h-5 border-2 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
                 </div>
               ) : recommendedContent.length > 0 ? (
-                <div className="flex space-x-3 sm:space-x-4 overflow-x-auto scrollbar-hide pb-2 w-full pl-3 sm:pl-0">
+                <div className="flex space-x-3 sm:space-x-4 overflow-x-auto scrollbar-hide pb-2 w-full pl-3 sm:pl-0 lg:pl-6 xl:pl-8">
                   {recommendedContent.map((content, index) => {
                     // Dynamic gradient colors
                     const gradients = [
