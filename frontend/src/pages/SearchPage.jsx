@@ -655,7 +655,7 @@ const SearchPage = () => {
           <div className="flex-1 px-2 py-6 space-y-6 sm:space-y-8 w-full">
             {/* Recent Searches Section - Real Data */}
             {isAuthenticated && (
-            <div className="space-y-3 sm:space-y-4 px-3 sm:px-0 max-w-7xl mx-auto">
+            <div className="space-y-3 sm:space-y-4 px-3 sm:px-0">
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold text-gray-900">Búsquedas recientes</h3>
                 {recentSearches.length > 0 && (
