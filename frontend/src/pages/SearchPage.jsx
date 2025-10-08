@@ -1012,19 +1012,14 @@ const SearchPage = () => {
                   {/* Description with hashtags */}
                   <div className="px-0 pb-1">
                     <p className="text-sm text-gray-900">
-                      {result.title || result.content || result.description || 'Contenido interesante'}
+                      {result.title || result.content || result.description || ''}
                       {' '}
                       {/* Hashtags inline */}
-                      {result.hashtags ? result.hashtags.slice(0, 2).map((hashtag, idx) => (
+                      {result.hashtags && result.hashtags.length > 0 && result.hashtags.slice(0, 2).map((hashtag, idx) => (
                         <span key={idx} className="text-xs text-gray-400 hover:text-gray-600 cursor-pointer">
                           #{hashtag}{' '}
                         </span>
-                      )) : (
-                        <>
-                          <span className="text-xs text-gray-400 hover:text-gray-600 cursor-pointer">#arte </span>
-                          <span className="text-xs text-gray-400 hover:text-gray-600 cursor-pointer">#creativo</span>
-                        </>
-                      )}
+                      ))}
                     </p>
                   </div>
                 </div>
