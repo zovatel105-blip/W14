@@ -944,7 +944,7 @@ const SearchPage = () => {
               ]).map((result, index) => (
                 <div
                   key={`${result.type}-${result.id}-${index}`}
-                  className="bg-white rounded-2xl overflow-hidden group shadow-sm"
+                  className="bg-white overflow-hidden group"
                 >
                   {/* Header: Avatar + Username + Follow Button */}
                   <div className="flex items-center justify-between px-0 py-2">
