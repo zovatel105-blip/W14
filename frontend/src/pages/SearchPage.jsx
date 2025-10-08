@@ -114,7 +114,7 @@ const SearchPage = () => {
   };
 
   const tabs = [
-    { id: SEARCH_CONFIG.FILTERS.ALL, label: 'Todo', icon: Sparkles, description: 'Buscar en todo' },
+    { id: SEARCH_CONFIG.FILTERS.ALL, label: 'Top', icon: Sparkles, description: 'Buscar en todo' },
     { id: SEARCH_CONFIG.FILTERS.USERS, label: 'Usuarios', icon: User, description: 'Encuentra personas' },
     { id: SEARCH_CONFIG.FILTERS.POSTS, label: 'Posts', icon: PostsIcon, description: 'Descubre contenido' },
     { id: SEARCH_CONFIG.FILTERS.HASHTAGS, label: 'Hashtags', icon: Hash, description: 'Trending topics' },
