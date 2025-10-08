@@ -4,7 +4,6 @@ import PollCard from './PollCard';
 import MusicPlayer from './MusicPlayer';
 import MusicDisplay from './MusicDisplay';
 import CustomLogo from './CustomLogo';
-import CreatePollModal from './CreatePollModal';
 import CommentsModal from './CommentsModal';
 import ShareModal from './ShareModal';
 import PostManagementMenu from './PostManagementMenu';
