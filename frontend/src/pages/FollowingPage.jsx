@@ -350,7 +350,7 @@ const FollowingPage = () => {
     }
 
     try {
-      // NOTE: El poll ya fue creado en CreatePollModal, aquí solo manejamos la UI
+      // Handle new poll creation
       const transformedPoll = pollService.transformPollData(newPoll);
       
       // Agregar la nueva votación al inicio de la lista
