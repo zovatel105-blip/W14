@@ -1562,12 +1562,8 @@ const ProfilePage = () => {
           <header className="bg-white border-b border-gray-100/50 sticky top-0 z-40">
             <div className="px-3 sm:px-6 py-4">
               <div className="flex items-center justify-between">
-                {/* Botón atrás o menú (izquierda) */}
-                {isOwnProfile ? (
-                  <Button variant="ghost" size="sm" className="w-10 h-10 rounded-full hover:bg-gray-50 p-0">
-                    <Menu className="w-5 h-5 text-gray-700" strokeWidth={1.5} />
-                  </Button>
-                ) : (
+                {/* Botón atrás (izquierda) */}
+                {!isOwnProfile && (
                   <Button 
                     variant="ghost" 
                     size="sm" 
