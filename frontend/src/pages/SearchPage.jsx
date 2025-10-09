@@ -286,6 +286,77 @@ const SearchPage = () => {
     setActiveTab(tabId);
   };
 
+  const handleFollow = async (result, e) => {
+    e.stopPropagation();
+    
+    if (!isAuthenticated) {
+      toast({
+        title: "Inicia sesión",
+        description: "Debes iniciar sesión para seguir usuarios",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    // Get user ID from result
+    const userId = result.user_id || result.author_id || result.id;
+    
+    // Don't let users follow themselves
+    if (user && user.id === userId) {
+      toast({
+        title: "No puedes seguirte a ti mismo",
+        variant: "default",
+      });
+      return;
+    }
+
+    // Check if already loading
+    if (loadingFollow.has(userId)) {
+      return;
+    }
+
+    // Add to loading
+    setLoadingFollow(prev => new Set(prev).add(userId));
+
+    try {
+      const isFollowing = followingUsers.has(userId);
+      
+      if (isFollowing) {
+        await userService.unfollowUser(userId);
+        setFollowingUsers(prev => {
+          const newSet = new Set(prev);
+          newSet.delete(userId);
+          return newSet;
+        });
+        toast({
+          title: "✅ Dejaste de seguir",
+          description: `Ya no sigues a ${result.username || result.display_name || 'este usuario'}`,
+        });
+      } else {
+        await userService.followUser(userId);
+        setFollowingUsers(prev => new Set(prev).add(userId));
+        toast({
+          title: "✅ Siguiendo",
+          description: `Ahora sigues a ${result.username || result.display_name || 'este usuario'}`,
+        });
+      }
+    } catch (error) {
+      console.error('Error toggling follow:', error);
+      toast({
+        title: "Error",
+        description: error.message || "No se pudo realizar la acción",
+        variant: "destructive",
+      });
+    } finally {
+      // Remove from loading
+      setLoadingFollow(prev => {
+        const newSet = new Set(prev);
+        newSet.delete(userId);
+        return newSet;
+      });
+    }
+  };
+
   const handleResultClick = async (result) => {
     console.log('Result clicked:', result);
     console.log('All search results:', searchResults);
