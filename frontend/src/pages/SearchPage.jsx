@@ -42,10 +42,14 @@ const SearchPage = () => {
   const [tikTokViewPosts, setTikTokViewPosts] = useState([]);
   const [currentTikTokIndex, setCurrentTikTokIndex] = useState(0);
   
+  // Follow states
+  const [followingUsers, setFollowingUsers] = useState(new Set());
+  const [loadingFollow, setLoadingFollow] = useState(new Set());
+  
   const searchInputRef = useRef(null);
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
 
   // Initialize from URL params and load real data
