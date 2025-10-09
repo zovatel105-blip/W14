@@ -1018,33 +1018,69 @@ const SearchPage = () => {
                   <div className="flex items-center justify-between px-0 py-2">
                     <div className="flex items-center space-x-2">
                       {/* Avatar */}
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-pink-500 flex items-center justify-center overflow-hidden">
-                        {result.avatar_url || result.author?.avatar_url ? (
+                      <div 
+                        className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-pink-500 flex items-center justify-center overflow-hidden cursor-pointer"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          const username = result.username || result.author?.username || result.author_username;
+                          if (username) {
+                            navigate(`/profile/${username}`);
+                          }
+                        }}
+                      >
+                        {(result.avatar_url || result.author?.avatar_url || result.author_avatar_url) ? (
                           <img 
-                            src={result.avatar_url || result.author?.avatar_url} 
+                            src={result.avatar_url || result.author?.avatar_url || result.author_avatar_url} 
                             alt="Avatar"
                             className="w-full h-full object-cover"
+                            onError={(e) => {
+                              // Si falla la carga de la imagen, mostrar el icono de usuario
+                              e.target.style.display = 'none';
+                              e.target.nextElementSibling?.classList.remove('hidden');
+                            }}
                           />
-                        ) : (
-                          <User size={16} className="text-white" />
-                        )}
+                        ) : null}
+                        <User size={16} className={`text-white ${(result.avatar_url || result.author?.avatar_url || result.author_avatar_url) ? 'hidden' : ''}`} />
                       </div>
                       {/* Username */}
                       <span className="text-sm font-semibold text-gray-900 truncate">
-                        {result.username || result.author?.username || result.display_name || 'usuario'}
+                        {result.username || result.author?.username || result.author_username || result.display_name || 'usuario'}
                       </span>
                     </div>
                     {/* Follow Button */}
-                    <button 
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        console.log('Follow clicked for:', result.id);
-                      }}
-                      className="flex items-center space-x-1 px-3 py-1 bg-black text-white text-xs font-medium rounded-full hover:bg-gray-800 transition-colors"
-                    >
-                      <UserPlus size={12} />
-                      <span>Seguir</span>
-                    </button>
+                    {(() => {
+                      const userId = result.user_id || result.author_id || result.id;
+                      const isFollowing = followingUsers.has(userId);
+                      const isLoading = loadingFollow.has(userId);
+                      const isSelf = user && user.id === userId;
+                      
+                      // No mostrar botón si es el usuario actual
+                      if (isSelf) return null;
+                      
+                      return (
+                        <button 
+                          onClick={(e) => handleFollow(result, e)}
+                          disabled={isLoading}
+                          className={`flex items-center space-x-1 px-3 py-1 text-xs font-medium rounded-full transition-colors ${
+                            isFollowing 
+                              ? 'bg-gray-200 text-gray-900 hover:bg-gray-300' 
+                              : 'bg-black text-white hover:bg-gray-800'
+                          } ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        >
+                          {isFollowing ? (
+                            <>
+                              <Check size={12} />
+                              <span>Siguiendo</span>
+                            </>
+                          ) : (
+                            <>
+                              <UserPlus size={12} />
+                              <span>Seguir</span>
+                            </>
+                          )}
+                        </button>
+                      );
+                    })()}
                   </div>
 
                   {/* Image Container - Use PollThumbnail for posts, original logic for others */}
@@ -1052,6 +1088,7 @@ const SearchPage = () => {
                     <PollThumbnail 
                       result={result}
                       onClick={() => handleResultClick(result)}
+                      hideBadge={true}
                     />
                   ) : (
                     <div 
