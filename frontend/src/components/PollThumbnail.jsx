@@ -100,7 +100,7 @@ const PollThumbnail = ({ result, className = "", onClick, hideBadge = false }) =
   // Para layouts de grid, mostrar todas las opciones en su layout correspondiente
   return (
     <div 
-      className={`relative aspect-[6/11] bg-gray-100 cursor-pointer rounded-xl overflow-hidden ${className}`}
+      className={`relative aspect-[6/11] bg-black cursor-pointer rounded-xl overflow-hidden ${className}`}
       onClick={onClick}
     >
       <div className={`w-full h-full ${getGridClasses()}`}>
