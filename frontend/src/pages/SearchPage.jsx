@@ -1197,6 +1197,7 @@ const SearchPage = () => {
                       result={result}
                       onClick={() => handleResultClick(result)}
                       hideBadge={true}
+                      onQuickVote={handleQuickVote}
                     />
                   ) : (
                     <div 
