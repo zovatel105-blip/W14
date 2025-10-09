@@ -78,23 +78,36 @@ const EditProfileModal = ({ isOpen, onClose, onProfileUpdate }) => {
 
   const handleAvatarCropped = async (croppedImageUrl, imageBlob) => {
     try {
-      // Actualizar los datos del formulario con la nueva imagen
+      console.log('🖼️ Iniciando upload de avatar recortado...');
+      
+      // Convertir el blob a un archivo
+      const file = new File([imageBlob], 'avatar.jpg', { type: 'image/jpeg' });
+      
+      // Subir el archivo al servidor
+      const uploadResult = await uploadService.uploadAvatar(file);
+      console.log('✅ Avatar subido al servidor:', uploadResult);
+      
+      // Obtener la URL permanente del servidor
+      const permanentUrl = uploadService.getPublicUrl(uploadResult.public_url);
+      console.log('🔗 URL permanente del avatar:', permanentUrl);
+      
+      // Actualizar los datos del formulario con la URL permanente del servidor
       setFormData(prev => ({
         ...prev,
-        avatar_url: croppedImageUrl
+        avatar_url: permanentUrl
       }));
 
       toast({
-        title: "¡Foto recortada!",
+        title: "¡Foto recortada y guardada!",
         description: "Tu nueva foto de perfil está lista. No olvides guardar los cambios.",
         variant: "default"
       });
 
     } catch (error) {
-      console.error('Error processing cropped image:', error);
+      console.error('❌ Error al subir la imagen recortada:', error);
       toast({
-        title: "Error",
-        description: "No se pudo procesar la imagen. Inténtalo de nuevo.",
+        title: "Error al subir imagen",
+        description: error.message || "No se pudo subir la imagen. Inténtalo de nuevo.",
         variant: "destructive"
       });
     }
