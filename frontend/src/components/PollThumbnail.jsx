@@ -10,27 +10,18 @@ import { Check } from 'lucide-react';
 const PollThumbnail = ({ result, className = "", onClick, hideBadge = false, onQuickVote }) => {
   const [showQuickVote, setShowQuickVote] = useState(false);
   const [selectedOption, setSelectedOption] = useState(null);
-  const [isHolding, setIsHolding] = useState(false);
   const longPressTimer = useRef(null);
   const containerRef = useRef(null);
   
-  if (!result || result.type !== 'post') {
-    return null;
-  }
-
-  const options = result.options || [];
-  const layout = result.layout || 'vertical';
-  
   // Long press handlers - Nueva lógica
-  const handlePressStart = (e) => {
+  const handlePressStart = useCallback((e) => {
     e.preventDefault();
     e.stopPropagation();
     
-    setIsHolding(true);
     longPressTimer.current = setTimeout(() => {
       setShowQuickVote(true);
     }, 300); // 300ms para mostrar opciones
-  };
+  }, []);
   
   const handlePressMove = useCallback((e) => {
     if (!showQuickVote || !containerRef.current) return;
