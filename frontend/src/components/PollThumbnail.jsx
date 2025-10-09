@@ -158,14 +158,16 @@ const PollThumbnail = ({ result, className = "", onClick, hideBadge = false, onQ
     const firstOption = optionsWithMedia[0];
     return (
       <div 
+        ref={containerRef}
         className={`relative aspect-[6/11] bg-gray-100 cursor-pointer rounded-xl overflow-hidden ${className}`}
-        onClick={showQuickVote ? undefined : onClick}
-        onMouseDown={handleLongPressStart}
-        onMouseUp={handleLongPressEnd}
-        onMouseLeave={handleLongPressEnd}
-        onTouchStart={handleLongPressStart}
-        onTouchEnd={handleLongPressEnd}
-        onTouchCancel={handleLongPressEnd}
+        onMouseDown={handlePressStart}
+        onMouseMove={handlePressMove}
+        onMouseUp={handlePressEnd}
+        onMouseLeave={handlePressCancel}
+        onTouchStart={handlePressStart}
+        onTouchMove={handlePressMove}
+        onTouchEnd={handlePressEnd}
+        onTouchCancel={handlePressCancel}
       >
         <img
           src={firstOption.media_url || firstOption.thumbnail_url}
