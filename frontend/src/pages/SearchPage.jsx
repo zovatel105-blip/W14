@@ -618,6 +618,65 @@ const SearchPage = () => {
     setTikTokViewPosts(prev => prev.filter(poll => poll.id !== pollId));
   }, []);
 
+  // Quick vote handler for PollThumbnail
+  const handleQuickVote = useCallback(async (pollId, optionIndex) => {
+    if (!isAuthenticated) {
+      toast({
+        title: "Inicia sesión",
+        description: "Debes iniciar sesión para votar",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    try {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001'}/api/polls/${pollId}/vote`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ option_index: optionIndex })
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        
+        // Update the search results with new vote data
+        setSearchResults(prev => prev.map(r => {
+          if (r.id === pollId && r.type === 'post') {
+            return {
+              ...r,
+              user_vote: optionIndex,
+              total_votes: result.total_votes || r.total_votes,
+              options: result.options || r.options
+            };
+          }
+          return r;
+        }));
+        
+        toast({
+          title: "✅ Voto registrado",
+          description: "Tu voto ha sido guardado exitosamente",
+        });
+      } else {
+        const error = await response.json();
+        toast({
+          title: "Error",
+          description: error.detail || "No se pudo registrar tu voto",
+          variant: "destructive",
+        });
+      }
+    } catch (error) {
+      console.error('Error voting:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo registrar tu voto. Intenta de nuevo.",
+        variant: "destructive",
+      });
+    }
+  }, [isAuthenticated, toast]);
+
   // Handle recent search click
   const handleRecentSearchClick = async (recentSearch) => {
     setSearchQuery(recentSearch.query);
