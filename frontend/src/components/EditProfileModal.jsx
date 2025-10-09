@@ -9,6 +9,7 @@ import { useToast } from '../hooks/use-toast';
 import { useAuth } from '../contexts/AuthContext';
 import AvatarUpload from './AvatarUpload';
 import CircularCrop from './CircularCrop';
+import uploadService from '../services/uploadService';
 
 const EditProfileModal = ({ isOpen, onClose, onProfileUpdate }) => {
   const { user, updateUser, apiRequest } = useAuth();
