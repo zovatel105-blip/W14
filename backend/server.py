@@ -2639,6 +2639,8 @@ async def search_posts_advanced(query: str, current_user_id: str, limit: int):
             "media_url": main_media_url,  # Add media_url field for frontend compatibility
             "thumbnail_url": main_thumbnail_url,
             "images": images_array,  # Add images array for frontend compatibility (result.images?.[0]?.url)
+            "layout": post.get("layout", "vertical"),  # Include layout for frontend grid rendering
+            "options": options,  # Include all options for complete poll rendering
             "hashtags": hashtags[:5],  # Limit to first 5 hashtags
             "tags": post.get("tags", []),
             "votes_count": votes_count,
