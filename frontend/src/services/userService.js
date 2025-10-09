@@ -88,6 +88,44 @@ class UserService {
       throw error;
     }
   }
+
+  async followUser(userId) {
+    try {
+      const response = await fetch(`${this.baseURL}/users/${userId}/follow`, {
+        method: 'POST',
+        headers: this.getAuthHeaders()
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || `Error ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error following user:', error);
+      throw error;
+    }
+  }
+
+  async unfollowUser(userId) {
+    try {
+      const response = await fetch(`${this.baseURL}/users/${userId}/unfollow`, {
+        method: 'POST',
+        headers: this.getAuthHeaders()
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.detail || `Error ${response.status}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error unfollowing user:', error);
+      throw error;
+    }
+  }
 }
 
 export default new UserService();
