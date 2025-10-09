@@ -266,14 +266,16 @@ const PollThumbnail = ({ result, className = "", onClick, hideBadge = false, onQ
   // Para layouts de grid, mostrar todas las opciones en su layout correspondiente
   return (
     <div 
+      ref={containerRef}
       className={`relative aspect-[6/11] bg-black cursor-pointer rounded-xl overflow-hidden ${className}`}
-      onClick={showQuickVote ? undefined : onClick}
-      onMouseDown={handleLongPressStart}
-      onMouseUp={handleLongPressEnd}
-      onMouseLeave={handleLongPressEnd}
-      onTouchStart={handleLongPressStart}
-      onTouchEnd={handleLongPressEnd}
-      onTouchCancel={handleLongPressEnd}
+      onMouseDown={handlePressStart}
+      onMouseMove={handlePressMove}
+      onMouseUp={handlePressEnd}
+      onMouseLeave={handlePressCancel}
+      onTouchStart={handlePressStart}
+      onTouchMove={handlePressMove}
+      onTouchEnd={handlePressEnd}
+      onTouchCancel={handlePressCancel}
     >
       <div className={`w-full h-full ${getGridClasses()}`}>
         {optionsWithMedia.map((option, index) => (
