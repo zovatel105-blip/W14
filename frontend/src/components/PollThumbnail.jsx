@@ -152,17 +152,19 @@ const PollThumbnail = ({ result, className = "", onClick, hideBadge = false }) =
         ))}
       </div>
 
-      {/* Badge con layout type en esquina superior izquierda */}
-      <div className="absolute top-1 left-1 bg-black/60 text-white text-xs px-2 py-0.5 rounded-full">
-        {layout === 'vertical' && '2️⃣'}
-        {layout === 'horizontal' && '⏸️'}
-        {layout === 'triptych-vertical' && '3️⃣'}
-        {layout === 'triptych-horizontal' && '3️⃣⏸️'}
-        {layout === 'grid-2x2' && '4️⃣'}
-        {layout === 'grid-3x2' && '6️⃣'}
-        {layout === 'horizontal-3x2' && '6️⃣⏸️'}
-        {layout === 'off' && '🎠'}
-      </div>
+      {/* Badge con layout type en esquina superior izquierda - Solo si hideBadge es false */}
+      {!hideBadge && (
+        <div className="absolute top-1 left-1 bg-black/60 text-white text-xs px-2 py-0.5 rounded-full">
+          {layout === 'vertical' && '2️⃣'}
+          {layout === 'horizontal' && '⏸️'}
+          {layout === 'triptych-vertical' && '3️⃣'}
+          {layout === 'triptych-horizontal' && '3️⃣⏸️'}
+          {layout === 'grid-2x2' && '4️⃣'}
+          {layout === 'grid-3x2' && '6️⃣'}
+          {layout === 'horizontal-3x2' && '6️⃣⏸️'}
+          {layout === 'off' && '🎠'}
+        </div>
+      )}
     </div>
   );
 };
