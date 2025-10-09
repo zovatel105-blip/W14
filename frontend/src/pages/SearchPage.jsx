@@ -971,44 +971,49 @@ const SearchPage = () => {
                     </button>
                   </div>
 
-                  {/* Image Container */}
-                  <div 
-                    onClick={() => handleResultClick(result)}
-                    className="relative aspect-[6/11] bg-gray-100 cursor-pointer rounded-xl overflow-hidden"
-                  >
-                    {/* Main Image */}
-                    {(result.image_url || result.thumbnail_url || result.images?.[0]?.url || result.media_url) ? (
-                      <img 
-                        src={result.image_url || result.thumbnail_url || result.images?.[0]?.url || result.media_url} 
-                        alt={result.title || result.content || 'Result'}
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          e.target.style.display = 'none';
-                          const placeholder = e.target.parentElement.querySelector('.placeholder-div');
-                          if (placeholder) {
-                            placeholder.style.display = 'flex';
-                          }
-                        }}
-                      />
-                    ) : null}
-                    
-                    {/* Fallback placeholder */}
-                    <div className={`placeholder-div absolute inset-0 w-full h-full flex items-center justify-center ${
-                      !result.image_url && !result.thumbnail_url && !result.images?.[0]?.url && !result.media_url ? 'flex' : 'hidden'
-                    } ${
-                      result.type === 'post' ? 'bg-gradient-to-br from-blue-400 to-purple-500' :
-                      result.type === 'user' ? 'bg-gradient-to-br from-green-400 to-blue-500' :
-                      result.type === 'hashtag' ? 'bg-gradient-to-br from-pink-400 to-red-500' :
-                      'bg-gradient-to-br from-yellow-400 to-orange-500'
-                    }`}>
-                      <div className="text-center text-white">
-                        {result.type === 'user' && <User size={32} className="mx-auto mb-2" />}
-                        {result.type === 'hashtag' && <Hash size={32} className="mx-auto mb-2" />}
-                        {result.type === 'sound' && <Music size={32} className="mx-auto mb-2" />}
-                        {result.type === 'post' && <Play size={32} className="mx-auto mb-2" />}
+                  {/* Image Container - Use PollThumbnail for posts, original logic for others */}
+                  {result.type === 'post' ? (
+                    <PollThumbnail 
+                      result={result}
+                      onClick={() => handleResultClick(result)}
+                    />
+                  ) : (
+                    <div 
+                      onClick={() => handleResultClick(result)}
+                      className="relative aspect-[6/11] bg-gray-100 cursor-pointer rounded-xl overflow-hidden"
+                    >
+                      {/* Main Image */}
+                      {(result.image_url || result.thumbnail_url || result.images?.[0]?.url || result.media_url) ? (
+                        <img 
+                          src={result.image_url || result.thumbnail_url || result.images?.[0]?.url || result.media_url} 
+                          alt={result.title || result.content || 'Result'}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                            const placeholder = e.target.parentElement.querySelector('.placeholder-div');
+                            if (placeholder) {
+                              placeholder.style.display = 'flex';
+                            }
+                          }}
+                        />
+                      ) : null}
+                      
+                      {/* Fallback placeholder */}
+                      <div className={`placeholder-div absolute inset-0 w-full h-full flex items-center justify-center ${
+                        !result.image_url && !result.thumbnail_url && !result.images?.[0]?.url && !result.media_url ? 'flex' : 'hidden'
+                      } ${
+                        result.type === 'user' ? 'bg-gradient-to-br from-green-400 to-blue-500' :
+                        result.type === 'hashtag' ? 'bg-gradient-to-br from-pink-400 to-red-500' :
+                        'bg-gradient-to-br from-yellow-400 to-orange-500'
+                      }`}>
+                        <div className="text-center text-white">
+                          {result.type === 'user' && <User size={32} className="mx-auto mb-2" />}
+                          {result.type === 'hashtag' && <Hash size={32} className="mx-auto mb-2" />}
+                          {result.type === 'sound' && <Music size={32} className="mx-auto mb-2" />}
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  )}
 
                   {/* Description with hashtags */}
                   <div className="px-0 pb-1">
