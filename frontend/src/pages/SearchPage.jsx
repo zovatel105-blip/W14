@@ -298,16 +298,28 @@ const SearchPage = () => {
       return;
     }
 
-    // Get user ID from result
-    const userId = result.user_id || result.author_id || result.id;
+    // Get user ID from result - for posts use author_id, for users use user_id or id
+    const userId = result.type === 'post' 
+      ? result.author_id || result.author?.id 
+      : result.user_id || result.id;
+    
+    console.log('Follow - Result type:', result.type);
+    console.log('Follow - User ID:', userId);
+    console.log('Follow - Current user ID:', user?.id);
+    
+    if (!userId) {
+      console.error('No user ID found in result:', result);
+      toast({
+        title: "Error",
+        description: "No se pudo identificar al usuario",
+        variant: "destructive",
+      });
+      return;
+    }
     
     // Don't let users follow themselves
     if (user && user.id === userId) {
-      toast({
-        title: "No puedes seguirte a ti mismo",
-        variant: "default",
-      });
-      return;
+      return; // Silently return, button should be hidden anyway
     }
 
     // Check if already loading
