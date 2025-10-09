@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Search, User, Hash, Music, ArrowLeft, X, TrendingUp, Star, SlidersHorizontal, Sparkles, Zap, Clock, Heart, Palette, Gamepad2, Camera, Plane, Pizza, BarChart3, Target, Flame, BookOpen, Play, UserPlus } from 'lucide-react';
+import { Search, User, Hash, Music, ArrowLeft, X, TrendingUp, Star, SlidersHorizontal, Sparkles, Zap, Clock, Heart, Palette, Gamepad2, Camera, Plane, Pizza, BarChart3, Target, Flame, BookOpen, Play, UserPlus, Check } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useToast } from '../hooks/use-toast';
 import { useAuth } from '../contexts/AuthContext';
 import searchService from '../services/searchService';
 import storyService from '../services/storyService';
+import userService from '../services/userService';
 import AutocompleteDropdown from '../components/search/AutocompleteDropdown';
 import TikTokScrollView from '../components/TikTokScrollView';
 import PollThumbnail from '../components/PollThumbnail';
