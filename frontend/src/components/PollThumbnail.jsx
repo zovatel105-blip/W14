@@ -348,18 +348,18 @@ const PollThumbnail = ({ result, className = "", onClick, hideBadge = false, onQ
         </div>
       )}
       
-      {/* Modal de votación rápida - Estilo Instagram */}
+      {/* Modal de votación rápida - Adaptado al layout */}
       {showQuickVote && (
         <div 
           className="absolute inset-0 bg-black/90 z-50 flex items-center justify-center p-2"
           style={{ touchAction: 'none' }}
         >
-          <div className="w-full h-full flex flex-col gap-1">
-            <div className="text-white text-center mb-1 text-xs font-medium">
+          <div className="w-full h-full flex flex-col">
+            <div className="text-white text-center mb-2 text-xs font-medium">
               Mantén presionado para votar
             </div>
             
-            <div className="flex-1 flex flex-col gap-1">
+            <div className={`flex-1 gap-1 ${getGridClasses()}`}>
               {options.map((option, index) => {
                 const isSelected = selectedOption === index;
                 const isVoted = result.user_vote === index;
@@ -371,12 +371,11 @@ const PollThumbnail = ({ result, className = "", onClick, hideBadge = false, onQ
                   <div
                     key={index}
                     data-option-index={index}
-                    className={`relative flex-1 rounded-lg overflow-hidden transition-all duration-150 ${
+                    className={`relative rounded-lg overflow-hidden transition-all duration-150 ${
                       isSelected 
                         ? 'ring-4 ring-blue-400 scale-105' 
                         : 'scale-100'
                     }`}
-                    style={{ minHeight: '60px' }}
                   >
                     {/* Background Image */}
                     {(option.media_url || option.thumbnail_url) && (
@@ -395,25 +394,27 @@ const PollThumbnail = ({ result, className = "", onClick, hideBadge = false, onQ
                     }`} />
                     
                     {/* Content */}
-                    <div className="relative h-full flex items-center justify-between px-3 py-2">
-                      <div className="flex-1">
-                        <span className="text-white text-sm font-semibold drop-shadow-lg">
+                    <div className="relative h-full flex flex-col justify-between p-2">
+                      <div className="flex-1 flex items-center justify-center">
+                        <span className="text-white text-sm font-semibold drop-shadow-lg text-center">
                           {option.text || `Opción ${index + 1}`}
                         </span>
                       </div>
                       
-                      <div className="flex items-center gap-2">
-                        {isVoted && (
-                          <div className="bg-white/90 rounded-full p-1">
-                            <Check size={14} className="text-blue-500" />
-                          </div>
-                        )}
-                        {isSelected && (
-                          <div className="bg-blue-500 rounded-full p-2 animate-pulse">
-                            <Check size={16} className="text-white" />
-                          </div>
-                        )}
-                        <span className="text-white text-xs font-bold bg-black/50 px-2 py-1 rounded-full">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-1">
+                          {isVoted && (
+                            <div className="bg-white/90 rounded-full p-0.5">
+                              <Check size={12} className="text-blue-500" />
+                            </div>
+                          )}
+                          {isSelected && (
+                            <div className="bg-blue-500 rounded-full p-1 animate-pulse">
+                              <Check size={14} className="text-white" />
+                            </div>
+                          )}
+                        </div>
+                        <span className="text-white text-xs font-bold bg-black/50 px-1.5 py-0.5 rounded-full">
                           {votePercentage}%
                         </span>
                       </div>
@@ -429,7 +430,7 @@ const PollThumbnail = ({ result, className = "", onClick, hideBadge = false, onQ
               })}
             </div>
             
-            <div className="text-center text-white text-xs opacity-70 mt-1">
+            <div className="text-center text-white text-xs opacity-70 mt-2">
               {selectedOption !== null ? '✓ Suelta para votar' : 'Desliza para seleccionar'}
             </div>
           </div>
