@@ -1,11 +1,17 @@
-import React from 'react';
+import React, { useState, useRef } from 'react';
+import { Check } from 'lucide-react';
 
 /**
  * Componente de miniatura de poll que replica el layout completo del poll
  * Muestra todas las opciones con su layout original (grid, carousel, etc.)
  * @param {boolean} hideBadge - Si es true, oculta el badge de layout
+ * @param {function} onQuickVote - Callback para votar rápidamente (pollId, optionIndex)
  */
-const PollThumbnail = ({ result, className = "", onClick, hideBadge = false }) => {
+const PollThumbnail = ({ result, className = "", onClick, hideBadge = false, onQuickVote }) => {
+  const [showQuickVote, setShowQuickVote] = useState(false);
+  const longPressTimer = useRef(null);
+  const longPressStarted = useRef(false);
+  
   if (!result || result.type !== 'post') {
     return null;
   }
