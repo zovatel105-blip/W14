@@ -1180,7 +1180,7 @@ const TikTokScrollView = ({
     };
   }, [activeIndex, polls.length]);
 
-  // No polls state - Enhanced design
+  // No polls state - Show loading spinner
   if (!polls.length) {
     return (
       <div className="fixed inset-0 z-50 bg-black flex items-center justify-center"
@@ -1189,13 +1189,9 @@ const TikTokScrollView = ({
              height: '100dvh'
            }}>
         <div className="text-center px-6">
-          <div className="w-32 h-32 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-8">
-            <svg className="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 4V2a1 1 0 011-1h4a1 1 0 011 1v2m0 0V1a1 1 0 011-1h4a1 1 0 011 1v3M7 4a1 1 0 00-1 1v16a1 1 0 001 1h10a1 1 0 001-1V5a1 1 0 00-1-1H7z" />
-            </svg>
-          </div>
-          <h3 className="text-3xl font-bold text-white mb-4">No hay votaciones</h3>
-          <p className="text-gray-400 text-lg">No se encontraron votaciones para mostrar</p>
+          <div className="w-20 h-20 border-4 border-gray-700 border-t-blue-500 rounded-full animate-spin mx-auto mb-6"></div>
+          <h3 className="text-xl font-semibold text-white mb-2">Cargando publicaciones...</h3>
+          <p className="text-gray-400 text-sm">Por favor espera un momento</p>
         </div>
       </div>
     );
