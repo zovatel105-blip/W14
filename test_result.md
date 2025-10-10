@@ -253,6 +253,22 @@ Feed Post Layout (Posts PROPIOS):
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
+**🎥 PREVIEW DE VIDEO EN CREACIÓN Y THUMBNAILS EN BÚSQUEDA CORREGIDOS (2025-01-27): Problemas con visualización de videos completamente resueltos.**
+
+✅ **PROBLEMA 1: Preview de video en página de creación**
+- **Causa**: La función `processVideoFile` generaba thumbnail sintético (icono genérico) en lugar de capturar frame real
+- **Solución**: Implementado sistema de captura de frame real usando elemento `<video>` y Canvas
+- **Resultado**: Los usuarios ahora ven preview real del contenido del video
+
+✅ **PROBLEMA 2: Miniaturas de video en página de búsqueda**
+- **Causa**: `PollThumbnail.jsx` priorizaba `media_url` (video base64) sobre `thumbnail_url` (imagen del frame)
+- **Análisis**: Troubleshoot_agent identificó 4 instancias con lógica incorrecta
+- **Solución**: Cambiado prioridad a `media_type === 'video' ? thumbnail_url : media_url`
+- **Archivos corregidos**: 
+  - `/app/frontend/src/pages/ContentCreationPage.jsx` (líneas 872-929)
+  - `/app/frontend/src/components/PollThumbnail.jsx` (líneas 170, 215, 298, 384)
+- **Resultado**: Miniaturas de videos ahora se muestran correctamente en resultados de búsqueda
+
 **🎨 REDISEÑO COMPLETO DEL PERFIL ESTILO INSTAGRAM IMPLEMENTADO (2025-01-27): ProfilePage completamente rediseñado con nuevo layout moderno y funcional.**
 
 ✅ **NUEVO DISEÑO IMPLEMENTADO:**
