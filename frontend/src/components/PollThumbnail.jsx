@@ -167,7 +167,7 @@ const PollThumbnail = ({ result, className = "", onClick, hideBadge = false, onQ
         onTouchCancel={handlePressCancel}
       >
         <img
-          src={firstOption.media_url || firstOption.thumbnail_url}
+          src={firstOption.media_type === 'video' ? firstOption.thumbnail_url : (firstOption.media_url || firstOption.thumbnail_url)}
           alt={result.title || 'Poll option'}
           className="w-full h-full object-cover"
           onError={(e) => {
