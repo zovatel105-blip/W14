@@ -371,58 +371,36 @@ const SearchPage = () => {
 
   const handleResultClick = async (result) => {
     console.log('Result clicked:', result);
-    console.log('All search results:', searchResults);
     
     // Handle different result types
     if (result.type === 'post') {
-      // Get all post IDs from search results
-      const postResults = searchResults.filter(r => r.type === 'post');
-      const clickedIndex = postResults.findIndex(p => p.id === result.id);
-      
       // ABRIR VISTA INMEDIATAMENTE con array vacío (mostrar loading)
       setTikTokViewPosts([]);
       setCurrentTikTokIndex(0);
       setShowTikTokView(true);
       
-      // Cargar datos completos
+      // Cargar datos completos SOLO de la publicación seleccionada
       try {
-        const completePolls = [];
-        for (const postResult of postResults) {
-          try {
-            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001'}/api/polls/${postResult.id}`, {
-              headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                'Content-Type': 'application/json'
-              }
-            });
-            
-            if (response.ok) {
-              const pollData = await response.json();
-              console.log('Fetched complete poll data:', pollData);
-              completePolls.push(pollData);
-              
-              // Actualizar progresivamente mientras carga
-              setTikTokViewPosts([...completePolls]);
-            } else {
-              console.warn(`Failed to fetch poll ${postResult.id}:`, response.status);
-            }
-          } catch (error) {
-            console.error(`Error fetching poll ${postResult.id}:`, error);
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL || 'http://localhost:8001'}/api/polls/${result.id}`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json'
           }
-        }
+        });
         
-        console.log('All polls loaded:', completePolls.length);
-        
-        if (completePolls.length > 0) {
-          // Establecer datos completos e índice correcto
-          setTikTokViewPosts(completePolls);
-          setCurrentTikTokIndex(clickedIndex >= 0 && clickedIndex < completePolls.length ? clickedIndex : 0);
+        if (response.ok) {
+          const pollData = await response.json();
+          console.log('Fetched complete poll data for selected post:', pollData);
+          
+          // Establecer solo esta publicación en el TikTokView
+          setTikTokViewPosts([pollData]);
+          setCurrentTikTokIndex(0); // Siempre será 0 ya que solo hay una publicación
         } else {
-          // Si no se pudo cargar nada, cerrar y mostrar error
+          console.warn(`Failed to fetch poll ${result.id}:`, response.status);
           setShowTikTokView(false);
           toast({
             title: "Error",
-            description: "No se pudieron cargar las publicaciones.",
+            description: "No se pudo cargar la publicación.",
             variant: "destructive",
           });
         }
