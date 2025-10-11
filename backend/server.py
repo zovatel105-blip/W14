@@ -2358,6 +2358,7 @@ async def search_posts_optimized(query: str, current_user_id: str, limit: int):
                 "author": {
                     "id": post.get("author", {}).get("id", ""),  # Add author id
                     "username": post.get("author", {}).get("username", ""),
+                    "display_name": post.get("author", {}).get("display_name", ""),  # Include display_name
                     "avatar_url": post.get("author", {}).get("avatar_url", "")  # Changed 'avatar' to 'avatar_url' for consistency
                 },
                 "created_at": post.get("created_at", ""),
