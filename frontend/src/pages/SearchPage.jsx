@@ -408,12 +408,14 @@ const SearchPage = () => {
           const selectedPollData = await selectedResponse.json();
           console.log('✅ Loaded selected poll immediately:', selectedPollData.id);
           
-          // Mostrar inmediatamente la publicación seleccionada
+          // Mostrar inmediatamente SOLO la publicación seleccionada
           setTikTokViewPosts([selectedPollData]);
           setCurrentTikTokIndex(0);
           
-          // 2. Cargar inicial: anterior y siguiente
-          loadAdjacentPostsInitial(postResults, clickedIndex, selectedPollData);
+          // 2. Cargar inicial: anterior y siguiente SIN cambiar el índice de la vista
+          setTimeout(() => {
+            loadAdjacentPostsInitial(postResults, clickedIndex, selectedPollData);
+          }, 300); // Dar tiempo para que se renderice la publicación seleccionada primero
           
         } else {
           console.warn(`Failed to fetch selected poll ${result.id}:`, selectedResponse.status);
