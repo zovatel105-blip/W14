@@ -1108,17 +1108,19 @@ const SearchPage = () => {
                             alt="Avatar"
                             className="w-full h-full object-cover"
                             onError={(e) => {
-                              // Si falla la carga de la imagen, mostrar el icono de usuario
+                              // Si falla la carga de la imagen, mostrar la inicial
                               e.target.style.display = 'none';
                               e.target.nextElementSibling?.classList.remove('hidden');
                             }}
                           />
                         ) : null}
-                        <User size={16} className={`text-white ${(result.avatar_url || result.author?.avatar_url || result.author_avatar_url) ? 'hidden' : ''}`} />
+                        <span className={`text-white text-xs font-semibold ${(result.avatar_url || result.author?.avatar_url || result.author_avatar_url) ? 'hidden' : ''}`}>
+                          {(result.username || result.author?.username || result.author_username || '?').charAt(0).toUpperCase()}
+                        </span>
                       </div>
-                      {/* Username */}
+                      {/* Display Name */}
                       <span className="text-sm font-semibold text-gray-900 truncate">
-                        {result.username || result.author?.username || result.author_username || result.display_name || 'usuario'}
+                        {result.display_name || result.author?.display_name || result.author_display_name || result.username || result.author?.username || result.author_username || 'usuario'}
                       </span>
                     </div>
                     {/* Follow Button */}
