@@ -42,6 +42,11 @@ const SearchPage = () => {
   const [tikTokViewPosts, setTikTokViewPosts] = useState([]);
   const [currentTikTokIndex, setCurrentTikTokIndex] = useState(0);
   
+  // New states for dynamic loading
+  const [originalSearchPosts, setOriginalSearchPosts] = useState([]); // Store original search results
+  const [currentSearchIndex, setCurrentSearchIndex] = useState(0); // Track position in original results
+  const [loadingAdjacentPosts, setLoadingAdjacentPosts] = useState(new Set()); // Track which posts are being loaded
+  
   // Follow states
   const [followingUsers, setFollowingUsers] = useState(new Set());
   const [loadingFollow, setLoadingFollow] = useState(new Set());
