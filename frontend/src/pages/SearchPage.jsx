@@ -1093,7 +1093,7 @@ const SearchPage = () => {
                     <div className="flex items-center space-x-2">
                       {/* Avatar */}
                       <div 
-                        className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-400 to-pink-500 flex items-center justify-center overflow-hidden cursor-pointer"
+                        className="w-8 h-8 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center overflow-hidden cursor-pointer"
                         onClick={(e) => {
                           e.stopPropagation();
                           const username = result.username || result.author?.username || result.author_username;
@@ -1114,7 +1114,7 @@ const SearchPage = () => {
                             }}
                           />
                         ) : null}
-                        <span className={`text-white text-xs font-semibold ${(result.avatar_url || result.author?.avatar_url || result.author_avatar_url) ? 'hidden' : ''}`}>
+                        <span className={`text-gray-600 text-xs font-semibold ${(result.avatar_url || result.author?.avatar_url || result.author_avatar_url) ? 'hidden' : ''}`}>
                           {(result.username || result.author?.username || result.author_username || '?').charAt(0).toUpperCase()}
                         </span>
                       </div>
