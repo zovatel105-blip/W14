@@ -905,6 +905,25 @@ const TikTokScrollView = ({
   // Performance optimization - prevent unnecessary re-renders
   const memoizedActiveIndex = useMemo(() => activeIndex, [activeIndex]);
 
+  // Dynamic loading when user navigates between posts (Search Page functionality)
+  useEffect(() => {
+    if (onIndexChange && activeIndex !== lastActiveIndex) {
+      const direction = activeIndex > lastActiveIndex ? 'next' : 'previous';
+      
+      // Only trigger dynamic loading if user is near the edges
+      if (direction === 'next' && activeIndex >= polls.length - 2) {
+        // User is near the end, load next posts
+        onIndexChange('next', activeIndex);
+      } else if (direction === 'previous' && activeIndex <= 1) {
+        // User is near the beginning, load previous posts
+        onIndexChange('previous', activeIndex);
+      }
+      
+      setLastActiveIndex(activeIndex);
+      console.log('🔄 TikTok Index changed:', lastActiveIndex, '→', activeIndex, 'Direction:', direction);
+    }
+  }, [activeIndex, lastActiveIndex, onIndexChange, polls.length]);
+
   // 🚀 ULTRA-OPTIMIZED scroll detection with video performance focus
   const handleScroll = useCallback(() => {
     const container = containerRef.current;
