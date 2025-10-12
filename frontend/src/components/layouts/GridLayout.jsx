@@ -169,17 +169,17 @@ const GridLayout = ({
                     // 🚀 VIDEO OPTIMIZATION: Lazy loading for non-active posts
                     loading={isActive ? "eager" : "lazy"}
                     onLoadStart={() => {
-                      if (optimizeVideo) {
-                        console.log(`🎬 Video loading started: ${optionIndex} (Priority: ${renderPriority}) - Layout: ${gridType}`);
-                      }
+                      console.log(`🎬 Video loading started: ${optionIndex} (Priority: ${renderPriority}) - Layout: ${gridType}, URL length: ${option.media.url.length}`);
                     }}
                     onCanPlay={() => {
-                      if (optimizeVideo) {
-                        console.log(`▶️ Video ready to play: ${optionIndex} - Layout: ${gridType}`);
-                      }
+                      console.log(`▶️ Video ready to play: ${optionIndex} - Layout: ${gridType}`);
                     }}
                     onError={(e) => {
-                      console.warn(`❌ Video load failed: ${option.media.url}`, e);
+                      console.error(`❌ Video load failed for option ${optionIndex}:`, {
+                        urlLength: option.media.url.length,
+                        urlStart: option.media.url.substring(0, 100),
+                        error: e
+                      });
                     }}
                   />
                 ) : (
@@ -191,6 +191,12 @@ const GridLayout = ({
                     loading={isActive ? "eager" : "lazy"}
                     style={{
                       display: shouldUnload ? 'none' : 'block'
+                    }}
+                    onError={(e) => {
+                      console.error(`❌ Image load failed for option ${optionIndex}:`, {
+                        urlLength: option.media.url.length,
+                        urlStart: option.media.url.substring(0, 100)
+                      });
                     }}
                   />
                 )
