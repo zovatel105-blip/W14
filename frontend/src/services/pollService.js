@@ -23,6 +23,13 @@ class PollService {
   async handleResponse(response) {
     if (!response.ok) {
       const errorData = await response.json();
+      
+      // Handle Pydantic validation errors (422 responses)
+      if (Array.isArray(errorData.detail)) {
+        const errorMessages = errorData.detail.map(err => err.msg || JSON.stringify(err)).join(', ');
+        throw new Error(errorMessages);
+      }
+      
       throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
     }
     return response.json();
