@@ -777,19 +777,25 @@ const SearchPage = () => {
         const result = await response.json();
         
         console.log('Vote response:', result); // Debug log
+        console.log('Poll ID:', pollId, 'Option Index:', optionIndex);
         
         // Update the search results with new vote data from backend
-        setSearchResults(prev => prev.map(r => {
-          if (r.id === pollId && r.type === 'post') {
-            return {
-              ...r,
-              user_vote: result.user_vote !== undefined ? result.user_vote : optionIndex,
-              total_votes: result.total_votes !== undefined ? result.total_votes : r.total_votes,
-              options: result.options || r.options
-            };
-          }
-          return r;
-        }));
+        setSearchResults(prev => {
+          const updated = prev.map(r => {
+            if (r.id === pollId && r.type === 'post') {
+              const updatedResult = {
+                ...r,
+                user_vote: result.user_vote !== undefined ? result.user_vote : optionIndex,
+                total_votes: result.total_votes !== undefined ? result.total_votes : r.total_votes,
+                options: result.options || r.options
+              };
+              console.log('Updated poll in search results:', updatedResult);
+              return updatedResult;
+            }
+            return r;
+          });
+          return updated;
+        });
         
         toast({
           title: "✅ Voto registrado",
