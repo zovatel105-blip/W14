@@ -8380,9 +8380,20 @@ async def get_recent_searches(
     """Get recent search history for current user"""
     try:
         # Get recent searches for the current user, sorted by most recent
-        recent_searches = await db.search_history.find({
+        recent_searches_raw = await db.search_history.find({
             "user_id": current_user.id
         }).sort("created_at", -1).limit(limit).to_list(limit)
+        
+        # Convert MongoDB documents to JSON-serializable format
+        recent_searches = []
+        for search in recent_searches_raw:
+            search_dict = {
+                "id": search.get("id", str(search.get("_id"))),
+                "query": search.get("query", ""),
+                "search_type": search.get("search_type", "general"),
+                "created_at": search.get("created_at", "")
+            }
+            recent_searches.append(search_dict)
         
         return {"recent_searches": recent_searches}
         
