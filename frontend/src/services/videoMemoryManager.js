@@ -240,25 +240,29 @@ class VideoMemoryManager {
    */
   cleanup() {
     const now = Date.now();
-    const maxAge = 120000; // 2 minutes
+    const maxAge = 300000; // ✅ INCREMENTADO: 5 minutos (era 2) para ser menos agresivo
     let cleanedCount = 0;
 
     for (const [videoKey, videoData] of this.activeVideos.entries()) {
       const { lastAccessed, isActive, isVisible } = videoData;
       
-      // Remove old, inactive, invisible videos
+      // ✅ FIXED: Solo limpiar videos MUY antiguos y definitivamente no visibles
+      // Esto previene limpiar videos que el usuario podría ver pronto al hacer scroll
       if (now - lastAccessed > maxAge && !isActive && !isVisible) {
         this.unregisterVideo(videoKey);
         cleanedCount++;
       }
     }
 
-    // Force cleanup if over threshold
-    if (this.activeVideos.size > this.memoryThreshold) {
+    // ✅ FIXED: Threshold más alto y menos agresivo
+    // Multiplicado por 2 para dar más margen antes de limpiar
+    const effectiveThreshold = this.memoryThreshold * 2;
+    if (this.activeVideos.size > effectiveThreshold) {
       const sortedVideos = Array.from(this.activeVideos.entries())
+        .filter(([,v]) => !v.isActive && !v.isVisible) // Solo considerar inactivos e invisibles
         .sort(([,a], [,b]) => a.lastAccessed - b.lastAccessed);
       
-      const toRemove = sortedVideos.slice(0, sortedVideos.length - this.memoryThreshold);
+      const toRemove = sortedVideos.slice(0, Math.floor(sortedVideos.length * 0.3)); // Solo limpiar 30%
       toRemove.forEach(([videoKey]) => {
         this.unregisterVideo(videoKey);
         cleanedCount++;
