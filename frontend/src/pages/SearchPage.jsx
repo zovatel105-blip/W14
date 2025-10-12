@@ -776,13 +776,15 @@ const SearchPage = () => {
       if (response.ok) {
         const result = await response.json();
         
-        // Update the search results with new vote data
+        console.log('Vote response:', result); // Debug log
+        
+        // Update the search results with new vote data from backend
         setSearchResults(prev => prev.map(r => {
           if (r.id === pollId && r.type === 'post') {
             return {
               ...r,
-              user_vote: optionIndex,
-              total_votes: result.total_votes || r.total_votes,
+              user_vote: result.user_vote !== undefined ? result.user_vote : optionIndex,
+              total_votes: result.total_votes !== undefined ? result.total_votes : r.total_votes,
               options: result.options || r.options
             };
           }
