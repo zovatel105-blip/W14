@@ -965,18 +965,17 @@ const SearchPage = () => {
               </div>
               
               {loadingStates.recentSearches ? (
-                <div className="flex items-center justify-center py-4">
-                  <div className="w-5 h-5 border-2 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
-                </div>
+                <RecentSearchesSkeleton count={5} />
               ) : recentSearches.length > 0 ? (
                 <div className="space-y-2">
-                  {recentSearches.map((recentSearch) => {
+                  {recentSearches.map((recentSearch, index) => {
                     const IconComponent = getSearchTypeIcon(recentSearch.search_type);
                     return (
                       <div 
                         key={recentSearch.id}
                         onClick={() => handleRecentSearchClick(recentSearch)}
-                        className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer group"
+                        className="flex items-center space-x-3 p-2 hover:bg-gray-50 rounded-lg cursor-pointer group animate-slide-up"
+                        style={{ animationDelay: `${index * 50}ms` }}
                       >
                         <div className="w-5 h-5 text-gray-400">
                           <IconComponent size={16} />
