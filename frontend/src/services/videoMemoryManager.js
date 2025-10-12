@@ -8,7 +8,7 @@ class VideoMemoryManager {
     this.activeVideos = new Map(); // Track active video elements
     this.videoCache = new Map();   // Cache video metadata
     this.memoryThreshold = 100;    // Max number of videos in memory
-    this.cleanupInterval = 30000;  // Cleanup every 30 seconds
+    this.cleanupInterval = 60000;  // ✅ INCREMENTADO: Cleanup cada 60 segundos (era 30) para ser menos agresivo
     this.observers = new Map();    // Intersection observers
     this.performanceMode = 'balanced'; // 'performance', 'balanced', 'quality'
     
