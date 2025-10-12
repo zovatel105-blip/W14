@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Search, User, Hash, Music, ArrowLeft, X, TrendingUp, Star, SlidersHorizontal, Sparkles, Zap, Clock, Heart, Palette, Gamepad2, Camera, Plane, Pizza, BarChart3, Target, Flame, BookOpen, Play, UserPlus, Check } from 'lucide-react';
+import { Search, User, Hash, Music, ArrowLeft, X, TrendingUp, Star, SlidersHorizontal, Sparkles, Zap, Clock, Heart, Palette, Gamepad2, Camera, Plane, Pizza, BarChart3, Target, Flame, BookOpen, UserPlus, Check } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useToast } from '../hooks/use-toast';
 import { useAuth } from '../contexts/AuthContext';
@@ -18,7 +18,6 @@ import {
 } from '../components/search/SearchSkeletons';
 
 import PostsIcon from '../components/icons/PostsIcon';
-import LogoWithQuickActions from '../components/LogoWithQuickActions';
 import SEARCH_CONFIG from '../config/searchConfig';
 
 const SearchPage = () => {
