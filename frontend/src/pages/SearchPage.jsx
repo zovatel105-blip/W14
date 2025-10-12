@@ -1228,9 +1228,8 @@ const SearchPage = () => {
         )}
 
         {isLoading ? (
-          <div className="flex items-center justify-center py-20">
-            <div className="w-8 h-8 border-2 border-gray-300 border-t-black rounded-full animate-spin"></div>
-          </div>
+          /* Show skeleton while loading search results */
+          <SearchResultsGridSkeleton count={6} />
         ) : (searchResults.length > 0 || hasSearched) ? (
           /* Search Results - Image Grid Style */
           <div className="px-1 py-2 w-full">
@@ -1239,7 +1238,8 @@ const SearchPage = () => {
               {searchResults.map((result, index) => (
                 <div
                   key={`${result.type}-${result.id}-${index}`}
-                  className="bg-white overflow-hidden group"
+                  className="bg-white overflow-hidden group animate-slide-up"
+                  style={{ animationDelay: `${index * 50}ms` }}
                 >
                   {/* Header: Avatar + Username + Follow Button */}
                   <div className="flex items-center justify-between px-0 py-2">
@@ -1256,8 +1256,8 @@ const SearchPage = () => {
                         }}
                       >
                         {(result.avatar_url || result.author?.avatar_url || result.author_avatar_url) ? (
-                          <img 
-                            src={result.avatar_url || result.author?.avatar_url || result.author_avatar_url} 
+                          <LazyImage 
+                            src={result.avatar_url || result.author?.avatar_url || result.author_avatar_url}
                             alt="Avatar"
                             className="w-full h-full object-cover"
                             onError={(e) => {
@@ -1325,36 +1325,40 @@ const SearchPage = () => {
                       onClick={() => handleResultClick(result)}
                       className="relative aspect-[6/11] bg-gray-100 cursor-pointer rounded-xl overflow-hidden"
                     >
-                      {/* Main Image */}
+                      {/* Main Image with lazy loading */}
                       {(result.image_url || result.thumbnail_url || result.images?.[0]?.url || result.media_url) ? (
-                        <img 
-                          src={result.image_url || result.thumbnail_url || result.images?.[0]?.url || result.media_url} 
+                        <LazyImage 
+                          src={result.image_url || result.thumbnail_url || result.images?.[0]?.url || result.media_url}
                           alt={result.title || result.content || 'Result'}
                           className="w-full h-full object-cover"
-                          onError={(e) => {
-                            e.target.style.display = 'none';
-                            const placeholder = e.target.parentElement.querySelector('.placeholder-div');
-                            if (placeholder) {
-                              placeholder.style.display = 'flex';
-                            }
-                          }}
+                          placeholder={
+                            <div className={`absolute inset-0 w-full h-full flex items-center justify-center ${
+                              result.type === 'user' ? 'bg-gradient-to-br from-green-400 to-blue-500' :
+                              result.type === 'hashtag' ? 'bg-gradient-to-br from-pink-400 to-red-500' :
+                              'bg-gradient-to-br from-yellow-400 to-orange-500'
+                            }`}>
+                              <div className="text-center text-white">
+                                {result.type === 'user' && <User size={32} className="mx-auto mb-2" />}
+                                {result.type === 'hashtag' && <Hash size={32} className="mx-auto mb-2" />}
+                                {result.type === 'sound' && <Music size={32} className="mx-auto mb-2" />}
+                              </div>
+                            </div>
+                          }
                         />
-                      ) : null}
-                      
-                      {/* Fallback placeholder */}
-                      <div className={`placeholder-div absolute inset-0 w-full h-full flex items-center justify-center ${
-                        !result.image_url && !result.thumbnail_url && !result.images?.[0]?.url && !result.media_url ? 'flex' : 'hidden'
-                      } ${
-                        result.type === 'user' ? 'bg-gradient-to-br from-green-400 to-blue-500' :
-                        result.type === 'hashtag' ? 'bg-gradient-to-br from-pink-400 to-red-500' :
-                        'bg-gradient-to-br from-yellow-400 to-orange-500'
-                      }`}>
-                        <div className="text-center text-white">
-                          {result.type === 'user' && <User size={32} className="mx-auto mb-2" />}
-                          {result.type === 'hashtag' && <Hash size={32} className="mx-auto mb-2" />}
-                          {result.type === 'sound' && <Music size={32} className="mx-auto mb-2" />}
+                      ) : (
+                        /* Fallback placeholder */
+                        <div className={`absolute inset-0 w-full h-full flex items-center justify-center ${
+                          result.type === 'user' ? 'bg-gradient-to-br from-green-400 to-blue-500' :
+                          result.type === 'hashtag' ? 'bg-gradient-to-br from-pink-400 to-red-500' :
+                          'bg-gradient-to-br from-yellow-400 to-orange-500'
+                        }`}>
+                          <div className="text-center text-white">
+                            {result.type === 'user' && <User size={32} className="mx-auto mb-2" />}
+                            {result.type === 'hashtag' && <Hash size={32} className="mx-auto mb-2" />}
+                            {result.type === 'sound' && <Music size={32} className="mx-auto mb-2" />}
+                          </div>
                         </div>
-                      </div>
+                      )}
                     </div>
                   )}
 
