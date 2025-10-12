@@ -503,12 +503,13 @@ const SearchPage = () => {
     }
     
     console.log('🔄 Initial polls loaded:', finalPolls.length, 'Selected index:', finalIndex);
-    // ✅ FIX: Use React batching to update both state values atomically
-    // This prevents the race condition where posts update but index hasn't updated yet
-    Promise.resolve().then(() => {
-      setCurrentTikTokIndex(finalIndex);
+    // ✅ CRITICAL FIX: Update index BEFORE posts to ensure TikTokScrollView has correct initial position
+    // When posts array changes, TikTokScrollView will use the already-updated index
+    setCurrentTikTokIndex(finalIndex);
+    // Use setTimeout to ensure index update is processed first
+    setTimeout(() => {
       setTikTokViewPosts(finalPolls);
-    });
+    }, 0);
   };
 
   // Function to dynamically load more posts as user navigates
