@@ -107,6 +107,23 @@ const GridLayout = ({
     };
   }, [poll.id, gridType, isActive]);
 
+  // 🔍 DEBUG: Log poll structure for video debugging
+  useEffect(() => {
+    if (poll.options && poll.options.length > 0) {
+      console.log('🔍 GridLayout Poll Debug:', {
+        pollId: poll.id,
+        layout: poll.layout,
+        optionsCount: poll.options.length,
+        firstOption: {
+          hasMedia: !!poll.options[0].media,
+          mediaType: poll.options[0].media?.type,
+          mediaUrl: poll.options[0].media?.url?.substring(0, 50),
+          hasThumbnail: !!poll.options[0].media?.thumbnail
+        }
+      });
+    }
+  }, [poll]);
+
   return (
     <div className={cn("w-full h-full", getGridClasses())}>
       {poll.options.map((option, optionIndex) => {
