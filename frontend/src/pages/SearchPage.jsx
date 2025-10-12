@@ -503,14 +503,11 @@ const SearchPage = () => {
     }
     
     console.log('🔄 Initial polls loaded:', finalPolls.length, 'Selected index:', finalIndex);
-    // ✅ FIX: Update posts and index together in a batch to prevent race condition
-    setTikTokViewPosts(prev => {
-      // Only update if we haven't already loaded adjacent posts
-      if (prev.length === 1) {
-        setCurrentTikTokIndex(finalIndex);
-        return finalPolls;
-      }
-      return prev;
+    // ✅ FIX: Use React batching to update both state values atomically
+    // This prevents the race condition where posts update but index hasn't updated yet
+    Promise.resolve().then(() => {
+      setCurrentTikTokIndex(finalIndex);
+      setTikTokViewPosts(finalPolls);
     });
   };
 
