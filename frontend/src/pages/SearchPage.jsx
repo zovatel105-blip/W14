@@ -1216,9 +1216,9 @@ const SearchPage = () => {
           </div>
         ) : (searchResults.length > 0 || hasSearched) ? (
           /* Search Results - Image Grid Style */
-          <div className="py-2 w-full">
+          <div className="px-1 py-2 w-full">
             {/* Results Grid - Maximum width usage with minimal separation */}
-            <div className="grid grid-cols-2 gap-0">
+            <div className="grid grid-cols-2 gap-1">
               {searchResults.map((result, index) => (
                 <div
                   key={`${result.type}-${result.id}-${index}`}
