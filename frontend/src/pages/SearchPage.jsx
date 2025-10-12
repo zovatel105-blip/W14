@@ -782,9 +782,24 @@ const SearchPage = () => {
         });
       } else {
         const error = await response.json();
+        
+        // Manejar errores de validación de Pydantic que son arrays de objetos
+        let errorMessage = "No se pudo registrar tu voto";
+        
+        if (typeof error.detail === 'string') {
+          errorMessage = error.detail;
+        } else if (Array.isArray(error.detail)) {
+          // Convertir errores de validación de Pydantic a texto legible
+          errorMessage = error.detail.map(err => err.msg || JSON.stringify(err)).join(', ');
+        } else if (typeof error.detail === 'object') {
+          errorMessage = JSON.stringify(error.detail);
+        } else if (error.message) {
+          errorMessage = error.message;
+        }
+        
         toast({
           title: "Error",
-          description: error.detail || "No se pudo registrar tu voto",
+          description: errorMessage,
           variant: "destructive",
         });
       }
