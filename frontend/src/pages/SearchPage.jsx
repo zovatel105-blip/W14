@@ -1425,21 +1425,13 @@ const SearchPage = () => {
         }
       `}</style>
 
-      {/* TikTokScrollView for search results with close button */}
+      {/* TikTokScrollView for search results with back button */}
       {showTikTokView && tikTokViewPosts.length > 0 && (
         <div className="fixed inset-0 z-50 bg-black">
-          {/* Close button */}
+          {/* Back to search button - moved to right */}
           <button
             onClick={handleCloseTikTokView}
-            className="fixed top-4 right-4 z-[60] bg-black/50 hover:bg-black/70 text-white rounded-full p-2 backdrop-blur-sm transition-all duration-200"
-          >
-            <X size={20} />
-          </button>
-          
-          {/* Back to search text */}
-          <button
-            onClick={handleCloseTikTokView}
-            className="fixed top-4 left-4 z-[60] bg-black/50 hover:bg-black/70 text-white text-sm px-3 py-2 rounded-full backdrop-blur-sm transition-all duration-200 flex items-center gap-2"
+            className="fixed top-4 right-4 z-[60] bg-black/50 hover:bg-black/70 text-white text-sm px-3 py-2 rounded-full backdrop-blur-sm transition-all duration-200 flex items-center gap-2"
           >
             <ArrowLeft size={16} />
             Volver a búsqueda
