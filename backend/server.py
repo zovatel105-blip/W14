@@ -2125,6 +2125,18 @@ def extract_hashtags_from_text(text):
     hashtags = re.findall(hashtag_pattern, text)
     return [f"#{tag}" for tag in hashtags]
 
+# Main search endpoint (alias)
+@api_router.get("/search")
+async def search_endpoint(
+    q: str = "",
+    filter: str = config.SEARCH_CONFIG['DEFAULT_FILTER'],
+    sort_by: str = config.SEARCH_CONFIG['DEFAULT_SORT'],
+    limit: int = config.SEARCH_CONFIG['DEFAULT_SEARCH_LIMIT'],
+    current_user: UserResponse = Depends(get_current_user)
+):
+    """Universal search endpoint - redirects to universal_search"""
+    return await universal_search(q, filter, sort_by, limit, current_user)
+
 @api_router.get("/search/universal")
 async def universal_search(
     q: str = "",
