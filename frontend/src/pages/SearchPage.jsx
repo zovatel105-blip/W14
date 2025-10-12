@@ -1259,11 +1259,6 @@ const SearchPage = () => {
                             src={result.avatar_url || result.author?.avatar_url || result.author_avatar_url}
                             alt="Avatar"
                             className="w-full h-full object-cover"
-                            onError={(e) => {
-                              // Si falla la carga de la imagen, mostrar la inicial
-                              e.target.style.display = 'none';
-                              e.target.nextElementSibling?.classList.remove('hidden');
-                            }}
                           />
                         ) : null}
                         <span className={`text-gray-600 text-xs font-semibold ${(result.avatar_url || result.author?.avatar_url || result.author_avatar_url) ? 'hidden' : ''}`}>
