@@ -83,7 +83,7 @@ const LazyImage = ({
       )}
 
       {/* Error placeholder */}
-      {hasError && placeholder && placeholder}
+      {hasError && placeholder}
     </div>
   );
 };
