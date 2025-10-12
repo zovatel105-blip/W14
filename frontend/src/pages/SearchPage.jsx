@@ -1118,9 +1118,7 @@ const SearchPage = () => {
               <h3 className="text-lg font-semibold text-gray-900 px-3 sm:px-0">You may like</h3>
               
               {loadingStates.recommendations ? (
-                <div className="flex items-center justify-center py-6">
-                  <div className="w-5 h-5 border-2 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
-                </div>
+                <RecommendationsSectionSkeleton count={6} />
               ) : recommendedContent.length > 0 ? (
                 <div className="flex space-x-3 sm:space-x-4 overflow-x-auto scrollbar-hide pb-2 w-full pl-3 sm:pl-0 lg:pl-6 xl:pl-8">
                   {recommendedContent.map((content, index) => {
@@ -1165,7 +1163,8 @@ const SearchPage = () => {
                       <div 
                         key={content.id || index} 
                         onClick={() => handleRecommendedContentClick(content)}
-                        className="flex-shrink-0 cursor-pointer group"
+                        className="flex-shrink-0 cursor-pointer group animate-slide-up"
+                        style={{ animationDelay: `${index * 50}ms` }}
                       >
                         <div 
                           className={`${gradients[index % gradients.length]} rounded-xl sm:rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-105 transition-all duration-300 relative overflow-hidden`}
@@ -1178,9 +1177,9 @@ const SearchPage = () => {
                             maxHeight: '230px'
                           }}
                         >
-                          {/* Background image if available */}
+                          {/* Background image if available - with lazy loading */}
                           {content.thumbnail_url && (
-                            <img 
+                            <LazyImage 
                               src={content.thumbnail_url}
                               alt={content.title || content.hashtag}
                               className="absolute inset-0 w-full h-full object-cover"
