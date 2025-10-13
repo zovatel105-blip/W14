@@ -29,14 +29,14 @@ const StoryPlusIcon = ({ size = 16, className = "" }) => (
       r="5.5"
       fill="white"
     />
-    {/* Cruz del + en naranja */}
+    {/* Cruz del + en naranja más fino */}
     <line
       x1="18"
       y1="16"
       x2="18"
       y2="22"
       stroke="#f97316"
-      strokeWidth="2.5"
+      strokeWidth="1.5"
       strokeLinecap="round"
     />
     <line
@@ -45,7 +45,7 @@ const StoryPlusIcon = ({ size = 16, className = "" }) => (
       x2="21"
       y2="19"
       stroke="#f97316"
-      strokeWidth="2.5"
+      strokeWidth="1.5"
       strokeLinecap="round"
     />
   </svg>
