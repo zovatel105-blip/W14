@@ -186,20 +186,18 @@ const StoryViewer = ({ stories = [], initialIndex = 0, onClose, onStoryEnd }) =>
         case 'Escape':
           onClose();
           break;
-        case 'l':
-        case 'L':
-          toggleLike();
-          break;
-        case 'p':
-        case 'P':
-          togglePlay();
+        case 'm':
+        case 'M':
+          if (hasAudio) {
+            setIsMuted(!isMuted);
+          }
           break;
       }
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [nextStory, previousStory, onClose, toggleLike, togglePlay]);
+  }, [nextStory, previousStory, onClose, hasAudio, isMuted]);
 
   if (!currentStory) {
     return null;
