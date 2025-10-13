@@ -155,42 +155,21 @@ class StoryService {
     }
   }
 
-  // Helper method to get time elapsed since story was created
+  // Helper method to get time when story was created (shows only time)
   getStoryTimeAgo(story) {
-    const now = new Date();
+    // Parse the created_at timestamp (comes as UTC from backend)
     const createdAt = new Date(story.created_at);
-    const elapsedMs = now - createdAt;
     
-    if (elapsedMs < 0) return "justo ahora";
+    // Get hours and minutes in local timezone
+    const hours = createdAt.getHours();
+    const minutes = createdAt.getMinutes();
     
-    const seconds = Math.floor(elapsedMs / 1000);
-    const minutes = Math.floor(seconds / 60);
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
+    // Format to 12-hour format with AM/PM
+    const period = hours >= 12 ? 'PM' : 'AM';
+    const displayHours = hours % 12 || 12; // Convert 0 to 12 for midnight
+    const displayMinutes = minutes.toString().padStart(2, '0');
     
-    if (days > 0) {
-      const remainingHours = hours % 24;
-      if (remainingHours > 0) {
-        return `hace ${days}d ${remainingHours}h`;
-      }
-      return `hace ${days}d`;
-    } else if (hours > 0) {
-      const remainingMinutes = minutes % 60;
-      if (remainingMinutes > 0) {
-        return `hace ${hours}h ${remainingMinutes}m`;
-      }
-      return `hace ${hours}h`;
-    } else if (minutes > 0) {
-      const remainingSeconds = seconds % 60;
-      if (remainingSeconds > 0) {
-        return `hace ${minutes}m ${remainingSeconds}s`;
-      }
-      return `hace ${minutes}m`;
-    } else if (seconds > 0) {
-      return `hace ${seconds}s`;
-    } else {
-      return "justo ahora";
-    }
+    return `${displayHours}:${displayMinutes} ${period}`;
   }
 
   // Helper method to create story data for API
