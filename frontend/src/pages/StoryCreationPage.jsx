@@ -164,8 +164,20 @@ const StoryCreationPage = () => {
     return style ? style.style : 'font-sans';
   };
 
+  // Show loading screen if not authenticated
+  if (!isAuthenticated) {
+    return (
+      <div className="fixed inset-0 bg-black z-50 flex items-center justify-center">
+        <div className="text-white text-center">
+          <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p>Verificando autenticación...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="fixed inset-0 z-50 bg-black">
+    <div className="fixed inset-0 z-50 relative h-screen w-screen overflow-hidden" style={{ margin: 0, padding: 0 }}>
       {/* Header */}
       <div className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between p-4 bg-gradient-to-b from-black/80 to-transparent">
         <button
