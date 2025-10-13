@@ -169,12 +169,24 @@ class StoryService {
     const days = Math.floor(hours / 24);
     
     if (days > 0) {
+      const remainingHours = hours % 24;
+      if (remainingHours > 0) {
+        return `hace ${days}d ${remainingHours}h`;
+      }
       return `hace ${days}d`;
     } else if (hours > 0) {
+      const remainingMinutes = minutes % 60;
+      if (remainingMinutes > 0) {
+        return `hace ${hours}h ${remainingMinutes}m`;
+      }
       return `hace ${hours}h`;
     } else if (minutes > 0) {
+      const remainingSeconds = seconds % 60;
+      if (remainingSeconds > 0) {
+        return `hace ${minutes}m ${remainingSeconds}s`;
+      }
       return `hace ${minutes}m`;
-    } else if (seconds > 30) {
+    } else if (seconds > 0) {
       return `hace ${seconds}s`;
     } else {
       return "justo ahora";
