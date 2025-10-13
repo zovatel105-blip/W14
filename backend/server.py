@@ -94,12 +94,38 @@ try:
 except Exception as e:
     print(f"⚠️  Feed optimizer initialization failed: {e}")
 
+# Custom JSON encoder to handle datetime with UTC timezone
+def custom_json_serializer(obj):
+    """Custom JSON serializer that adds 'Z' suffix to UTC datetime objects"""
+    if isinstance(obj, datetime):
+        # Convert to ISO format and ensure 'Z' suffix for UTC
+        return obj.isoformat() + 'Z' if not obj.isoformat().endswith('Z') else obj.isoformat()
+    raise TypeError(f"Type {type(obj)} not serializable")
+
 # Create the main app without a prefix
 app = FastAPI(
     title="Social Media Network", 
     description="Advanced social network with polls, messaging and media",
     version=config.API_VERSION
 )
+
+# Configure FastAPI to use custom JSON encoder for responses
+from fastapi.encoders import jsonable_encoder
+from fastapi.responses import JSONResponse as FastAPIJSONResponse
+
+class CustomJSONResponse(FastAPIJSONResponse):
+    def render(self, content) -> bytes:
+        return json.dumps(
+            content,
+            ensure_ascii=False,
+            allow_nan=False,
+            indent=None,
+            separators=(",", ":"),
+            default=custom_json_serializer,
+        ).encode("utf-8")
+
+# Set as default response class
+app.router.default_response_class = CustomJSONResponse
 
 # Initialize Fast Upload System
 try:
