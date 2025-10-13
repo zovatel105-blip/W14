@@ -608,9 +608,10 @@ const SearchPage = () => {
           
           if (response.ok) {
             const pollData = await response.json();
-            console.log('📤 Dynamically loaded next poll:', pollData.id);
+            const transformedPoll = transformPollData(pollData);
+            console.log('📤 Dynamically loaded next poll:', transformedPoll.id, 'userVote:', transformedPoll.userVote);
             
-            setTikTokViewPosts(prev => [...prev, pollData]);
+            setTikTokViewPosts(prev => [...prev, transformedPoll]);
             // No need to adjust index for next posts
           }
         } catch (error) {
