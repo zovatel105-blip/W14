@@ -257,13 +257,7 @@ const StoryViewer = ({ stories = [], initialIndex = 0, onClose, onStoryEnd }) =>
                 {currentStory.display_name || currentStory.username}
               </p>
               <p className="text-white/70 text-xs">
-                {(() => {
-                  console.log('🕐 Story created_at:', currentStory.created_at);
-                  console.log('🕐 Current time:', new Date().toISOString());
-                  const timeAgo = storyService.getStoryTimeAgo(currentStory);
-                  console.log('🕐 Time ago result:', timeAgo);
-                  return timeAgo;
-                })()}
+                {storyService.getStoryTimeAgo(currentStory)}
               </p>
             </div>
           </div>
