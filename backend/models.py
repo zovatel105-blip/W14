@@ -427,6 +427,11 @@ class StoryResponse(BaseModel):
     expires_at: datetime
     is_viewed: bool = False  # Whether current user has viewed this story
     is_liked: bool = False   # Whether current user has liked this story
+    
+    class Config:
+        json_encoders = {
+            datetime: lambda v: v.isoformat() + 'Z' if not v.isoformat().endswith('Z') else v.isoformat()
+        }
 
 class StoryView(BaseModel):
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
