@@ -1095,6 +1095,68 @@ DESPUÉS:
 
 **ARCHIVOS MODIFICADOS:**
 - `/app/frontend/src/pages/SearchPage.jsx`:
+
+
+**🎨 MEJORAS FINALES EN BÚSQUEDAS RECIENTES (2025-01-27): Ajustes de diseño en el título, eliminación de botón actualizar y mejor icono para "See more".**
+
+✅ **CAMBIOS IMPLEMENTADOS:**
+
+**1. TÍTULO MOVIDO A LA DERECHA:**
+- ✅ Agregado `px-4` al contenedor del título para moverlo a la derecha
+- ✅ Alineación consistente con los items de búsqueda que también usan `px-4`
+- ✅ Mejor balance visual en el layout
+
+**2. BOTÓN "ACTUALIZAR" ELIMINADO:**
+- ✅ Removido botón "Actualizar" del header de búsquedas recientes
+- ✅ Simplificación del header dejando solo el título
+- ✅ Interfaz más limpia y menos elementos distractores
+
+**3. ÍCONO "SEE MORE" MEJORADO:**
+- ✅ Importados `ChevronDown` y `ChevronUp` de lucide-react
+- ✅ Reemplazadas flechas de texto (▼/▲) por íconos profesionales
+- ✅ Tamaño de 16px para mejor visibilidad
+- ✅ Gap aumentado de `gap-1` a `gap-2` para mejor espaciado
+
+**CÓDIGO IMPLEMENTADO:**
+```javascript
+// Import
+import { ..., ChevronDown, ChevronUp } from 'lucide-react';
+
+// Título con padding
+<div className="flex items-center justify-between px-4">
+  <h3 className="text-lg font-semibold text-gray-900">Búsquedas recientes</h3>
+  {/* Botón Actualizar eliminado */}
+</div>
+
+// Botón See more con ícono mejorado
+<button className="... flex items-center justify-center gap-2">
+  <span>{showAllRecentSearches ? 'See less' : 'See more'}</span>
+  {showAllRecentSearches ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+</button>
+```
+
+**DISEÑO FINAL:**
+```
+┌────────────────────────────────────┐
+│    Búsquedas recientes             │ ← Movido a la derecha con px-4
+├────────────────────────────────────┤
+│ 🕐  elpasodelzopilote          ✕  │
+├────────────────────────────────────┤
+│ 🕐  sueños en el islam...      ✕  │
+├────────────────────────────────────┤
+│ 🕐  torenza                    ✕  │
+├────────────────────────────────────┤
+│       See more 🔽                  │ ← Ícono ChevronDown
+└────────────────────────────────────┘
+```
+
+✅ **RESULTADO FINAL:**
+🎯 **BÚSQUEDAS RECIENTES CON DISEÑO PERFECCIONADO** - Los cambios finales incluyen:
+- ✅ Título alineado correctamente con padding derecho
+- ✅ Botón "Actualizar" eliminado para interfaz más limpia
+- ✅ Íconos profesionales ChevronDown/ChevronUp en lugar de símbolos de texto
+- ✅ Mejor espaciado y balance visual general
+
   - Línea 987: `px-2` → removido
   - Línea 990: `px-3 sm:px-0` → removido
   - Línea 1010: `px-2` → `px-4`
