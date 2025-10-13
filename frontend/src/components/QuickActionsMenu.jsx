@@ -1,7 +1,55 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, CirclePlus, X, Plus, User, Settings, Video } from 'lucide-react';
+import { Search, X, Plus, User, Settings, Video } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '../hooks/use-toast';
+
+// Ícono personalizado de historia con + en esquina inferior
+const StoryPlusIcon = ({ size = 16, className = "" }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+    className={className}
+  >
+    {/* Círculo principal */}
+    <circle
+      cx="12"
+      cy="12"
+      r="9"
+      stroke="currentColor"
+      strokeWidth="2"
+      fill="none"
+    />
+    {/* Círculo pequeño con + en esquina inferior derecha */}
+    <circle
+      cx="18"
+      cy="18"
+      r="4"
+      fill="currentColor"
+    />
+    {/* Cruz del + */}
+    <line
+      x1="18"
+      y1="16"
+      x2="18"
+      y2="20"
+      stroke="white"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+    />
+    <line
+      x1="16"
+      y1="18"
+      x2="20"
+      y2="18"
+      stroke="white"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+    />
+  </svg>
+);
 
 const QuickActionsMenu = ({ isVisible, onClose, onActionSelect }) => {
   const [isAnimating, setIsAnimating] = useState(false);
