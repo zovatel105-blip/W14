@@ -272,12 +272,12 @@ const GridLayout = ({
             {isActive && isMobile && poll.userVote && percentage > 0 && (
               <div 
                 className={cn(
-                  "absolute inset-x-0 bottom-0 transition-all duration-1000 ease-out",
+                  "absolute inset-x-0 bottom-0 transition-all duration-1000 ease-out mix-blend-screen",
                   isWinner 
-                    ? "bg-gradient-to-t from-green-500/90 via-green-600/70 to-green-400/40"
+                    ? "bg-gradient-to-t from-green-500/25 via-green-600/15 to-green-400/5"
                     : isSelected 
-                      ? "bg-gradient-to-t from-blue-500/30 via-blue-600/20 to-blue-400/10"
-                      : "bg-gradient-to-t from-black/50 via-black/30 to-transparent"
+                      ? "bg-gradient-to-t from-blue-500/25 via-blue-600/15 to-blue-400/5"
+                      : "bg-gradient-to-t from-black/30 via-black/15 to-transparent"
                 )}
                 style={{ 
                   height: `${percentage}%`,
