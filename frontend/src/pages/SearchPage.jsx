@@ -37,6 +37,7 @@ const SearchPage = () => {
   const [recentSearches, setRecentSearches] = useState([]);
   const [stories, setStories] = useState([]);
   const [recommendedContent, setRecommendedContent] = useState([]);
+  const [showAllRecentSearches, setShowAllRecentSearches] = useState(false);
   const [loadingStates, setLoadingStates] = useState({
     recentSearches: false,
     stories: false,
