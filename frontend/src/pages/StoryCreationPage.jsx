@@ -17,7 +17,7 @@ const StoryCreationPage = () => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
   
-  const [storyType, setStoryType] = useState(null); // 'image', 'video', 'text'
+  const [storyType, setStoryType] = useState('image'); // 'image', 'video', 'text'
   const [contentUrl, setContentUrl] = useState(null);
   const [textContent, setTextContent] = useState('');
   const [backgroundColor, setBackgroundColor] = useState('#8B5CF6');
@@ -27,6 +27,8 @@ const StoryCreationPage = () => {
   const [duration] = useState(15);
   const [isUploading, setIsUploading] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
+  const [previewMode, setPreviewMode] = useState(false);
+  const [showColorPicker, setShowColorPicker] = useState(false);
 
   const fileInputRef = useRef(null);
   const videoRef = useRef(null);
