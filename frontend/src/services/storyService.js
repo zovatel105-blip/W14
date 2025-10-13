@@ -155,21 +155,25 @@ class StoryService {
     }
   }
 
-  // Helper method to get time when story was created (shows only time)
+  // Helper method to get time elapsed since story was created (shows only hours)
   getStoryTimeAgo(story) {
     // Parse the created_at timestamp (comes as UTC from backend)
+    // The Date constructor automatically converts UTC to local timezone
+    const now = new Date();
     const createdAt = new Date(story.created_at);
+    const elapsedMs = now - createdAt;
     
-    // Get hours and minutes in local timezone
-    const hours = createdAt.getHours();
-    const minutes = createdAt.getMinutes();
+    if (elapsedMs < 0) return "justo ahora";
     
-    // Format to 12-hour format with AM/PM
-    const period = hours >= 12 ? 'PM' : 'AM';
-    const displayHours = hours % 12 || 12; // Convert 0 to 12 for midnight
-    const displayMinutes = minutes.toString().padStart(2, '0');
+    const hours = Math.floor(elapsedMs / (1000 * 60 * 60));
     
-    return `${displayHours}:${displayMinutes} ${period}`;
+    // Show only hours
+    if (hours > 0) {
+      return `hace ${hours}h`;
+    } else {
+      // If less than 1 hour, show "justo ahora"
+      return "justo ahora";
+    }
   }
 
   // Helper method to create story data for API
