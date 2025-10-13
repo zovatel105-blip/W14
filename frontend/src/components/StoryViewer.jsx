@@ -134,7 +134,6 @@ const StoryViewer = ({ stories = [], initialIndex = 0, onClose, onStoryEnd }) =>
   const handleTouchStart = (e) => {
     touchStartX.current = e.touches[0].clientX;
     touchStartY.current = e.touches[0].clientY;
-    setIsPlaying(false); // Pause on touch
   };
 
   const handleTouchEnd = (e) => {
@@ -145,7 +144,7 @@ const StoryViewer = ({ stories = [], initialIndex = 0, onClose, onStoryEnd }) =>
 
     // Check if it's a tap (small movement)
     if (Math.abs(deltaX) < 50 && Math.abs(deltaY) < 50) {
-      // Tap on left third = previous, right third = next, middle = play/pause
+      // Tap on left third = previous, right third = next
       const containerWidth = containerRef.current?.offsetWidth || window.innerWidth;
       const tapX = touchEndX;
       
@@ -153,8 +152,6 @@ const StoryViewer = ({ stories = [], initialIndex = 0, onClose, onStoryEnd }) =>
         previousStory();
       } else if (tapX > (containerWidth * 2) / 3) {
         nextStory();
-      } else {
-        togglePlay();
       }
     } else {
       // Swipe gestures
@@ -172,8 +169,6 @@ const StoryViewer = ({ stories = [], initialIndex = 0, onClose, onStoryEnd }) =>
         }
       }
     }
-    
-    setIsPlaying(true); // Resume playing
   };
 
   // Keyboard navigation
