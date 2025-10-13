@@ -29,6 +29,7 @@ const StoryCreationPage = () => {
   const [isCreating, setIsCreating] = useState(false);
   const [previewMode, setPreviewMode] = useState(false);
   const [showColorPicker, setShowColorPicker] = useState(false);
+  const [showTypeSelector, setShowTypeSelector] = useState(false);
 
   const fileInputRef = useRef(null);
   const videoRef = useRef(null);
@@ -94,6 +95,7 @@ const StoryCreationPage = () => {
           setStoryType('video');
         }
         setIsUploading(false);
+        toast.success('Archivo cargado correctamente');
       };
       reader.onerror = () => {
         toast.error('Error al cargar el archivo');
@@ -132,7 +134,7 @@ const StoryCreationPage = () => {
         duration: 3000,
       });
 
-      // Navigate back to feed or profile
+      // Navigate back to feed
       navigate('/feed');
     } catch (error) {
       console.error('Error creating story:', error);
@@ -144,11 +146,6 @@ const StoryCreationPage = () => {
     }
   };
 
-  const handleTextStoryCreate = () => {
-    setStoryType('text');
-    setContentUrl(null);
-  };
-
   const triggerFileInput = (type) => {
     setStoryType(type);
     if (fileInputRef.current) {
@@ -157,11 +154,25 @@ const StoryCreationPage = () => {
         : 'video/mp4,video/webm,video/ogg';
       fileInputRef.current.click();
     }
+    setShowTypeSelector(false);
+  };
+
+  const handleTextStoryCreate = () => {
+    setStoryType('text');
+    setContentUrl(null);
+    setShowTypeSelector(false);
   };
 
   const getFontStyleClass = () => {
     const style = fontStyles.find(f => f.value === fontStyle);
     return style ? style.style : 'font-sans';
+  };
+
+  const canPublish = () => {
+    if (storyType === 'text') {
+      return textContent.trim().length > 0;
+    }
+    return contentUrl !== null;
   };
 
   // Show loading screen if not authenticated
@@ -178,170 +189,169 @@ const StoryCreationPage = () => {
 
   return (
     <div className="fixed inset-0 z-50 relative h-screen w-screen overflow-hidden" style={{ margin: 0, padding: 0 }}>
-      {/* Header */}
-      <div className="absolute top-0 left-0 right-0 z-20 flex items-center justify-between p-4 bg-gradient-to-b from-black/80 to-transparent">
-        <button
-          onClick={handleClose}
-          className="p-2 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors"
-        >
-          <X size={24} className="text-white" />
-        </button>
-        
-        <h1 className="text-white text-xl font-bold">Crear Historia</h1>
-        
-        <button
-          onClick={handleCreateStory}
-          disabled={isCreating || (!contentUrl && !textContent.trim())}
-          className="px-4 py-2 bg-purple-500 hover:bg-purple-600 disabled:bg-gray-600 
-                   disabled:cursor-not-allowed text-white rounded-full font-semibold 
-                   transition-colors flex items-center gap-2"
-        >
-          {isCreating ? (
-            <>
-              <Loader2 size={18} className="animate-spin" />
-              Publicando...
-            </>
-          ) : (
-            <>
-              <Send size={18} />
-              Publicar
-            </>
-          )}
-        </button>
+      {/* Main Content Area - Preview ocupa TODA la pantalla */}
+      <div className="w-full h-full min-h-screen">
+        {/* Preview Area */}
+        {storyType === 'text' ? (
+          /* Text Story Preview */
+          <div
+            className="w-full h-full flex items-center justify-center px-8"
+            style={{ backgroundColor }}
+          >
+            <textarea
+              value={textContent}
+              onChange={(e) => setTextContent(e.target.value)}
+              placeholder="Escribe tu historia aquí..."
+              className={`w-full h-auto max-h-[60vh] bg-transparent border-none outline-none 
+                       text-center resize-none text-3xl ${getFontStyleClass()}`}
+              style={{ color: textColor }}
+              maxLength={500}
+              disabled={previewMode}
+            />
+          </div>
+        ) : storyType === 'image' && contentUrl ? (
+          /* Image Preview */
+          <div className="w-full h-full flex items-center justify-center bg-black">
+            <img
+              src={contentUrl}
+              alt="Preview"
+              className="w-full h-full object-contain"
+            />
+          </div>
+        ) : storyType === 'video' && contentUrl ? (
+          /* Video Preview */
+          <div className="w-full h-full flex items-center justify-center bg-black">
+            <video
+              ref={videoRef}
+              src={contentUrl}
+              controls
+              className="w-full h-full object-contain"
+            />
+          </div>
+        ) : (
+          /* Empty State - Show upload prompt */
+          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-purple-900 via-purple-800 to-pink-900">
+            <div className="text-center text-white">
+              <Upload size={64} className="mx-auto mb-4 opacity-50" />
+              <p className="text-xl mb-2">Crea tu historia</p>
+              <p className="text-sm opacity-75">Sube una imagen, video o escribe texto</p>
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Main Content */}
-      <div className="h-full flex items-center justify-center">
-        {!storyType ? (
-          /* Type Selection */
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="flex flex-col items-center gap-6 p-8"
-          >
-            <h2 className="text-white text-2xl font-bold mb-4">¿Qué tipo de historia quieres crear?</h2>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl">
-              {/* Image Story */}
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => triggerFileInput('image')}
-                className="flex flex-col items-center gap-4 p-8 bg-gradient-to-br 
-                         from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 
-                         rounded-2xl text-white transition-all shadow-2xl"
-              >
-                <div className="p-4 bg-white/20 rounded-full">
-                  <Camera size={48} />
-                </div>
-                <div className="text-center">
-                  <h3 className="text-xl font-bold mb-2">Foto</h3>
-                  <p className="text-sm opacity-90">Comparte una imagen</p>
-                </div>
-              </motion.button>
+      {/* Header Controls - Floating on top - Hidden in preview mode */}
+      {!previewMode && (
+        <div className="absolute top-0 left-0 right-0 z-50">
+          {/* Main Controls Row */}
+          <div className="flex items-center justify-between px-3 sm:px-4 py-2 sm:py-3">
+            {/* Close button - Left */}
+            <button
+              onClick={handleClose}
+              className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center text-white bg-black/50 backdrop-blur-sm rounded-lg"
+            >
+              <X className="w-5 h-5 sm:w-6 sm:h-6" />
+            </button>
 
-              {/* Video Story */}
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => triggerFileInput('video')}
-                className="flex flex-col items-center gap-4 p-8 bg-gradient-to-br 
-                         from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 
-                         rounded-2xl text-white transition-all shadow-2xl"
-              >
-                <div className="p-4 bg-white/20 rounded-full">
-                  <Video size={48} />
-                </div>
-                <div className="text-center">
-                  <h3 className="text-xl font-bold mb-2">Video</h3>
-                  <p className="text-sm opacity-90">Graba o sube un video</p>
-                </div>
-              </motion.button>
+            {/* Title - Center */}
+            <h1 className="text-white text-base sm:text-lg font-semibold">Crear Historia</h1>
 
-              {/* Text Story */}
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={handleTextStoryCreate}
-                className="flex flex-col items-center gap-4 p-8 bg-gradient-to-br 
-                         from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 
-                         rounded-2xl text-white transition-all shadow-2xl"
-              >
-                <div className="p-4 bg-white/20 rounded-full">
-                  <Type size={48} />
-                </div>
-                <div className="text-center">
-                  <h3 className="text-xl font-bold mb-2">Texto</h3>
-                  <p className="text-sm opacity-90">Escribe un mensaje</p>
-                </div>
-              </motion.button>
-            </div>
+            {/* Preview button - Right */}
+            <button
+              onClick={() => setPreviewMode(true)}
+              className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center text-white bg-black/50 backdrop-blur-sm rounded-lg hover:bg-black/60 transition-colors"
+              title="Vista previa fullscreen"
+            >
+              <Search className="w-4 h-4 sm:w-5 sm:h-5" />
+            </button>
+          </div>
+        </div>
+      )}
 
-            {isUploading && (
-              <div className="mt-8 flex items-center gap-3 text-white">
-                <Loader2 size={24} className="animate-spin" />
-                <span>Cargando archivo...</span>
+      {/* Exit preview button - Only visible in preview mode */}
+      {previewMode && (
+        <button
+          onClick={() => setPreviewMode(false)}
+          className="absolute top-4 right-4 z-50 w-10 h-10 bg-black/50 backdrop-blur-sm rounded-full flex items-center justify-center text-white"
+        >
+          <X className="w-6 h-6" />
+        </button>
+      )}
+
+      {/* Floating Right Sidebar - Overlay on top of content - Hidden in preview mode */}
+      {!previewMode && (
+        <div className="absolute top-16 sm:top-20 right-2 sm:right-4 z-40 flex flex-col gap-2 sm:gap-3">
+          {/* Type Selector Button */}
+          <div className="relative">
+            <button
+              onClick={() => setShowTypeSelector(!showTypeSelector)}
+              className="w-10 h-10 sm:w-12 sm:h-12 bg-black/70 backdrop-blur-sm hover:bg-black/80 rounded-full flex items-center justify-center text-white transition-all shadow-lg border border-white/10"
+              title="Tipo de historia"
+            >
+              {storyType === 'image' && <Camera className="w-5 h-5 sm:w-6 sm:h-6" />}
+              {storyType === 'video' && <Video className="w-5 h-5 sm:w-6 sm:h-6" />}
+              {storyType === 'text' && <Type className="w-5 h-5 sm:w-6 sm:h-6" />}
+            </button>
+
+            {/* Type Menu */}
+            {showTypeSelector && (
+              <div className="absolute right-full top-0 mr-2 sm:mr-3 w-12 sm:w-14 bg-black/90 backdrop-blur-sm rounded-lg shadow-xl overflow-hidden z-50 border border-white/10">
+                <div className="py-2 flex flex-col gap-1">
+                  <button
+                    onClick={() => triggerFileInput('image')}
+                    className={`w-full px-2 py-3 flex items-center justify-center hover:bg-white/10 transition-colors ${
+                      storyType === 'image' ? 'bg-white/20 text-white' : 'text-gray-300'
+                    }`}
+                    title="Foto"
+                  >
+                    <Camera className="w-5 h-5" />
+                  </button>
+                  <button
+                    onClick={() => triggerFileInput('video')}
+                    className={`w-full px-2 py-3 flex items-center justify-center hover:bg-white/10 transition-colors ${
+                      storyType === 'video' ? 'bg-white/20 text-white' : 'text-gray-300'
+                    }`}
+                    title="Video"
+                  >
+                    <Video className="w-5 h-5" />
+                  </button>
+                  <button
+                    onClick={handleTextStoryCreate}
+                    className={`w-full px-2 py-3 flex items-center justify-center hover:bg-white/10 transition-colors ${
+                      storyType === 'text' ? 'bg-white/20 text-white' : 'text-gray-300'
+                    }`}
+                    title="Texto"
+                  >
+                    <Type className="w-5 h-5" />
+                  </button>
+                </div>
               </div>
             )}
-          </motion.div>
-        ) : (
-          /* Content Editor */
-          <div className="w-full h-full max-w-md mx-auto flex flex-col">
-            {/* Preview Area */}
-            <div className="flex-1 relative flex items-center justify-center">
-              {storyType === 'text' ? (
-                /* Text Story Editor */
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="w-full h-full flex items-center justify-center px-8"
-                  style={{ backgroundColor }}
-                >
-                  <textarea
-                    value={textContent}
-                    onChange={(e) => setTextContent(e.target.value)}
-                    placeholder="Escribe tu historia aquí..."
-                    className={`w-full h-auto max-h-[60vh] bg-transparent border-none outline-none 
-                             text-center resize-none text-3xl ${getFontStyleClass()}`}
-                    style={{ color: textColor }}
-                    maxLength={500}
-                  />
-                </motion.div>
-              ) : storyType === 'image' && contentUrl ? (
-                /* Image Preview */
-                <motion.img
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  src={contentUrl}
-                  alt="Preview"
-                  className="w-full h-full object-contain"
-                />
-              ) : storyType === 'video' && contentUrl ? (
-                /* Video Preview */
-                <motion.video
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  ref={videoRef}
-                  src={contentUrl}
-                  controls
-                  className="w-full h-full object-contain"
-                />
-              ) : null}
-            </div>
+          </div>
 
-            {/* Controls */}
-            {storyType === 'text' && (
-              <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent">
-                <div className="max-w-md mx-auto space-y-4">
+          {/* Color Picker Button - Only for text stories */}
+          {storyType === 'text' && (
+            <div className="relative">
+              <button
+                onClick={() => setShowColorPicker(!showColorPicker)}
+                className="w-10 h-10 sm:w-12 sm:h-12 bg-black/70 backdrop-blur-sm hover:bg-black/80 rounded-full flex items-center justify-center text-white transition-all shadow-lg border border-white/10"
+                title="Colores"
+              >
+                <Palette className="w-5 h-5 sm:w-6 sm:h-6" />
+              </button>
+
+              {/* Color Picker Menu */}
+              {showColorPicker && (
+                <div className="absolute right-full top-0 mr-2 sm:mr-3 w-48 sm:w-56 bg-black/90 backdrop-blur-sm rounded-lg shadow-xl overflow-hidden z-50 border border-white/10 p-4">
                   {/* Background Colors */}
-                  <div>
-                    <p className="text-white text-sm mb-2 font-semibold">Color de fondo</p>
-                    <div className="flex flex-wrap gap-3">
+                  <div className="mb-4">
+                    <p className="text-white text-xs mb-2 font-semibold">Fondo</p>
+                    <div className="flex flex-wrap gap-2">
                       {backgroundColors.map(({ color, name }) => (
                         <button
                           key={color}
                           onClick={() => setBackgroundColor(color)}
-                          className={`w-12 h-12 rounded-full border-4 transition-all ${
+                          className={`w-8 h-8 rounded-full border-2 transition-all ${
                             backgroundColor === color 
                               ? 'border-white scale-110' 
                               : 'border-transparent hover:scale-105'
@@ -354,14 +364,14 @@ const StoryCreationPage = () => {
                   </div>
 
                   {/* Text Colors */}
-                  <div>
-                    <p className="text-white text-sm mb-2 font-semibold">Color de texto</p>
-                    <div className="flex flex-wrap gap-3">
+                  <div className="mb-4">
+                    <p className="text-white text-xs mb-2 font-semibold">Texto</p>
+                    <div className="flex flex-wrap gap-2">
                       {textColors.map((color) => (
                         <button
                           key={color}
                           onClick={() => setTextColor(color)}
-                          className={`w-10 h-10 rounded-full border-3 transition-all ${
+                          className={`w-7 h-7 rounded-full border-2 transition-all ${
                             textColor === color 
                               ? 'border-white scale-110' 
                               : 'border-gray-600 hover:scale-105'
@@ -374,13 +384,13 @@ const StoryCreationPage = () => {
 
                   {/* Font Styles */}
                   <div>
-                    <p className="text-white text-sm mb-2 font-semibold">Estilo de fuente</p>
+                    <p className="text-white text-xs mb-2 font-semibold">Fuente</p>
                     <div className="flex flex-wrap gap-2">
                       {fontStyles.map((font) => (
                         <button
                           key={font.value}
                           onClick={() => setFontStyle(font.value)}
-                          className={`px-4 py-2 rounded-lg transition-all ${
+                          className={`px-3 py-1 text-xs rounded-lg transition-all ${
                             fontStyle === font.value
                               ? 'bg-purple-500 text-white'
                               : 'bg-white/20 text-white hover:bg-white/30'
@@ -392,11 +402,27 @@ const StoryCreationPage = () => {
                     </div>
                   </div>
                 </div>
-              </div>
+              )}
+            </div>
+          )}
+
+          {/* Publish Button */}
+          <button
+            onClick={handleCreateStory}
+            disabled={isCreating || !canPublish()}
+            className="w-10 h-10 sm:w-12 sm:h-12 bg-purple-500/90 backdrop-blur-sm hover:bg-purple-600/90 disabled:bg-gray-500/70 rounded-full flex items-center justify-center text-white transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed border border-white/10"
+            title={isCreating ? 'Publicando...' : 'Publicar Historia'}
+          >
+            {isCreating ? (
+              <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+            ) : (
+              <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+              </svg>
             )}
-          </div>
-        )}
-      </div>
+          </button>
+        </div>
+      )}
 
       {/* Hidden File Input */}
       <input
@@ -406,6 +432,16 @@ const StoryCreationPage = () => {
         className="hidden"
         accept="image/*,video/*"
       />
+
+      {/* Loading Overlay */}
+      {isUploading && (
+        <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white/10 rounded-lg p-6 flex flex-col items-center gap-3">
+            <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+            <p className="text-white font-medium">Cargando archivo...</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
