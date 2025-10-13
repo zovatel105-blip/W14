@@ -9,6 +9,7 @@ const LogoWithQuickActions = ({ size = 32, className = "" }) => {
   const [showQuickActions, setShowQuickActions] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const handleLongPress = useCallback(() => {
     setShowQuickActions(true);
