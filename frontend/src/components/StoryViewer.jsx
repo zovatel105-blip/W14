@@ -7,21 +7,25 @@ import storyService from '../services/storyService';
 import { useAuth } from '../contexts/AuthContext';
 
 const StoryViewer = ({ stories = [], initialIndex = 0, onClose, onStoryEnd }) => {
+  const { user, apiRequest } = useAuth();
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
   const [progress, setProgress] = useState(0);
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(false);
-  const [isLiked, setIsLiked] = useState(false);
-  const [likesCount, setLikesCount] = useState(0);
-  const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState('');
+  const [sendingMessage, setSendingMessage] = useState(false);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   
-  const progressRef = useRef(null);
   const containerRef = useRef(null);
   const touchStartX = useRef(0);
   const touchStartY = useRef(0);
+  const inputRef = useRef(null);
 
   const currentStory = stories[currentIndex];
   const storyDuration = currentStory?.duration || 15; // seconds
+  
+  // Determinar si la historia tiene audio/video para mostrar botón mute
+  const hasAudio = currentStory?.story_type === 'video' && currentStory?.content_url;
 
   // Initialize story state
   useEffect(() => {
