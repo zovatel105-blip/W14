@@ -45,8 +45,8 @@ const LogoWithQuickActions = ({ size = 32, className = "" }) => {
         console.log('🔍 Navigating to search...');
         break;
       case 'moments':
-        // Aquí se puede implementar navegación a historias
-        console.log('📸 Navigating to moments...');
+        // Historias - Próximamente
+        console.log('📸 Stories feature - Coming soon...');
         break;
       default:
         console.log('❓ Unknown action:', actionType);
