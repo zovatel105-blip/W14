@@ -52,42 +52,88 @@ const StoryPlusIcon = ({ size = 16, className = "" }) => (
 );
 
 // Ícono personalizado de LIVE estilo TikTok
-const TikTokLiveIcon = ({ size = 16, className = "" }) => (
-  <svg
-    width={size * 2.2}
-    height={size}
-    viewBox="0 0 44 20"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    className={className}
-  >
-    {/* Rectángulo redondeado - estilo TikTok LIVE */}
-    <rect
-      x="2"
-      y="2"
-      width="40"
-      height="16"
-      rx="3"
+const TikTokLiveIcon = ({ size = 16, className = "" }) => {
+  const scale = size / 16; // Factor de escala basado en el tamaño deseado
+  const viewBoxSize = 100; // Tamaño del viewBox para trabajar con proporciones
+  
+  return (
+    <svg
+      width={size * 2.2}
+      height={size * 2.2}
+      viewBox="0 0 100 100"
       fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-    />
-    
-    {/* Texto LIVE en negrita */}
-    <text
-      x="22"
-      y="13"
-      textAnchor="middle"
-      fill="currentColor"
-      fontSize="8"
-      fontWeight="900"
-      fontFamily="Arial, sans-serif"
-      letterSpacing="0.8"
+      xmlns="http://www.w3.org/2000/svg"
+      className={className}
     >
-      LIVE
-    </text>
-  </svg>
-);
+      {/* Antena izquierda */}
+      <line
+        x1="35"
+        y1="20"
+        x2="20"
+        y2="5"
+        stroke="currentColor"
+        strokeWidth="8"
+        strokeLinecap="round"
+      />
+      
+      {/* Antena derecha */}
+      <line
+        x1="65"
+        y1="20"
+        x2="80"
+        y2="5"
+        stroke="currentColor"
+        strokeWidth="8"
+        strokeLinecap="round"
+      />
+      
+      {/* Arco superior del TV */}
+      <path
+        d="M 20 30 Q 20 20 30 20 L 70 20 Q 80 20 80 30"
+        stroke="currentColor"
+        strokeWidth="8"
+        strokeLinecap="round"
+        fill="none"
+      />
+      
+      {/* Rectángulo principal con esquinas muy redondeadas */}
+      <rect
+        x="20"
+        y="30"
+        width="60"
+        height="50"
+        rx="20"
+        ry="20"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="8"
+      />
+      
+      {/* Arco inferior del TV (base) */}
+      <path
+        d="M 30 80 Q 40 90 50 90 Q 60 90 70 80"
+        stroke="currentColor"
+        strokeWidth="8"
+        strokeLinecap="round"
+        fill="none"
+      />
+      
+      {/* Texto LIVE centrado */}
+      <text
+        x="50"
+        y="62"
+        textAnchor="middle"
+        fill="currentColor"
+        fontSize="24"
+        fontWeight="900"
+        fontFamily="Arial, sans-serif"
+        letterSpacing="1"
+      >
+        LIVE
+      </text>
+    </svg>
+  );
+};
 
 const QuickActionsMenu = ({ isVisible, onClose, onActionSelect }) => {
   const [isAnimating, setIsAnimating] = useState(false);
