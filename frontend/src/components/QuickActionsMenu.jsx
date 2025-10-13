@@ -93,9 +93,9 @@ const TikTokLiveIcon = ({ size = 16, className = "" }) => {
         fill="none"
       />
       
-      {/* Arco inferior del TV (base) */}
+      {/* Arco inferior del TV (base) - igual que el superior */}
       <path
-        d="M 30 80 Q 40 90 50 90 Q 60 90 70 80"
+        d="M 20 70 Q 20 80 30 80 L 70 80 Q 80 80 80 70"
         stroke="currentColor"
         strokeWidth="8"
         strokeLinecap="round"
