@@ -500,8 +500,9 @@ const SearchPage = () => {
         
         if (prevResponse.ok) {
           const prevPollData = await prevResponse.json();
-          console.log('📥 Loaded previous poll in background:', prevPollData.id);
-          finalPolls.unshift(prevPollData);
+          const transformedPrevPoll = transformPollData(prevPollData);
+          console.log('📥 Loaded previous poll in background:', transformedPrevPoll.id, 'userVote:', transformedPrevPoll.userVote);
+          finalPolls.unshift(transformedPrevPoll);
           finalIndex = 1;
         }
       } catch (error) {
