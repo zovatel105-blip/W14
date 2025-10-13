@@ -22,20 +22,20 @@ const StoryPlusIcon = ({ size = 16, className = "" }) => (
       strokeWidth="2"
       fill="none"
     />
-    {/* Círculo más grande con + en esquina inferior derecha */}
+    {/* Círculo blanco en esquina inferior derecha */}
     <circle
       cx="18"
       cy="18"
       r="5.5"
-      fill="currentColor"
+      fill="white"
     />
-    {/* Cruz del + más grande y gruesa */}
+    {/* Cruz del + en naranja */}
     <line
       x1="18"
       y1="15"
       x2="18"
       y2="21"
-      stroke="white"
+      stroke="#f97316"
       strokeWidth="2.5"
       strokeLinecap="round"
     />
@@ -44,7 +44,7 @@ const StoryPlusIcon = ({ size = 16, className = "" }) => (
       y1="18"
       x2="21"
       y2="18"
-      stroke="white"
+      stroke="#f97316"
       strokeWidth="2.5"
       strokeLinecap="round"
     />
