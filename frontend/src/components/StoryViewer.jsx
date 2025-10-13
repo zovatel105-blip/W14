@@ -257,7 +257,7 @@ const StoryViewer = ({ stories = [], initialIndex = 0, onClose, onStoryEnd }) =>
                 {currentStory.display_name || currentStory.username}
               </p>
               <p className="text-white/70 text-xs">
-                {storyService.getStoryRemainingTime(currentStory)}
+                {storyService.getStoryTimeAgo(currentStory)}
               </p>
             </div>
           </div>
