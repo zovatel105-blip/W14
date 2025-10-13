@@ -1044,7 +1044,7 @@ const SearchPage = () => {
           {/* Stories Section - Real Data */}
           {isAuthenticated && (
             <div className="space-y-4">
-              <h3 className="text-2xl font-bold text-gray-900 px-4">Stories</h3>
+              <h3 className="text-lg font-semibold text-gray-900 px-4">Stories</h3>
               
               {loadingStates.stories ? (
                 <StoriesSectionSkeleton count={5} />
