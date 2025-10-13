@@ -14,7 +14,6 @@ import storyService from '../services/storyService';
 
 const StoryCreationPage = () => {
   const navigate = useNavigate();
-  const { authUser } = useAuth();
   
   const [storyType, setStoryType] = useState(null); // 'image', 'video', 'text'
   const [contentUrl, setContentUrl] = useState(null);
