@@ -17,7 +17,7 @@ const StoryPlusIcon = ({ size = 16, className = "" }) => (
     <circle
       cx="12"
       cy="12"
-      r="10.5"
+      r="11"
       stroke="currentColor"
       strokeWidth="2.2"
       fill="none"
