@@ -155,6 +155,32 @@ class StoryService {
     }
   }
 
+  // Helper method to get time elapsed since story was created
+  getStoryTimeAgo(story) {
+    const now = new Date();
+    const createdAt = new Date(story.created_at);
+    const elapsedMs = now - createdAt;
+    
+    if (elapsedMs < 0) return "justo ahora";
+    
+    const seconds = Math.floor(elapsedMs / 1000);
+    const minutes = Math.floor(seconds / 60);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+    
+    if (days > 0) {
+      return `hace ${days}d`;
+    } else if (hours > 0) {
+      return `hace ${hours}h`;
+    } else if (minutes > 0) {
+      return `hace ${minutes}m`;
+    } else if (seconds > 30) {
+      return `hace ${seconds}s`;
+    } else {
+      return "justo ahora";
+    }
+  }
+
   // Helper method to create story data for API
   createStoryData({
     contentUrl = null,
