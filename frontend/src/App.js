@@ -19,6 +19,7 @@ import ContentCreationPage from './pages/ContentCreationPage';
 import ContentPublishPage from './pages/ContentPublishPage';
 import FollowingPage from './pages/FollowingPage';
 import AuthPage from './pages/AuthPage';
+import StoryCreationPage from './pages/StoryCreationPage';
 import { Toaster } from './components/ui/toaster';
 // Mock data imports removed - using real backend services
 import { useToast } from './hooks/use-toast';
