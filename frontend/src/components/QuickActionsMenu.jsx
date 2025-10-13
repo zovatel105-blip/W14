@@ -128,11 +128,10 @@ const QuickActionsMenu = ({ isVisible, onClose, onActionSelect }) => {
 
   const handleMoments = () => {
     toast({
-      title: "📸 Abriendo momentos...",
-      description: "Navegando a historias de momentos",
+      title: "📸 Historias - Próximamente",
+      description: "Esta función estará disponible muy pronto. ¡Mantente atento!",
+      duration: 3000,
     });
-    
-    navigate('/moments');
     
     if (onActionSelect) {
       onActionSelect('moments');
