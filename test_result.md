@@ -1056,8 +1056,9 @@ Layout "off" - Carrusel Horizontal:
 **AJUSTE DE FUENTE SEGÚN REFERENCIA:**
 1. ✅ **Tamaño reducido**: Cambiado de `text-base` (16px) a `text-sm` (14px)
 2. ✅ **Sans-serif**: Mantiene fuente del sistema (sans-serif por defecto)
-3. ✅ **Peso regular**: `font-normal` para peso estándar
-4. ✅ **Legibilidad optimizada**: Tamaño apropiado para listas compactas
+3. ✅ **Peso semibold**: Cambiado de `font-normal` a `font-semibold` para coincidir con títulos de resultados
+4. ✅ **Consistencia tipográfica**: Usa exactamente la misma clase que los títulos de resultados de búsqueda (`text-sm font-semibold text-gray-900`)
+5. ✅ **Legibilidad optimizada**: Tamaño y peso apropiados para listas compactas
 
 **CÓDIGO IMPLEMENTADO:**
 ```javascript
