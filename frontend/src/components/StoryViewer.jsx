@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Heart, Send, MoreHorizontal, Volume2, VolumeX, Play, Pause } from 'lucide-react';
+import { X, Send, Volume2, VolumeX, Smile } from 'lucide-react';
 import { toast } from 'sonner';
+import EmojiPicker from 'emoji-picker-react';
 import storyService from '../services/storyService';
+import { useAuth } from '../contexts/AuthContext';
 
 const StoryViewer = ({ stories = [], initialIndex = 0, onClose, onStoryEnd }) => {
   const [currentIndex, setCurrentIndex] = useState(initialIndex);
