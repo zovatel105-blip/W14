@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import CustomLogo from './CustomLogo';
 import QuickActionsMenu from './QuickActionsMenu';
 import useLongPress from '../hooks/useLongPress';
