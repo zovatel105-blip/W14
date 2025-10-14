@@ -2420,15 +2420,7 @@ const ProfilePage = () => {
         />
       )}
 
-      {/* Story Viewer */}
-      {showStoryViewer && userStories.length > 0 && (
-        <StoryViewer
-          stories={userStories}
-          initialIndex={0}
-          onClose={() => setShowStoryViewer(false)}
-          onStoryEnd={() => setShowStoryViewer(false)}
-        />
-      )}
+      {/* Story Viewer - REMOVED (Stories feature disabled) */}
 
       {/* Create Story Modal - REMOVED */}
     </>
