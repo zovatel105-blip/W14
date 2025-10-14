@@ -1642,36 +1642,15 @@ const ProfilePage = () => {
                 {/* Avatar - Centro */}
                 <div className="flex justify-center">
                   <div className="relative w-20 h-20 sm:w-24 sm:h-24">
-                    {displayUser?.hasStory ? (
-                      <button
-                        onClick={() => {
-                          if (userStories.length > 0) {
-                            setShowStoryViewer(true);
-                          }
-                        }}
-                        className="absolute inset-0 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 rounded-full p-1 hover:scale-105 transition-transform duration-200"
-                      >
-                        <div className="w-full h-full bg-white rounded-full overflow-hidden">
-                          <Avatar className="w-full h-full rounded-full">
-                            <AvatarImage src={displayUser?.avatar} alt={displayUser?.displayName} className="object-cover" />
-                            <AvatarFallback className="bg-gradient-to-br from-gray-100 to-gray-200 text-gray-600 text-lg sm:text-xl font-medium">
-                              {displayUser?.displayName ? displayUser.displayName.charAt(0).toUpperCase() : 'U'}
-                            </AvatarFallback>
-                          </Avatar>
-                        </div>
-                      </button>
-                    ) : (
-                      <div className="w-full h-full bg-white rounded-full overflow-hidden border-4 border-gray-100">
-                        <Avatar className="w-full h-full rounded-full">
-                          <AvatarImage src={displayUser?.avatar} alt={displayUser?.displayName} className="object-cover" />
-                          <AvatarFallback className="bg-gradient-to-br from-gray-100 to-gray-200 text-gray-600 text-lg sm:text-xl font-medium">
-                            {displayUser?.displayName ? displayUser.displayName.charAt(0).toUpperCase() : 'U'}
-                          </AvatarFallback>
-                        </Avatar>
-                      </div>
-                    )}
-                    
-                    {/* Botón de crear story - REMOVED */}
+                    {/* Stories feature removed - simple avatar display */}
+                    <div className="w-full h-full bg-white rounded-full overflow-hidden border-4 border-gray-100">
+                      <Avatar className="w-full h-full rounded-full">
+                        <AvatarImage src={displayUser?.avatar} alt={displayUser?.displayName} className="object-cover" />
+                        <AvatarFallback className="bg-gradient-to-br from-gray-100 to-gray-200 text-gray-600 text-lg sm:text-xl font-medium">
+                          {displayUser?.displayName ? displayUser.displayName.charAt(0).toUpperCase() : 'U'}
+                        </AvatarFallback>
+                      </Avatar>
+                    </div>
                   </div>
                 </div>
                 
