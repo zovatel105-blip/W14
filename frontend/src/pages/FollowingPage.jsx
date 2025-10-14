@@ -548,11 +548,7 @@ const FollowingPage = () => {
         </div>
 
         {/* Stories overlay en la parte superior */}
-        <div className="fixed top-0 left-0 right-0 z-30 bg-gradient-to-b from-black/80 via-black/40 to-transparent">
-          <div className="pt-safe-top">
-            <StoriesContainer className="px-2 py-2" showCreateButton={false} />
-          </div>
-        </div>
+        {/* Stories overlay - REMOVED (Stories feature disabled) */}
         
         <TikTokScrollView
           polls={polls}
