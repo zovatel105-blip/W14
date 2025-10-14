@@ -12,14 +12,14 @@ import ShareModal from '../components/ShareModal';
 import StatisticsModal from '../components/StatisticsModal';
 import TikTokProfileGrid from '../components/TikTokProfileGrid';
 import TikTokScrollView from '../components/TikTokScrollView';
-import StoryViewer from '../components/StoryViewer';
+// import StoryViewer from '../components/StoryViewer'; // Removed - Stories feature disabled
 import { 
   Settings, Users, Vote, Trophy, Heart, Share, ArrowLeft, AtSign, Bookmark, LayoutDashboard, Check, 
   Share2, UserPlus, UserCheck, ChevronDown, Plus, BarChart3, Mail, MessageCircle, Send, Hash, Bell, BellOff, UserCircle, Link, X, Trash2 
 } from 'lucide-react';
 import pollService from '../services/pollService';
 import userService from '../services/userService';
-import storyService from '../services/storyService';
+// import storyService from '../services/storyService'; // Removed - Stories feature disabled
 import { useToast } from '../hooks/use-toast';
 import { useAuth } from '../contexts/AuthContext';
 import { useFollow } from '../contexts/FollowContext';
