@@ -47,8 +47,8 @@ const LogoWithQuickActions = ({ size = 32, className = "" }) => {
         navigate('/search');
         break;
       case 'moments':
-        console.log('📸 Navigating to story creation...');
-        navigate('/story-creation');
+        console.log('📸 Moments action - Coming soon...');
+        // Funcionalidad de historias deshabilitada
         break;
       default:
         console.log('❓ Unknown action:', actionType);
