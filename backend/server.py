@@ -7361,17 +7361,12 @@ async def get_stories(
     limit: int = 50,
     current_user: UserResponse = Depends(get_current_user)
 ):
-    """Get active stories from followed users and own stories"""
+    """Get ALL active PUBLIC stories from all users"""
     try:
-        # Get following list
-        follows = await db.follows.find({"follower_id": current_user.id}).to_list(1000)
-        following_ids = [follow["following_id"] for follow in follows]
-        following_ids.append(current_user.id)  # Include own stories
-        
-        # Get active stories from followed users
+        # Get ALL active public stories (not just from followed users)
         now = datetime.utcnow()
         stories = await db.stories.find({
-            "user_id": {"$in": following_ids},
+            "privacy": "public",
             "is_active": True,
             "expires_at": {"$gt": now}
         }).sort("created_at", -1).limit(limit).to_list(limit)
