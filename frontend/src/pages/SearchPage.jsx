@@ -102,16 +102,9 @@ const SearchPage = () => {
   const loadStories = async () => {
     if (!isAuthenticated) return;
     
-    setLoadingStates(prev => ({ ...prev, stories: true }));
-    try {
-      const response = await storyService.getStories(20);
-      setStories(response.stories || []);
-    } catch (error) {
-      console.error('Error loading stories:', error);
-      // Keep empty array if error
-    } finally {
-      setLoadingStates(prev => ({ ...prev, stories: false }));
-    }
+    // Stories feature disabled - no longer loading stories
+    setLoadingStates(prev => ({ ...prev, stories: false }));
+    setStories([]);
   };
 
   // Load recommended content  
