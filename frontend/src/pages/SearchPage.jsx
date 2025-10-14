@@ -4,7 +4,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useToast } from '../hooks/use-toast';
 import { useAuth } from '../contexts/AuthContext';
 import searchService from '../services/searchService';
-import storyService from '../services/storyService';
+// import storyService from '../services/storyService'; // Removed - Stories feature disabled
 import userService from '../services/userService';
 import AutocompleteDropdown from '../components/search/AutocompleteDropdown';
 import TikTokScrollView from '../components/TikTokScrollView';
