@@ -502,11 +502,15 @@ const ContentPublishPage = () => {
                     {hashtagsList.map((hashtag, index) => (
                       <span 
                         key={index} 
-                        className="bg-blue-50 text-blue-700 px-3 py-2 rounded-lg text-sm font-medium flex items-center gap-2"
+                        className="bg-blue-50 text-blue-700 px-3 py-2 rounded-lg text-sm font-medium flex items-center gap-2 cursor-pointer hover:bg-blue-100 transition-colors"
+                        onClick={() => navigate(`/search?q=${encodeURIComponent(hashtag)}&filter=hashtags`)}
                       >
                         #{hashtag}
                         <button
-                          onClick={() => handleRemoveHashtag(hashtag)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleRemoveHashtag(hashtag);
+                          }}
                           className="text-blue-500 hover:text-blue-700"
                         >
                           ×
