@@ -12,6 +12,34 @@ import CommentsModal from './CommentsModal';
 import ShareModal from './ShareModal';
 import { useShare } from '../hooks/useShare';
 
+// Helper function to render text with clickable hashtags
+const renderTextWithHashtags = (text, navigate) => {
+  if (!text) return null;
+  
+  // Split text by hashtags while keeping the hashtags
+  const parts = text.split(/(#\w+)/g);
+  
+  return parts.map((part, index) => {
+    if (part.startsWith('#')) {
+      // This is a hashtag, make it clickable
+      return (
+        <span
+          key={index}
+          className="text-blue-600 hover:text-blue-700 cursor-pointer underline"
+          onClick={(e) => {
+            e.stopPropagation();
+            navigate(`/search?q=${encodeURIComponent(part.substring(1))}&filter=hashtags`);
+          }}
+        >
+          {part}
+        </span>
+      );
+    }
+    // Regular text
+    return <span key={index}>{part}</span>;
+  });
+};
+
 const MediaPreview = ({ media, isWinner, isSelected, onClick, percentage, option, totalVotes, userVote, fullScreen = false }) => {
   // Detect mobile device with window resize handling
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
