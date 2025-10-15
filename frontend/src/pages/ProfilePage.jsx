@@ -1074,7 +1074,7 @@ const ProfilePage = () => {
     pollsCreated: userPolls.length,
     totalPolls: userPolls.length,
     verified: authUser?.is_verified || false,
-    hasStory: userHasStories, // ✅ REAL DATA: Verificación real de historias activas desde backend
+    hasStory: false, // Stories feature disabled - always false
   } : viewedUser; // Use real viewed user data, no fallback to mock data
 
   // Add null safety check to prevent charAt errors
