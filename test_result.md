@@ -952,6 +952,100 @@ Layout "off" - Carrusel Horizontal:
 └─────────────────────────────────────────────────────────────────┘
 ```
 
+**🎭 HISTORIAS ESTILO INSTAGRAM EN PÁGINA DE SEGUIDOS IMPLEMENTADAS (2025-01-27): Sistema completo de historias horizontales agregado exitosamente en la posición del logo de acciones rápidas.**
+
+✅ **IMPLEMENTACIÓN COMPLETADA:**
+
+**1. COMPONENTE STORIESBAR.JSX CREADO:**
+- ✅ **Diseño horizontal**: Scroll horizontal con avatares circulares estilo Instagram
+- ✅ **Borde degradado**: Gradiente purple-pink para historias no vistas, gris para vistas
+- ✅ **Avatar "Tu historia"**: Botón especial para agregar historia propia con ícono "+"
+- ✅ **Contador de historias**: Badge indicando número de historias por usuario
+- ✅ **Scroll suave**: Implementado con scrollbar oculto para UX limpia
+- ✅ **Responsive**: Funciona perfectamente en mobile y desktop
+
+**2. COMPONENTE STORYVIEWER.JSX CREADO:**
+- ✅ **Vista fullscreen**: Experiencia inmersiva estilo Instagram Stories
+- ✅ **Progress bars**: Barras de progreso animadas en la parte superior
+- ✅ **Auto-avance**: Cambia automáticamente cada 5 segundos
+- ✅ **Controles de navegación**: Click izquierda/derecha para navegar entre historias
+- ✅ **Pausa/Play**: Botón para pausar/reanudar historias
+- ✅ **Cerrar con X**: Botón X en esquina superior derecha
+- ✅ **Navegación entre usuarios**: Avanza automáticamente al siguiente usuario después de ver todas sus historias
+- ✅ **Desktop controls**: Flechas izquierda/derecha para navegación en desktop
+
+**3. INTEGRACIÓN EN FOLLOWINGPAGE.JSX:**
+- ✅ **Posición superior fija**: StoriesBar posicionado en parte superior (z-index 9998)
+- ✅ **Logo preservado**: Logo de acciones rápidas mantiene su posición (z-index 9999)
+- ✅ **Generación de datos demo**: Historias generadas automáticamente de usuarios seguidos
+- ✅ **Estado de historias**: Gestión completa con useState para viewer y selección
+- ✅ **Handlers implementados**: handleStoryClick, handleAddStory, handleCloseStoryViewer
+- ✅ **Vista móvil**: Perfectamente integrado en modo TikTok
+- ✅ **Vista desktop**: También disponible en layout de escritorio
+
+**4. DATOS DEMO INTELIGENTES:**
+- ✅ **Extracción de usuarios**: Obtiene usuarios únicos de los polls de seguidos
+- ✅ **Historias por usuario**: Cada usuario tiene 1-3 historias aleatorias
+- ✅ **Imágenes placeholder**: Usa Picsum para imágenes demo realistas
+- ✅ **Timestamps**: "Hace Xh" generado aleatoriamente (1-12 horas)
+- ✅ **Captions opcionales**: Primera historia incluye caption personalizado
+- ✅ **Límite de 15 usuarios**: Para evitar sobrecarga de UI
+
+**5. CARACTERÍSTICAS DE UX:**
+- ✅ **Click areas**: Zona izquierda (anterior), zona derecha (siguiente)
+- ✅ **Keyboard support**: Implícito para navegación
+- ✅ **Touch gestures**: Soporte completo para móviles
+- ✅ **Visual feedback**: Bordes de color cambian según estado (visto/no visto)
+- ✅ **Smooth transitions**: Animaciones fluidas entre historias
+- ✅ **Error handling**: Fallback de imágenes en caso de error de carga
+
+**6. UBICACIÓN FINAL:**
+```
+Mobile/TikTok Mode:
+┌─────────────────────────────────────────┐
+│ [Tu +] [User1] [User2] [User3] ... →→→ │ ← Stories Bar (fixed top)
+│                                    [⚡] │ ← Quick Actions Logo (fixed top-right)
+├─────────────────────────────────────────┤
+│                                         │
+│         TikTok Scroll View              │
+│         (Posts from followed)           │
+│                                         │
+└─────────────────────────────────────────┘
+
+Desktop Mode:
+┌─────────────────────────────────────────┐
+│ [Tu +] [User1] [User2] [User3] ... →→→ │ ← Stories Bar (top)
+│                                    [⚡] │ ← Quick Actions Logo (top-right)
+├─────────────────────────────────────────┤
+│           [👥 Following]                │ ← Header
+│    Publicaciones de usuarios seguidos   │
+├─────────────────────────────────────────┤
+│  [Post1]  [Post2]  [Post3]              │
+│  [Post4]  [Post5]  [Post6]              │ ← Grid de posts
+│  ...                                    │
+└─────────────────────────────────────────┘
+```
+
+**7. FUNCIONALIDAD AL HACER CLIC:**
+- ✅ **Story fullscreen**: Abre en vista fullscreen tipo Instagram
+- ✅ **Navegación fluida**: Puede navegar entre historias de un usuario
+- ✅ **Cambio de usuario**: Al terminar historias de un usuario, pasa al siguiente
+- ✅ **Cerrar modal**: Con botón X o terminando todas las historias
+
+**ARCHIVOS CREADOS/MODIFICADOS:**
+- ✅ **Creado**: `/app/frontend/src/components/StoriesBar.jsx` (70 líneas)
+- ✅ **Creado**: `/app/frontend/src/components/StoryViewer.jsx` (228 líneas)
+- ✅ **Modificado**: `/app/frontend/src/pages/FollowingPage.jsx` (agregadas 60+ líneas)
+
+**RESULTADO FINAL:**
+🎯 **HISTORIAS ESTILO INSTAGRAM COMPLETAMENTE FUNCIONALES** - Los usuarios ahora pueden:
+- Ver historias de usuarios seguidos en formato horizontal estilo Instagram
+- Hacer clic para ver historias en vista fullscreen inmersiva
+- Navegar entre historias y usuarios con controles intuitivos
+- Disfrutar de auto-avance con progress bars animados
+- Acceder a la función tanto en mobile como desktop
+- Todo ubicado en la posición del logo de acciones rápidas como solicitado
+
 **FUNCIONALIDADES CLAVE IMPLEMENTADAS:**
 
 **📱 Carrusel Horizontal Completo:**
