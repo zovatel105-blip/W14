@@ -725,17 +725,16 @@ const FollowingPage = () => {
       <>
         {/* Stories tabs deslizables */}
         <div 
-          className="fixed top-1 right-0 z-[9999] flex items-center gap-2 pr-2"
+          className="fixed top-1 right-0 z-[9999] flex items-center gap-2"
           style={{ 
             position: 'fixed',
             top: '4px',
             right: '0px',
             zIndex: 9999,
-            paddingRight: '8px',
           }}
         >
           {/* Stories horizontales deslizables */}
-          <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide max-w-[250px] justify-end">
+          <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide max-w-[250px] justify-end pr-1">
             {demoStories.slice(0, 5).map((story, index) => (
               <button
                 key={story.userId}
