@@ -35,7 +35,7 @@ const renderTextWithHashtags = (text, navigate) => {
       return (
         <span
           key={index}
-          className="text-blue-400 hover:text-blue-300 cursor-pointer underline"
+          className="text-white font-semibold hover:underline cursor-pointer"
           onClick={(e) => {
             e.stopPropagation();
             navigate(`/search?q=${encodeURIComponent(part.substring(1))}&filter=hashtags`);
