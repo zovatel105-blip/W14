@@ -1297,10 +1297,10 @@ const SearchPage = () => {
                 >
                   {/* Header: Avatar + Username + Follow Button */}
                   <div className="flex items-center justify-between px-0 py-2">
-                    <div className="flex items-center space-x-1">
+                    <div className="flex items-center space-x-1 flex-1 min-w-0">
                       {/* Avatar */}
                       <div 
-                        className="w-6 h-6 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center overflow-hidden cursor-pointer"
+                        className="w-6 h-6 rounded-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center overflow-hidden cursor-pointer flex-shrink-0"
                         onClick={(e) => {
                           e.stopPropagation();
                           const username = result.username || result.author?.username || result.author_username;
@@ -1321,7 +1321,7 @@ const SearchPage = () => {
                         </span>
                       </div>
                       {/* Display Name */}
-                      <span className="text-sm text-gray-500 truncate">
+                      <span className="text-xs text-gray-400 truncate flex-1 min-w-0">
                         {result.display_name || result.author?.display_name || result.author_display_name || result.username || result.author?.username || result.author_username || 'usuario'}
                       </span>
                     </div>
