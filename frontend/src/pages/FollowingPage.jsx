@@ -620,28 +620,13 @@ const FollowingPage = () => {
 
   if (isLoading) {
     return (
-      <>
-        {/* Logo fijo SIEMPRE VISIBLE - Loading */}
-        <div 
-          className="fixed top-4 right-4 z-[9999] flex items-center justify-center w-10 h-10 rounded-full bg-white/95 backdrop-blur-md border border-white/60 shadow-lg"
-          style={{ 
-            position: 'fixed',
-            top: '16px',
-            right: '16px',
-            zIndex: 9999,
-          }}
-        >
-          <LogoWithQuickActions size={32} />
+      <div className="fixed inset-0 z-50 bg-black flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-white/20 border-t-white rounded-full animate-spin mx-auto mb-4"></div>
+          <h2 className="text-xl font-semibold text-white">Cargando Following...</h2>
+          <p className="text-white/70 mt-2">Obteniendo publicaciones de usuarios seguidos</p>
         </div>
-        
-        <div className="fixed inset-0 z-50 bg-black flex items-center justify-center">
-          <div className="text-center">
-            <div className="w-16 h-16 border-4 border-white/20 border-t-white rounded-full animate-spin mx-auto mb-4"></div>
-            <h2 className="text-xl font-semibold text-white">Cargando Following...</h2>
-            <p className="text-white/70 mt-2">Obteniendo publicaciones de usuarios seguidos</p>
-          </div>
-        </div>
-      </>
+      </div>
     );
   }
 
