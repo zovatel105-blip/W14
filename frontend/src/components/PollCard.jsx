@@ -184,10 +184,10 @@ const MediaPreview = ({ media, isWinner, isSelected, onClick, percentage, option
             className={cn(
               "absolute inset-x-0 bottom-0 transition-all duration-700 ease-out",
               isSelected 
-                ? "bg-gradient-to-t from-blue-500/70 to-blue-600/70"
+                ? "bg-blue-500/70"
                 : isWinner 
-                  ? "bg-gradient-to-t from-green-500/70 to-green-600/70"
-                  : "bg-gradient-to-t from-gray-400/50 to-gray-500/50"
+                  ? "bg-green-500/70"
+                  : "bg-gray-400/50"
             )}
             initial={{ height: 0 }}
             animate={{ height: `${displayPercentage}%` }}
