@@ -70,6 +70,14 @@ module.exports = {
   				to: {
   					height: '0'
   				}
+  			},
+  			'spin-slow': {
+  				from: {
+  					transform: 'rotate(0deg)'
+  				},
+  				to: {
+  					transform: 'rotate(360deg)'
+  				}
   			}
   		},
   		animation: {
