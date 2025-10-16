@@ -691,25 +691,6 @@ const FollowingPage = () => {
       </div>
       
       <div className="min-h-screen bg-gray-50 pt-6 relative">
-        {/* Stories Bar - Desktop */}
-        <div className="mb-6">
-          <StoriesBar 
-            stories={demoStories}
-            onStoryClick={handleStoryClick}
-            onAddStory={handleAddStory}
-            currentUserId={user?.id}
-          />
-        </div>
-
-        {/* Story Viewer Modal */}
-        {showStoryViewer && demoStories.length > 0 && (
-          <StoryViewer
-            stories={demoStories}
-            initialIndex={selectedStoryIndex}
-            onClose={handleCloseStoryViewer}
-          />
-        )}
-
         {/* Header */}
         <div className="mb-8 text-center">
           <div className="flex items-center justify-center space-x-3 mb-2">
