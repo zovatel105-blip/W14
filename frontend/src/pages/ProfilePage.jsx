@@ -1996,7 +1996,7 @@ const ProfilePage = () => {
 
                 {/* Panel de Enlaces de Redes Sociales - Para el propietario */}
                 {isOwnProfile && (
-                  <TabsContent value="social" className="space-y-6">
+                  <TabsContent value="social" className="space-y-6 mt-0">
                     <div className="px-4 pt-2 pb-6">
                       {/* Header del Panel */}
                       <div className="text-center mb-6">
@@ -2155,7 +2155,7 @@ const ProfilePage = () => {
 
                 {/* Panel de Enlaces Sociales - Para visitantes (solo vista) */}
                 {!isOwnProfile && Object.keys(socialLinks).length > 0 && (
-                  <TabsContent value="social" className="space-y-6">
+                  <TabsContent value="social" className="space-y-6 mt-0">
                     <div className="px-4 pt-2 pb-6">
                       {/* Lista de Enlaces (Solo vista) - Tarjetas coloridas como en referencia */}
                       <div className="max-w-lg mx-auto">
