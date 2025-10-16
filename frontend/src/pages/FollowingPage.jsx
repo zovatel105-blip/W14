@@ -724,7 +724,7 @@ const FollowingPage = () => {
   if (isMobile || isTikTokMode) {
     return (
       <>
-        {/* Stories tabs deslizables en la posición del logo */}
+        {/* Stories tabs deslizables */}
         <div 
           className="fixed top-4 right-4 z-[9999] flex items-center gap-2"
           style={{ 
@@ -735,7 +735,7 @@ const FollowingPage = () => {
           }}
         >
           {/* Stories horizontales deslizables */}
-          <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide max-w-[200px]">
+          <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide max-w-[250px]">
             {demoStories.slice(0, 5).map((story, index) => (
               <button
                 key={story.userId}
@@ -756,11 +756,6 @@ const FollowingPage = () => {
                 </div>
               </button>
             ))}
-          </div>
-
-          {/* Logo de acciones rápidas */}
-          <div className="flex-shrink-0 w-10 h-10 rounded-full bg-white/95 backdrop-blur-md border border-white/60 shadow-lg flex items-center justify-center">
-            <LogoWithQuickActions size={32} />
           </div>
         </div>
 
