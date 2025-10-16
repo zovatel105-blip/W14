@@ -109,6 +109,67 @@ const FollowingPage = () => {
     };
   }, [isMobile, enterTikTokMode, exitTikTokMode]);
 
+  // Generate demo stories data from followed users
+  const demoStories = useMemo(() => {
+    if (!polls || polls.length === 0) return [];
+    
+    // Extract unique users from polls
+    const usersMap = new Map();
+    polls.forEach(poll => {
+      const author = poll.author || poll.authorUser;
+      if (author && author.id && author.id !== user?.id) {
+        usersMap.set(author.id, {
+          userId: author.id,
+          username: author.username || author.name || 'Usuario',
+          userAvatar: author.avatar || author.profilePicture || null,
+          hasViewed: false,
+          storiesCount: Math.floor(Math.random() * 3) + 1, // 1-3 stories per user
+          stories: []
+        });
+      }
+    });
+
+    // Generate demo stories for each user
+    const stories = Array.from(usersMap.values()).map(userStory => {
+      const storiesCount = userStory.storiesCount;
+      const stories = [];
+      
+      for (let i = 0; i < storiesCount; i++) {
+        stories.push({
+          id: `story-${userStory.userId}-${i}`,
+          type: 'image',
+          url: `https://picsum.photos/400/600?random=${userStory.userId}-${i}`,
+          caption: i === 0 ? `Historia de ${userStory.username}` : null,
+          timeAgo: `Hace ${Math.floor(Math.random() * 12) + 1}h`
+        });
+      }
+      
+      return {
+        ...userStory,
+        stories
+      };
+    });
+
+    return stories.slice(0, 15); // Limit to 15 users max
+  }, [polls, user]);
+
+  const handleStoryClick = (index) => {
+    setSelectedStoryIndex(index);
+    setShowStoryViewer(true);
+  };
+
+  const handleAddStory = () => {
+    toast({
+      title: "Próximamente",
+      description: "La función de agregar historias estará disponible pronto",
+    });
+  };
+
+  const handleCloseStoryViewer = () => {
+    setShowStoryViewer(false);
+    setSelectedStoryIndex(0);
+  };
+
   const handleVote = async (pollId, optionId) => {
     if (!isAuthenticated) {
       toast({
