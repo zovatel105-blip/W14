@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useLocation, useNavigate } from 'react-router-dom';
 import TikTokScrollView from '../components/TikTokScrollView';
 import PollCard from '../components/PollCard';
@@ -6,7 +6,8 @@ import CommentsModal from '../components/CommentsModal';
 import ShareModal from '../components/ShareModal';
 import CustomLogo from '../components/CustomLogo';
 import LogoWithQuickActions from '../components/LogoWithQuickActions';
-// import StoriesContainer from '../components/StoriesContainer'; // Removed - Stories feature disabled
+import StoriesBar from '../components/StoriesBar';
+import StoryViewer from '../components/StoryViewer';
 import pollService from '../services/pollService';
 import savedPollsService from '../services/savedPollsService';
 import { useToast } from '../hooks/use-toast';
