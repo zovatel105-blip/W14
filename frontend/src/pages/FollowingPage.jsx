@@ -37,6 +37,10 @@ const FollowingPage = () => {
 
   // Detect if we're on mobile or desktop
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
+  
+  // Stories state
+  const [showStoryViewer, setShowStoryViewer] = useState(false);
+  const [selectedStoryIndex, setSelectedStoryIndex] = useState(0);
 
   // Load following users' polls from backend
   useEffect(() => {
