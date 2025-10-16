@@ -6,7 +6,6 @@ import CommentsModal from '../components/CommentsModal';
 import ShareModal from '../components/ShareModal';
 import CustomLogo from '../components/CustomLogo';
 import LogoWithQuickActions from '../components/LogoWithQuickActions';
-import StoriesBar from '../components/StoriesBar';
 import StoryViewer from '../components/StoryViewer';
 import pollService from '../services/pollService';
 import savedPollsService from '../services/savedPollsService';
