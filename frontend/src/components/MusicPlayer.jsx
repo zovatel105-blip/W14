@@ -145,24 +145,28 @@ const MusicPlayer = ({ music, isVisible = true, onTogglePlay, className = '', au
     }
   };
 
+  // Determinar si es original sound o música externa
+  const isOriginalSound = music.isOriginal || music.source === 'User Upload' || !music.cover;
+  const displayImage = isOriginalSound && authorAvatar ? authorAvatar : music.cover;
+  
   return (
     <div className={`flex-shrink-0 ${className}`}>
       {/* Reproductor clicable - SOLO PARA NAVEGACIÓN */}
       <div className="relative">
         <div 
           onClick={handleNavigateToAudio}
-          className="relative cursor-pointer w-8 h-8 rounded-full overflow-hidden bg-white/20 backdrop-blur-sm border border-white/30 shadow-lg hover:shadow-xl transition-shadow duration-200"
+          className="relative cursor-pointer w-10 h-10 rounded-full overflow-hidden bg-gray-800 border-2 border-white shadow-lg hover:shadow-xl transition-shadow duration-200 animate-spin-slow"
           title="Ver información de la música"
         >
-          {music.cover ? (
+          {displayImage ? (
             <img 
-              src={music.cover} 
-              alt={music.title}
+              src={displayImage} 
+              alt={isOriginalSound ? `Avatar de ${authorUsername || 'usuario'}` : music.title}
               className="w-full h-full object-cover"
             />
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
-              <Music className="w-4 h-4 text-white" />
+            <div className="w-full h-full bg-gray-800 flex items-center justify-center">
+              <Music className="w-5 h-5 text-white" />
             </div>
           )}
           
@@ -191,7 +195,7 @@ const MusicPlayer = ({ music, isVisible = true, onTogglePlay, className = '', au
         {/* Animación de ondas cuando está reproduciéndose */}
         {isPlaying && (
           <div className="absolute -inset-2 opacity-60 pointer-events-none">
-            <div className="w-12 h-12 rounded-full border-2 border-white/30 animate-ping" />
+            <div className="w-14 h-14 rounded-full border-2 border-white/30 animate-ping" />
           </div>
         )}
       </div>
