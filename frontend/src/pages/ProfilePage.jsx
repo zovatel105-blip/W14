@@ -1835,7 +1835,7 @@ const ProfilePage = () => {
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
               
               {/* Navegación de tabs minimalista con padding lateral mínimo */}
-              <div className="px-1 sm:px-2 mb-6">
+              <div className="px-1 sm:px-2 mb-2">
                 <TabsList className={`grid w-full ${isOwnProfile ? 'grid-cols-5' : (Object.keys(socialLinks).length > 0 ? 'grid-cols-3' : 'grid-cols-2')} bg-gray-50 rounded-2xl p-1 h-auto`}>
                   <TabsTrigger 
                     value="polls" 
