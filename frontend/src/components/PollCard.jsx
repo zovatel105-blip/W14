@@ -88,18 +88,18 @@ const MediaPreview = ({ media, isWinner, isSelected, onClick, percentage, option
         {shouldShowBars && (
           <motion.div 
             className={cn(
-              "absolute inset-y-0 left-0 transition-all duration-700 ease-out",
+              "absolute inset-y-0 left-0 transition-all duration-700 ease-out rounded-r-lg",
               isSelected 
-                ? "bg-blue-500/40"
+                ? "bg-gradient-to-r from-blue-500/80 via-blue-500/60 to-blue-500/30"
                 : isWinner 
-                  ? "bg-green-500/40"
-                  : "bg-gray-400/30"
+                  ? "bg-gradient-to-r from-green-500/80 via-green-500/60 to-green-500/30"
+                  : "bg-gradient-to-r from-gray-500/70 via-gray-500/50 to-gray-500/20"
             )}
             initial={{ width: 0 }}
             animate={{ width: `${Math.max(displayPercentage, 15)}%` }}
             transition={{ duration: 1, ease: "easeOut" }}
             style={{
-              minWidth: '60px'
+              minWidth: '80px'
             }}
           />
         )}
