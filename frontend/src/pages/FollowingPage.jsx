@@ -613,8 +613,24 @@ const FollowingPage = () => {
           <LogoWithQuickActions size={32} />
         </div>
 
-        {/* Stories overlay en la parte superior */}
-        {/* Stories overlay - REMOVED (Stories feature disabled) */}
+        {/* Stories Bar - Horizontal at the top */}
+        <div className="fixed top-0 left-0 right-0 z-[9998]">
+          <StoriesBar 
+            stories={demoStories}
+            onStoryClick={handleStoryClick}
+            onAddStory={handleAddStory}
+            currentUserId={user?.id}
+          />
+        </div>
+
+        {/* Story Viewer Modal */}
+        {showStoryViewer && demoStories.length > 0 && (
+          <StoryViewer
+            stories={demoStories}
+            initialIndex={selectedStoryIndex}
+            onClose={handleCloseStoryViewer}
+          />
+        )}
         
         <TikTokScrollView
           polls={polls}
