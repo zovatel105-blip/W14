@@ -694,44 +694,29 @@ const FollowingPage = () => {
 
   if (polls.length === 0) {
     return (
-      <>
-        {/* Logo fijo SIEMPRE VISIBLE - Empty State */}
-        <div 
-          className="fixed top-4 right-4 z-[9999] flex items-center justify-center w-10 h-10 rounded-full bg-white/95 backdrop-blur-md border border-white/60 shadow-lg"
-          style={{ 
-            position: 'fixed',
-            top: '16px',
-            right: '16px',
-            zIndex: 9999,
-          }}
-        >
-          <LogoWithQuickActions size={32} />
-        </div>
-        
-        <div className="fixed inset-0 z-50 bg-black flex items-center justify-center">
-          <div className="text-center px-6">
-            <div className="w-32 h-32 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-8">
-              <Users className="w-16 h-16 text-purple-400" />
-            </div>
-            <h3 className="text-3xl font-bold text-white mb-4">Sin publicaciones</h3>
-            <p className="text-white/70 text-lg mb-6">No tienes publicaciones de usuarios que sigues. ¡Sigue a más personas para ver su contenido aquí!</p>
-            <div className="space-y-3">
-              <button
-                onClick={() => navigate('/explore')}
-                className="block w-full px-6 py-3 bg-purple-500 text-white rounded-full font-medium hover:bg-purple-600 transition-colors"
-              >
-                Explorar usuarios
-              </button>
-              <button
-                onClick={() => navigate('/feed')}
-                className="block w-full px-6 py-3 bg-gray-600 text-white rounded-full font-medium hover:bg-gray-700 transition-colors"
-              >
-                Volver al Feed
-              </button>
-            </div>
+      <div className="fixed inset-0 z-50 bg-black flex items-center justify-center">
+        <div className="text-center px-6">
+          <div className="w-32 h-32 bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-8">
+            <Users className="w-16 h-16 text-purple-400" />
+          </div>
+          <h3 className="text-3xl font-bold text-white mb-4">Sin publicaciones</h3>
+          <p className="text-white/70 text-lg mb-6">No tienes publicaciones de usuarios que sigues. ¡Sigue a más personas para ver su contenido aquí!</p>
+          <div className="space-y-3">
+            <button
+              onClick={() => navigate('/explore')}
+              className="block w-full px-6 py-3 bg-purple-500 text-white rounded-full font-medium hover:bg-purple-600 transition-colors"
+            >
+              Explorar usuarios
+            </button>
+            <button
+              onClick={() => navigate('/feed')}
+              className="block w-full px-6 py-3 bg-gray-600 text-white rounded-full font-medium hover:bg-gray-700 transition-colors"
+            >
+              Volver al Feed
+            </button>
           </div>
         </div>
-      </>
+      </div>
     );
   }
 
