@@ -25,6 +25,7 @@ import { Label } from './ui/label';
 import { useToast } from '../hooks/use-toast';
 
 const PostManagementMenu = ({ poll, onUpdate, onDelete, currentUser, isOwnProfile, className }) => {
+  const [isOpen, setIsOpen] = useState(false);
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [editTitle, setEditTitle] = useState(poll.title || '');
