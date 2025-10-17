@@ -491,16 +491,66 @@ const CommentSection = ({
         )}
       </div>
       
-      {/* Área de comentario flotante minimalista */}
-      {!showHeader && user && !showNewCommentForm && (
-        <div className="sticky bottom-0 bg-white border-t border-gray-100 p-3 sm:p-4">
-          <button
-            onClick={() => setShowNewCommentForm(true)}
-            className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white py-3 sm:py-4 rounded-xl font-medium transition-all duration-200 flex items-center justify-center gap-2 sm:gap-3"
-          >
-            <MessageCircle className="w-5 h-5" />
-            <span className="text-base">Escribir comentario</span>
-          </button>
+      {/* Área de comentario flotante estilo Instagram */}
+      {!showHeader && user && (
+        <div className="sticky bottom-0 bg-white border-t border-gray-100 p-4">
+          <div className="flex items-center gap-3">
+            <Avatar className="w-8 h-8 flex-shrink-0">
+              <AvatarImage src={user.avatar_url} alt={user.username} />
+              <AvatarFallback className="bg-gradient-to-br from-purple-500 to-blue-500 text-white text-sm">
+                {user.username?.charAt(0).toUpperCase()}
+              </AvatarFallback>
+            </Avatar>
+            
+            {showNewCommentForm ? (
+              <div className="flex-1">
+                <form 
+                  onSubmit={async (e) => {
+                    e.preventDefault();
+                    const content = e.target.content.value.trim();
+                    if (!content) return;
+                    
+                    try {
+                      await handleAddComment(content);
+                      e.target.reset();
+                      setShowNewCommentForm(false);
+                    } catch (error) {
+                      // Error ya manejado en handleAddComment
+                    }
+                  }}
+                  className="flex items-center gap-2"
+                >
+                  <input
+                    name="content"
+                    type="text"
+                    placeholder="Añade un comentario..."
+                    className="flex-1 px-3 py-2 border border-gray-200 rounded-full text-sm focus:outline-none focus:border-gray-300"
+                    maxLength={500}
+                    autoFocus
+                    required
+                  />
+                  <button
+                    type="submit"
+                    disabled={submitting}
+                    className="text-blue-500 hover:text-blue-600 font-semibold text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    {submitting ? 'Enviando...' : 'Publicar'}
+                  </button>
+                </form>
+              </div>
+            ) : (
+              <button
+                onClick={() => setShowNewCommentForm(true)}
+                className="flex-1 text-left px-3 py-2 text-gray-400 text-sm"
+              >
+                Añade un comentario...
+              </button>
+            )}
+            
+            <button className="text-gray-400 hover:text-gray-600 text-sm font-semibold">
+              GIF
+            </button>
+          </div>
         </div>
       )}
       
