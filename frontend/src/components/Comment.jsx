@@ -172,7 +172,7 @@ const Comment = ({
   return (
     <motion.div
       className={cn(
-        "comment-thread py-3",
+        "comment-thread py-3 px-3 border border-gray-200 rounded-lg",
         depth > 0 && "ml-12"
       )}
       initial={{ opacity: 0, x: -20 }}
