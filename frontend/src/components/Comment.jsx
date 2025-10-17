@@ -93,6 +93,7 @@ const Comment = ({
   const [showReplies, setShowReplies] = useState(true);
   const [showMenu, setShowMenu] = useState(false);
   const [isLiking, setIsLiking] = useState(false);
+  const [isDisliking, setIsDisliking] = useState(false);
 
   const isAuthor = currentUser && currentUser.id === comment.user.id;
   const canReply = depth < maxDepth;
