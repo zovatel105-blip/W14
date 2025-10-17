@@ -114,46 +114,35 @@ const CommentsModal = ({
               </div>
             )}
 
-            {/* Header responsivo */}
-            <div className="sticky top-0 z-10 bg-gradient-to-r from-indigo-50 via-white to-purple-50 border-b border-gray-200/60 backdrop-blur-sm px-4 sm:px-6 py-3 sm:py-5">
+            {/* Header minimalista */}
+            <div className="sticky top-0 z-10 bg-white border-b border-gray-100 px-4 sm:px-6 py-3 sm:py-4">
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3 min-w-0 flex-1">
-                  <div className={cn(
-                    "bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-lg flex-shrink-0",
-                    isMobile ? "w-10 h-10" : "w-12 h-12"
+                <div className="min-w-0 flex-1">
+                  <h2 className={cn(
+                    "font-semibold text-gray-900 truncate",
+                    isMobile ? "text-lg" : "text-xl"
                   )}>
-                    <Sparkles className={cn("text-white", isMobile ? "w-5 h-5" : "w-6 h-6")} />
-                  </div>
-                  
-                  <div className="min-w-0 flex-1">
-                    <h2 className={cn(
-                      "font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent truncate",
-                      isMobile ? "text-lg" : "text-xl"
+                    {pollTitle}
+                  </h2>
+                  {pollAuthor && (
+                    <p className={cn(
+                      "text-gray-500 mt-0.5 truncate",
+                      isMobile ? "text-xs" : "text-sm"
                     )}>
-                      {pollTitle}
-                    </h2>
-                    {pollAuthor && (
-                      <p className={cn(
-                        "text-gray-600 mt-0.5 truncate",
-                        isMobile ? "text-xs" : "text-sm"
-                      )}>
-                        por <span className="font-medium text-indigo-600">{pollAuthor}</span>
-                      </p>
-                    )}
-                  </div>
+                      por <span className="font-medium text-gray-700">{pollAuthor}</span>
+                    </p>
+                  )}
                 </div>
                 
-                <Button
-                  variant="ghost"
-                  size="sm"
+                <button
                   onClick={onClose}
                   className={cn(
-                    "p-0 hover:bg-gray-100/80 rounded-xl transition-all duration-200 hover:scale-105 flex-shrink-0",
+                    "p-0 hover:bg-gray-100 rounded-full transition-all duration-200 flex-shrink-0 ml-4 flex items-center justify-center",
                     isMobile ? "h-8 w-8" : "h-10 w-10"
                   )}
                 >
-                  <X className={cn("text-gray-500", isMobile ? "w-4 h-4" : "w-5 h-5")} />
-                </Button>
+                  <X className={cn("text-gray-500", isMobile ? "w-5 h-5" : "w-6 h-6")} />
+                </button>
               </div>
             </div>
             
