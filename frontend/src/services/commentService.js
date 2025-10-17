@@ -133,8 +133,9 @@ class CommentService {
   // Frontend-friendly method to add comment (alias for createComment)
   async addCommentForFrontend(pollId, content, parentId = null) {
     const commentData = {
+      poll_id: pollId,
       content,
-      ...(parentId && { parent_id: parentId })
+      ...(parentId && { parent_comment_id: parentId })
     };
     return this.createComment(pollId, commentData);
   }
