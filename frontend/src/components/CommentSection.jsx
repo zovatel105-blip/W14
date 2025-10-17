@@ -404,11 +404,6 @@ const CommentSection = ({
         </div>
       )}
       
-      {/* Formulario de nuevo comentario */}
-      <AnimatePresence>
-        {showNewCommentForm && <NewCommentForm />}
-      </AnimatePresence>
-      
       {/* Lista de comentarios minimalista */}
       <div className="comment-list overflow-y-auto flex-1 bg-white" style={{ maxHeight: `calc(${maxHeight} - 140px)` }}>
         {error && (
