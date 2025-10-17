@@ -494,7 +494,7 @@ const CommentSection = ({
       
       {/* Área de comentario flotante estilo Instagram */}
       {!showHeader && user && (
-        <div className="sticky bottom-0 bg-white border-t border-gray-100 p-4">
+        <div className="sticky bottom-0 bg-white p-4">
           <div className="flex items-center gap-3">
             <Avatar className="w-8 h-8 flex-shrink-0">
               <AvatarImage src={user.avatar_url} alt={user.username} />
