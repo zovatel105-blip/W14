@@ -107,42 +107,37 @@ const CommentsModal = ({
               duration: 0.4 
             }}
           >
-            {/* Handle para móviles */}
-            {isMobile && (
-              <div className="w-full py-2 flex justify-center bg-white">
-                <div className="w-10 h-1 bg-gray-300 rounded-full" />
-              </div>
-            )}
+            {/* Handle superior - ambos móvil y desktop */}
+            <div className="w-full py-2 flex justify-center bg-white border-b border-gray-100">
+              <div className={cn(
+                "bg-gray-300 rounded-full",
+                isMobile ? "w-10 h-1" : "w-12 h-1"
+              )} />
+            </div>
 
-            {/* Header minimalista */}
-            <div className="sticky top-0 z-10 bg-white border-b border-gray-100 px-4 sm:px-6 py-3 sm:py-4">
+            {/* Header minimalista centrado */}
+            <div className="sticky top-0 z-10 bg-white border-b border-gray-100 px-4 sm:px-6 py-3">
               <div className="flex items-center justify-between">
-                <div className="min-w-0 flex-1">
-                  <h2 className={cn(
-                    "font-semibold text-gray-900 truncate",
-                    isMobile ? "text-lg" : "text-xl"
-                  )}>
-                    {pollTitle}
-                  </h2>
-                  {pollAuthor && (
-                    <p className={cn(
-                      "text-gray-500 mt-0.5 truncate",
-                      isMobile ? "text-xs" : "text-sm"
-                    )}>
-                      por <span className="font-medium text-gray-700">{pollAuthor}</span>
-                    </p>
-                  )}
-                </div>
+                <div className="flex-1" />
                 
-                <button
-                  onClick={onClose}
-                  className={cn(
-                    "p-0 hover:bg-gray-100 rounded-full transition-all duration-200 flex-shrink-0 ml-4 flex items-center justify-center",
-                    isMobile ? "h-8 w-8" : "h-10 w-10"
-                  )}
-                >
-                  <X className={cn("text-gray-500", isMobile ? "w-5 h-5" : "w-6 h-6")} />
-                </button>
+                <h2 className={cn(
+                  "font-semibold text-gray-900 text-center",
+                  isMobile ? "text-base" : "text-lg"
+                )}>
+                  Comentarios
+                </h2>
+                
+                <div className="flex-1 flex justify-end">
+                  <button
+                    onClick={onClose}
+                    className={cn(
+                      "p-0 hover:bg-gray-100 rounded-full transition-all duration-200 flex items-center justify-center",
+                      isMobile ? "h-8 w-8" : "h-10 w-10"
+                    )}
+                  >
+                    <X className={cn("text-gray-500", isMobile ? "w-5 h-5" : "w-6 h-6")} />
+                  </button>
+                </div>
               </div>
             </div>
             
