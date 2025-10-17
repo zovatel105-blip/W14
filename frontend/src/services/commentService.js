@@ -93,14 +93,23 @@ class CommentService {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
+        let errorMessage = `HTTP error! status: ${response.status}`;
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.detail || errorData.message || errorMessage;
+        } catch (e) {
+          // Si no se puede parsear el JSON, usar el mensaje por defecto
+        }
+        throw new Error(errorMessage);
       }
 
       return await response.json();
     } catch (error) {
       console.error('Toggle comment like error:', error);
-      throw error;
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new Error(String(error));
     }
   }
 
@@ -113,14 +122,23 @@ class CommentService {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
+        let errorMessage = `HTTP error! status: ${response.status}`;
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.detail || errorData.message || errorMessage;
+        } catch (e) {
+          // Si no se puede parsear el JSON, usar el mensaje por defecto
+        }
+        throw new Error(errorMessage);
       }
 
       return await response.json();
     } catch (error) {
       console.error('Delete comment error:', error);
-      throw error;
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new Error(String(error));
     }
   }
 
@@ -134,14 +152,23 @@ class CommentService {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.detail || `HTTP error! status: ${response.status}`);
+        let errorMessage = `HTTP error! status: ${response.status}`;
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.detail || errorData.message || errorMessage;
+        } catch (e) {
+          // Si no se puede parsear el JSON, usar el mensaje por defecto
+        }
+        throw new Error(errorMessage);
       }
 
       return await response.json();
     } catch (error) {
       console.error('Update comment error:', error);
-      throw error;
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new Error(String(error));
     }
   }
 
