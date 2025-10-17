@@ -441,20 +441,13 @@ const CommentSection = ({
             </div>
           </div>
         ) : comments.length === 0 ? (
-          <div className="empty-state p-12 text-center">
-            <MessageCircle className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">¡Sé el primero!</h3>
-            <p className="text-gray-500 mb-6 max-w-sm mx-auto text-sm">
-              No hay comentarios aún. Inicia la conversación.
-            </p>
-            {user && (
-              <button
-                onClick={() => setShowNewCommentForm(true)}
-                className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white px-8 py-3 rounded-xl font-medium transition-all duration-200"
-              >
-                Escribir primer comentario
-              </button>
-            )}
+          <div className="empty-state flex items-center justify-center min-h-[400px] p-8">
+            <div className="text-center">
+              <h3 className="text-xl font-bold text-gray-900 mb-2">Todavía no hay comentarios</h3>
+              <p className="text-gray-500 text-base">
+                Inicia una conversación.
+              </p>
+            </div>
           </div>
         ) : (
           <div className="comments-container p-3 sm:p-6 space-y-4 sm:space-y-6">
