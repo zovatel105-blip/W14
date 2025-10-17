@@ -393,7 +393,7 @@ const CommentSection = ({
       
       {/* Área de comentario flotante en la parte inferior - SIEMPRE */}
       {user && (
-        <div className="sticky bottom-0 bg-white border-t border-gray-100 p-4">
+        <div className="bg-white border-t border-gray-100 p-4 flex-shrink-0">
           <div className="flex items-center gap-3">
             <Avatar className="w-8 h-8 flex-shrink-0">
               <AvatarImage src={user.avatar_url} alt={user.username} />
@@ -445,7 +445,7 @@ const CommentSection = ({
       
       {/* Aviso para usuarios no autenticados - Diseño moderno */}
       {!user && (
-        <div className="auth-notice p-4 sm:p-6 bg-gradient-to-r from-amber-50 to-orange-50 border-t border-amber-200/60">
+        <div className="auth-notice p-4 sm:p-6 bg-gradient-to-r from-amber-50 to-orange-50 border-t border-amber-200/60 flex-shrink-0">
           <div className="text-center">
             <p className="text-amber-800 font-medium mb-2 text-sm sm:text-base">
               ¡Únete a la conversación!
