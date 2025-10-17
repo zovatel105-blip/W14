@@ -91,7 +91,7 @@ const CommentsModal = ({
           <motion.div
             ref={modalRef}
             className={cn(
-              "relative bg-white shadow-2xl overflow-hidden",
+              "relative bg-white shadow-2xl overflow-hidden flex flex-col",
               isMobile 
                 ? "w-full h-[70vh] rounded-t-3xl" 
                 : "w-full max-w-2xl max-h-[92vh] rounded-2xl"
@@ -108,7 +108,7 @@ const CommentsModal = ({
             }}
           >
             {/* Handle superior - ambos móvil y desktop */}
-            <div className="w-full py-2 flex justify-center bg-white">
+            <div className="w-full py-2 flex justify-center bg-white flex-shrink-0">
               <div className={cn(
                 "bg-gray-300 rounded-full",
                 isMobile ? "w-10 h-1" : "w-12 h-1"
@@ -116,7 +116,7 @@ const CommentsModal = ({
             </div>
 
             {/* Header minimalista centrado */}
-            <div className="sticky top-0 z-10 bg-white px-4 sm:px-6 py-3">
+            <div className="sticky top-0 z-10 bg-white px-4 sm:px-6 py-3 flex-shrink-0">
               <div className="flex items-center justify-between">
                 <div className="flex-1" />
                 
@@ -141,13 +141,8 @@ const CommentsModal = ({
               </div>
             </div>
             
-            {/* Contenido con altura dinámica */}
-            <div className={cn(
-              "flex flex-col overflow-hidden",
-              isMobile 
-                ? "h-[calc(65vh-100px)]" 
-                : "h-[calc(85vh-120px)]"
-            )}>
+            {/* Contenido que ocupa todo el espacio restante */}
+            <div className="flex-1 flex flex-col overflow-hidden">
               <CommentSection
                 pollId={pollId}
                 isVisible={isOpen}
