@@ -145,8 +145,8 @@ const CommentsModal = ({
             <div className={cn(
               "flex flex-col overflow-hidden",
               isMobile 
-                ? "h-[calc(60vh-80px)]" 
-                : "h-[calc(92vh-100px)]"
+                ? "h-[calc(65vh-100px)]" 
+                : "h-[calc(85vh-120px)]"
             )}>
               <CommentSection
                 pollId={pollId}
