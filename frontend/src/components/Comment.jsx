@@ -193,53 +193,57 @@ const Comment = ({
   return (
     <motion.div
       className={cn(
-        "comment-thread",
-        depth > 0 && "ml-6 pl-6 border-l-2 border-gradient-to-b from-indigo-100 to-purple-100"
+        "comment-thread py-3",
+        depth > 0 && "ml-12"
       )}
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.4, delay: depth * 0.1 }}
     >
-      <div className="comment-item bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-md border border-gray-100/80 hover:shadow-lg hover:bg-white/90 transition-all duration-300">
-        {/* Header del comentario con diseño moderno */}
-        <div className="flex items-start gap-4 mb-4">
-          <Avatar className="w-11 h-11 flex-shrink-0 ring-2 ring-white shadow-lg">
-            <AvatarImage src={comment.user.avatar_url} />
-            <AvatarFallback className="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 text-white font-bold text-sm">
-              {((comment.user.display_name || comment.user.username || 'U') + '').charAt(0).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
-          
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2 mb-2">
+      <div className="comment-item flex gap-3">
+        {/* Avatar */}
+        <Avatar className="w-10 h-10 flex-shrink-0">
+          <AvatarImage src={comment.user.avatar_url} />
+          <AvatarFallback className="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 text-white font-bold text-sm">
+            {((comment.user.display_name || comment.user.username || 'U') + '').charAt(0).toUpperCase()}
+          </AvatarFallback>
+        </Avatar>
+        
+        <div className="flex-1 min-w-0">
+          {/* Header con nombre y tiempo */}
+          <div className="flex items-center justify-between mb-1">
+            <div className="flex items-center gap-2">
               <span className="font-bold text-gray-900 text-sm">
                 {comment.user.display_name || comment.user.username}
               </span>
-              
-              {comment.user.is_verified && (
-                <div className="w-5 h-5 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-full flex items-center justify-center">
-                  <CheckCircle className="w-3 h-3 text-white fill-current" />
-                </div>
-              )}
-              
-              <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full">
+              <span className="text-xs text-gray-500">
                 {formatTimeAgo(comment.created_at)}
               </span>
-              
               {comment.is_edited && (
-                <span className="text-xs text-gray-400 bg-gray-50 px-2 py-1 rounded-full">editado</span>
-              )}
-              
-              {comment.status === 'sending' && (
-                <span className="text-xs text-orange-500 bg-orange-50 px-2 py-1 rounded-full flex items-center gap-1">
-                  <Loader2 className="w-3 h-3 animate-spin" />
-                  Enviando...
-                </span>
+                <span className="text-xs text-gray-400">(editado)</span>
               )}
             </div>
             
-            {/* Contenido del comentario */}
-            {showEditForm ? (
+            {/* Botón de like a la derecha */}
+            <motion.button
+              onClick={handleLike}
+              disabled={isLiking}
+              className={cn(
+                "p-1 transition-all duration-200",
+                comment.user_liked ? "text-red-500" : "text-gray-400 hover:text-red-500"
+              )}
+              whileTap={{ scale: 0.9 }}
+            >
+              <Heart className={cn(
+                "w-4 h-4",
+                comment.user_liked && "fill-current"
+              )} />
+            </motion.button>
+          </div>
+          
+          {/* Contenido del comentario */}
+          {showEditForm ? (
+            <div className="mb-2">
               <CommentForm
                 onSubmit={handleEdit}
                 onCancel={() => setShowEditForm(false)}
@@ -247,126 +251,88 @@ const Comment = ({
                 initialValue={comment.content}
                 isEditing={true}
               />
-            ) : (
-              <div className="bg-gray-50/50 rounded-xl p-4 border border-gray-100">
-                <p className="text-gray-800 text-sm leading-relaxed whitespace-pre-wrap">
-                  {comment.content}
-                </p>
-              </div>
-            )}
-          </div>
-          
-          {/* Menú de acciones con diseño moderno */}
-          <div className="relative">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setShowMenu(!showMenu)}
-              className="h-8 w-8 p-0 hover:bg-gray-100/80 rounded-xl transition-all duration-200"
-            >
-              <MoreHorizontal className="w-4 h-4 text-gray-400" />
-            </Button>
-            
-            <AnimatePresence>
-              {showMenu && (
-                <motion.div 
-                  className="absolute right-0 top-10 bg-white/95 backdrop-blur-xl border border-gray-200 rounded-2xl shadow-2xl py-2 z-20 min-w-[140px] overflow-hidden"
-                  initial={{ opacity: 0, scale: 0.9, y: -10 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.9, y: -10 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  {isAuthor && (
-                    <>
-                      <button
-                        onClick={() => {
-                          setShowEditForm(true);
-                          setShowMenu(false);
-                        }}
-                        className="flex items-center gap-3 w-full px-4 py-3 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
-                      >
-                        <Edit3 className="w-4 h-4" />
-                        Editar
-                      </button>
-                      <button
-                        onClick={() => {
-                          handleDelete();
-                          setShowMenu(false);
-                        }}
-                        className="flex items-center gap-3 w-full px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                        Eliminar
-                      </button>
-                      <div className="h-px bg-gray-200 mx-2 my-1" />
-                    </>
-                  )}
-                  
-                  <button
-                    onClick={() => setShowMenu(false)}
-                    className="flex items-center gap-3 w-full px-4 py-3 text-sm text-gray-700 hover:bg-amber-50 hover:text-amber-600 transition-colors"
-                  >
-                    <Flag className="w-4 h-4" />
-                    Reportar
-                  </button>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        </div>
-        
-        {/* Acciones del comentario con diseño moderno */}
-        <div className="flex items-center gap-2 text-sm">
-          <motion.button
-            onClick={handleLike}
-            disabled={isLiking}
-            className={cn(
-              "flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-200 font-medium",
-              comment.user_liked 
-                ? "text-red-600 bg-red-50 hover:bg-red-100 shadow-md" 
-                : "text-gray-600 hover:text-red-600 hover:bg-red-50 hover:shadow-md"
-            )}
-            whileTap={{ scale: 0.95 }}
-            whileHover={{ scale: 1.02 }}
-          >
-            <Heart className={cn(
-              "w-4 h-4 transition-all duration-200",
-              comment.user_liked && "fill-current scale-110"
-            )} />
-            {comment.likes > 0 && (
-              <span>{comment.likes}</span>
-            )}
-          </motion.button>
-          
-          {canReply && (
-            <motion.button
-              onClick={() => setShowReplyForm(!showReplyForm)}
-              className="flex items-center gap-2 px-4 py-2 rounded-full text-gray-600 hover:text-indigo-600 hover:bg-indigo-50 transition-all duration-200 font-medium hover:shadow-md"
-              whileTap={{ scale: 0.95 }}
-              whileHover={{ scale: 1.02 }}
-            >
-              <Reply className="w-4 h-4" />
-              Responder
-            </motion.button>
+            </div>
+          ) : (
+            <p className="text-gray-900 text-sm leading-relaxed mb-2">
+              {comment.content}
+            </p>
           )}
           
+          {/* Likes count y acciones */}
+          <div className="flex items-center gap-4 text-xs text-gray-500">
+            {comment.likes > 0 && (
+              <span className="font-semibold">{comment.likes} Me gusta</span>
+            )}
+            
+            {canReply && (
+              <button
+                onClick={() => setShowReplyForm(!showReplyForm)}
+                className="font-semibold hover:text-gray-700"
+              >
+                Responder
+              </button>
+            )}
+            
+            {isAuthor && (
+              <>
+                <button
+                  onClick={() => setShowEditForm(true)}
+                  className="font-semibold hover:text-gray-700"
+                >
+                  Editar
+                </button>
+                <button
+                  onClick={handleDelete}
+                  className="font-semibold hover:text-red-500"
+                >
+                  Eliminar
+                </button>
+              </>
+            )}
+            
+            {/* Menú de 3 puntos */}
+            <div className="relative ml-auto">
+              <button
+                onClick={() => setShowMenu(!showMenu)}
+                className="hover:text-gray-700"
+              >
+                <MoreHorizontal className="w-4 h-4" />
+              </button>
+              
+              <AnimatePresence>
+                {showMenu && (
+                  <motion.div 
+                    className="absolute right-0 top-6 bg-white border border-gray-200 rounded-lg shadow-lg py-1 z-20 min-w-[120px]"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.9 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <button
+                      onClick={() => setShowMenu(false)}
+                      className="flex items-center gap-2 w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
+                    >
+                      <Flag className="w-4 h-4" />
+                      Reportar
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </div>
+          
+          {/* Ver respuestas */}
           {hasReplies && (
-            <motion.button
+            <button
               onClick={() => setShowReplies(!showReplies)}
-              className="flex items-center gap-2 px-4 py-2 rounded-full text-gray-600 hover:text-gray-800 hover:bg-gray-100 transition-all duration-200 font-medium hover:shadow-md"
-              whileTap={{ scale: 0.95 }}
-              whileHover={{ scale: 1.02 }}
+              className="flex items-center gap-2 text-xs text-gray-500 font-semibold hover:text-gray-700 mt-2"
             >
               {showReplies ? (
-                <ChevronUp className="w-4 h-4" />
+                <>Ocultar respuestas ({comment.reply_count})</>
               ) : (
-                <ChevronDown className="w-4 h-4" />
+                <>Ver {comment.reply_count} respuesta{comment.reply_count !== 1 ? 's' : ''} más</>
               )}
-              <span className="bg-gray-200 text-gray-700 px-2 py-1 rounded-full text-xs font-semibold">
-                {comment.reply_count}
-              </span>
-              {comment.reply_count === 1 ? 'respuesta' : 'respuestas'}
-            </motion.button>
+            </button>
           )}
         </div>
       </div>
