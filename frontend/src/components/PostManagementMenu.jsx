@@ -11,13 +11,6 @@ import {
 } from 'lucide-react';
 import '../styles/PostManagement.css';
 import { Button } from './ui/button';
-import { 
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from './ui/dropdown-menu';
 import {
   Dialog,
   DialogContent,
