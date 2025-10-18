@@ -458,6 +458,35 @@ const FeedPage = () => {
     console.log('🔖 FeedPage: process.env.REACT_APP_BACKEND_URL:', process.env.REACT_APP_BACKEND_URL);
     console.log('🔖 FeedPage: window.location.origin:', window.location.origin);
     
+    // Determinar si estamos guardando o desgurdando
+    const isSaved = savedPolls.has(pollId);
+    const action = isSaved ? 'unsave' : 'save';
+    
+    // Optimistic update: actualizar el contador inmediatamente
+    setPolls(prevPolls => 
+      prevPolls.map(poll => 
+        poll.id === pollId 
+          ? { 
+              ...poll, 
+              saves_count: isSaved 
+                ? Math.max(0, (poll.saves_count || 0) - 1) 
+                : (poll.saves_count || 0) + 1 
+            }
+          : poll
+      )
+    );
+    
+    // Actualizar el estado de guardado
+    setSavedPolls(prev => {
+      const newSet = new Set(prev);
+      if (isSaved) {
+        newSet.delete(pollId);
+      } else {
+        newSet.add(pollId);
+      }
+      return newSet;
+    });
+    
     try {
       // Test with raw fetch and explicit URL first
       const token = localStorage.getItem('token');
@@ -491,8 +520,10 @@ const FeedPage = () => {
       console.log('🔖 FeedPage: Success result:', result);
       
       toast({
-        title: "¡Publicación guardada!",
-        description: "La publicación ha sido guardada en tu colección",
+        title: result.saved ? "¡Publicación guardada!" : "Publicación removida",
+        description: result.saved 
+          ? "La publicación ha sido guardada en tu colección"
+          : "La publicación ha sido removida de tu colección",
         duration: 3000,
       });
       
@@ -503,6 +534,30 @@ const FeedPage = () => {
       console.error('❌ FeedPage: Error name:', error.name);
       console.error('❌ FeedPage: Error message:', error.message);
       console.error('❌ FeedPage: Error stack:', error.stack);
+      
+      // Revertir cambios en caso de error
+      setPolls(prevPolls => 
+        prevPolls.map(poll => 
+          poll.id === pollId 
+            ? { 
+                ...poll, 
+                saves_count: isSaved 
+                  ? (poll.saves_count || 0) + 1 
+                  : Math.max(0, (poll.saves_count || 0) - 1)
+              }
+            : poll
+        )
+      );
+      
+      setSavedPolls(prev => {
+        const newSet = new Set(prev);
+        if (isSaved) {
+          newSet.add(pollId);
+        } else {
+          newSet.delete(pollId);
+        }
+        return newSet;
+      });
       
       toast({
         title: "Error",
