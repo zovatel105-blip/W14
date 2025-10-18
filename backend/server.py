@@ -6086,6 +6086,7 @@ async def get_poll_by_id(
         likes=poll["likes"],
         shares=poll["shares"],
         comments_count=poll["comments_count"],
+        saves_count=poll.get("saves_count", 0),
         music=music_info,  # Include music information
         user_vote=user_vote["option_id"] if user_vote else None,
         user_liked=bool(user_like),
