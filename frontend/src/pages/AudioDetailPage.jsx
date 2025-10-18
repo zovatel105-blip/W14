@@ -264,6 +264,28 @@ const AudioDetailPage = () => {
     try {
       const token = localStorage.getItem('token');
       
+      // Determinar si está guardado actualmente
+      const currentPost = posts.find(p => p.id === pollId);
+      const isSaved = currentPost?.isSaved;
+      
+      // Optimistic update: actualizar el contador inmediatamente
+      setPosts(prevPosts => 
+        prevPosts.map(post => 
+          post.id === pollId 
+            ? { 
+                ...post, 
+                isSaved: !isSaved,
+                saves_count: isSaved 
+                  ? Math.max(0, (post.saves_count || 0) - 1) 
+                  : (post.saves_count || 0) + 1,
+                saves: isSaved 
+                  ? Math.max(0, (post.saves || 0) - 1) 
+                  : (post.saves || 0) + 1
+              } 
+            : post
+        )
+      );
+      
       const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/polls/${pollId}/save`, {
         method: 'POST',
         headers: {
@@ -275,15 +297,22 @@ const AudioDetailPage = () => {
       if (response.ok) {
         const data = await response.json();
         toast({
-          title: "Publicación guardada",
-          description: "La publicación se ha guardado exitosamente",
+          title: data.saved ? "Publicación guardada" : "Publicación removida",
+          description: data.saved 
+            ? "La publicación se ha guardado exitosamente"
+            : "La publicación ha sido removida de guardados",
         });
         
-        // Update the posts state to reflect the saved status
+        // Update the posts state with actual data from backend
         setPosts(prevPosts => 
           prevPosts.map(post => 
             post.id === pollId 
-              ? { ...post, isSaved: data.saved, saves: data.saves } 
+              ? { 
+                  ...post, 
+                  isSaved: data.saved, 
+                  saves: data.saves,
+                  saves_count: data.saves
+                } 
               : post
           )
         );
@@ -292,6 +321,28 @@ const AudioDetailPage = () => {
       }
     } catch (error) {
       console.error('Error saving post:', error);
+      
+      // Revertir cambios en caso de error
+      const currentPost = posts.find(p => p.id === pollId);
+      const isSaved = currentPost?.isSaved;
+      
+      setPosts(prevPosts => 
+        prevPosts.map(post => 
+          post.id === pollId 
+            ? { 
+                ...post, 
+                isSaved: !isSaved,
+                saves_count: isSaved 
+                  ? (post.saves_count || 0) + 1 
+                  : Math.max(0, (post.saves_count || 0) - 1),
+                saves: isSaved 
+                  ? (post.saves || 0) + 1 
+                  : Math.max(0, (post.saves || 0) - 1)
+              } 
+            : post
+        )
+      );
+      
       toast({
         title: "Error",
         description: "No se pudo guardar la publicación",
