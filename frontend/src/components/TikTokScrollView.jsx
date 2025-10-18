@@ -857,6 +857,7 @@ const TikTokScrollView = ({
   const [savedPolls, setSavedPolls] = useState(new Set()); // Track saved polls locally
   const [commentedPolls, setCommentedPolls] = useState(new Set()); // Track polls user has commented on
   const [sharedPolls, setSharedPolls] = useState(new Set()); // Track polls user has shared
+  const [saveCounts, setSaveCounts] = useState({}); // Track updated save counts
   const { user: currentUser } = useAuth();
   const [lastActiveIndex, setLastActiveIndex] = useState(initialIndex);
 
