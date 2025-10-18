@@ -611,6 +611,13 @@ const TikTokPollCard = ({
               size="sm"
               onClick={(e) => {
                 e.stopPropagation();
+                // Marcar como compartido
+                setSharedPolls(prev => {
+                  const newSet = new Set(prev);
+                  newSet.add(poll.id);
+                  return newSet;
+                });
+                
                 // Intentar Web Share API primero
                 if (navigator.share) {
                   navigator.share({
@@ -631,9 +638,13 @@ const TikTokPollCard = ({
                   onShare && onShare(poll.id);
                 }
               }}
-              className="flex items-center gap-1 text-white hover:text-green-400 hover:scale-105 transition-all duration-200 h-auto p-2 rounded-lg bg-black/20 backdrop-blur-sm"
+              className={`flex items-center gap-1 hover:scale-105 transition-all duration-200 h-auto p-2 rounded-lg backdrop-blur-sm ${
+                sharedPolls.has(poll.id) || poll.userShared
+                  ? 'text-green-400 bg-green-500/20 hover:text-green-300'
+                  : 'text-white bg-black/20 hover:text-green-400'
+              }`}
             >
-              <Share2 className="w-5 h-5" />
+              <Share2 className={`w-5 h-5 ${sharedPolls.has(poll.id) || poll.userShared ? 'fill-current' : ''}`} />
               <span className="font-medium text-sm">{formatNumber(poll.shares)}</span>
             </Button>
 
