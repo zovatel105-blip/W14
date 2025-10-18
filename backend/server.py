@@ -5980,27 +5980,40 @@ async def share_poll(
     poll_id: str,
     current_user: UserResponse = Depends(get_current_user)
 ):
-    """Increment share count for a poll"""
+    """Increment share count for a poll and track user share"""
     
     # Check if poll exists
     poll = await db.polls.find_one({"id": poll_id, "is_active": True})
     if not poll:
         raise HTTPException(status_code=404, detail="Poll not found")
     
-    # Increment share count
-    result = await db.polls.update_one(
-        {"id": poll_id},
-        {"$inc": {"shares": 1}}
-    )
+    # Check if user has already shared this poll
+    existing_share = await db.poll_shares.find_one({
+        "poll_id": poll_id,
+        "user_id": current_user.id
+    })
     
-    if result.modified_count == 0:
-        raise HTTPException(status_code=500, detail="Failed to update share count")
+    if not existing_share:
+        # Record the share
+        await db.poll_shares.insert_one({
+            "id": str(uuid.uuid4()),
+            "poll_id": poll_id,
+            "user_id": current_user.id,
+            "shared_at": datetime.utcnow().isoformat()
+        })
+        
+        # Increment share count only if it's a new share
+        await db.polls.update_one(
+            {"id": poll_id},
+            {"$inc": {"shares": 1}}
+        )
     
     # Get updated count
     updated_poll = await db.polls.find_one({"id": poll_id})
     
     return {
-        "shares": updated_poll["shares"]
+        "shares": updated_poll.get("shares", 0),
+        "user_shared": True
     }
 
 @api_router.get("/polls/{poll_id}", response_model=PollResponse)
