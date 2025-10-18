@@ -7984,6 +7984,36 @@ async def get_saved_polls(
         logger.error(f"❌ Error details: {repr(e)}")
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
+@api_router.get("/users/{user_id}/shared-polls")
+async def get_shared_polls(
+    user_id: str,
+    current_user: UserResponse = Depends(get_current_user)
+):
+    """Get poll IDs that the user has shared"""
+    logger.info(f"🔗 Getting shared polls for user {user_id}, current_user: {current_user.id}")
+    try:
+        # Only allow users to see their own shared polls
+        if user_id != current_user.id:
+            logger.warning(f"❌ Access denied: user {current_user.id} trying to access {user_id}'s shared polls")
+            raise HTTPException(status_code=403, detail="Cannot access other user's shared polls")
+        
+        # Get shared poll IDs
+        shared_records = await db.poll_shares.find({
+            "user_id": user_id
+        }).to_list(1000)  # Get up to 1000 shared polls
+        
+        logger.info(f"🔗 Found {len(shared_records)} shared records")
+        
+        poll_ids = [record["poll_id"] for record in shared_records]
+        
+        return {"shared_poll_ids": poll_ids, "total": len(poll_ids)}
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"❌ Error getting shared polls: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
+
 @api_router.get("/polls/{poll_id}/save-status")
 async def get_poll_save_status(
     poll_id: str,
