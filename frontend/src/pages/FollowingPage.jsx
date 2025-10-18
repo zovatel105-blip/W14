@@ -553,6 +553,36 @@ const FollowingPage = () => {
 
   const handleSave = async (pollId) => {
     try {
+      // Determinar si está guardado actualmente
+      const currentPoll = polls.find(p => p.id === pollId);
+      const wasSaved = currentPoll?.isSaved || savedPolls.has(pollId);
+      
+      // Optimistic update: actualizar el contador inmediatamente
+      setPolls(prevPolls => 
+        prevPolls.map(poll => 
+          poll.id === pollId 
+            ? { 
+                ...poll, 
+                saves_count: wasSaved 
+                  ? Math.max(0, (poll.saves_count || 0) - 1) 
+                  : (poll.saves_count || 0) + 1,
+                isSaved: !wasSaved
+              }
+            : poll
+        )
+      );
+      
+      // Actualizar savedPolls Set
+      setSavedPolls(prev => {
+        const newSet = new Set(prev);
+        if (wasSaved) {
+          newSet.delete(pollId);
+        } else {
+          newSet.add(pollId);
+        }
+        return newSet;
+      });
+      
       const result = await savedPollsService.toggleSavePoll(pollId);
       
       if (result.saved) {
@@ -574,6 +604,35 @@ const FollowingPage = () => {
       
     } catch (error) {
       console.error('Error saving poll:', error);
+      
+      // Revertir cambios en caso de error
+      const currentPoll = polls.find(p => p.id === pollId);
+      const wasSaved = currentPoll?.isSaved;
+      
+      setPolls(prevPolls => 
+        prevPolls.map(poll => 
+          poll.id === pollId 
+            ? { 
+                ...poll, 
+                saves_count: wasSaved 
+                  ? (poll.saves_count || 0) + 1 
+                  : Math.max(0, (poll.saves_count || 0) - 1),
+                isSaved: !wasSaved
+              }
+            : poll
+        )
+      );
+      
+      setSavedPolls(prev => {
+        const newSet = new Set(prev);
+        if (wasSaved) {
+          newSet.add(pollId);
+        } else {
+          newSet.delete(pollId);
+        }
+        return newSet;
+      });
+      
       toast({
         title: "Error",
         description: "No se pudo guardar la publicación. Inténtalo de nuevo.",
