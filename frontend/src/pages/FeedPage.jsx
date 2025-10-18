@@ -25,6 +25,7 @@ const FeedPage = () => {
   const [hasMoreContent, setHasMoreContent] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(0);
+  const [savedPolls, setSavedPolls] = useState(new Set()); // Track saved polls
   
   // 🚀 SPEED OPTIMIZATION: Simple cache for faster subsequent loads
   const [pollsCache, setPollsCache] = useState(new Map());
