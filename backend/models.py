@@ -488,6 +488,7 @@ class PollResponse(BaseModel):
     likes: int
     shares: int
     comments_count: int
+    saves_count: int = 0  # Contador de veces que se guardó la publicación
     music: Optional[dict] = None  # Información de la música
     user_vote: Optional[str] = None  # ID de la opción votada por el usuario actual
     user_liked: bool = False
