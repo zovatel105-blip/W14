@@ -1121,6 +1121,34 @@ const ProfilePage = () => {
     try {
       const isSaved = savedPolls.some(poll => poll.id === pollId);
       
+      // Optimistic update: actualizar el contador inmediatamente en polls
+      setPolls(prevPolls => 
+        prevPolls.map(poll => 
+          poll.id === pollId 
+            ? { 
+                ...poll, 
+                saves_count: isSaved 
+                  ? Math.max(0, (poll.saves_count || 0) - 1) 
+                  : (poll.saves_count || 0) + 1 
+              }
+            : poll
+        )
+      );
+      
+      // Actualizar también mentionedPolls si el poll está allí
+      setMentionedPolls(prevPolls =>
+        prevPolls.map(poll =>
+          poll.id === pollId
+            ? {
+                ...poll,
+                saves_count: isSaved
+                  ? Math.max(0, (poll.saves_count || 0) - 1)
+                  : (poll.saves_count || 0) + 1
+              }
+            : poll
+        )
+      );
+      
       if (isSaved) {
         // Unsave the poll
         await pollService.unsavePoll(pollId);
@@ -1134,7 +1162,7 @@ const ProfilePage = () => {
         await pollService.savePoll(pollId);
         const pollToSave = polls.find(poll => poll.id === pollId);
         if (pollToSave) {
-          setSavedPolls([...savedPolls, pollToSave]);
+          setSavedPolls([...savedPolls, { ...pollToSave, saves_count: (pollToSave.saves_count || 0) + 1 }]);
         }
         toast({
           title: "¡Publicación guardada!",
@@ -1143,6 +1171,35 @@ const ProfilePage = () => {
       }
     } catch (error) {
       console.error('Error toggling save status:', error);
+      
+      // Revertir cambios en caso de error
+      const isSaved = savedPolls.some(poll => poll.id === pollId);
+      setPolls(prevPolls => 
+        prevPolls.map(poll => 
+          poll.id === pollId 
+            ? { 
+                ...poll, 
+                saves_count: isSaved 
+                  ? (poll.saves_count || 0) + 1 
+                  : Math.max(0, (poll.saves_count || 0) - 1)
+              }
+            : poll
+        )
+      );
+      
+      setMentionedPolls(prevPolls =>
+        prevPolls.map(poll =>
+          poll.id === pollId
+            ? {
+                ...poll,
+                saves_count: isSaved
+                  ? (poll.saves_count || 0) + 1
+                  : Math.max(0, (poll.saves_count || 0) - 1)
+              }
+            : poll
+        )
+      );
+      
       toast({
         title: "Error",
         description: "No se pudo actualizar el estado de guardado",
