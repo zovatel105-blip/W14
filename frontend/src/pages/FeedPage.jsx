@@ -536,20 +536,7 @@ const FeedPage = () => {
       console.error('❌ FeedPage: Error message:', error.message);
       console.error('❌ FeedPage: Error stack:', error.stack);
       
-      // Revertir cambios en caso de error
-      setPolls(prevPolls => 
-        prevPolls.map(poll => 
-          poll.id === pollId 
-            ? { 
-                ...poll, 
-                saves_count: isSaved 
-                  ? (poll.saves_count || 0) + 1 
-                  : Math.max(0, (poll.saves_count || 0) - 1)
-              }
-            : poll
-        )
-      );
-      
+      // Revertir estado de guardado en caso de error
       setSavedPolls(prev => {
         const newSet = new Set(prev);
         if (isSaved) {
