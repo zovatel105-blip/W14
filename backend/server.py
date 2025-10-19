@@ -2490,12 +2490,13 @@ async def search_users_optimized(query: str, current_user_id: str, limit: int):
         return []
 
 async def search_hashtags_optimized(query: str, current_user_id: str, limit: int):
-    """Optimized hashtag search with minimal database operations"""
+    """Optimized hashtag search - returns individual posts containing the hashtag"""
     try:
         # Search for hashtags in post tags, title, and content
         hashtag_query = query if query.startswith("#") else f"#{query}"
         query_without_hash = query.replace("#", "").strip()
         
+        # Use aggregation pipeline similar to search_posts_optimized
         pipeline = [
             {
                 "$match": {
@@ -2510,30 +2511,143 @@ async def search_hashtags_optimized(query: str, current_user_id: str, limit: int
                 }
             },
             {
-                "$group": {
-                    "_id": None,
-                    "posts": {"$push": "$$ROOT"},
-                    "count": {"$sum": 1}
+                "$limit": limit * 2  # Get more to ensure we have enough after processing
+            },
+            {
+                "$lookup": {
+                    "from": "users",
+                    "localField": "author_id", 
+                    "foreignField": "id",
+                    "as": "author_info"
+                }
+            },
+            {
+                "$addFields": {
+                    "author": {"$arrayElemAt": ["$author_info", 0]}
+                }
+            },
+            {
+                "$project": {
+                    "id": 1,
+                    "title": 1,
+                    "content": 1,
+                    "options": 1,
+                    "layout": 1,
+                    "images": 1,
+                    "image_url": 1,
+                    "thumbnail_url": 1,
+                    "video_url": 1,
+                    "author_id": 1,
+                    "created_at": 1,
+                    "votes_count": {"$ifNull": ["$votes_count", 0]},
+                    "comments_count": {"$ifNull": ["$comments_count", 0]},
+                    "saves_count": {"$ifNull": ["$saves_count", 0]},
+                    "author.id": 1,
+                    "author.username": 1,
+                    "author.display_name": 1,
+                    "author.avatar_url": 1,
+                    "hashtags": 1,
+                    "tags": 1
                 }
             }
         ]
         
-        result = await db.polls.aggregate(pipeline).to_list(1)
+        posts = await db.polls.aggregate(pipeline).to_list(limit * 2)
         
-        if result and result[0]["count"] > 0:
-            hashtag_result = {
-                "type": "hashtag",
-                "id": f"hashtag_{query_without_hash}",
-                "hashtag": hashtag_query,
-                "posts_count": result[0]["count"],
-                "relevance_score": 1.0,
-                "popularity_score": result[0]["count"],
-                # Add sample posts for preview
-                "sample_posts": result[0]["posts"][:3] if len(result[0]["posts"]) > 0 else []
-            }
-            return [hashtag_result]
+        results = []
+        for post in posts[:limit]:  # Limit results after processing
+            # Calculate relevance score based on hashtag match
+            relevance_score = 0
+            if query_without_hash.lower() in [tag.lower() for tag in post.get("tags", [])]:
+                relevance_score += 3  # Higher score for exact tag match
+            if hashtag_query.lower() in post.get("title", "").lower():
+                relevance_score += 2
+            if hashtag_query.lower() in post.get("content", "").lower():
+                relevance_score += 1
+            
+            # Get first image for thumbnail from poll options
+            image_url = None
+            media_url = None
+            thumbnail_url = None
+            
+            # Extract images from poll options
+            if post.get("options") and len(post["options"]) > 0:
+                for option in post["options"]:
+                    if option.get("media_url"):
+                        media_url = option["media_url"]
+                        if option.get("media_type") == "video":
+                            option_thumbnail = option.get("thumbnail_url")
+                            if not option_thumbnail:
+                                option_thumbnail = await get_thumbnail_for_media_url(media_url)
+                            if option_thumbnail:
+                                thumbnail_url = option_thumbnail
+                                image_url = option_thumbnail
+                            else:
+                                image_url = media_url
+                        else:
+                            image_url = media_url
+                        break
+                    elif option.get("thumbnail_url"):
+                        thumbnail_url = option["thumbnail_url"]
+                        if not image_url:
+                            image_url = thumbnail_url
+            
+            # Fallback to legacy fields
+            if not image_url:
+                if post.get("images") and len(post["images"]) > 0:
+                    image_url = post["images"][0].get("url")
+                elif post.get("image_url"):
+                    image_url = post["image_url"]
+                elif post.get("thumbnail_url"):
+                    image_url = post["thumbnail_url"]
+                
+            # Build images array for frontend compatibility
+            images_array = []
+            processed_options = []
+            if post.get("options"):
+                for option in post["options"]:
+                    option_copy = option.copy()
+                    
+                    if option.get("media_url"):
+                        images_array.append({"url": option["media_url"]})
+                        
+                        if option.get("media_type") == "video":
+                            if not option_copy.get("thumbnail_url"):
+                                video_thumbnail = await get_thumbnail_for_media_url(option["media_url"])
+                                if video_thumbnail:
+                                    option_copy["thumbnail_url"] = video_thumbnail
+                    
+                    processed_options.append(option_copy)
+            
+            results.append({
+                "type": "post",
+                "id": post["id"],
+                "title": post.get("title", ""),
+                "content": post.get("content", ""),
+                "image_url": image_url,
+                "thumbnail_url": thumbnail_url or image_url,
+                "media_url": media_url or image_url,
+                "images": images_array,
+                "layout": post.get("layout", "vertical"),
+                "options": processed_options,
+                "video_url": post.get("video_url"),
+                "author_id": post.get("author_id"),
+                "author": {
+                    "id": post.get("author", {}).get("id", ""),
+                    "username": post.get("author", {}).get("username", ""),
+                    "display_name": post.get("author", {}).get("display_name", ""),
+                    "avatar_url": post.get("author", {}).get("avatar_url", "")
+                },
+                "created_at": post.get("created_at", ""),
+                "votes_count": post.get("votes_count", 0),
+                "comments_count": post.get("comments_count", 0),
+                "hashtags": post.get("hashtags", []),
+                "tags": post.get("tags", []),
+                "relevance_score": relevance_score,
+                "popularity_score": post.get("votes_count", 0) + post.get("comments_count", 0)
+            })
         
-        return []
+        return results
         
     except Exception as e:
         logger.error(f"Error in optimized hashtag search: {str(e)}")
