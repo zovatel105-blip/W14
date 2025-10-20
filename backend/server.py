@@ -2689,9 +2689,21 @@ async def search_sounds_optimized(query: str, current_user_id: str, limit: int):
         results = []
         for sound in sounds:
             # Calculate relevance score
-            title_score = 2 if query in sound.get("title", "").lower() else 0
-            artist_score = 1.5 if query in sound.get("artist", "").lower() else 0
+            title_score = 2 if query.lower() in sound.get("title", "").lower() else 0
+            artist_score = 1.5 if query.lower() in sound.get("artist", "").lower() else 0
             relevance_score = title_score + artist_score
+            
+            # Count posts using this audio
+            posts_count = await db.polls.count_documents({
+                "$or": [
+                    {"music.id": sound["id"]},
+                    {"music_id": sound["id"]},
+                    {"user_audio_id": sound["id"]}
+                ]
+            })
+            
+            # Get cover image - use cover_image field or fallback to waveform_url
+            cover_url = sound.get("cover_image") or sound.get("waveform_url", "")
             
             results.append({
                 "type": "sound",
@@ -2699,13 +2711,16 @@ async def search_sounds_optimized(query: str, current_user_id: str, limit: int):
                 "title": sound.get("title", ""),
                 "artist": sound.get("artist", ""),
                 "duration": sound.get("duration", 0),
-                "cover_image": sound.get("cover_image", ""),
+                "cover_image": cover_url,
+                "thumbnail_url": cover_url,  # Frontend expects this field
                 "author": {
-                    "username": sound.get("author", {}).get("username", "")
+                    "username": sound.get("author", {}).get("username", ""),
+                    "display_name": sound.get("author", {}).get("display_name", "")
                 },
-                "posts_using_count": 0,  # Could be calculated with another query if needed
+                "posts_count": posts_count,  # Frontend uses posts_count
+                "posts_using_count": posts_count,
                 "relevance_score": relevance_score,
-                "popularity_score": 0
+                "popularity_score": posts_count
             })
         
         return results
