@@ -1305,7 +1305,13 @@ const SearchPage = () => {
           <div className="px-1 pt-0 pb-2 w-full">
             {/* Users and Sounds in List Mode */}
             <div className="flex flex-col gap-0">
-              {searchResults.filter(r => r.type === 'user' || r.type === 'sound').map((result, index) => (
+              {searchResults
+                .filter(r => r.type === 'user' || r.type === 'sound')
+                .filter((result, index, self) => 
+                  // Remove duplicates based on ID
+                  index === self.findIndex((t) => (t.id === result.id && t.type === result.type))
+                )
+                .map((result, index) => (
                 <div
                   key={`${result.type}-${result.id}-${index}`}
                   className="bg-white overflow-hidden group animate-slide-up"
