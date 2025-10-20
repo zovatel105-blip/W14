@@ -1285,10 +1285,10 @@ const SearchPage = () => {
           /* Show skeleton while loading search results */
           <SearchResultsGridSkeleton count={6} />
         ) : (searchResults.length > 0 || hasSearched) ? (
-          /* Search Results - Image Grid Style */
+          /* Search Results - Grid or List based on filter type */
           <div className="px-1 pt-0 pb-2 w-full">
-            {/* Results Grid - Maximum width usage with minimal separation */}
-            <div className="grid grid-cols-2 gap-1">
+            {/* Results Grid/List - Grid for posts/hashtags, List for users/sounds */}
+            <div className={activeTab === 'users' || activeTab === 'sounds' ? 'flex flex-col gap-0' : 'grid grid-cols-2 gap-1'}>
               {searchResults.map((result, index) => (
                 <div
                   key={`${result.type}-${result.id}-${index}`}
