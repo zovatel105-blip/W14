@@ -133,6 +133,26 @@ class UserService {
       throw error;
     }
   }
+
+  async getFollowing(userId) {
+    try {
+      const response = await fetch(`${this.baseURL}/users/${userId}/following`, {
+        method: 'GET',
+        headers: this.getAuthHeaders()
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        const errorMessage = formatApiError(errorData, response.status);
+        throw new Error(errorMessage);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error getting following users:', error);
+      throw error;
+    }
+  }
 }
 
 export default new UserService();
