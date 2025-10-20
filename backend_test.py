@@ -63,28 +63,37 @@ class BackendTester:
             return {}
         return {"Authorization": f"Bearer {self.auth_token}"}
     
-    async def test_universal_search_poll_images(self):
-        """Test universal search for polls with images"""
-        print("\n🔍 Testing Universal Search for Poll Images...")
+    async def test_sounds_search_functionality(self):
+        """Test sounds search functionality with filter=sounds"""
+        print("\n🎵 Testing Sounds Search Functionality...")
         
+        # Test the specific endpoint mentioned in the review
         test_queries = [
-            "pizza",
-            "hamburguesa", 
-            "color",
-            "comida",
-            "poll",
-            "encuesta"
+            "test",
+            "music", 
+            "audio",
+            "sound",
+            "song",
+            ""  # Empty query to see if there are any sounds at all
         ]
         
         all_results = []
         
         for query in test_queries:
-            print(f"\n📝 Testing query: '{query}'")
+            print(f"\n🔍 Testing sounds search with query: '{query}'")
             
             try:
+                # Test the exact endpoint from the review: GET /api/search?q=test&filter=sounds&sort_by=relevance&limit=10
+                params = {
+                    "q": query,
+                    "filter": "sounds",
+                    "sort_by": "relevance", 
+                    "limit": 10
+                }
+                
                 async with self.session.get(
-                    f"{BACKEND_URL}/search/universal",
-                    params={"q": query, "limit": 20},
+                    f"{BACKEND_URL}/search",
+                    params=params,
                     headers=self.get_auth_headers()
                 ) as response:
                     
@@ -94,37 +103,37 @@ class BackendTester:
                         
                         print(f"✅ Search successful - Found {len(results)} results")
                         
-                        # Filter for post/poll results
-                        poll_results = [r for r in results if r.get("type") == "post"]
-                        print(f"📊 Found {len(poll_results)} poll/post results")
+                        # Filter for sound results
+                        sound_results = [r for r in results if r.get("type") == "sound"]
+                        print(f"🎵 Found {len(sound_results)} sound results")
                         
-                        # Check image fields for each poll
-                        polls_with_images = 0
-                        for result in poll_results:
-                            has_images = self.check_poll_image_fields(result, query)
-                            if has_images:
-                                polls_with_images += 1
+                        # Check required fields for each sound
+                        valid_sounds = 0
+                        for result in sound_results:
+                            is_valid = self.check_sound_result_fields(result, query)
+                            if is_valid:
+                                valid_sounds += 1
                                 all_results.append({
                                     "query": query,
                                     "result": result
                                 })
                         
-                        print(f"🖼️  Polls with images: {polls_with_images}/{len(poll_results)}")
+                        print(f"✅ Valid sounds: {valid_sounds}/{len(sound_results)}")
                         
                         self.test_results.append({
-                            "test": f"universal_search_{query}",
-                            "status": "PASS",
+                            "test": f"sounds_search_{query if query else 'empty'}",
+                            "status": "PASS" if len(sound_results) > 0 or query == "" else "PARTIAL",
                             "total_results": len(results),
-                            "poll_results": len(poll_results),
-                            "polls_with_images": polls_with_images,
-                            "details": f"Query '{query}' returned {len(results)} results, {len(poll_results)} polls, {polls_with_images} with images"
+                            "sound_results": len(sound_results),
+                            "valid_sounds": valid_sounds,
+                            "details": f"Query '{query}' returned {len(results)} results, {len(sound_results)} sounds, {valid_sounds} valid"
                         })
                         
                     else:
                         error_text = await response.text()
                         print(f"❌ Search failed: {response.status} - {error_text}")
                         self.test_results.append({
-                            "test": f"universal_search_{query}",
+                            "test": f"sounds_search_{query if query else 'empty'}",
                             "status": "FAIL",
                             "error": f"HTTP {response.status}: {error_text}"
                         })
@@ -132,7 +141,7 @@ class BackendTester:
             except Exception as e:
                 print(f"❌ Search error for '{query}': {str(e)}")
                 self.test_results.append({
-                    "test": f"universal_search_{query}",
+                    "test": f"sounds_search_{query if query else 'empty'}",
                     "status": "ERROR",
                     "error": str(e)
                 })
