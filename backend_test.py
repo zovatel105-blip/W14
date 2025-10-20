@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Backend Testing Suite for Universal Search Poll Images
-Testing the functionality specifically requested in the review.
+Backend Testing Suite for Sounds Search Functionality
+Testing the search for "sounds" in the backend as requested in the review.
 """
 
 import asyncio
