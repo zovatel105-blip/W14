@@ -3500,10 +3500,22 @@ async def send_message(message: MessageCreate, current_user: UserResponse = Depe
     
     await db.messages.insert_one(new_message.dict())
     
+    # Prepare complete message response with sender info
+    sender_user = await db.users.find_one({"id": current_user.id})
+    
     return {
         "success": True,
         "message_id": new_message.id,
-        "conversation_id": conversation_id
+        "conversation_id": conversation_id,
+        "timestamp": new_message.created_at.isoformat() if hasattr(new_message.created_at, 'isoformat') else new_message.created_at,
+        "content": new_message.content,
+        "sender_id": current_user.id,
+        "sender": {
+            "id": current_user.id,
+            "username": sender_user.get("username") if sender_user else current_user.username,
+            "display_name": sender_user.get("display_name") if sender_user else current_user.display_name,
+            "avatar_url": sender_user.get("avatar_url") if sender_user else current_user.avatar_url
+        }
     }
 
 @api_router.get("/conversations")
