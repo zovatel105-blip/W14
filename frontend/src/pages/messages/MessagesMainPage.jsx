@@ -649,8 +649,8 @@ const MessagesMainPage = () => {
               msg.id === tempMessageId
                 ? { 
                     ...msg, // Keep original temp message data (includes sender info)
-                    ...response, // Merge server response
                     id: response.message_id, // Use server-provided ID
+                    timestamp: response.timestamp || msg.timestamp, // Use server timestamp if available
                     status: 'sent' // Mark as sent
                   }
                 : msg
