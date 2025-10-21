@@ -1122,6 +1122,17 @@ const MessagesMainPage = () => {
                           </span>
                         </div>
                       )}
+                      
+                      {/* Pending Badge */}
+                      {conversation.isPending && (
+                        <div 
+                          className="min-w-[24px] h-6 rounded-full flex items-center justify-center ml-3 flex-shrink-0 bg-yellow-100 border border-yellow-400"
+                        >
+                          <span className="text-xs text-yellow-700 font-medium px-2">
+                            ⏳
+                          </span>
+                        </div>
+                      )}
                     </motion.button>
                   );
                 })}
