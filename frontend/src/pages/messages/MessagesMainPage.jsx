@@ -793,11 +793,28 @@ const MessagesMainPage = () => {
         
         setMessages(prevMessages => [...prevMessages, chatRequestPendingMessage]);
         
-        // Cerrar la conversación después de mostrar el mensaje
-        setTimeout(() => {
-          setSelectedConversation(null);
-          setShowChat(false);
-        }, 4000);
+        // Agregar la conversación a la lista si no existe
+        const conversationExists = conversations.some(conv => 
+          conv.participants?.some(p => p.id === recipient.id)
+        );
+        
+        if (!conversationExists) {
+          const newConversation = {
+            id: selectedConversation.id || `pending-${recipient.id}`,
+            participants: [recipient],
+            last_message: messageContent,
+            last_message_at: new Date().toISOString(),
+            unread_count: 0,
+            created_at: new Date().toISOString(),
+            isPending: true // Marcar como solicitud pendiente
+          };
+          
+          setConversations(prevConversations => [newConversation, ...prevConversations]);
+          console.log('📋 Conversación agregada a la lista (solicitud ya enviada previamente)');
+        }
+        
+        // NO cerrar la conversación - dejar que el usuario la cierre manualmente
+        // El usuario puede seguir viendo su mensaje y el estado de la solicitud
         
       } else if (error.status === 403) {
         // Otros errores 403
