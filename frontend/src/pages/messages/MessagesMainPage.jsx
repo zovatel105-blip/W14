@@ -609,15 +609,24 @@ const MessagesMainPage = () => {
           // El mensaje se convirtió en una solicitud de chat
           console.log('📨 Solicitud de chat enviada:', response.request_id);
           
-          // Eliminar mensaje temporal
+          // NO eliminar el mensaje temporal, sino actualizarlo para mostrar que es una solicitud
           setMessages(prevMessages =>
-            prevMessages.filter(msg => msg.id !== tempMessageId)
+            prevMessages.map(msg =>
+              msg.id === tempMessageId
+                ? { 
+                    ...msg, 
+                    id: `chat-request-${response.request_id}`, // ID único para la solicitud
+                    status: 'chat_request', // Estado especial para solicitudes de chat
+                    isPending: true // Marcar como pendiente
+                  }
+                : msg
+            )
           );
           
-          // Mostrar mensaje informativo al usuario
+          // Agregar mensaje informativo del sistema DESPUÉS del mensaje del usuario
           const chatRequestMessage = {
             id: `system-${Date.now()}`,
-            content: '📨 Solicitud de chat enviada. El usuario debe aceptarla para poder intercambiar mensajes.',
+            content: '📨 Tu mensaje fue enviado como solicitud de chat. El usuario debe aceptarla para que puedan intercambiar mensajes.',
             sender_id: 'system',
             isSystemMessage: true,
             created_at: new Date().toISOString()
@@ -625,10 +634,8 @@ const MessagesMainPage = () => {
           
           setMessages(prevMessages => [...prevMessages, chatRequestMessage]);
           
-          // Cerrar la conversación después de un momento
-          setTimeout(() => {
-            setSelectedConversation(null);
-          }, 3000);
+          // NO cerrar la conversación automáticamente - dejar que el usuario la cierre
+          // El usuario puede seguir viendo su mensaje y el estado de la solicitud
           
         } else if (response.message_id) {
           // Mensaje enviado normalmente
