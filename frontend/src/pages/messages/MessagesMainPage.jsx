@@ -1104,7 +1104,10 @@ const MessagesMainPage = () => {
                           </span>
                         </div>
                         <p className="text-sm text-gray-600 truncate leading-relaxed">
-                          {conversation.last_message || 'Iniciar conversación'}
+                          {conversation.isPending 
+                            ? '⏳ Solicitud de chat enviada...' 
+                            : conversation.last_message || 'Iniciar conversación'
+                          }
                         </p>
                       </div>
 
