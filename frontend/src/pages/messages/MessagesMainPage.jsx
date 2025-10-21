@@ -1239,7 +1239,9 @@ const MessagesMainPage = () => {
                     {/* Mensaje */}
                     <div className={`relative px-4 py-2 rounded-2xl ${
                       isOwnMessage 
-                        ? 'bg-blue-500 text-white' 
+                        ? message.status === 'chat_request' 
+                          ? 'bg-yellow-100 text-gray-800 border-2 border-yellow-400' 
+                          : 'bg-blue-500 text-white'
                         : 'bg-gray-100 text-gray-900'
                     }`}>
                       <p className="text-sm">{message.content}</p>
