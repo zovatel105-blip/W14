@@ -86,24 +86,43 @@ const MessagesPage = () => {
     }
   };
 
-  // Load messages for a specific conversation
+  // Load messages for a specific conversation or chat request
   const loadMessages = async (conversationId) => {
     if (!conversationId || !user?.id) return;
     
     try {
       console.log('📩 Loading messages for conversation:', conversationId);
       
-      const response = await apiRequest(`/api/conversations/${conversationId}/messages`, {
-        method: 'GET'
-      });
-      
-      console.log('📥 Loaded messages:', response);
-      
-      if (Array.isArray(response)) {
-        setMessages(response);
+      // Check if this is a chat request
+      if (conversationId.startsWith('request-')) {
+        const requestId = conversationId.replace('request-', '');
+        console.log('📨 Loading chat request messages:', requestId);
+        
+        const response = await apiRequest(`/api/chat-requests/${requestId}/messages`, {
+          method: 'GET'
+        });
+        
+        console.log('📥 Loaded chat request messages:', response);
+        
+        if (Array.isArray(response)) {
+          setMessages(response);
+        } else {
+          setMessages([]);
+        }
       } else {
-        console.log('ℹ️ No messages found');
-        setMessages([]);
+        // Regular conversation
+        const response = await apiRequest(`/api/conversations/${conversationId}/messages`, {
+          method: 'GET'
+        });
+        
+        console.log('📥 Loaded messages:', response);
+        
+        if (Array.isArray(response)) {
+          setMessages(response);
+        } else {
+          console.log('ℹ️ No messages found');
+          setMessages([]);
+        }
       }
       
       // Scroll to bottom
