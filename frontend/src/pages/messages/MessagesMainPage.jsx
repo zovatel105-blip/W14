@@ -1248,10 +1248,13 @@ const MessagesMainPage = () => {
                       {isOwnMessage && message.status && (
                         <div className="absolute -bottom-1 -right-1">
                           {message.status === 'sending' && (
-                            <div className="w-3 h-3 bg-gray-400 rounded-full animate-pulse"></div>
+                            <div className="w-3 h-3 bg-gray-400 rounded-full animate-pulse" title="Enviando..."></div>
                           )}
                           {message.status === 'sent' && (
-                            <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                            <div className="w-3 h-3 bg-green-500 rounded-full" title="Enviado"></div>
+                          )}
+                          {message.status === 'chat_request' && (
+                            <div className="w-3 h-3 bg-yellow-500 rounded-full animate-pulse" title="Solicitud de chat enviada"></div>
                           )}
                           {message.status === 'failed' && (
                             <div className="w-3 h-3 bg-red-500 rounded-full cursor-pointer" title="Error al enviar"></div>
