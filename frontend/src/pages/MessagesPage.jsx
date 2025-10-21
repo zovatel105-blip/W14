@@ -510,7 +510,6 @@ const MessagesPage = () => {
   useEffect(() => {
     if (user?.id) {
       loadConversations();
-      loadChatRequests();
     }
   }, [user?.id]);
 
