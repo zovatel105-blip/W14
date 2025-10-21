@@ -514,7 +514,7 @@ const MessagesMainPage = () => {
       
       loadMessages(selectedConversation.id);
     }
-  }, [selectedConversation, user]);
+  }, [selectedConversation?.id, user]); // Solo reaccionar cuando el ID cambia, no todo el objeto
   const handleSendMessage = async () => {
     if (!newMessage.trim() || !selectedConversation) return;
 
