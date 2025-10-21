@@ -3821,22 +3821,40 @@ user_problem_statement: 🔐 NUEVA PÁGINA DE AUTENTICACIÓN CREADA (2025-01-27)
 - Después de enviar un mensaje en una conversación nueva, la conversación no aparecía en la lista de mensajes
 - El usuario tenía que recargar la página para ver la conversación
 - No había feedback visual de que la conversación se había creado
+- **PROBLEMA ADICIONAL**: Los mensajes volvían a desaparecer cuando había error 403 "Chat request already sent"
+
+✅ **CAUSA RAÍZ DEL SEGUNDO PROBLEMA:**
+1. La variable `recipient` estaba definida dentro del bloque try, no disponible en el catch
+2. Cuando había error 403, el código en el catch no podía acceder a `recipient` para agregar la conversación
+3. El mensaje se eliminaba porque el código de manejo de errores no podía ejecutar la lógica correcta
 
 ✅ **SOLUCIÓN IMPLEMENTADA:**
 
 **ACTUALIZACIÓN AUTOMÁTICA DE LISTA (/app/frontend/src/pages/messages/MessagesMainPage.jsx):**
 
-1. ✅ **Solicitudes de chat** (líneas 637-656):
+1. ✅ **Variable recipient movida fuera del try** (línea 526):
+   - Definida antes del try para estar disponible en el catch
+   - Permite acceso desde manejo de errores
+   - Asegura que la conversación se agregue incluso con errores
+
+2. ✅ **Solicitudes de chat** (líneas 637-656):
    - Agregar conversación a la lista inmediatamente después de enviar
    - Marcar con flag `isPending: true` para indicar que es una solicitud
    - Verificar que no exista ya en la lista antes de agregar
 
-2. ✅ **Mensajes normales** (líneas 697-730):
+3. ✅ **Mensajes normales** (líneas 697-730):
    - Agregar conversación nueva a la lista si no existe
    - Actualizar conversación existente y moverla al inicio
    - Mantener sincronización con último mensaje y timestamp
 
-3. ✅ **Indicadores visuales en lista** (líneas 1106-1131):
+4. ✅ **Manejo de error 403 "Chat request already sent"** (líneas 758-817):
+   - NO eliminar el mensaje temporal
+   - Actualizar mensaje a estado 'chat_request' con indicador visual amarillo
+   - Agregar conversación a la lista si no existe (ahora funciona porque recipient está disponible)
+   - NO cerrar conversación automáticamente
+   - Mostrar mensaje de sistema explicativo
+
+5. ✅ **Indicadores visuales en lista** (líneas 1106-1131):
    - Texto especial: "⏳ Solicitud de chat enviada..." para conversaciones pendientes
    - Badge amarillo con reloj (⏳) para conversaciones pendientes
    - Badge rosa para mensajes no leídos (funcionalidad existente)
@@ -3847,13 +3865,17 @@ user_problem_statement: 🔐 NUEVA PÁGINA DE AUTENTICACIÓN CREADA (2025-01-27)
 - ✅ Orden cronológico: conversaciones más recientes al inicio
 - ✅ Actualización optimista: no requiere recarga de página
 - ✅ Prevención de duplicados: verifica existencia antes de agregar
+- ✅ Mensajes persisten incluso con error 403 "Chat request already sent"
+- ✅ Conversación se agrega a la lista incluso con errores
 
 ✅ **RESULTADO FINAL:**
-🎯 **LISTA DE CONVERSACIONES SIEMPRE ACTUALIZADA** - Los usuarios ahora:
+🎯 **LISTA DE CONVERSACIONES SIEMPRE ACTUALIZADA Y MENSAJES PERSISTENTES** - Los usuarios ahora:
 - Ven sus conversaciones nuevas aparecer inmediatamente en la lista
 - Pueden identificar visualmente cuáles son solicitudes pendientes (⏳)
 - No necesitan recargar la página para ver sus conversaciones
 - Tienen feedback visual claro del estado de cada conversación
+- Los mensajes NO desaparecen incluso si ya enviaron una solicitud previamente
+- La conversación aparece en la lista incluso con errores 403
 
 🎯 PROBLEMA CRÍTICO COMPATIBILIDAD UUID AUDIO Y SUBIDA DE AUDIOS RESUELTO (2025-01-27): 
 
