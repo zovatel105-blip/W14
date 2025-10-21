@@ -634,13 +634,23 @@ const MessagesPage = () => {
                 const otherUser = getOtherParticipant(conversation);
                 if (!otherUser) return null;
                 
+                const isChatRequest = conversation.is_chat_request;
+                const isSender = conversation.is_request_sender;
+                const isReceiver = conversation.is_request_receiver;
+                
                 return (
                   <div
                     key={conversation.id}
-                    onClick={() => setSelectedConversation(conversation)}
+                    onClick={(e) => {
+                      // Don't open conversation if clicking on action buttons
+                      if (e.target.closest('button')) return;
+                      setSelectedConversation(conversation);
+                      loadMessages(conversation.id);
+                    }}
                     className={cn(
                       "flex items-center p-4 border-b cursor-pointer hover:bg-gray-50 transition-colors",
-                      selectedConversation?.id === conversation.id && "bg-blue-50"
+                      selectedConversation?.id === conversation.id && "bg-blue-50",
+                      isChatRequest && isReceiver && "bg-blue-50/30"
                     )}
                   >
                     <div className="w-12 h-12 bg-gray-300 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
@@ -658,18 +668,57 @@ const MessagesPage = () => {
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between mb-1">
-                        <h3 className="font-semibold text-gray-900 truncate">
-                          {otherUser.display_name || otherUser.username}
-                        </h3>
-                        {conversation.last_message && (
+                        <div className="flex items-center gap-2">
+                          <h3 className="font-semibold text-gray-900 truncate">
+                            {otherUser.display_name || otherUser.username}
+                          </h3>
+                          {isChatRequest && (
+                            <span className={cn(
+                              "text-xs px-2 py-0.5 rounded-full font-medium",
+                              isSender ? "bg-yellow-100 text-yellow-700" : "bg-blue-100 text-blue-700"
+                            )}>
+                              {isSender ? "⏳ Pendiente" : "✉️ Nueva"}
+                            </span>
+                          )}
+                        </div>
+                        {conversation.last_message_at && (
                           <span className="text-xs text-gray-500">
-                            {formatMessageTime(conversation.last_message.created_at)}
+                            {formatMessageTime(conversation.last_message_at)}
                           </span>
                         )}
                       </div>
-                      <p className="text-sm text-gray-600 truncate">
-                        {conversation.last_message?.content || 'Nueva conversación'}
-                      </p>
+                      <div className="flex items-center justify-between gap-2">
+                        <p className="text-sm text-gray-600 truncate flex-1">
+                          {conversation.last_message || 'Nueva conversación'}
+                        </p>
+                        {isChatRequest && (
+                          <div className="flex gap-1 flex-shrink-0" onClick={(e) => e.stopPropagation()}>
+                            {isReceiver ? (
+                              <>
+                                <button
+                                  onClick={() => handleChatRequest(conversation.chat_request_id, 'accept')}
+                                  className="px-2 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600"
+                                >
+                                  Aceptar
+                                </button>
+                                <button
+                                  onClick={() => handleChatRequest(conversation.chat_request_id, 'reject')}
+                                  className="px-2 py-1 text-xs bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
+                                >
+                                  Rechazar
+                                </button>
+                              </>
+                            ) : (
+                              <button
+                                onClick={() => handleCancelRequest(conversation.chat_request_id)}
+                                className="px-2 py-1 text-xs bg-red-100 text-red-700 rounded hover:bg-red-200"
+                              >
+                                Cancelar
+                              </button>
+                            )}
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 );
