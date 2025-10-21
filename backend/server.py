@@ -3634,7 +3634,25 @@ async def get_conversation_messages(
     # Reverse to get chronological order (oldest first)
     messages.reverse()
     
-    return [Message(**msg) for msg in messages]
+    # Enrich messages with sender information
+    enriched_messages = []
+    for msg in messages:
+        # Get sender user info
+        sender = await db.users.find_one({"id": msg["sender_id"]})
+        
+        # Build enriched message object
+        enriched_msg = {
+            **msg,
+            "sender": {
+                "id": msg["sender_id"],
+                "username": sender.get("username") if sender else "unknown",
+                "display_name": sender.get("display_name") if sender else "Usuario",
+                "avatar_url": sender.get("avatar_url") if sender else None
+            }
+        }
+        enriched_messages.append(enriched_msg)
+    
+    return enriched_messages
 
 @api_router.get("/messages/unread")
 async def get_unread_count(current_user: UserResponse = Depends(get_current_user)):
