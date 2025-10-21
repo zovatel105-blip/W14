@@ -494,16 +494,19 @@ const MessagesPage = () => {
 
   useEffect(() => {
     if (selectedConversation && selectedConversation.id && !selectedConversation.isNewConversation) {
+      console.log('🔄 UseEffect: Loading messages for conversation:', selectedConversation.id);
       loadMessages(selectedConversation.id);
       
-      // Set up polling for new messages
-      const interval = setInterval(() => {
-        loadMessages(selectedConversation.id);
-      }, 5000);
-      
-      return () => clearInterval(interval);
+      // Set up polling for new messages (don't poll for chat requests)
+      if (!selectedConversation.is_chat_request) {
+        const interval = setInterval(() => {
+          loadMessages(selectedConversation.id);
+        }, 5000);
+        
+        return () => clearInterval(interval);
+      }
     }
-  }, [selectedConversation]);
+  }, [selectedConversation?.id]);
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
