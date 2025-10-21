@@ -3769,6 +3769,50 @@ frontend:
           comment: "✅ NEW AUTH PAGE BACKEND COMPLETAMENTE VERIFICADO (2025-01-27): Testing exhaustivo de endpoints backend para nueva página de autenticación simplificada. CONTEXTO: Usuario creó NewAuthPage.jsx para reemplazar AuthPage complejo con funcionalidad simplificada (login + register, sin Google OAuth, validación básica, redirección a /feed). TESTING REALIZADO: ✅ HEALTH CHECK: API funcionando correctamente en URL externa, ✅ REGISTRO (POST /api/auth/register): Endpoint funcional, acepta email/username/display_name/password, retorna JWT válido + datos usuario, manejo correcto de emails duplicados (400), validación campos requeridos (422), ✅ LOGIN (POST /api/auth/login): Endpoint funcional, acepta email/password, retorna JWT válido + datos usuario, rechaza credenciales inválidas (400), ✅ JWT VALIDATION: Tokens generados correctamente, validación en GET /api/auth/me funcional, rechazo de tokens inválidos (401), ✅ SEGURIDAD: Contraseñas no expuestas en respuestas, datos usuario almacenados correctamente, ✅ FORMATO RESPUESTA: Estructura compatible con frontend (access_token, token_type, expires_in, user object con id/email/username/display_name). RESULTADO: Backend 100% listo para nueva página de autenticación. Todos los endpoints necesarios funcionando correctamente con manejo de errores apropiado y formato de respuesta compatible con frontend."
 user_problem_statement: 🔐 NUEVA PÁGINA DE AUTENTICACIÓN CREADA (2025-01-27): Usuario solicitó crear nueva AuthPage para reemplazar la actual con campos básicos (email, password), validación mínima frontend, redirección a /dashboard tras registro exitoso, manejo de errores backend, y diseño modular. IMPLEMENTADO: Nueva página limpia y funcional sin Google OAuth, usando mismos hooks AuthContext, con redirección correcta a /feed.
 
+**💬 PROBLEMA CRÍTICO MENSAJES DESAPARECEN EN CONVERSACIONES NUEVAS RESUELTO (2025-01-27):**
+
+✅ **PROBLEMA REPORTADO:**
+- Usuario reportó que cuando envía un mensaje en conversaciones nuevas, el mensaje desaparece
+- El mensaje aparecía momentáneamente en la interfaz pero luego desaparecía sin explicación
+- No había mensaje de error visible para el usuario
+- Solo ocurría en conversaciones nuevas, no en conversaciones existentes
+
+✅ **CAUSA RAÍZ IDENTIFICADA:**
+1. **Backend**: Cuando dos usuarios no se siguen mutuamente, el endpoint POST /api/messages crea una "solicitud de chat" en lugar de enviar el mensaje directamente (líneas 3418-3453 en server.py)
+2. **Frontend**: Cuando recibe respuesta tipo "chat_request", eliminaba completamente el mensaje temporal del usuario (línea 613-615 en MessagesMainPage.jsx)
+3. **UX Issue**: La conversación se cerraba automáticamente después de 3 segundos (línea 629-631), dando muy poco tiempo para que el usuario viera el mensaje de sistema
+4. **Resultado**: El usuario veía su mensaje desaparecer sin entender qué había pasado
+
+✅ **SOLUCIÓN IMPLEMENTADA:**
+
+**FRONTEND (/app/frontend/src/pages/messages/MessagesMainPage.jsx):**
+
+1. ✅ **Mensaje NO se elimina**: Cambiado de eliminar el mensaje (`filter`) a actualizarlo (`map`) con estado 'chat_request'
+2. ✅ **Estado visual especial**: Mensajes con estado 'chat_request' se muestran con fondo amarillo y borde para diferenciarse
+3. ✅ **Indicador de estado**: Agregado punto amarillo pulsante para mensajes tipo solicitud de chat
+4. ✅ **Mensaje de sistema mejorado**: Texto más claro explicando que el mensaje fue enviado como solicitud
+5. ✅ **NO cierre automático**: Eliminado el timeout que cerraba la conversación automáticamente
+6. ✅ **UX mejorada**: El usuario ahora puede ver su mensaje persistentemente con estado visual claro
+
+**CAMBIOS ESPECÍFICOS:**
+- Líneas 608-631: Mensaje temporal se convierte en mensaje con estado 'chat_request' en lugar de eliminarse
+- Líneas 1247-1262: Agregado soporte visual para estado 'chat_request' con color amarillo y borde
+- Líneas 1247-1262: Indicador de estado amarillo pulsante para solicitudes de chat
+- Mensaje del sistema más descriptivo: "Tu mensaje fue enviado como solicitud de chat..."
+
+✅ **RESULTADO FINAL:**
+🎯 **MENSAJES PERSISTEN CORRECTAMENTE** - Los usuarios ahora pueden:
+- Ver su mensaje permanentemente en la conversación con indicador visual de "solicitud pendiente"
+- Entender claramente que el mensaje fue enviado como solicitud de chat
+- Mantener contexto de la conversación sin que se cierre automáticamente
+- Diferenciar visualmente entre mensajes normales (azul), solicitudes de chat (amarillo), y mensajes fallidos (rojo)
+
+**ESTADOS DE MENSAJES SOPORTADOS:**
+- `sending`: Punto gris pulsante - mensaje enviándose
+- `sent`: Punto verde - mensaje enviado exitosamente
+- `chat_request`: Punto amarillo pulsante - solicitud de chat enviada (mensaje persiste con fondo amarillo)
+- `failed`: Punto rojo - mensaje fallido (puede reintentar)
+
 🎯 PROBLEMA CRÍTICO COMPATIBILIDAD UUID AUDIO Y SUBIDA DE AUDIOS RESUELTO (2025-01-27): 
 
 1. **COMPATIBILIDAD UUID AUDIO**: Las publicaciones fueron creadas con music_id igual al UUID del audio (sin prefijo "user_audio_"), pero función actualizada espera prefijo. SOLUCIONADO: Agregado soporte para UUID de user audio con y sin prefijo.
