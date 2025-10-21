@@ -249,9 +249,107 @@ Feed Post Layout (Posts PROPIOS):
 
 #====================================================================================================
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
-#====================================================================================================#====================================================================================================
-# Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
+
+**💬 SISTEMA DE SOLICITUDES DE CHAT COMO CONVERSACIONES PENDIENTES IMPLEMENTADO (2025-01-27): Las solicitudes de chat ahora aparecen en la lista de conversaciones, visibles para ambos usuarios (sender y receiver).**
+
+✅ **FUNCIONALIDAD IMPLEMENTADA:**
+
+**1. BACKEND - Solicitudes en lista de conversaciones:**
+- ✅ Modificado endpoint `GET /api/conversations` para incluir solicitudes de chat pendientes
+- ✅ Las solicitudes se mezclan con conversaciones normales, ordenadas por fecha
+- ✅ Cada solicitud incluye metadata especial:
+  - `is_chat_request: true` - Identifica que es solicitud
+  - `chat_request_id` - ID de la solicitud original
+  - `is_request_sender` - true si el usuario actual es quien envió
+  - `is_request_receiver` - true si el usuario actual es quien recibe
+  - `last_message` - Mensaje inicial de la solicitud
+
+**2. BACKEND - Endpoint para mensajes de solicitud:**
+- ✅ Creado `GET /api/chat-requests/{request_id}/messages`
+- ✅ Retorna el mensaje inicial de la solicitud
+- ✅ Formato compatible con mensajes normales para renderizado
+
+**3. BACKEND - Conversión a conversación real:**
+- ✅ Modificado `PUT /api/chat-requests/{request_id}` al aceptar
+- ✅ Crea conversación real automáticamente
+- ✅ Convierte el mensaje inicial de solicitud en primer mensaje real
+- ✅ Ambos usuarios pueden chatear libremente después
+
+**4. FRONTEND - Visualización integrada:**
+- ✅ Eliminada sección separada de "Chat Requests"
+- ✅ Solicitudes mezcladas en lista de conversaciones
+- ✅ Badges visuales según rol:
+  - Sender: "⏳ Pendiente" (amarillo)
+  - Receiver: "✉️ Nueva" (azul)
+- ✅ Background diferenciado para solicitudes de receiver (azul claro)
+
+**5. FRONTEND - Botones de acción en lista:**
+- ✅ **Para Receiver:**
+  - Botones "Aceptar" y "Rechazar" directamente en la lista
+  - Al hacer clic se abre la conversación con el mensaje visible
+- ✅ **Para Sender:**
+  - Botón "Cancelar" en la lista
+  - Puede cancelar su solicitud en cualquier momento
+
+**6. FRONTEND - Vista de conversación pendiente:**
+- ✅ **Receiver abre solicitud:**
+  - Ve el mensaje inicial del sender
+  - Panel inferior azul con botones grandes "✓ Aceptar solicitud" y "✗ Rechazar"
+  - Texto informativo: "¿Quieres aceptar esta conversación?"
+- ✅ **Sender abre su solicitud enviada:**
+  - Ve el mensaje que envió
+  - Panel inferior amarillo con mensaje de espera
+  - Texto: "Esperando respuesta. No puedes enviar más mensajes hasta que sea aceptada"
+  - Botón para "Cancelar solicitud"
+  - Input de mensajes DESHABILITADO
+
+**7. FRONTEND - Prevención de mensajes:**
+- ✅ Si sender intenta escribir en solicitud pendiente, muestra toast:
+  - "Espera a que el usuario acepte tu solicitud para enviar más mensajes"
+- ✅ Input bloqueado visualmente con mensaje de estado
+
+**8. FLUJO COMPLETO - Después de aceptar:**
+- ✅ Solicitud se convierte en conversación normal
+- ✅ Se eliminan badges y estados de "pendiente"
+- ✅ Input de mensajes se habilita para ambos usuarios
+- ✅ Mensaje inicial queda como primer mensaje del historial
+- ✅ Ambos pueden chatear libremente
+
+**9. FLUJO COMPLETO - Después de rechazar/cancelar:**
+- ✅ Solicitud desaparece de la lista para ambos usuarios
+- ✅ Se cierra la conversación automáticamente
+- ✅ Toast de confirmación: "Solicitud cancelada/rechazada"
+
+**ARCHIVOS MODIFICADOS:**
+- `/app/backend/server.py`:
+  - GET /api/conversations (líneas 3521-3600)
+  - GET /api/chat-requests/{request_id}/messages (nuevo endpoint)
+  - PUT /api/chat-requests/{request_id} (líneas 3834-3870)
+- `/app/frontend/src/pages/MessagesPage.jsx`:
+  - loadMessages() - soporte para solicitudes
+  - sendMessage() - validación de permisos
+  - handleCancelRequest() - nueva función
+  - handleChatRequest() - mejorada
+  - Renderizado de lista - badges y botones
+  - Área de input - condicional según estado
+
+**RESULTADO FINAL:**
+🎯 **SISTEMA COMPLETO DE SOLICITUDES COMO CONVERSACIONES PENDIENTES** - Los usuarios ahora ven las solicitudes de chat directamente en su lista de conversaciones:
+- **Sender ve:** Su solicitud pendiente con estado de espera, puede cancelar
+- **Receiver ve:** Solicitud nueva con mensaje, puede aceptar o rechazar
+- **Después de aceptar:** Chat normal, ambos pueden escribir libremente
+- **Experiencia unificada:** Todo en una sola lista, sin secciones separadas
+
+**TESTING PENDIENTE:**
+- Verificar que solicitudes aparecen correctamente en ambos lados
+- Probar flujo completo: enviar → ver pendiente → aceptar → chatear
+- Probar cancelar solicitud desde sender
+- Probar rechazar solicitud desde receiver
+- Verificar que después de aceptar se puede chatear normalmente
+- Confirmar que mensaje inicial se conserva después de aceptar
+
+---
 
 **🎥 PREVIEW DE VIDEO EN CREACIÓN Y THUMBNAILS EN BÚSQUEDA CORREGIDOS (2025-01-27): Problemas con visualización de videos completamente resueltos. ✅ CONFIRMADO POR USUARIO**
 
