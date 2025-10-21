@@ -615,42 +615,6 @@ const MessagesPage = () => {
           </div>
         </div>
 
-        {/* Chat Requests */}
-        {chatRequests.length > 0 && (
-          <div className="border-b bg-blue-50 p-4">
-            <h3 className="font-semibold text-blue-900 mb-2">Solicitudes de chat</h3>
-            {chatRequests.map((request) => (
-              <div key={request.id} className="flex items-center justify-between p-2 bg-white rounded-lg mb-2">
-                <div className="flex items-center space-x-2">
-                  <div className="w-8 h-8 bg-gray-300 rounded-full flex items-center justify-center">
-                    <span className="text-xs font-semibold">
-                      {request.sender?.display_name?.charAt(0) || '?'}
-                    </span>
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium">{request.sender?.display_name}</p>
-                    <p className="text-xs text-gray-500">@{request.sender?.username}</p>
-                  </div>
-                </div>
-                <div className="flex space-x-1">
-                  <button
-                    onClick={() => handleChatRequest(request.id, 'accept')}
-                    className="px-3 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600"
-                  >
-                    Aceptar
-                  </button>
-                  <button
-                    onClick={() => handleChatRequest(request.id, 'reject')}
-                    className="px-3 py-1 text-xs bg-gray-300 text-gray-700 rounded hover:bg-gray-400"
-                  >
-                    Rechazar
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-
         {/* Conversations List */}
         <div className="flex-1 overflow-y-auto">
           {loading ? (
