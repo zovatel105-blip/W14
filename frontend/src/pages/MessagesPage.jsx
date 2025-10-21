@@ -251,6 +251,16 @@ const MessagesPage = () => {
   const sendMessage = async () => {
     if (!newMessage.trim() || !selectedConversation || sendingMessage) return;
     
+    // Check if this is a pending chat request and user is the sender
+    if (selectedConversation.is_chat_request && selectedConversation.is_request_sender) {
+      toast({
+        title: "Solicitud pendiente",
+        description: "Espera a que el usuario acepte tu solicitud para enviar más mensajes",
+        variant: "default",
+      });
+      return;
+    }
+    
     const messageContent = newMessage.trim();
     const tempMessageId = `temp-${Date.now()}`;
     
