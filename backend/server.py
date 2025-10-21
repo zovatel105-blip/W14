@@ -3866,7 +3866,7 @@ async def respond_to_chat_request(
         }
     )
     
-    # If accepted, create conversation
+    # If accepted, create conversation and convert initial message
     if action_data.action == "accept":
         # Check if conversation already exists
         existing_conversation = await db.conversations.find_one({
@@ -3875,8 +3875,11 @@ async def respond_to_chat_request(
         })
         
         if not existing_conversation:
+            # Create new conversation
             conversation = Conversation(
                 participants=[current_user.id, chat_request["sender_id"]],
+                last_message=chat_request.get("message", ""),
+                last_message_at=datetime.utcnow(),
                 unread_count={
                     current_user.id: 0,
                     chat_request["sender_id"]: 0
@@ -3884,6 +3887,17 @@ async def respond_to_chat_request(
             )
             await db.conversations.insert_one(conversation.dict())
             conversation_id = conversation.id
+            
+            # Convert the initial chat request message into a real message
+            if chat_request.get("message"):
+                initial_message = Message(
+                    conversation_id=conversation_id,
+                    sender_id=chat_request["sender_id"],
+                    recipient_id=current_user.id,
+                    content=chat_request["message"],
+                    is_read=False
+                )
+                await db.messages.insert_one(initial_message.dict())
         else:
             conversation_id = existing_conversation["id"]
         
