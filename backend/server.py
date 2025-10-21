@@ -3651,6 +3651,42 @@ async def get_unread_count(current_user: UserResponse = Depends(get_current_user
     
     return {"unread_count": total_unread}
 
+@api_router.get("/chat-requests/{request_id}/messages")
+async def get_chat_request_messages(
+    request_id: str,
+    current_user: UserResponse = Depends(get_current_user)
+):
+    """Get the initial message from a pending chat request"""
+    # Find the chat request
+    chat_request = await db.chat_requests.find_one({"id": request_id})
+    if not chat_request:
+        raise HTTPException(status_code=404, detail="Chat request not found")
+    
+    # Check if current user is involved in this request
+    if chat_request["sender_id"] != current_user.id and chat_request["receiver_id"] != current_user.id:
+        raise HTTPException(status_code=403, detail="You don't have access to this chat request")
+    
+    # Get sender info
+    sender_data = await db.users.find_one({"id": chat_request["sender_id"]})
+    if not sender_data:
+        raise HTTPException(status_code=404, detail="Sender not found")
+    
+    # Return the initial message as a message-like object
+    return [{
+        "id": f"request-msg-{chat_request['id']}",
+        "content": chat_request.get("message", "Nueva solicitud de chat"),
+        "sender_id": chat_request["sender_id"],
+        "recipient_id": chat_request["receiver_id"],
+        "sender": {
+            "id": sender_data["id"],
+            "username": sender_data.get("username"),
+            "display_name": sender_data.get("display_name"),
+            "avatar_url": sender_data.get("avatar_url")
+        },
+        "created_at": chat_request["created_at"],
+        "is_chat_request_message": True
+    }]
+
 @api_router.get("/messages/requests")
 async def get_message_requests(current_user: UserResponse = Depends(get_current_user)):
     """Get message requests (pending chat requests) for the current user"""
