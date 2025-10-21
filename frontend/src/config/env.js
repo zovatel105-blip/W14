@@ -22,6 +22,12 @@ async function detectEnvironment() {
     const subdomain = hostname.split(".")[0];
     API_URL = `https://api.${subdomain}.emergent.sh`;
     console.log("🚀 Entorno EMERGENT.SH detectado:", API_URL);
+  } else if (hostname.endsWith(".emergentagent.com")) {
+    // 🧩 Entorno Emergent Agent (preview/producción)
+    // Para dominios como user-msg-error-fix.preview.emergentagent.com
+    // La API está en el mismo dominio, usando rutas con /api prefix
+    API_URL = `https://${hostname}`;
+    console.log("🚀 Entorno EMERGENT AGENT detectado:", API_URL);
   } else {
     // 🧩 Dominio personalizado → pedir configuración dinámica
     try {
