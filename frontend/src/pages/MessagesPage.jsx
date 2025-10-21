@@ -143,30 +143,6 @@ const MessagesPage = () => {
     }
   };
 
-  // Load chat requests
-  const loadChatRequests = async () => {
-    if (!user?.id) return;
-    
-    try {
-      console.log('📨 Loading chat requests...');
-      
-      const response = await apiRequest('/api/chat-requests/received', {
-        method: 'GET'
-      });
-      
-      console.log('📥 Loaded chat requests:', response);
-      
-      if (Array.isArray(response)) {
-        setChatRequests(response);
-      } else {
-        setChatRequests([]);
-      }
-    } catch (error) {
-      console.error('❌ Error loading chat requests:', error);
-      setChatRequests([]);
-    }
-  };
-
   // Search users for new conversation
   const searchUsers = async (query) => {
     if (!query || query.length < 2) {
