@@ -413,8 +413,18 @@ const MessagesMainPage = () => {
         return;
       }
       
-      const messagesData = await apiRequest(`/api/conversations/${conversationId}/messages`);
-      console.log('✅ Mensajes cargados:', messagesData.length);
+      // Si es una solicitud de chat (id empieza con 'request-'), usar endpoint de chat requests
+      let messagesData;
+      if (conversationId.startsWith('request-')) {
+        const requestId = conversationId.replace('request-', '');
+        console.log('📨 Cargando mensajes de solicitud de chat:', requestId);
+        messagesData = await apiRequest(`/api/chat-requests/${requestId}/messages`);
+      } else {
+        // Conversación normal
+        messagesData = await apiRequest(`/api/conversations/${conversationId}/messages`);
+      }
+      
+      console.log('✅ Mensajes cargados:', messagesData?.length || 0);
       setMessages(messagesData || []);
     } catch (error) {
       console.error('❌ Error cargando mensajes:', error);
