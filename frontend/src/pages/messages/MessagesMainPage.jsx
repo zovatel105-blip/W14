@@ -694,8 +694,40 @@ const MessagesMainPage = () => {
             }
           }));
 
-          // NO recargar conversaciones aquí - causaría re-render innecesario
-          // loadConversations(); // <-- Comentado para evitar problemas
+          // Agregar o actualizar la conversación en la lista
+          const conversationIndex = conversations.findIndex(conv => 
+            conv.id === response.conversation_id || 
+            conv.participants?.some(p => p.id === recipient.id)
+          );
+          
+          if (conversationIndex === -1) {
+            // Conversación nueva - agregar a la lista
+            const newConversation = {
+              id: response.conversation_id,
+              participants: [recipient],
+              last_message: messageContent,
+              last_message_at: response.timestamp,
+              unread_count: 0,
+              created_at: new Date().toISOString()
+            };
+            
+            setConversations(prevConversations => [newConversation, ...prevConversations]);
+            console.log('📋 Nueva conversación agregada a la lista');
+          } else {
+            // Conversación existente - actualizar
+            setConversations(prevConversations => {
+              const updated = [...prevConversations];
+              updated[conversationIndex] = {
+                ...updated[conversationIndex],
+                last_message: messageContent,
+                last_message_at: response.timestamp
+              };
+              // Mover al inicio de la lista
+              const [movedConv] = updated.splice(conversationIndex, 1);
+              return [movedConv, ...updated];
+            });
+            console.log('📋 Conversación actualizada en la lista');
+          }
         }
       } catch (error) {
         console.error('❌ Error enviando mensaje COMPLETO:', error);
