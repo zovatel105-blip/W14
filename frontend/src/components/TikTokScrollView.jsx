@@ -799,15 +799,15 @@ const TikTokPollCard = ({
 
       {/* Título de la música - Contenedor separado debajo de los botones (estilo TikTok) */}
       {poll.music && (
-        <div className="absolute left-0 right-0 z-20 px-4"
+        <div className="absolute left-0 right-0 z-30 px-4"
              style={{ 
                bottom: 'max(0.5rem, env(safe-area-inset-bottom))',
                paddingLeft: 'max(1rem, env(safe-area-inset-left))',
                paddingRight: 'max(1rem, env(safe-area-inset-right))'
              }}>
-          <div className="flex items-center gap-1.5 text-white">
-            <Music className="w-3.5 h-3.5 flex-shrink-0" />
-            <span className="text-xs font-light truncate">
+          <div className="flex items-center gap-1.5 text-white" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>
+            <Music className="w-3.5 h-3.5 flex-shrink-0" style={{ filter: 'drop-shadow(0 1px 2px rgba(0,0,0,0.8))' }} />
+            <span className="text-xs font-light truncate" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>
               {poll.music.title} - {poll.music.artist}
             </span>
           </div>
