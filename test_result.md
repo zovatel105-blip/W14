@@ -5859,3 +5859,83 @@ El problema de "mensajes invisibles" está completamente resuelto. El sistema de
 
 El problema de "No hay botón de aceptar o cancelar" está completamente resuelto.
 
+
+**🔧 ERROR CRÍTICO AL ACEPTAR SOLICITUD CORREGIDO (2025-01-28): Conversación ahora aparece correctamente después de aceptar una solicitud de chat.**
+
+✅ **PROBLEMA REPORTADO POR USUARIO:**
+- "Ahora acabo de aceptar la solicitud de un usuario pero en el momento que le di a aceptar el usuario desapareció completamente"
+- Al hacer clic en "Aceptar solicitud", la conversación desaparecía de la lista
+- El usuario quedaba sin forma de acceder al chat
+
+✅ **CAUSA RAÍZ IDENTIFICADA:**
+**ERROR 500 en GET /api/conversations después de aceptar solicitud**
+
+El endpoint `/api/conversations` (líneas 3521-3595) mezclaba dos tipos de objetos en el array de resultados:
+1. **Conversaciones normales**: Objetos `ConversationResponse` de Pydantic (línea 3544-3552)
+2. **Solicitudes pendientes**: Diccionarios simples (línea 3575-3590)
+
+Luego en la línea 3593, intentaba hacer `.sort()` con una función lambda que usaba `.get()`:
+```python
+result.sort(key=lambda x: x.get("last_message_at") or x.get("created_at"), reverse=True)
+```
+
+**PROBLEMA**: Los objetos Pydantic `ConversationResponse` NO tienen método `.get()`, causando:
+```
+AttributeError: 'ConversationResponse' object has no attribute 'get'
+```
+
+Esto causaba que después de aceptar una solicitud (que crea una conversación normal), el endpoint GET /api/conversations fallara con error 500, impidiendo que el frontend recargara la lista de conversaciones.
+
+✅ **SOLUCIÓN IMPLEMENTADA:**
+
+**CAMBIO EN BACKEND (/app/backend/server.py líneas 3544-3552):**
+```python
+# ANTES (objeto Pydantic):
+conversation_response = ConversationResponse(
+    id=conv_data["id"],
+    participants=participants,
+    last_message=conv_data.get("last_message"),
+    last_message_at=conv_data.get("last_message_at"),
+    unread_count=unread_count,
+    created_at=conv_data["created_at"]
+)
+result.append(conversation_response)
+
+# AHORA (diccionario simple):
+conversation_response = {
+    "id": conv_data["id"],
+    "participants": participants,
+    "last_message": conv_data.get("last_message"),
+    "last_message_at": conv_data.get("last_message_at"),
+    "unread_count": unread_count,
+    "created_at": conv_data["created_at"]
+}
+result.append(conversation_response)
+```
+
+**RESULTADO**: Ahora todos los elementos en `result` son diccionarios simples, por lo que `.get()` funciona correctamente para todos.
+
+✅ **FLUJO CORREGIDO:**
+1. Usuario hace clic en "Aceptar solicitud"
+2. Backend procesa la aceptación exitosamente (PUT /api/chat-requests/{id})
+3. Backend crea conversación real en la base de datos
+4. Frontend llama GET /api/conversations
+5. ✅ Endpoint ahora devuelve 200 OK (antes era 500 Error)
+6. ✅ Lista se actualiza con la nueva conversación
+7. ✅ Usuario puede ver y acceder al chat normalmente
+
+✅ **CAMBIOS TÉCNICOS:**
+- **Archivo**: `/app/backend/server.py`
+- **Líneas**: 3544-3552
+- **Cambio**: ConversationResponse object → diccionario simple
+- **Backend reiniciado**: Exitosamente sin errores
+
+✅ **RESULTADO FINAL:**
+🎯 **ACEPTACIÓN DE SOLICITUDES FUNCIONANDO COMPLETAMENTE** - Los usuarios ahora pueden:
+- Aceptar solicitudes de chat sin que la conversación desaparezca
+- Ver la conversación recién creada en la lista inmediatamente
+- Acceder y chatear normalmente después de aceptar
+- Sistema robusto sin errores 500
+
+El problema de "usuario desapareció completamente" está completamente resuelto.
+
