@@ -795,17 +795,24 @@ const TikTokPollCard = ({
             />
           )}
         </div>
-        
-        {/* Título de la música - Debajo de los botones (estilo TikTok) */}
-        {poll.music && (
-          <div className="mt-3 flex items-center gap-1.5 text-white/90">
+      </div>
+
+      {/* Título de la música - Contenedor separado debajo de los botones (estilo TikTok) */}
+      {poll.music && (
+        <div className="absolute left-0 right-0 z-20 px-4"
+             style={{ 
+               bottom: 'calc(6rem + max(1.5rem, env(safe-area-inset-bottom)))',
+               paddingLeft: 'max(1rem, env(safe-area-inset-left))',
+               paddingRight: 'max(1rem, env(safe-area-inset-right))'
+             }}>
+          <div className="flex items-center gap-1.5 text-white/90">
             <Music className="w-3.5 h-3.5 flex-shrink-0" />
             <span className="text-xs font-light truncate">
               {poll.music.title} - {poll.music.artist}
             </span>
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Scroll hints - Enhanced for first card */}
       {index === 0 && (
