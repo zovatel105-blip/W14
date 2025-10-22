@@ -805,7 +805,7 @@ const TikTokPollCard = ({
                paddingLeft: 'max(1rem, env(safe-area-inset-left))',
                paddingRight: 'max(1rem, env(safe-area-inset-right))'
              }}>
-          <div className="flex items-center gap-1.5 text-white/90">
+          <div className="flex items-center gap-1.5 text-white">
             <Music className="w-3.5 h-3.5 flex-shrink-0" />
             <span className="text-xs font-light truncate">
               {poll.music.title} - {poll.music.artist}
