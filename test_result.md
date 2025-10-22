@@ -5767,3 +5767,95 @@ return enriched_messages
 
 El problema de "mensajes invisibles" está completamente resuelto. El sistema de chat ahora funciona end-to-end correctamente.
 
+
+**🔘 BOTONES DE ACEPTAR/RECHAZAR SOLICITUD DE CHAT IMPLEMENTADOS (2025-01-28): Ahora las solicitudes de chat pendientes muestran botones de acción según el rol del usuario.**
+
+✅ **PROBLEMA REPORTADO POR USUARIO:**
+- "No hay botón de aceptar o cancelar solicitud de chat"
+- Las solicitudes de chat aparecían en la lista pero sin forma de aceptarlas o rechazarlas
+- No había diferenciación entre ser el sender o el receiver de una solicitud
+
+✅ **SOLUCIÓN COMPLETA IMPLEMENTADA:**
+
+**1. INTERFAZ CONDICIONAL SEGÚN ROL:**
+- **Para el RECEPTOR (is_request_receiver = true):**
+  - Panel azul con texto: "📨 Solicitud de chat pendiente"
+  - Mensaje: "¿Quieres aceptar esta conversación?"
+  - Botón verde "✓ Aceptar solicitud"
+  - Botón rojo "✗ Rechazar"
+
+- **Para el SENDER (is_request_sender = true):**
+  - Panel amarillo con texto: "⏳ Solicitud enviada"
+  - Mensaje: "Esperando respuesta. No puedes enviar más mensajes hasta que sea aceptada"
+  - Botón gris "Cancelar solicitud"
+
+- **Para conversaciones normales:**
+  - Input de mensajes estándar con botón de enviar
+
+**2. FUNCIONES IMPLEMENTADAS:**
+
+**handleChatRequestAction(action):**
+- Parámetro: 'accept' o 'reject'
+- Endpoint: PUT /api/chat-requests/{request_id}
+- Body: {"action": "accept"} o {"action": "reject"}
+- Si acepta:
+  - Recarga lista de conversaciones
+  - Obtiene la conversación real creada
+  - La selecciona automáticamente
+  - Carga los mensajes
+  - Muestra alert de confirmación
+- Si rechaza:
+  - Cierra la conversación
+  - Recarga lista
+  - Muestra alert de confirmación
+
+**handleCancelChatRequest():**
+- Endpoint: DELETE /api/chat-requests/{request_id}
+- Permite al sender cancelar su solicitud enviada
+- Cierra la conversación
+- Recarga la lista
+- Muestra alert de confirmación
+
+**3. LÓGICA CONDICIONAL EN UI:**
+- Archivo modificado: `/app/frontend/src/pages/messages/MessagesMainPage.jsx`
+- Líneas: 1387-1461 (área de input de mensajes)
+- Verifica: `selectedConversation?.is_chat_request` y `is_request_receiver/is_request_sender`
+- Muestra interfaz apropiada según el rol
+
+**4. INTEGRACIÓN CON BACKEND:**
+- PUT /api/chat-requests/{request_id} con {"action": "accept"/"reject"}
+- DELETE /api/chat-requests/{request_id} para cancelar
+- Al aceptar, el backend crea automáticamente:
+  - Nueva conversación entre ambos usuarios
+  - Convierte el mensaje inicial de solicitud en primer mensaje real
+  - Devuelve conversation_id para que el frontend lo use
+
+**5. FLUJO COMPLETO:**
+1. Usuario A envía mensaje a Usuario B (sin seguirse mutuamente)
+2. Se crea solicitud de chat pendiente (aparece en lista de ambos)
+3. Usuario B abre la conversación → ve botones "Aceptar" y "Rechazar"
+4. Usuario A abre su solicitud enviada → ve "Solicitud enviada" con opción de cancelar
+5. Si Usuario B acepta:
+   - Se crea conversación real
+   - Ambos pueden chatear libremente
+   - El mensaje inicial aparece en el historial
+6. Si Usuario B rechaza o Usuario A cancela:
+   - Solicitud desaparece de ambas listas
+
+✅ **CAMBIOS TÉCNICOS:**
+- **Frontend**: `/app/frontend/src/pages/messages/MessagesMainPage.jsx`
+  - Líneas 869-927: Funciones handleChatRequestAction y handleCancelChatRequest
+  - Líneas 1387-1461: UI condicional según tipo de conversación y rol
+- **Backend**: Ya existían los endpoints necesarios (verificado)
+- **Frontend reiniciado**: Exitosamente
+
+✅ **RESULTADO FINAL:**
+🎯 **SISTEMA DE SOLICITUDES DE CHAT COMPLETAMENTE FUNCIONAL** - Los usuarios ahora pueden:
+- Ver claramente cuando tienen una solicitud de chat pendiente
+- Aceptar o rechazar solicitudes recibidas con botones visibles
+- Cancelar solicitudes enviadas si cambian de opinión
+- Diferenciar visualmente entre solicitudes pendientes y conversaciones activas
+- Experiencia completa y intuitiva según su rol (sender/receiver)
+
+El problema de "No hay botón de aceptar o cancelar" está completamente resuelto.
+
