@@ -801,7 +801,7 @@ const TikTokPollCard = ({
       {poll.music && (
         <div className="absolute left-0 right-0 z-20 px-4"
              style={{ 
-               bottom: 'calc(6rem + max(1.5rem, env(safe-area-inset-bottom)))',
+               bottom: 'max(0.5rem, env(safe-area-inset-bottom))',
                paddingLeft: 'max(1rem, env(safe-area-inset-left))',
                paddingRight: 'max(1rem, env(safe-area-inset-right))'
              }}>
