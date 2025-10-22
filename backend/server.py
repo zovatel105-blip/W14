@@ -3541,14 +3541,14 @@ async def get_conversations(current_user: UserResponse = Depends(get_current_use
         # Get unread count for current user
         unread_count = conv_data.get("unread_count", {}).get(current_user.id, 0)
         
-        conversation_response = ConversationResponse(
-            id=conv_data["id"],
-            participants=participants,
-            last_message=conv_data.get("last_message"),
-            last_message_at=conv_data.get("last_message_at"),
-            unread_count=unread_count,
-            created_at=conv_data["created_at"]
-        )
+        conversation_response = {
+            "id": conv_data["id"],
+            "participants": participants,
+            "last_message": conv_data.get("last_message"),
+            "last_message_at": conv_data.get("last_message_at"),
+            "unread_count": unread_count,
+            "created_at": conv_data["created_at"]
+        }
         result.append(conversation_response)
     
     # Get pending chat requests (both sent and received)
