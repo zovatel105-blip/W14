@@ -251,6 +251,56 @@ Feed Post Layout (Posts PROPIOS):
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
+**🔧 CORREGIDO DUPLICACIÓN DE SOLICITUDES DE MENSAJES (2025-01-27): Las solicitudes pendientes ahora aparecen SOLO en "Solicitudes de mensajes" para el receptor, eliminando la duplicación.**
+
+✅ **PROBLEMA RESUELTO:**
+- **Antes**: Las solicitudes aparecían duplicadas:
+  - Una vez en el inbox principal CON botones aceptar/rechazar
+  - Otra vez en "Solicitudes de mensajes" SIN botones
+- **Causa**: Endpoint `/api/conversations` incluía solicitudes para AMBOS (sender y receiver)
+- **Solución**: Separación clara de dónde aparecen las solicitudes según el rol del usuario
+
+✅ **CAMBIOS IMPLEMENTADOS:**
+
+**BACKEND - Separación de solicitudes por rol:**
+1. ✅ **Endpoint `/api/conversations`** (Inbox principal):
+   - Ahora SOLO incluye solicitudes donde el usuario es el SENDER
+   - El sender ve su solicitud enviada con estado "Pendiente"
+   - Permite al sender cancelar la solicitud desde el inbox
+   
+2. ✅ **Endpoint `/api/messages/requests`** (Solicitudes de mensajes):
+   - Restaurado y optimizado
+   - SOLO retorna solicitudes donde el usuario es el RECEIVER
+   - El receiver ve las solicitudes SOLO aquí, con botones aceptar/rechazar
+
+**FLUJO CORREGIDO:**
+
+**Para el SENDER (quien envía la solicitud):**
+- ✅ Ve su solicitud en el **Inbox principal**
+- ✅ Badge amarillo "⏳ Pendiente"
+- ✅ Puede cancelar la solicitud
+- ✅ Input de mensajes deshabilitado hasta que sea aceptada
+
+**Para el RECEIVER (quien recibe la solicitud):**
+- ✅ Ve la solicitud SOLO en **"Solicitudes de mensajes"**
+- ✅ NO aparece en el inbox principal (sin duplicación)
+- ✅ Botones "Aceptar" y "Rechazar" disponibles
+- ✅ Al hacer clic, se abre la conversación con opciones de aceptar/rechazar
+
+**ARCHIVOS MODIFICADOS:**
+- `/app/backend/server.py`:
+  - GET /api/conversations (líneas 3554-3575): Solo incluye solicitudes del sender
+  - GET /api/messages/requests (restaurado): Solo retorna solicitudes para el receiver
+
+**RESULTADO FINAL:**
+🎯 **SIN DUPLICACIÓN - FLUJO LIMPIO Y ORGANIZADO**:
+- Sender: Ve solicitud enviada en inbox (1 vez)
+- Receiver: Ve solicitud recibida en "Solicitudes" (1 vez)
+- Cada usuario ve la solicitud en el lugar correcto según su rol
+- Eliminada completamente la duplicación de solicitudes
+
+---
+
 **💬 SISTEMA DE SOLICITUDES DE CHAT COMO CONVERSACIONES PENDIENTES IMPLEMENTADO (2025-01-27): Las solicitudes de chat ahora aparecen en la lista de conversaciones, visibles para ambos usuarios (sender y receiver).**
 
 ✅ **FUNCIONALIDAD IMPLEMENTADA:**
