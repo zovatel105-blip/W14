@@ -1457,30 +1457,20 @@ const MessagesMainPage = () => {
                   </p>
                 </div>
 
-                {/* Botones de acción rediseñados - Solo Rechazar y Aceptar */}
-                <div className="grid grid-cols-2 gap-4 px-2 max-w-sm mx-auto">
+                {/* Botones minimalistas */}
+                <div className="grid grid-cols-2 gap-3 px-2 max-w-sm mx-auto">
                   <button
                     onClick={() => handleChatRequestAction('reject')}
-                    className="flex flex-col items-center justify-center py-5 px-4 bg-gray-100 hover:bg-gray-200 rounded-2xl transition-all duration-200 group"
+                    className="py-3 px-4 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors text-center"
                   >
-                    <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center mb-2 group-hover:scale-105 transition-transform shadow-sm">
-                      <svg className="w-7 h-7 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                      </svg>
-                    </div>
-                    <span className="text-base font-medium text-gray-900">Rechazar</span>
+                    <span className="text-sm font-medium text-gray-900">Rechazar</span>
                   </button>
 
                   <button
                     onClick={() => handleChatRequestAction('accept')}
-                    className="flex flex-col items-center justify-center py-5 px-4 bg-gray-100 hover:bg-gray-200 rounded-2xl transition-all duration-200 group"
+                    className="py-3 px-4 bg-gray-100 hover:bg-gray-200 rounded-xl transition-colors text-center"
                   >
-                    <div className="w-14 h-14 bg-white rounded-full flex items-center justify-center mb-2 group-hover:scale-105 transition-transform shadow-sm">
-                      <svg className="w-7 h-7 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                    </div>
-                    <span className="text-base font-medium text-gray-900">Aceptar</span>
+                    <span className="text-sm font-medium text-gray-900">Aceptar</span>
                   </button>
                 </div>
               </div>
