@@ -251,7 +251,7 @@ Feed Post Layout (Posts PROPIOS):
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
-**🔧 CORREGIDO DUPLICACIÓN DE SOLICITUDES DE MENSAJES (2025-01-27): Las solicitudes pendientes ahora aparecen SOLO en "Solicitudes de mensajes" para el receptor, eliminando la duplicación.**
+**🔧 CORREGIDO DUPLICACIÓN DE SOLICITUDES DE MENSAJES Y BOTONES MINIMALISTAS (2025-01-27): Las solicitudes pendientes ahora aparecen SOLO en "Solicitudes de mensajes" para el receptor, eliminando la duplicación. Botones de aceptar/rechazar con diseño minimalista dentro de la conversación.**
 
 ✅ **PROBLEMA RESUELTO:**
 - **Antes**: Las solicitudes aparecían duplicadas:
