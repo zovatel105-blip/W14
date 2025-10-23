@@ -827,28 +827,20 @@ const MessagesPage = () => {
 
             {/* Message Input or Chat Request Actions */}
             {selectedConversation.is_chat_request && selectedConversation.is_request_receiver && (
-              /* Receiver: Show accept/reject buttons */
-              <div className="border-t p-4 bg-blue-50">
-                <div className="text-center mb-3">
-                  <p className="text-sm text-blue-900 font-medium">
-                    ✉️ Solicitud de chat pendiente
-                  </p>
-                  <p className="text-xs text-blue-700">
-                    ¿Quieres aceptar esta conversación?
-                  </p>
-                </div>
-                <div className="flex gap-2">
+              /* Receiver: Show accept/reject buttons - Diseño minimalista */
+              <div className="border-t border-gray-200 p-3 bg-white">
+                <div className="flex gap-2 max-w-md mx-auto">
                   <button
                     onClick={() => handleChatRequest(selectedConversation.chat_request_id, 'accept')}
-                    className="flex-1 px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 font-medium text-sm"
+                    className="flex-1 px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm"
                   >
-                    ✓ Aceptar solicitud
+                    Aceptar
                   </button>
                   <button
                     onClick={() => handleChatRequest(selectedConversation.chat_request_id, 'reject')}
-                    className="flex-1 px-4 py-2 bg-gray-300 text-gray-700 rounded-full hover:bg-gray-400 font-medium text-sm"
+                    className="flex-1 px-4 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium text-sm"
                   >
-                    ✗ Rechazar
+                    Rechazar
                   </button>
                 </div>
               </div>
