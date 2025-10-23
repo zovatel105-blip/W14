@@ -185,7 +185,7 @@ const EditProfileModal = ({ isOpen, onClose, onProfileUpdate }) => {
     <div className="fixed inset-0 bg-white z-50 flex flex-col">
       
       {/* Header móvil con botón volver */}
-      <div className="relative w-full flex items-center justify-center px-4 py-4 bg-blue-50 border-b border-gray-100 safe-area-top">
+      <div className="relative w-full flex items-center justify-center px-4 py-4 border-b border-gray-100 safe-area-top" style={{backgroundColor: 'rgba(176, 97, 255, 0.1)'}}>
         
         {/* Botón de retroceder posicionado absolutamente a la izquierda y centrado verticalmente */}
         <button
