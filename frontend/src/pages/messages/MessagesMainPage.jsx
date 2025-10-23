@@ -1147,7 +1147,7 @@ const MessagesMainPage = () => {
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
               </div>
             ) : conversations.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full text-center px-6">
+              <div className="flex flex-col items-center justify-center h-full text-center px-6 bg-white">
                 <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
                   <MessageCircle className="h-8 w-8 text-blue-500" />
                 </div>
