@@ -113,12 +113,103 @@ const RequestsPage = () => {
     }
   }, [user]);
 
-  // Manejar clic en solicitud (aceptar/abrir chat)
+  // Aceptar solicitud de chat
+  const handleAcceptRequest = async (request, event) => {
+    event.stopPropagation(); // Evitar que se active el onClick del contenedor
+    
+    if (processingRequest === request.requestId) return;
+    setProcessingRequest(request.requestId);
+    
+    try {
+      console.log('✅ Aceptando solicitud:', request.requestId);
+      
+      const response = await apiRequest(`/api/chat-requests/${request.requestId}`, {
+        method: 'PUT',
+        body: JSON.stringify({ action: 'accept' })
+      });
+      
+      console.log('✅ Solicitud aceptada:', response);
+      
+      toast({
+        title: "✅ Solicitud aceptada",
+        description: `Ahora puedes chatear con ${request.title}`,
+      });
+      
+      // Eliminar la solicitud de la lista
+      setRequests(prev => prev.filter(r => r.id !== request.id));
+      setRequestCount(prev => Math.max(0, prev - 1));
+      
+      // Navegar al chat con la conversación aceptada
+      setTimeout(() => {
+        navigate('/messages', { 
+          state: { 
+            openConversation: {
+              id: response.conversation_id || `conversation-${request.requestId}`,
+              participants: [{
+                id: request.userId,
+                username: request.title.replace(/[^\w]/g, '').toLowerCase(),
+                display_name: request.title
+              }]
+            }
+          }
+        });
+      }, 500);
+      
+    } catch (error) {
+      console.error('❌ Error aceptando solicitud:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo aceptar la solicitud",
+        variant: "destructive"
+      });
+    } finally {
+      setProcessingRequest(null);
+    }
+  };
+
+  // Rechazar solicitud de chat
+  const handleRejectRequest = async (request, event) => {
+    event.stopPropagation(); // Evitar que se active el onClick del contenedor
+    
+    if (processingRequest === request.requestId) return;
+    setProcessingRequest(request.requestId);
+    
+    try {
+      console.log('❌ Rechazando solicitud:', request.requestId);
+      
+      await apiRequest(`/api/chat-requests/${request.requestId}`, {
+        method: 'PUT',
+        body: JSON.stringify({ action: 'reject' })
+      });
+      
+      console.log('❌ Solicitud rechazada');
+      
+      toast({
+        title: "Solicitud rechazada",
+        description: "La solicitud ha sido eliminada",
+      });
+      
+      // Eliminar la solicitud de la lista
+      setRequests(prev => prev.filter(r => r.id !== request.id));
+      setRequestCount(prev => Math.max(0, prev - 1));
+      
+    } catch (error) {
+      console.error('❌ Error rechazando solicitud:', error);
+      toast({
+        title: "Error",
+        description: "No se pudo rechazar la solicitud",
+        variant: "destructive"
+      });
+    } finally {
+      setProcessingRequest(null);
+    }
+  };
+
+  // Manejar clic en solicitud (ver detalles)
   const handleRequestClick = (request) => {
     if (request.isSystem) return;
     
-    // TODO: Implementar lógica para aceptar solicitud y abrir chat
-    // Por ahora navegamos de vuelta a messages con la conversación
+    // Navegar a messages para ver el mensaje completo
     navigate('/messages', { 
       state: { 
         openConversation: {
@@ -126,7 +217,7 @@ const RequestsPage = () => {
           participants: [{
             id: request.userId,
             username: request.title.replace(/[^\w]/g, '').toLowerCase(),
-            display_name: request.title.replace(/[^\w\s]/g, '').trim()
+            display_name: request.title
           }],
           isRequest: true,
           requestId: request.requestId
