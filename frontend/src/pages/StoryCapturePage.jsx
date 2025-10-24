@@ -114,18 +114,18 @@ const StoryCapturePage = () => {
         </div>
       ) : (
         /* Preview del contenido seleccionado - ocupa todo el espacio dejando inferior libre */
-        <div className="absolute top-16 left-0 right-0 bottom-52 flex items-center justify-center">
-          <div className="relative w-full h-full">
+        <div className="absolute top-16 left-0 right-0 bottom-52 flex items-center justify-center p-4">
+          <div className="relative w-full h-full bg-white/10 backdrop-blur-sm rounded-3xl overflow-hidden border-2 border-white/30">
             {fileType === 'image' ? (
               <img
                 src={previewUrl}
                 alt="Preview"
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain"
               />
             ) : (
               <video
                 src={previewUrl}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-contain"
                 controls
               />
             )}
