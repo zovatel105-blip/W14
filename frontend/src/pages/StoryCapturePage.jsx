@@ -101,14 +101,6 @@ const StoryCapturePage = () => {
               Sube una foto o video para comenzar tu historia
             </p>
 
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*,video/*"
-              onChange={handleFileSelect}
-              className="hidden"
-            />
-
             <div className="flex flex-col gap-3 w-full max-w-xs">
               <button
                 onClick={() => fileInputRef.current?.click()}
