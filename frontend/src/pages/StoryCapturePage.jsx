@@ -128,18 +128,8 @@ const StoryCapturePage = () => {
             </button>
           </div>
         ) : (
-                onClick={handleNext}
-                className="w-12 h-12 rounded-full bg-white flex items-center justify-center hover:bg-gray-100 transition-all"
-              >
-                <svg className="w-6 h-6 text-black" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M8 5v14l11-7z"/>
-                </svg>
-              </button>
-            </div>
-          </div>
-        ) : (
           /* Barra inferior sin imagen - controles de captura */
-          <div className="flex items-center justify-between px-4 pb-6 bg-black">
+          <div className="flex items-center justify-between px-4 pb-6">
             {/* Modo seleccionado */}
             <div className="flex items-center gap-6">
               <button className="text-white/50 text-sm font-medium">
