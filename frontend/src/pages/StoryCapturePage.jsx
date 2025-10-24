@@ -117,27 +117,17 @@ const StoryCapturePage = () => {
       )}
 
       {/* Barra inferior */}
-      <div className="absolute bottom-0 left-0 right-0 z-30 bg-gradient-to-t from-black via-black/95 to-transparent pt-8">
+      <div className="absolute bottom-0 left-0 right-0 z-30 pb-8">
         {previewUrl ? (
-          /* Barra inferior con imagen cargada - solo botones */
-          <div className="px-4 pb-5 bg-black">
-            {/* Botones de acción */}
-            <div className="flex items-center gap-3">
-              {/* Botón "Tu historia" */}
-              <button
-                onClick={handleNext}
-                className="flex-1 bg-gray-800 hover:bg-gray-700 text-white font-medium py-3 px-4 rounded-full transition-all flex items-center justify-center gap-2"
-              >
-                <div className="w-6 h-6 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 p-0.5">
-                  <div className="w-full h-full rounded-full bg-gray-800 flex items-center justify-center">
-                    <span className="text-white text-xs">📸</span>
-                  </div>
-                </div>
-                <span>Tu historia</span>
-              </button>
-
-              {/* Botón siguiente (flecha) */}
-              <button
+          /* Barra inferior con imagen cargada - solo botón circular blanco centrado */
+          <div className="flex items-center justify-center">
+            <button
+              onClick={handleNext}
+              className="w-16 h-16 rounded-full bg-white hover:bg-gray-100 transition-all shadow-2xl"
+            >
+            </button>
+          </div>
+        ) : (
                 onClick={handleNext}
                 className="w-12 h-12 rounded-full bg-white flex items-center justify-center hover:bg-gray-100 transition-all"
               >
