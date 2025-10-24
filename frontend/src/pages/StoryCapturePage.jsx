@@ -78,9 +78,9 @@ const StoryCapturePage = () => {
       </div>
 
       {/* Área central - preview o prompt de captura */}
-      <div className="absolute inset-0 flex items-center justify-center pt-20 pb-32">
-        {!previewUrl ? (
-          /* Estado inicial - sin contenido */
+      {!previewUrl ? (
+        <div className="absolute inset-0 flex items-center justify-center pt-20 pb-32">
+          {/* Estado inicial - sin contenido */}
           <div className="w-full h-full flex flex-col items-center justify-center px-8">
             <div className="w-32 h-32 rounded-full bg-white/10 flex items-center justify-center mb-8">
               <Camera className="w-16 h-16 text-white/60" />
@@ -111,25 +111,27 @@ const StoryCapturePage = () => {
               </button>
             </div>
           </div>
-        ) : (
-          /* Preview del contenido seleccionado */
-          <div className="relative w-full h-full max-w-lg mx-auto">
+        </div>
+      ) : (
+        /* Preview del contenido seleccionado - ocupa todo el espacio dejando inferior libre */
+        <div className="absolute top-16 left-0 right-0 bottom-52 flex items-center justify-center">
+          <div className="relative w-full h-full">
             {fileType === 'image' ? (
               <img
                 src={previewUrl}
                 alt="Preview"
-                className="w-full h-full object-contain"
+                className="w-full h-full object-cover"
               />
             ) : (
               <video
                 src={previewUrl}
-                className="w-full h-full object-contain"
+                className="w-full h-full object-cover"
                 controls
               />
             )}
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {/* Barra inferior */}
       <div className="absolute bottom-0 left-0 right-0 z-30 bg-black pb-8 px-4">
