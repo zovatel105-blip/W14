@@ -118,13 +118,23 @@ const StoryCapturePage = () => {
 
       {/* Barra inferior */}
       <div className="absolute bottom-0 left-0 right-0 z-30 pb-8">
-        {previewUrl && (
-          /* Barra inferior solo cuando hay imagen - botón circular blanco centrado */
+        {previewUrl ? (
+          /* Barra inferior con imagen - botón blanco centrado */
           <div className="flex items-center justify-center">
             <button
               onClick={handleNext}
               className="w-16 h-16 rounded-full bg-white hover:bg-gray-100 transition-all shadow-2xl"
             >
+            </button>
+          </div>
+        ) : (
+          /* Barra inferior sin imagen - solo botón circular de captura */
+          <div className="flex items-center justify-center">
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="w-20 h-20 rounded-full border-4 border-white bg-transparent flex items-center justify-center hover:bg-white/10 transition-all"
+            >
+              <div className="w-16 h-16 rounded-full bg-white"></div>
             </button>
           </div>
         )}
