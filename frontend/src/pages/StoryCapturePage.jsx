@@ -118,47 +118,14 @@ const StoryCapturePage = () => {
 
       {/* Barra inferior */}
       <div className="absolute bottom-0 left-0 right-0 z-30 pb-8">
-        {previewUrl ? (
-          /* Barra inferior con imagen cargada - solo botón circular blanco centrado */
+        {previewUrl && (
+          /* Barra inferior solo cuando hay imagen - botón circular blanco centrado */
           <div className="flex items-center justify-center">
             <button
               onClick={handleNext}
               className="w-16 h-16 rounded-full bg-white hover:bg-gray-100 transition-all shadow-2xl"
             >
             </button>
-          </div>
-        ) : (
-          /* Barra inferior sin imagen - controles de captura */
-          <div className="flex items-center justify-between px-4 pb-6">
-            {/* Modo seleccionado */}
-            <div className="flex items-center gap-6">
-              <button className="text-white/50 text-sm font-medium">
-                TÁNER
-              </button>
-              <button className="text-white text-base font-bold">
-                HISTORIA
-              </button>
-              <button className="text-white/50 text-sm font-medium">
-                REEL
-              </button>
-            </div>
-
-            {/* Botón de captura */}
-            <button
-              onClick={() => fileInputRef.current?.click()}
-              className="w-16 h-16 rounded-full border-4 border-white bg-transparent flex items-center justify-center hover:bg-white/10 transition-all"
-            >
-              <div className="w-14 h-14 rounded-full bg-white"></div>
-            </button>
-
-            {/* Preview de historias anteriores */}
-            <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 p-0.5">
-                <div className="w-full h-full rounded-full bg-black flex items-center justify-center">
-                  <span className="text-white text-xs">📸</span>
-                </div>
-              </div>
-            </div>
           </div>
         )}
       </div>
