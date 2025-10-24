@@ -502,4 +502,4 @@ const MusicSelectorModal = ({ onClose, onSelect }) => {
   );
 };
 
-export default StoryCreationPage;
+export default StoryEditPage;
