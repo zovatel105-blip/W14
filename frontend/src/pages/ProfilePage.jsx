@@ -2479,7 +2479,14 @@ const ProfilePage = () => {
         />
       )}
 
-      {/* Story Viewer - REMOVED (Stories feature disabled) */}
+      {/* Story Viewer */}
+      {showStoryViewer && userStories.length > 0 && (
+        <StoriesViewer
+          stories={userStories}
+          onClose={() => setShowStoryViewer(false)}
+          currentUserId={authUser?.id}
+        />
+      )}
 
       {/* Create Story Modal - REMOVED */}
     </>
