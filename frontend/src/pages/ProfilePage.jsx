@@ -1788,7 +1788,7 @@ const ProfilePage = () => {
                     className="h-11 sm:h-12 rounded-2xl border-gray-200 hover:bg-gray-50 font-medium text-sm"
                     onClick={() => setStatisticsModalOpen(true)}
                   >
-                    <BarChart3 className="w-4 h-4 mr-2" strokeWidth={1.5} />
+                    <TrendingUp className="w-4 h-4 mr-2" strokeWidth={1.5} />
                     Estadísticas
                   </Button>
                 </>
