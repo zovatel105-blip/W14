@@ -136,17 +136,8 @@ const StoryCapturePage = () => {
       {/* Barra inferior */}
       <div className="absolute bottom-0 left-0 right-0 z-30 bg-gradient-to-t from-black via-black/95 to-transparent pt-8">
         {previewUrl ? (
-          /* Barra inferior con imagen cargada - descripción y botones */
-          <div className="px-4 pb-5 space-y-3 bg-black">
-            {/* Input de descripción */}
-            <div className="w-full">
-              <input
-                type="text"
-                placeholder="Añade una descripción..."
-                className="w-full bg-transparent text-white text-sm placeholder-white/50 px-0 py-2 border-b border-white/20 focus:outline-none focus:border-white/40 transition-colors"
-              />
-            </div>
-
+          /* Barra inferior con imagen cargada - solo botones */
+          <div className="px-4 pb-5 bg-black">
             {/* Botones de acción */}
             <div className="flex items-center gap-3">
               {/* Botón "Tu historia" */}
