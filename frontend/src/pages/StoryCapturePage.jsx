@@ -87,30 +87,13 @@ const StoryCapturePage = () => {
       />
       
       {!previewUrl ? (
-        <div className="absolute inset-0 flex items-center justify-center pt-20 pb-32">
-          {/* Estado inicial - sin contenido */}
-          <div className="w-full h-full flex flex-col items-center justify-center px-8">
-            <div className="w-32 h-32 rounded-full bg-white/10 flex items-center justify-center mb-8">
-              <Camera className="w-16 h-16 text-white/60" />
-            </div>
-            
-            <h3 className="text-2xl font-bold text-white mb-3 text-center">
-              Captura tu momento
-            </h3>
-            <p className="text-white/70 text-center text-sm mb-8">
-              Sube una foto o video para comenzar tu historia
-            </p>
-
-            <div className="flex flex-col gap-3 w-full max-w-xs">
-              <button
-                onClick={() => fileInputRef.current?.click()}
-                className="w-full bg-white hover:bg-gray-100 text-black font-semibold py-4 px-6 rounded-full transition-all flex items-center justify-center gap-3"
-              >
-                <ImageIcon className="w-5 h-5" />
-                Subir desde galería
-              </button>
-            </div>
-          </div>
+        /* Estado inicial - solo botón circular blanco en el centro */
+        <div className="absolute inset-0 flex items-center justify-center">
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            className="w-20 h-20 rounded-full bg-white hover:bg-gray-100 transition-all shadow-2xl"
+          >
+          </button>
         </div>
       ) : (
         /* Preview del contenido seleccionado - fullscreen con bordes curvos arriba y abajo */
