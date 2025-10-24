@@ -15,7 +15,7 @@ import TikTokScrollView from '../components/TikTokScrollView';
 // import StoryViewer from '../components/StoryViewer'; // Removed - Stories feature disabled
 import { 
   Settings, Users, Vote, Trophy, Heart, Share, ArrowLeft, AtSign, Bookmark, LayoutDashboard, Check, 
-  Share2, UserPlus, UserCheck, ChevronDown, Plus, BarChart3, Mail, MessageCircle, Send, Hash, Bell, BellOff, UserCircle, Link, X, Trash2 
+  Share2, UserPlus, UserCheck, ChevronDown, Plus, BarChart3, Mail, MessageCircle, Send, Hash, Bell, BellOff, UserCircle, Link, X, Trash2, TrendingUp 
 } from 'lucide-react';
 import pollService from '../services/pollService';
 import userService from '../services/userService';
