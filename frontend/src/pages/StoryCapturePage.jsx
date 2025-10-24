@@ -51,23 +51,23 @@ const StoryCapturePage = () => {
     <div className="fixed inset-0 z-50 bg-black overflow-hidden">
       {/* Header con botones transparentes sobre la imagen */}
       <div className="absolute top-0 left-0 right-0 z-30 pt-3 px-4">
-        <div className="flex items-center justify-between">
-          {/* Botón cerrar */}
+        <div className="flex items-start justify-between">
+          {/* Botón cerrar a la izquierda */}
           <button
             onClick={() => navigate(-1)}
-            className="w-10 h-10 flex items-center justify-center"
+            className="w-10 h-10 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center hover:bg-black/70 transition-all"
           >
-            <X className="w-7 h-7 text-white" />
+            <X className="w-6 h-6 text-white" />
           </button>
 
-          {/* Botones configuración (solo visual) */}
-          <div className="flex items-center gap-3">
-            <button className="w-10 h-10 flex items-center justify-center">
+          {/* Botones en vertical a la derecha */}
+          <div className="flex flex-col gap-3">
+            <button className="w-10 h-10 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center hover:bg-black/70 transition-all">
               <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
               </svg>
             </button>
-            <button className="w-10 h-10 flex items-center justify-center">
+            <button className="w-10 h-10 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center hover:bg-black/70 transition-all">
               <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <circle cx="12" cy="12" r="3"/>
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 1v6m0 6v6"/>
