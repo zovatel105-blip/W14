@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
-import AppConfig from '../config';
+import AppConfig from '../config/config';
 
 const StoriesViewer = ({ storiesGroups, onClose, initialUserIndex = 0 }) => {
   const [currentUserIndex, setCurrentUserIndex] = useState(initialUserIndex);
