@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
+import AppConfig from '../config';
 
 const StoriesViewer = ({ storiesGroups, onClose, initialUserIndex = 0 }) => {
   const [currentUserIndex, setCurrentUserIndex] = useState(initialUserIndex);
@@ -8,6 +9,13 @@ const StoriesViewer = ({ storiesGroups, onClose, initialUserIndex = 0 }) => {
 
   const currentGroup = storiesGroups[currentUserIndex];
   const currentStory = currentGroup?.stories[currentStoryIndex];
+  
+  // Helper function to get full URL
+  const getFullMediaUrl = (url) => {
+    if (!url) return '';
+    if (url.startsWith('http')) return url;
+    return `${AppConfig.API_BASE_URL}${url}`;
+  };
 
   // Auto advance story
   useEffect(() => {
