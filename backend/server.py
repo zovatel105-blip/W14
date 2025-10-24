@@ -8702,6 +8702,309 @@ async def delete_recent_search(
         logger.error(f"Error deleting recent search: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to delete search")
 
+
+
+# =============  STORY ENDPOINTS =============
+
+@api_router.post("/api/stories", response_model=StoryResponse, tags=["Stories"])
+async def create_story(
+    story: StoryCreate,
+    current_user: User = Depends(get_current_user)
+):
+    """Create a new story"""
+    try:
+        # Create story document
+        story_doc = Story(
+            user_id=current_user.id,
+            **story.dict()
+        )
+        
+        # Insert into database
+        result = await db.stories.insert_one(story_doc.dict())
+        
+        if not result.inserted_id:
+            raise HTTPException(status_code=500, detail="Failed to create story")
+        
+        # Get user info
+        user_data = await db.users.find_one({"id": current_user.id})
+        user_response = UserResponse(**user_data)
+        
+        # Return story response
+        return StoryResponse(
+            **story_doc.dict(),
+            user=user_response,
+            viewed_by_me=False
+        )
+        
+    except Exception as e:
+        logger.error(f"Error creating story: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to create story")
+
+@api_router.get("/api/stories", response_model=List[StoriesGroupResponse], tags=["Stories"])
+async def get_stories(
+    current_user: User = Depends(get_current_user)
+):
+    """Get stories from followed users (grouped by user)"""
+    try:
+        # Get followed users
+        following_doc = await db.user_relationships.find_one({"user_id": current_user.id})
+        following_ids = following_doc.get("following", []) if following_doc else []
+        
+        # Add current user to see their own stories
+        all_user_ids = following_ids + [current_user.id]
+        
+        # Get active stories from followed users
+        current_time = datetime.utcnow()
+        stories_cursor = db.stories.find({
+            "user_id": {"$in": all_user_ids},
+            "is_active": True,
+            "expires_at": {"$gt": current_time}
+        }).sort("created_at", -1)
+        
+        stories = await stories_cursor.to_list(length=1000)
+        
+        if not stories:
+            return []
+        
+        # Get story views for current user
+        story_ids = [story["id"] for story in stories]
+        views_cursor = db.story_views.find({
+            "story_id": {"$in": story_ids},
+            "user_id": current_user.id
+        })
+        viewed_story_ids = set([view["story_id"] async for view in views_cursor])
+        
+        # Group stories by user
+        stories_by_user = {}
+        for story in stories:
+            user_id = story["user_id"]
+            if user_id not in stories_by_user:
+                stories_by_user[user_id] = []
+            stories_by_user[user_id].append(story)
+        
+        # Get user info for all users
+        user_ids = list(stories_by_user.keys())
+        users_cursor = db.users.find({"id": {"$in": user_ids}})
+        users_dict = {user["id"]: user async for user in users_cursor}
+        
+        # Build response
+        result = []
+        for user_id, user_stories in stories_by_user.items():
+            user_data = users_dict.get(user_id)
+            if not user_data:
+                continue
+            
+            user_response = UserResponse(**user_data)
+            
+            # Convert stories to StoryResponse
+            story_responses = []
+            has_unviewed = False
+            for story in user_stories:
+                viewed_by_me = story["id"] in viewed_story_ids
+                if not viewed_by_me:
+                    has_unviewed = True
+                    
+                story_responses.append(StoryResponse(
+                    **story,
+                    user=user_response,
+                    viewed_by_me=viewed_by_me
+                ))
+            
+            result.append(StoriesGroupResponse(
+                user=user_response,
+                stories=story_responses,
+                total_stories=len(story_responses),
+                has_unviewed=has_unviewed
+            ))
+        
+        # Sort: unviewed stories first, then by most recent
+        result.sort(key=lambda x: (not x.has_unviewed, -x.stories[0].created_at.timestamp()))
+        
+        return result
+        
+    except Exception as e:
+        logger.error(f"Error getting stories: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to get stories")
+
+@api_router.get("/api/stories/user/{user_id}", response_model=StoriesGroupResponse, tags=["Stories"])
+async def get_user_stories(
+    user_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """Get all stories from a specific user"""
+    try:
+        # Get active stories from user
+        current_time = datetime.utcnow()
+        stories_cursor = db.stories.find({
+            "user_id": user_id,
+            "is_active": True,
+            "expires_at": {"$gt": current_time}
+        }).sort("created_at", -1)
+        
+        stories = await stories_cursor.to_list(length=100)
+        
+        if not stories:
+            raise HTTPException(status_code=404, detail="No active stories found")
+        
+        # Get user info
+        user_data = await db.users.find_one({"id": user_id})
+        if not user_data:
+            raise HTTPException(status_code=404, detail="User not found")
+        
+        user_response = UserResponse(**user_data)
+        
+        # Get story views for current user
+        story_ids = [story["id"] for story in stories]
+        views_cursor = db.story_views.find({
+            "story_id": {"$in": story_ids},
+            "user_id": current_user.id
+        })
+        viewed_story_ids = set([view["story_id"] async for view in views_cursor])
+        
+        # Convert stories to StoryResponse
+        story_responses = []
+        has_unviewed = False
+        for story in stories:
+            viewed_by_me = story["id"] in viewed_story_ids
+            if not viewed_by_me:
+                has_unviewed = True
+                
+            story_responses.append(StoryResponse(
+                **story,
+                user=user_response,
+                viewed_by_me=viewed_by_me
+            ))
+        
+        return StoriesGroupResponse(
+            user=user_response,
+            stories=story_responses,
+            total_stories=len(story_responses),
+            has_unviewed=has_unviewed
+        )
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error getting user stories: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to get user stories")
+
+@api_router.post("/api/stories/{story_id}/view", tags=["Stories"])
+async def view_story(
+    story_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """Mark a story as viewed"""
+    try:
+        # Check if story exists
+        story = await db.stories.find_one({"id": story_id})
+        if not story:
+            raise HTTPException(status_code=404, detail="Story not found")
+        
+        # Check if already viewed
+        existing_view = await db.story_views.find_one({
+            "story_id": story_id,
+            "user_id": current_user.id
+        })
+        
+        if existing_view:
+            return {"success": True, "message": "Already viewed"}
+        
+        # Create view record
+        view_doc = StoryView(
+            story_id=story_id,
+            user_id=current_user.id
+        )
+        
+        await db.story_views.insert_one(view_doc.dict())
+        
+        # Increment views count
+        await db.stories.update_one(
+            {"id": story_id},
+            {"$inc": {"views_count": 1}}
+        )
+        
+        return {"success": True, "message": "Story viewed"}
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error viewing story: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to view story")
+
+@api_router.delete("/api/stories/{story_id}", tags=["Stories"])
+async def delete_story(
+    story_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """Delete a story (only owner can delete)"""
+    try:
+        # Check if story exists and user is owner
+        story = await db.stories.find_one({"id": story_id})
+        if not story:
+            raise HTTPException(status_code=404, detail="Story not found")
+        
+        if story["user_id"] != current_user.id:
+            raise HTTPException(status_code=403, detail="Not authorized to delete this story")
+        
+        # Mark as inactive instead of deleting
+        await db.stories.update_one(
+            {"id": story_id},
+            {"$set": {"is_active": False}}
+        )
+        
+        return {"success": True, "message": "Story deleted"}
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error deleting story: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to delete story")
+
+@api_router.get("/api/stories/{story_id}/views", tags=["Stories"])
+async def get_story_viewers(
+    story_id: str,
+    current_user: User = Depends(get_current_user)
+):
+    """Get list of users who viewed a story (only owner can see)"""
+    try:
+        # Check if story exists and user is owner
+        story = await db.stories.find_one({"id": story_id})
+        if not story:
+            raise HTTPException(status_code=404, detail="Story not found")
+        
+        if story["user_id"] != current_user.id:
+            raise HTTPException(status_code=403, detail="Not authorized to view story viewers")
+        
+        # Get all views
+        views_cursor = db.story_views.find({"story_id": story_id}).sort("created_at", -1)
+        views = await views_cursor.to_list(length=1000)
+        
+        if not views:
+            return {"viewers": [], "total": 0}
+        
+        # Get user info for viewers
+        viewer_ids = [view["user_id"] for view in views]
+        users_cursor = db.users.find({"id": {"$in": viewer_ids}})
+        users_dict = {user["id"]: user async for user in users_cursor}
+        
+        # Build response
+        viewers = []
+        for view in views:
+            user_data = users_dict.get(view["user_id"])
+            if user_data:
+                viewers.append({
+                    "user": UserResponse(**user_data),
+                    "viewed_at": view["created_at"]
+                })
+        
+        return {"viewers": viewers, "total": len(viewers)}
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error getting story viewers: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to get story viewers")
+
 # Incluir el router en la aplicación
 app.include_router(api_router)
 
