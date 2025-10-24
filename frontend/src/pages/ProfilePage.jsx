@@ -558,28 +558,28 @@ const ProfilePage = () => {
     loadMentionedPolls();
   }, [authUser?.id, authUser?.username, userId, viewedUser, polls, toast]);
 
-  // Load user stories status - REMOVED (Stories feature disabled)
-  // useEffect(() => {
-  //   const loadUserStories = async () => {
-  //     try {
-  //       const targetUserId = userId || authUser?.id;
-  //       if (!targetUserId) return;
-  //       const hasStoriesResponse = await storyService.checkUserHasStories(targetUserId);
-  //       setUserHasStories(hasStoriesResponse.has_stories);
-  //       if (hasStoriesResponse.has_stories) {
-  //         const storiesResponse = await storyService.getUserStories(targetUserId);
-  //         setUserStories(storiesResponse || []);
-  //       } else {
-  //         setUserStories([]);
-  //       }
-  //     } catch (error) {
-  //       console.error('Error loading user stories:', error);
-  //       setUserHasStories(false);
-  //       setUserStories([]);
-  //     }
-  //   };
-  //   loadUserStories();
-  // }, [userId, authUser?.id]);
+  // Load user stories status
+  useEffect(() => {
+    const loadUserStories = async () => {
+      try {
+        const targetUserId = userId || authUser?.id;
+        if (!targetUserId) return;
+        const hasStoriesResponse = await storyService.checkUserHasStories(targetUserId);
+        setUserHasStories(hasStoriesResponse);
+        if (hasStoriesResponse) {
+          const storiesResponse = await storyService.getUserStories(targetUserId);
+          setUserStories(storiesResponse?.stories || []);
+        } else {
+          setUserStories([]);
+        }
+      } catch (error) {
+        console.error('Error loading user stories:', error);
+        setUserHasStories(false);
+        setUserStories([]);
+      }
+    };
+    loadUserStories();
+  }, [userId, authUser?.id]);
 
   const handleShareProfile = () => {
     // Intentar usar Web Share API primero (mejor para móviles)
