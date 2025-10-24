@@ -253,17 +253,13 @@ const StoryEditPage = () => {
       <div className="absolute bottom-0 left-0 right-0 z-30 pb-8 px-4 bg-gradient-to-t from-black via-black/95 to-transparent pt-8">
         <div className="max-w-md mx-auto space-y-4">
           {/* Botones de acción */}
-          <div className="flex gap-3">
-            {/* Botón "Tu historia" */}
+          <div className="flex justify-center">
+            {/* Botón "Tu historia" minimalista */}
             <button
               onClick={handlePublishStory}
               disabled={!mediaFile}
-              className="flex-1 bg-white hover:bg-gray-100 disabled:bg-white/40 disabled:cursor-not-allowed text-gray-900 font-bold py-4 px-6 rounded-full transition-all flex items-center justify-center gap-2"
+              className="w-14 h-14 rounded-full bg-white hover:bg-gray-100 disabled:bg-white/40 disabled:cursor-not-allowed transition-all shadow-2xl"
             >
-              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
-                <span className="text-white text-xs font-bold">▶</span>
-              </div>
-              Tu historia
             </button>
           </div>
 
