@@ -123,8 +123,16 @@ const StoryCapturePage = () => {
             </button>
           </div>
         ) : (
-          /* Barra inferior sin imagen - solo botón circular de captura */
-          <div className="flex items-center justify-center">
+          /* Barra inferior sin imagen - botón galería a la izquierda y botón captura al centro */
+          <div className="flex items-center justify-center px-4">
+            {/* Botón de galería a la izquierda */}
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="absolute left-8 w-16 h-16 rounded-full bg-white hover:bg-gray-100 transition-all shadow-2xl"
+            >
+            </button>
+            
+            {/* Botón circular de captura en el centro */}
             <button
               onClick={() => fileInputRef.current?.click()}
               className="w-20 h-20 rounded-full border-4 border-white bg-transparent flex items-center justify-center hover:bg-white/10 transition-all"
