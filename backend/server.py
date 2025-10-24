@@ -9002,6 +9002,80 @@ async def get_story_viewers(
     except HTTPException:
         raise
     except Exception as e:
+
+
+@api_router.post("/api/stories/upload", tags=["Stories"])
+async def upload_story_media(
+    file: UploadFile = File(...),
+    current_user: User = Depends(get_current_user)
+):
+    """Upload media for a story (image or video)"""
+    try:
+        # Validate file type
+        content_type = file.content_type
+        if not content_type:
+            raise HTTPException(status_code=400, detail="Invalid file type")
+        
+        is_image = content_type.startswith('image/')
+        is_video = content_type.startswith('video/')
+        
+        if not (is_image or is_video):
+            raise HTTPException(status_code=400, detail="Only images and videos are allowed")
+        
+        # Generate unique filename
+        file_ext = os.path.splitext(file.filename)[1]
+        unique_filename = f"{uuid.uuid4()}{file_ext}"
+        file_path = Path(f"/app/backend/uploads/stories/{unique_filename}")
+        
+        # Save file
+        async with aiofiles.open(file_path, 'wb') as f:
+            content = await file.read()
+            await f.write(content)
+        
+        # Generate public URL
+        public_url = f"/uploads/stories/{unique_filename}"
+        
+        # Get dimensions if image
+        width = height = None
+        if is_image:
+            try:
+                with Image.open(file_path) as img:
+                    width, height = img.size
+            except Exception as e:
+                logger.error(f"Error getting image dimensions: {str(e)}")
+        
+        # Generate thumbnail for video
+        thumbnail_url = None
+        if is_video:
+            thumbnail_filename = f"{uuid.uuid4()}_thumb.jpg"
+            thumbnail_path = Path(f"/app/backend/uploads/stories/{thumbnail_filename}")
+            # Generate thumbnail using first frame (if OpenCV available)
+            if OPENCV_AVAILABLE:
+                try:
+                    cap = cv2.VideoCapture(str(file_path))
+                    ret, frame = cap.read()
+                    if ret:
+                        cv2.imwrite(str(thumbnail_path), frame)
+                        thumbnail_url = f"/uploads/stories/{thumbnail_filename}"
+                    cap.release()
+                except Exception as e:
+                    logger.error(f"Error generating video thumbnail: {str(e)}")
+        
+        return {
+            "success": True,
+            "media_url": public_url,
+            "thumbnail_url": thumbnail_url,
+            "media_type": "image" if is_image else "video",
+            "width": width,
+            "height": height
+        }
+        
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.error(f"Error uploading story media: {str(e)}")
+        raise HTTPException(status_code=500, detail="Failed to upload media")
+
         logger.error(f"Error getting story viewers: {str(e)}")
         raise HTTPException(status_code=500, detail="Failed to get story viewers")
 
