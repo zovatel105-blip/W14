@@ -149,9 +149,9 @@ const StoryEditPage = () => {
 
       {/* Área de contenido central con imagen */}
       {mediaPreview ? (
-        /* Vista previa del contenido con bordes curvos */
-        <div className="absolute top-2 left-2 right-2 bottom-40">
-          <div className="relative w-full h-full bg-black rounded-3xl overflow-hidden">
+        /* Vista previa del contenido con bordes curvos solo abajo */
+        <div className="absolute top-0 left-0 right-0 bottom-40">
+          <div className="relative w-full h-full bg-black rounded-b-3xl overflow-hidden">
             {/* Preview de imagen o video */}
             {mediaType === 'image' ? (
               <img
