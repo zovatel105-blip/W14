@@ -14,7 +14,7 @@ const StoriesViewer = ({ storiesGroups, onClose, initialUserIndex = 0 }) => {
   const getFullMediaUrl = (url) => {
     if (!url) return '';
     if (url.startsWith('http')) return url;
-    return `${AppConfig.API_BASE_URL}${url}`;
+    return `${AppConfig.BACKEND_URL}${url}`;
   };
 
   // Auto advance story
