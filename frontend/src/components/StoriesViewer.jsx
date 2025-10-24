@@ -149,13 +149,13 @@ const StoriesViewer = ({ storiesGroups, onClose, initialUserIndex = 0 }) => {
       <div className="absolute inset-0 flex items-center justify-center">
         {currentStory.media_type === 'image' ? (
           <img
-            src={currentStory.media_url}
+            src={getFullMediaUrl(currentStory.media_url)}
             alt="Story"
             className="w-full h-full object-contain"
           />
         ) : (
           <video
-            src={currentStory.media_url}
+            src={getFullMediaUrl(currentStory.media_url)}
             className="w-full h-full object-contain"
             autoPlay
             muted
