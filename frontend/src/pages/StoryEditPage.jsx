@@ -87,28 +87,26 @@ const StoryEditPage = () => {
     <div className="fixed inset-0 z-50 bg-black overflow-hidden">
       {/* Header con botones circulares */}
       <div className="absolute top-0 left-0 right-0 z-30 pt-3 px-4">
-        <div className="flex items-center justify-between gap-2">
-          {/* Botón volver */}
+        <div className="flex items-start justify-between">
+          {/* Botón volver a la izquierda */}
           <button
             onClick={() => navigate(-1)}
-            className="w-11 h-11 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center hover:bg-black/70 transition-all"
+            className="w-10 h-10 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center hover:bg-black/70 transition-all"
           >
             <ArrowLeft className="w-6 h-6 text-white" />
           </button>
 
-          {/* Botones superiores derechos */}
-          <div className="flex items-center gap-2">
+          {/* Botones en vertical a la derecha */}
+          <div className="flex flex-col gap-3">
             {/* Expandir */}
-            <button
-              className="w-11 h-11 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center hover:bg-black/70 transition-all"
-            >
+            <button className="w-10 h-10 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center hover:bg-black/70 transition-all">
               <Maximize2 className="w-5 h-5 text-white" />
             </button>
 
             {/* Texto "Aa" */}
             <button
               onClick={() => setShowTextEditor(!showTextEditor)}
-              className="w-11 h-11 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center hover:bg-black/70 transition-all"
+              className="w-10 h-10 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center hover:bg-black/70 transition-all"
             >
               <Type className="w-5 h-5 text-white" />
             </button>
@@ -116,7 +114,7 @@ const StoryEditPage = () => {
             {/* Emoji */}
             <button
               onClick={() => setShowEmojiPicker(!showEmojiPicker)}
-              className="w-11 h-11 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center hover:bg-black/70 transition-all"
+              className="w-10 h-10 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center hover:bg-black/70 transition-all"
             >
               <Smile className="w-5 h-5 text-white" />
             </button>
@@ -124,7 +122,7 @@ const StoryEditPage = () => {
             {/* Stickers */}
             <button
               onClick={() => setShowStickerPicker(!showStickerPicker)}
-              className="w-11 h-11 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center hover:bg-black/70 transition-all"
+              className="w-10 h-10 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center hover:bg-black/70 transition-all"
             >
               <Sticker className="w-5 h-5 text-white" />
             </button>
@@ -132,15 +130,13 @@ const StoryEditPage = () => {
             {/* Música */}
             <button
               onClick={() => setShowMusicSelector(!showMusicSelector)}
-              className="w-11 h-11 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center hover:bg-black/70 transition-all"
+              className="w-10 h-10 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center hover:bg-black/70 transition-all"
             >
               <Music className="w-5 h-5 text-white" />
             </button>
 
             {/* Más opciones */}
-            <button
-              className="w-11 h-11 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center hover:bg-black/70 transition-all"
-            >
+            <button className="w-10 h-10 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center hover:bg-black/70 transition-all">
               <MoreHorizontal className="w-5 h-5 text-white" />
             </button>
           </div>
