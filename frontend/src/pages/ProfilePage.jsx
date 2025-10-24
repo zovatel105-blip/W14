@@ -2480,11 +2480,20 @@ const ProfilePage = () => {
       )}
 
       {/* Story Viewer */}
-      {showStoryViewer && userStories.length > 0 && (
+      {showStoryViewer && userStories.length > 0 && displayUser && (
         <StoriesViewer
-          stories={userStories}
+          storiesGroups={[{
+            user: {
+              id: displayUser.id,
+              username: displayUser.username,
+              profile_picture: displayUser.profilePicture
+            },
+            stories: userStories,
+            total_stories: userStories.length,
+            has_unviewed: false
+          }]}
           onClose={() => setShowStoryViewer(false)}
-          currentUserId={authUser?.id}
+          initialUserIndex={0}
         />
       )}
 
