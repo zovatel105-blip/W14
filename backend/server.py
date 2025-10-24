@@ -48,6 +48,7 @@ from models import (
     Message, MessageCreate, Conversation, ConversationResponse,
     UserUpdate, PasswordChange, UserSettings,
     Comment, CommentCreate, CommentUpdate, CommentResponse, CommentLike,
+    Story, StoryCreate, StoryView, StoryResponse, StoriesGroupResponse,
     Follow, FollowCreate, FollowResponse, FollowStatus, FollowingList, FollowersList,
     LoginAttempt, UserDevice, UserSession, SecurityNotification,
     Poll, PollCreate, PollResponse, PollOption, Vote, VoteCreate, PollLike, Music, MentionedUser,
