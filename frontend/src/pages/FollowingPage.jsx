@@ -681,73 +681,87 @@ const FollowingPage = () => {
   if (isMobile || isTikTokMode) {
     return (
       <>
-        {/* Stories tabs deslizables */}
-        <div 
-          className="fixed top-1 right-0 z-[9999] flex items-center gap-2"
-          style={{ 
-            position: 'fixed',
-            top: '4px',
-            right: '0px',
-            zIndex: 9999,
-          }}
-        >
-          {/* Stories horizontales deslizables - Todas las historias disponibles */}
-          <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide max-w-[200px] pr-1">
-            {/* Tu Historia - Primera posición */}
-            <button
-              onClick={() => {
-                toast({
-                  title: "Agregar Historia",
-                  description: "Funcionalidad de historias próximamente disponible",
-                });
-              }}
-              className="flex-shrink-0 relative"
-            >
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gray-200 to-gray-300 p-[2px]">
-                <div className="w-full h-full rounded-full bg-white p-[1px] relative">
-                  <img
-                    src={user?.avatar || user?.profilePicture || `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.username || user?.name || 'Tu')}&background=random`}
-                    alt="Tu historia"
-                    className="w-full h-full rounded-full object-cover"
-                    onError={(e) => {
-                      e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(user?.username || user?.name || 'Tu')}&background=random`;
-                    }}
-                  />
-                  {/* Botón + para agregar historia */}
-                  <div className="absolute bottom-0 right-0 w-3 h-3 bg-blue-500 rounded-full flex items-center justify-center border border-white">
-                    <Plus className="w-2 h-2 text-white" strokeWidth={3} />
-                  </div>
-                </div>
-              </div>
-            </button>
-            
-            {/* Historias de otros usuarios */}
-            {demoStories.map((story, index) => (
-              <button
-                key={story.userId}
-                onClick={() => handleStoryClick(index)}
-                className="flex-shrink-0"
-              >
-                <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${story.hasViewed ? 'from-gray-300 to-gray-400' : 'from-purple-500 via-pink-500 to-orange-400'} p-[2px]`}>
-                  <div className="w-full h-full rounded-full bg-white p-[1px]">
-                    <img
-                      src={story.userAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(story.username)}&background=random`}
-                      alt={story.username}
-                      className="w-full h-full rounded-full object-cover"
-                      onError={(e) => {
-                        e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(story.username)}&background=random`;
-                      }}
-                    />
-                  </div>
-                </div>
-              </button>
-            ))}
+        {/* Stories tabs deslizables - Solo mostrar si hay historias reales */}
+        {displayStories.length > 0 && (
+          <div 
+            className="fixed top-1 right-0 z-[9999] flex items-center gap-2"
+            style={{ 
+              position: 'fixed',
+              top: '4px',
+              right: '0px',
+              zIndex: 9999,
+            }}
+          >
+            {/* Stories horizontales deslizables */}
+            <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide max-w-[200px] pr-1">
+              {displayStories.map((story, index) => {
+                const isOwnStory = story.isOwnStory;
+                const hasStories = story.storiesCount > 0;
+                
+                // Get initial for avatar
+                const username = story.username || 'U';
+                const initial = username.charAt(0).toUpperCase();
+                
+                return (
+                  <button
+                    key={story.userId}
+                    onClick={() => handleStoryClick(index)}
+                    className="flex-shrink-0 relative"
+                  >
+                    {/* Gradient ring for new stories, gray for viewed or no stories */}
+                    <div className={`w-10 h-10 rounded-full ${
+                      !hasStories 
+                        ? 'bg-gradient-to-br from-gray-200 to-gray-300' 
+                        : story.hasViewed 
+                          ? 'bg-gradient-to-br from-gray-300 to-gray-400' 
+                          : 'bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400'
+                    } p-[2px]`}>
+                      <div className="w-full h-full rounded-full bg-white p-[1px] relative">
+                        {/* Avatar image if available, otherwise gradient with initial */}
+                        {story.userAvatar ? (
+                          <img
+                            src={story.userAvatar}
+                            alt={story.username}
+                            className="w-full h-full rounded-full object-cover"
+                            onError={(e) => {
+                              // Fallback to gradient with initial
+                              e.target.style.display = 'none';
+                              e.target.nextSibling.style.display = 'flex';
+                            }}
+                          />
+                        ) : null}
+                        {/* Fallback gradient avatar with initial (like ProfilePage) */}
+                        <div 
+                          className={`w-full h-full rounded-full bg-gradient-to-br from-purple-400 to-pink-600 flex items-center justify-center text-white font-bold text-sm ${story.userAvatar ? 'hidden' : 'flex'}`}
+                          style={{ display: story.userAvatar ? 'none' : 'flex' }}
+                        >
+                          {initial}
+                        </div>
+                        
+                        {/* Plus button for own story when no stories exist */}
+                        {isOwnStory && !hasStories && (
+                          <div className="absolute bottom-0 right-0 w-3 h-3 bg-blue-500 rounded-full flex items-center justify-center border border-white">
+                            <Plus className="w-2 h-2 text-white" strokeWidth={3} />
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Story Viewer Modal */}
-        {showStoryViewer && demoStories.length > 0 && (
+        {showStoryViewer && displayStories.length > 0 && (
           <StoryViewer
+            stories={displayStories}
+            initialIndex={selectedStoryIndex}
+            onClose={handleCloseStoryViewer}
+            onStoryView={handleStoryView}
+          />
+        )}
             stories={demoStories}
             initialIndex={selectedStoryIndex}
             onClose={handleCloseStoryViewer}
