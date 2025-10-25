@@ -216,6 +216,39 @@ const TikTokPollCard = ({
     }
   };
 
+  // Handle avatar click - open stories if unviewed, go to profile if all viewed
+  const handleAvatarClick = (e) => {
+    e.stopPropagation();
+    
+    // If has stories and has unviewed stories, open story viewer
+    if (authorStoriesData && authorStoriesData.has_unviewed) {
+      setShowAuthorStoryViewer(true);
+    } else {
+      // Navigate to profile if no stories or all stories viewed
+      handleUserClick(poll.authorUser || { username: poll.author?.username || poll.author?.display_name || 'usuario' });
+    }
+  };
+  
+  // Handle story viewer close - reload stories to update viewed status
+  const handleStoryViewerClose = async () => {
+    setShowAuthorStoryViewer(false);
+    // Reload stories to update viewed status
+    try {
+      if (authorUserId) {
+        const storiesResponse = await storyService.getUserStories(authorUserId);
+        if (storiesResponse && storiesResponse.total_stories > 0) {
+          setAuthorHasStories(true);
+          setAuthorStoriesData(storiesResponse);
+        } else {
+          setAuthorHasStories(false);
+          setAuthorStoriesData(null);
+        }
+      }
+    } catch (error) {
+      console.error('Error reloading author stories:', error);
+    }
+  };
+
 
 
   // Debug logging for save functionality
