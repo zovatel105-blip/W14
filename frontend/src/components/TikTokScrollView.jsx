@@ -568,7 +568,7 @@ const TikTokPollCard = ({
                     console.log('📝 userToFollow object:', userToFollow);
                     handleFollowUser(userToFollow);
                   }}
-                  className="absolute -bottom-1 -right-1 bg-blue-500 hover:bg-blue-600 rounded-full p-1 shadow-lg cursor-pointer transition-colors duration-200 hover:scale-110"
+                  className="absolute bottom-0 right-0 bg-blue-500 hover:bg-blue-600 rounded-full p-1 shadow-lg cursor-pointer transition-colors duration-200 hover:scale-110"
                 >
                   <Plus className="w-3 h-3 text-white" />
                 </button>
@@ -586,7 +586,7 @@ const TikTokPollCard = ({
               
               {/* Indicador de siguiendo */}
               {isFollowing(authorUserId) && (
-                <div className="absolute -bottom-1 -right-1 bg-green-500 rounded-full p-1 shadow-lg">
+                <div className="absolute bottom-0 right-0 bg-green-500 rounded-full p-1 shadow-lg">
                   <CheckCircle className="w-3 h-3 text-white" />
                 </div>
               )}
