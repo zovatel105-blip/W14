@@ -361,6 +361,25 @@ const PollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, fullScreen
   const [showHashtags, setShowHashtags] = useState(false);
   const { shareModal, sharePoll, closeShareModal } = useShare();
   
+  // Story state for author avatar ring
+  const [authorHasStories, setAuthorHasStories] = useState(false);
+  
+  // Load author stories status
+  useEffect(() => {
+    const loadAuthorStories = async () => {
+      try {
+        const authorId = poll.author?.id;
+        if (!authorId) return;
+        const hasStories = await storyService.checkUserHasStories(authorId);
+        setAuthorHasStories(hasStories);
+      } catch (error) {
+        console.error('Error loading author stories in PollCard:', error);
+        setAuthorHasStories(false);
+      }
+    };
+    loadAuthorStories();
+  }, [poll.author?.id]);
+  
   // Convert layout ID to CSS grid classes for feed
   const getLayoutGridClass = () => {
     const layout = poll.layout || 'vertical'; // Default to vertical if no layout
