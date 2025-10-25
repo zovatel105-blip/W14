@@ -504,6 +504,43 @@ const PollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, fullScreen
     setShowCommentsModal(true);
   };
 
+  // Handle avatar click - open stories if unviewed, go to profile if all viewed
+  const handleAvatarClick = (e) => {
+    e.stopPropagation();
+    
+    // If has stories and has unviewed stories, open story viewer
+    if (authorStoriesData && authorStoriesData.has_unviewed) {
+      setShowAuthorStoryViewer(true);
+    } else {
+      // Navigate to profile if no stories or all stories viewed
+      const username = poll.author?.username || poll.author?.display_name?.toLowerCase().replace(/\s+/g, '_');
+      if (username) {
+        navigate(`/profile/${username}`);
+      }
+    }
+  };
+  
+  // Handle story viewer close - reload stories to update viewed status
+  const handleStoryViewerClose = async () => {
+    setShowAuthorStoryViewer(false);
+    // Reload stories to update viewed status
+    try {
+      const authorId = poll.author?.id;
+      if (authorId) {
+        const storiesResponse = await storyService.getUserStories(authorId);
+        if (storiesResponse && storiesResponse.total_stories > 0) {
+          setAuthorHasStories(true);
+          setAuthorStoriesData(storiesResponse);
+        } else {
+          setAuthorHasStories(false);
+          setAuthorStoriesData(null);
+        }
+      }
+    } catch (error) {
+      console.error('Error reloading author stories in PollCard:', error);
+    }
+  };
+
   const formatNumber = (num) => {
     // Handle undefined, null, or non-numeric values
     if (num === undefined || num === null || isNaN(num)) {
