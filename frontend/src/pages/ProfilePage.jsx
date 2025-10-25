@@ -1778,7 +1778,7 @@ const ProfilePage = () => {
                       )}
                     >
                       {userHasStories ? (
-                        <div className="w-full h-full bg-black rounded-full overflow-hidden p-[2px]">
+                        <div className="w-full h-full bg-white rounded-full overflow-hidden p-[2px]">
                           <div className="w-full h-full bg-white rounded-full overflow-hidden">
                             <Avatar className="w-full h-full rounded-full">
                               <AvatarImage src={displayUser?.avatar} alt={displayUser?.displayName} className="object-cover" />
