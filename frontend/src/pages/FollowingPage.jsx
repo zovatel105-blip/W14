@@ -38,7 +38,9 @@ const FollowingPage = () => {
   // Detect if we're on mobile or desktop
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
   
-  // Stories state
+  // Stories state - Real stories from backend
+  const [realStories, setRealStories] = useState([]);
+  const [loadingStories, setLoadingStories] = useState(false);
   const [showStoryViewer, setShowStoryViewer] = useState(false);
   const [selectedStoryIndex, setSelectedStoryIndex] = useState(0);
 
