@@ -194,6 +194,15 @@ const FollowingPage = () => {
   }, [realStories, user]);
 
   const handleStoryClick = (index) => {
+    const story = displayStories[index];
+    
+    // If it's own story and no stories exist, open create modal
+    if (story.isOwnStory && story.storiesCount === 0) {
+      handleAddStory();
+      return;
+    }
+    
+    // Otherwise, open story viewer
     setSelectedStoryIndex(index);
     setShowStoryViewer(true);
   };
@@ -208,6 +217,39 @@ const FollowingPage = () => {
   const handleCloseStoryViewer = () => {
     setShowStoryViewer(false);
     setSelectedStoryIndex(0);
+    
+    // Reload stories to update viewed status
+    if (isAuthenticated) {
+      storyService.getStories().then(storiesData => {
+        const transformedStories = storiesData.map(group => ({
+          userId: group.user.id,
+          username: group.user.username || group.user.name || 'Usuario',
+          userAvatar: group.user.avatar || group.user.profilePicture || null,
+          hasViewed: !group.has_unviewed,
+          storiesCount: group.total_stories,
+          stories: group.stories.map(story => ({
+            id: story.id,
+            type: story.media_type,
+            url: story.media_url,
+            caption: story.text_overlays?.[0]?.text || null,
+            timeAgo: formatTimeAgo(new Date(story.created_at)),
+            viewedByMe: story.viewed_by_me
+          }))
+        }));
+        setRealStories(transformedStories);
+      }).catch(err => {
+        console.error('Error reloading stories:', err);
+      });
+    }
+  };
+
+  // Mark story as viewed when viewing
+  const handleStoryView = async (storyId) => {
+    try {
+      await storyService.viewStory(storyId);
+    } catch (err) {
+      console.error('Error marking story as viewed:', err);
+    }
   };
 
   const handleVote = async (pollId, optionId) => {
