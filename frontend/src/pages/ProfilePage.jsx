@@ -635,21 +635,35 @@ const ProfilePage = () => {
     setShowStoryViewer(false);
     // Reload stories to update viewed status
     try {
-      const targetUserId = userId || authUser?.id;
-      if (targetUserId) {
-        const storiesResponse = await storyService.getUserStories(targetUserId);
-        if (storiesResponse && storiesResponse.total_stories > 0) {
-          setUserHasStories(true);
-          setUserStories(storiesResponse?.stories || []);
-          setUserStoriesData(storiesResponse);
-        } else {
-          setUserHasStories(false);
-          setUserStories([]);
-          setUserStoriesData(null);
-        }
+      // Determine the correct user ID to use
+      let targetUserId;
+      
+      if (userId && viewedUser) {
+        // Viewing another user's profile - use viewedUser.id (real UUID)
+        targetUserId = viewedUser.id;
+      } else if (!userId && authUser) {
+        // Viewing own profile - use authUser.id
+        targetUserId = authUser.id;
+      } else {
+        console.log('⏳ Story close: No user data available');
+        return;
+      }
+      
+      console.log('🔄 Reloading stories after close for user:', targetUserId);
+      const storiesResponse = await storyService.getUserStories(targetUserId);
+      
+      if (storiesResponse && storiesResponse.total_stories > 0) {
+        setUserHasStories(true);
+        setUserStories(storiesResponse?.stories || []);
+        setUserStoriesData(storiesResponse);
+        console.log('✅ Stories reloaded: has_unviewed:', storiesResponse.has_unviewed);
+      } else {
+        setUserHasStories(false);
+        setUserStories([]);
+        setUserStoriesData(null);
       }
     } catch (error) {
-      console.error('Error reloading user stories:', error);
+      console.error('❌ Error reloading user stories:', error);
     }
   };
 
