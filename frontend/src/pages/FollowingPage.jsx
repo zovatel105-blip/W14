@@ -712,15 +712,15 @@ const FollowingPage = () => {
                     {/* Story ring container - outer gradient ring */}
                     <div className={`w-10 h-10 rounded-full overflow-hidden ${
                       hasStories && !story.hasViewed
-                        ? 'p-[3px] bg-gradient-to-tr from-[#00FFFF] via-[#8A2BE2] to-[#000000]'
+                        ? 'p-[2.5px] bg-gradient-to-tr from-[#00FFFF] via-[#8A2BE2] to-[#000000]'
                         : hasStories && story.hasViewed
-                        ? 'p-[3px] bg-gray-300'
-                        : 'p-[3px] bg-gray-200'
+                        ? 'p-[2.5px] bg-gray-300'
+                        : 'p-[2.5px] bg-gray-200'
                     }`}>
-                      {/* White margin between ring and avatar */}
-                      <div className="w-full h-full bg-white rounded-full overflow-hidden p-[2px]">
+                      {/* White space between ring and avatar - increased padding */}
+                      <div className="w-full h-full bg-white rounded-full overflow-hidden p-[3px]">
                         {/* Avatar container */}
-                        <div className="w-full h-full rounded-full overflow-hidden relative">
+                        <div className="w-full h-full rounded-full overflow-hidden relative bg-white">
                           {/* Avatar image if available */}
                           {story.userAvatar ? (
                             <img
