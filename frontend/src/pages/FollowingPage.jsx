@@ -164,234 +164,34 @@ const FollowingPage = () => {
     };
   }, [isMobile, enterTikTokMode, exitTikTokMode]);
 
-  // Generate demo stories data - 6-7 usuarios diferentes
-  const demoStories = useMemo(() => {
-    // Usuarios demo fijos con historias
-    const demoUsers = [
-      {
-        userId: 'demo-user-1',
-        username: 'mariaperez',
-        userAvatar: 'https://i.pravatar.cc/150?img=5',
-        hasViewed: false,
-        storiesCount: 3,
-        stories: [
-          {
-            id: 'story-maria-1',
-            type: 'image',
-            url: 'https://picsum.photos/400/600?random=maria1',
-            caption: '¡Nuevo día, nuevas aventuras! 🌅',
-            timeAgo: 'Hace 2h'
-          },
-          {
-            id: 'story-maria-2',
-            type: 'image',
-            url: 'https://picsum.photos/400/600?random=maria2',
-            caption: null,
-            timeAgo: 'Hace 2h'
-          },
-          {
-            id: 'story-maria-3',
-            type: 'image',
-            url: 'https://picsum.photos/400/600?random=maria3',
-            caption: 'Momento café ☕',
-            timeAgo: 'Hace 2h'
-          }
-        ]
-      },
-      {
-        userId: 'demo-user-2',
-        username: 'carlosrodriguez',
-        userAvatar: 'https://i.pravatar.cc/150?img=12',
-        hasViewed: false,
-        storiesCount: 2,
-        stories: [
-          {
-            id: 'story-carlos-1',
-            type: 'image',
-            url: 'https://picsum.photos/400/600?random=carlos1',
-            caption: 'Entrenando duro 💪',
-            timeAgo: 'Hace 4h'
-          },
-          {
-            id: 'story-carlos-2',
-            type: 'image',
-            url: 'https://picsum.photos/400/600?random=carlos2',
-            caption: null,
-            timeAgo: 'Hace 4h'
-          }
-        ]
-      },
-      {
-        userId: 'demo-user-3',
-        username: 'anagomez',
-        userAvatar: 'https://i.pravatar.cc/150?img=9',
-        hasViewed: true,
-        storiesCount: 4,
-        stories: [
-          {
-            id: 'story-ana-1',
-            type: 'image',
-            url: 'https://picsum.photos/400/600?random=ana1',
-            caption: '¡Día de playa! 🏖️',
-            timeAgo: 'Hace 6h'
-          },
-          {
-            id: 'story-ana-2',
-            type: 'image',
-            url: 'https://picsum.photos/400/600?random=ana2',
-            caption: null,
-            timeAgo: 'Hace 6h'
-          },
-          {
-            id: 'story-ana-3',
-            type: 'image',
-            url: 'https://picsum.photos/400/600?random=ana3',
-            caption: 'Atardecer perfecto 🌅',
-            timeAgo: 'Hace 6h'
-          },
-          {
-            id: 'story-ana-4',
-            type: 'image',
-            url: 'https://picsum.photos/400/600?random=ana4',
-            caption: null,
-            timeAgo: 'Hace 6h'
-          }
-        ]
-      },
-      {
-        userId: 'demo-user-4',
-        username: 'luismartinez',
-        userAvatar: 'https://i.pravatar.cc/150?img=15',
-        hasViewed: false,
-        storiesCount: 1,
-        stories: [
-          {
-            id: 'story-luis-1',
-            type: 'image',
-            url: 'https://picsum.photos/400/600?random=luis1',
-            caption: 'Nuevo proyecto en marcha 🚀',
-            timeAgo: 'Hace 1h'
-          }
-        ]
-      },
-      {
-        userId: 'demo-user-5',
-        username: 'sofialopez',
-        userAvatar: 'https://i.pravatar.cc/150?img=20',
-        hasViewed: false,
-        storiesCount: 3,
-        stories: [
-          {
-            id: 'story-sofia-1',
-            type: 'image',
-            url: 'https://picsum.photos/400/600?random=sofia1',
-            caption: 'Look del día 👗✨',
-            timeAgo: 'Hace 3h'
-          },
-          {
-            id: 'story-sofia-2',
-            type: 'image',
-            url: 'https://picsum.photos/400/600?random=sofia2',
-            caption: null,
-            timeAgo: 'Hace 3h'
-          },
-          {
-            id: 'story-sofia-3',
-            type: 'image',
-            url: 'https://picsum.photos/400/600?random=sofia3',
-            caption: 'Shopping time 🛍️',
-            timeAgo: 'Hace 3h'
-          }
-        ]
-      },
-      {
-        userId: 'demo-user-6',
-        username: 'davidsilva',
-        userAvatar: 'https://i.pravatar.cc/150?img=33',
-        hasViewed: false,
-        storiesCount: 2,
-        stories: [
-          {
-            id: 'story-david-1',
-            type: 'image',
-            url: 'https://picsum.photos/400/600?random=david1',
-            caption: 'Vista increíble 🏔️',
-            timeAgo: 'Hace 5h'
-          },
-          {
-            id: 'story-david-2',
-            type: 'image',
-            url: 'https://picsum.photos/400/600?random=david2',
-            caption: null,
-            timeAgo: 'Hace 5h'
-          }
-        ]
-      },
-      {
-        userId: 'demo-user-7',
-        username: 'laurafernandez',
-        userAvatar: 'https://i.pravatar.cc/150?img=44',
-        hasViewed: true,
-        storiesCount: 2,
-        stories: [
-          {
-            id: 'story-laura-1',
-            type: 'image',
-            url: 'https://picsum.photos/400/600?random=laura1',
-            caption: 'Cocinando algo rico 🍝',
-            timeAgo: 'Hace 8h'
-          },
-          {
-            id: 'story-laura-2',
-            type: 'image',
-            url: 'https://picsum.photos/400/600?random=laura2',
-            caption: null,
-            timeAgo: 'Hace 8h'
-          }
-        ]
-      }
-    ];
+  // Prepare stories for display: current user first + real stories from followed users
+  const displayStories = useMemo(() => {
+    if (!user) return [];
 
-    // Si hay usuarios reales de los polls, agregar algunos también
-    if (polls && polls.length > 0) {
-      const realUsersMap = new Map();
-      polls.forEach(poll => {
-        const author = poll.author || poll.authorUser;
-        if (author && author.id && author.id !== user?.id && !demoUsers.find(u => u.userId === author.id)) {
-          if (realUsersMap.size < 3) { // Agregar máximo 3 usuarios reales
-            realUsersMap.set(author.id, {
-              userId: author.id,
-              username: author.username || author.name || 'Usuario',
-              userAvatar: author.avatar || author.profilePicture || null,
-              hasViewed: false,
-              storiesCount: 2,
-              stories: [
-                {
-                  id: `story-${author.id}-1`,
-                  type: 'image',
-                  url: `https://picsum.photos/400/600?random=${author.id}-1`,
-                  caption: `Historia de ${author.username || author.name}`,
-                  timeAgo: `Hace ${Math.floor(Math.random() * 12) + 1}h`
-                },
-                {
-                  id: `story-${author.id}-2`,
-                  type: 'image',
-                  url: `https://picsum.photos/400/600?random=${author.id}-2`,
-                  caption: null,
-                  timeAgo: `Hace ${Math.floor(Math.random() * 12) + 1}h`
-                }
-              ]
-            });
-          }
-        }
-      });
+    // Always show current user as first story (for adding stories)
+    const currentUserStory = {
+      userId: user.id,
+      username: user.username || user.name || 'Tú',
+      userAvatar: user.avatar || user.profilePicture || null,
+      hasViewed: false,
+      storiesCount: 0, // Will be updated if user has stories
+      isOwnStory: true, // Flag to identify own story
+      stories: []
+    };
 
-      // Mezclar usuarios demo con usuarios reales
-      return [...demoUsers, ...Array.from(realUsersMap.values())];
+    // Check if current user has stories in realStories
+    const userStoryData = realStories.find(s => s.userId === user.id);
+    if (userStoryData) {
+      currentUserStory.storiesCount = userStoryData.storiesCount;
+      currentUserStory.stories = userStoryData.stories;
+      currentUserStory.hasViewed = userStoryData.hasViewed;
     }
 
-    return demoUsers;
-  }, [polls, user]);
+    // Filter out current user from other stories and return
+    const otherStories = realStories.filter(s => s.userId !== user.id);
+    
+    return [currentUserStory, ...otherStories];
+  }, [realStories, user]);
 
   const handleStoryClick = (index) => {
     setSelectedStoryIndex(index);
