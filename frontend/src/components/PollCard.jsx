@@ -363,6 +363,8 @@ const PollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, fullScreen
   
   // Story state for author avatar ring
   const [authorHasStories, setAuthorHasStories] = useState(false);
+  const [authorStoriesData, setAuthorStoriesData] = useState(null);
+  const [showAuthorStoryViewer, setShowAuthorStoryViewer] = useState(false);
   
   // Load author stories status
   useEffect(() => {
