@@ -507,7 +507,7 @@ const TikTokPollCard = ({
       <div className="absolute top-0 left-0 right-0 z-30 bg-gradient-to-b from-black/80 to-transparent px-4 pt-safe-4 pb-8"
            style={{ paddingTop: 'max(1rem, env(safe-area-inset-top))' }}>
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             {/* PROPIETARIO - Avatar clickeable para perfil */}
             <div className="group relative">
               {/* Avatar para navegar al perfil o abrir historias */}
