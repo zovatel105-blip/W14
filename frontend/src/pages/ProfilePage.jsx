@@ -612,6 +612,29 @@ const ProfilePage = () => {
     }
   };
 
+  // Handle story viewer close - reload stories to update viewed status
+  const handleStoryViewerClose = async () => {
+    setShowStoryViewer(false);
+    // Reload stories to update viewed status
+    try {
+      const targetUserId = userId || authUser?.id;
+      if (targetUserId) {
+        const storiesResponse = await storyService.getUserStories(targetUserId);
+        if (storiesResponse && storiesResponse.total_stories > 0) {
+          setUserHasStories(true);
+          setUserStories(storiesResponse?.stories || []);
+          setUserStoriesData(storiesResponse);
+        } else {
+          setUserHasStories(false);
+          setUserStories([]);
+          setUserStoriesData(null);
+        }
+      }
+    } catch (error) {
+      console.error('Error reloading user stories:', error);
+    }
+  };
+
   const handleSaveSocialLinks = async () => {
     if (!authUser?.id) return;
 
