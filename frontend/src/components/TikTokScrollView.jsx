@@ -8,6 +8,7 @@ import CommentsModal from './CommentsModal';
 import ShareModal from './ShareModal';
 import PostManagementMenu from './PostManagementMenu';
 import FeedMenu from './FeedMenu';
+import StoriesViewer from './StoriesViewer';
 import { useFollow } from '../contexts/FollowContext';
 import { useAuth } from '../contexts/AuthContext';
 import { useShare } from '../hooks/useShare';
