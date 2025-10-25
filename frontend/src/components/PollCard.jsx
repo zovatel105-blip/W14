@@ -940,7 +940,7 @@ const PollCard = ({ poll, onVote, onLike, onShare, onComment, onSave, fullScreen
                   authorHasStories && authorStoriesData?.has_unviewed
                     ? "w-12 h-12 rounded-full overflow-hidden p-[2px] bg-gradient-to-tr from-[#00FFFF] via-[#8A2BE2] to-[#000000]"
                     : authorHasStories && !authorStoriesData?.has_unviewed
-                    ? "w-12 h-12 rounded-full overflow-hidden p-[2px] bg-gray-400"
+                    ? "w-12 h-12 rounded-full overflow-hidden p-[2px] bg-gray-300"
                     : ""
                 )}
                 onClick={handleAvatarClick}
