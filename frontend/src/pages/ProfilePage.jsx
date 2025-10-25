@@ -1777,14 +1777,27 @@ const ProfilePage = () => {
                           : "border-4 border-gray-100"
                       )}
                     >
-                      <div className="w-full h-full bg-white rounded-full overflow-hidden">
-                        <Avatar className="w-full h-full rounded-full">
-                          <AvatarImage src={displayUser?.avatar} alt={displayUser?.displayName} className="object-cover" />
-                          <AvatarFallback className="bg-gradient-to-br from-gray-100 to-gray-200 text-gray-600 text-lg sm:text-xl font-medium">
-                            {displayUser?.displayName ? displayUser.displayName.charAt(0).toUpperCase() : 'U'}
-                          </AvatarFallback>
-                        </Avatar>
-                      </div>
+                      {userHasStories ? (
+                        <div className="w-full h-full bg-black rounded-full overflow-hidden p-[2px]">
+                          <div className="w-full h-full bg-white rounded-full overflow-hidden">
+                            <Avatar className="w-full h-full rounded-full">
+                              <AvatarImage src={displayUser?.avatar} alt={displayUser?.displayName} className="object-cover" />
+                              <AvatarFallback className="bg-gradient-to-br from-gray-100 to-gray-200 text-gray-600 text-lg sm:text-xl font-medium">
+                                {displayUser?.displayName ? displayUser.displayName.charAt(0).toUpperCase() : 'U'}
+                              </AvatarFallback>
+                            </Avatar>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="w-full h-full bg-white rounded-full overflow-hidden">
+                          <Avatar className="w-full h-full rounded-full">
+                            <AvatarImage src={displayUser?.avatar} alt={displayUser?.displayName} className="object-cover" />
+                            <AvatarFallback className="bg-gradient-to-br from-gray-100 to-gray-200 text-gray-600 text-lg sm:text-xl font-medium">
+                              {displayUser?.displayName ? displayUser.displayName.charAt(0).toUpperCase() : 'U'}
+                            </AvatarFallback>
+                          </Avatar>
+                        </div>
+                      )}
                     </button>
                   </div>
                 </div>
