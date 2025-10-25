@@ -91,6 +91,7 @@ const ProfilePage = () => {
   const [showFollowingModal, setShowFollowingModal] = useState(false);
   const [userHasStories, setUserHasStories] = useState(false);
   const [userStories, setUserStories] = useState([]);
+  const [userStoriesData, setUserStoriesData] = useState(null);
   const [showStoryViewer, setShowStoryViewer] = useState(false);
   const [socialLinks, setSocialLinks] = useState({});
   const [savingSocialLinks, setSavingSocialLinks] = useState(false);
