@@ -1773,7 +1773,7 @@ const ProfilePage = () => {
                         userHasStories && userStoriesData?.has_unviewed
                           ? "p-1 bg-gradient-to-tr from-[#00FFFF] via-[#8A2BE2] to-[#000000] cursor-pointer"
                           : userHasStories && !userStoriesData?.has_unviewed
-                          ? "p-1 bg-gray-400 cursor-pointer"
+                          ? "p-1 bg-gray-300 cursor-pointer"
                           : ""
                       )}
                     >
