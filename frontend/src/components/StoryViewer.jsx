@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Pause, Play, Volume2, VolumeX, ChevronLeft, ChevronRight } from 'lucide-react';
 
-const StoryViewer = ({ stories, initialIndex = 0, onClose }) => {
+const StoryViewer = ({ stories, initialIndex = 0, onClose, onStoryView }) => {
   const [currentUserIndex, setCurrentUserIndex] = useState(initialIndex);
   const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
@@ -12,6 +12,13 @@ const StoryViewer = ({ stories, initialIndex = 0, onClose }) => {
   const currentUser = stories[currentUserIndex];
   const currentStory = currentUser?.stories[currentStoryIndex];
   const totalStories = currentUser?.stories.length || 0;
+
+  // Mark story as viewed when it's displayed
+  useEffect(() => {
+    if (currentStory && currentStory.id && onStoryView && !currentStory.viewedByMe) {
+      onStoryView(currentStory.id);
+    }
+  }, [currentStory, onStoryView]);
 
   // Auto-advance story progress
   useEffect(() => {
