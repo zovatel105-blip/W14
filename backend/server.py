@@ -4731,7 +4731,7 @@ async def get_upload_file(category: str, filename: str):
     """Serve uploaded files through API endpoint"""
     
     # Validate category
-    allowed_categories = ["avatars", "poll_options", "poll_backgrounds", "general", "audio"]
+    allowed_categories = ["avatars", "poll_options", "poll_backgrounds", "general", "audio", "stories"]
     if category not in allowed_categories:
         raise HTTPException(status_code=404, detail="Invalid category")
     
