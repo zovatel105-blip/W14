@@ -136,9 +136,13 @@ const StoriesViewer = ({ storiesGroups, onClose, initialUserIndex = 0 }) => {
         <div className="flex items-center justify-between mt-3">
           <div className="flex items-center gap-2">
             <img
-              src={currentGroup.user.profile_picture || '/default-avatar.png'}
+              src={getAvatarUrl(currentGroup.user)}
               alt={currentGroup.user.username}
-              className="w-8 h-8 rounded-full border-2 border-white"
+              className="w-8 h-8 rounded-full border-2 border-white object-cover"
+              onError={(e) => {
+                console.error('❌ [StoriesViewer] Error cargando avatar:', e.target.src);
+                e.target.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(currentGroup.user.username)}&background=667eea&color=fff`;
+              }}
             />
             <span className="text-white font-semibold text-sm">
               {currentGroup.user.username}
