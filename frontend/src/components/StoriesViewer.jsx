@@ -170,6 +170,11 @@ const StoriesViewer = ({ storiesGroups, onClose, initialUserIndex = 0 }) => {
             src={getFullMediaUrl(currentStory.media_url)}
             alt="Story"
             className="w-full h-full object-contain"
+            onError={(e) => {
+              console.error('❌ [StoriesViewer] Error cargando imagen de historia:', e.target.src);
+              console.error('   Media URL original:', currentStory.media_url);
+              e.target.src = 'https://via.placeholder.com/400x600/667eea/ffffff?text=Error+al+cargar+historia';
+            }}
           />
         ) : (
           <video
@@ -177,6 +182,11 @@ const StoriesViewer = ({ storiesGroups, onClose, initialUserIndex = 0 }) => {
             className="w-full h-full object-contain"
             autoPlay
             muted
+            playsInline
+            onError={(e) => {
+              console.error('❌ [StoriesViewer] Error cargando video de historia:', e.target.src);
+              console.error('   Media URL original:', currentStory.media_url);
+            }}
           />
         )}
       </div>
