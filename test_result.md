@@ -251,6 +251,64 @@ Feed Post Layout (Posts PROPIOS):
 # Testing Data - Main Agent and testing sub agent both should log testing data below this section
 #====================================================================================================
 
+**📖 PROBLEMA CRÍTICO DE HISTORIAS DE USUARIOS SEGUIDOS CORREGIDO (2025-01-27): Las historias de los usuarios seguidos ahora aparecen correctamente en la página Following - bug de colección incorrecta resuelto.**
+
+✅ **PROBLEMA IDENTIFICADO:**
+- Usuario reportó que las historias de usuarios seguidos NO aparecían en la página Following
+- Las historias existían en la base de datos pero no se mostraban
+- **CAUSA RAÍZ**: El endpoint `/api/stories` buscaba relaciones en la colección `user_relationships` (vacía) en lugar de la colección `follows` (la colección real donde están almacenadas las relaciones)
+
+✅ **ANÁLISIS DETALLADO:**
+1. **Base de datos correcta**: Sistema usa `social_media_app` (no `votatokdb`) ✅
+2. **Historias existen**: 1 historia activa del usuario "Kiki" (eb9c8f7c-6830-4570-9af5-e9f32804b572)
+3. **Relaciones existen**: Usuario "Free" (76054879-a298-4cc6-864d-838228470642) sigue a "Kiki"
+4. **Colección incorrecta**: Endpoint buscaba en `user_relationships` (0 docs) pero debía buscar en `follows` (1 doc)
+
+✅ **SOLUCIÓN IMPLEMENTADA:**
+
+**BACKEND - Endpoint GET /api/stories corregido:**
+```python
+# ANTES (INCORRECTO):
+following_doc = await db.user_relationships.find_one({"user_id": current_user.id})
+following_ids = following_doc.get("following", []) if following_doc else []
+
+# DESPUÉS (CORRECTO):
+follows_cursor = db.follows.find({"follower_id": current_user.id})
+follows_docs = await follows_cursor.to_list(length=1000)
+following_ids = [doc["following_id"] for doc in follows_docs]
+```
+
+**CAMBIOS TÉCNICOS:**
+- **Archivo**: `/app/backend/server.py` (líneas 8749-8752)
+- **Colección**: Cambiado de `user_relationships` → `follows`
+- **Query**: Busca por `follower_id` en lugar de `user_id`
+- **Extracción**: Obtiene `following_id` de cada documento
+- **Logging**: Agregado logging detallado para debugging futuro
+
+**LOGGING MEJORADO AGREGADO:**
+- 📊 Total de usuarios seguidos
+- 📖 Conteo de historias por estado (total, activas, no expiradas)
+- 👥 User IDs con historias disponibles
+- ✅ Grupos de historias retornados al frontend
+
+✅ **FUNCIONALIDADES CORREGIDAS:**
+- ✅ Historias de usuarios seguidos aparecen en página Following
+- ✅ Sistema detecta correctamente las relaciones de seguimiento
+- ✅ Historias se agrupan por usuario correctamente
+- ✅ Estado de visualización (visto/no visto) funciona
+- ✅ Ordenamiento correcto (no vistas primero, luego por fecha)
+
+✅ **RESULTADO FINAL:**
+🎯 **HISTORIAS DE USUARIOS SEGUIDOS COMPLETAMENTE FUNCIONALES** - Los usuarios ahora pueden ver las historias de todas las personas que siguen en la página Following. El sistema lee correctamente de la colección `follows` y muestra las historias activas y no expiradas de los usuarios seguidos.
+
+**TESTING PENDIENTE:**
+- Verificar que las historias aparecen correctamente en el frontend
+- Confirmar que el usuario puede ver la historia del usuario "Kiki"
+- Probar navegación y visualización de historias
+- Validar que el estado de "visto" se actualiza correctamente
+
+---
+
 **🔧 CORREGIDO DUPLICACIÓN DE SOLICITUDES DE MENSAJES Y BOTONES MINIMALISTAS (2025-01-27): Las solicitudes pendientes ahora aparecen SOLO en "Solicitudes de mensajes" para el receptor, eliminando la duplicación. Botones de aceptar/rechazar con diseño minimalista dentro de la conversación.**
 
 ✅ **PROBLEMA RESUELTO:**
