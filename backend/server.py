@@ -8750,11 +8750,37 @@ async def get_stories(
         following_doc = await db.user_relationships.find_one({"user_id": current_user.id})
         following_ids = following_doc.get("following", []) if following_doc else []
         
+        logger.info(f"📖 [STORIES] User {current_user.id} is following {len(following_ids)} users: {following_ids}")
+        
         # Add current user to see their own stories
         all_user_ids = following_ids + [current_user.id]
         
+        logger.info(f"📖 [STORIES] Searching for stories from {len(all_user_ids)} users (including self)")
+        
         # Get active stories from followed users
         current_time = datetime.utcnow()
+        
+        # First, let's check how many stories exist in total for these users
+        total_stories_count = await db.stories.count_documents({
+            "user_id": {"$in": all_user_ids}
+        })
+        logger.info(f"📖 [STORIES] Total stories in DB for these users: {total_stories_count}")
+        
+        # Check active stories count
+        active_stories_count = await db.stories.count_documents({
+            "user_id": {"$in": all_user_ids},
+            "is_active": True
+        })
+        logger.info(f"📖 [STORIES] Active stories: {active_stories_count}")
+        
+        # Check non-expired stories count
+        non_expired_count = await db.stories.count_documents({
+            "user_id": {"$in": all_user_ids},
+            "is_active": True,
+            "expires_at": {"$gt": current_time}
+        })
+        logger.info(f"📖 [STORIES] Non-expired active stories: {non_expired_count}")
+        
         stories_cursor = db.stories.find({
             "user_id": {"$in": all_user_ids},
             "is_active": True,
@@ -8762,6 +8788,13 @@ async def get_stories(
         }).sort("created_at", -1)
         
         stories = await stories_cursor.to_list(length=1000)
+        
+        logger.info(f"📖 [STORIES] Retrieved {len(stories)} stories from database")
+        
+        # Log user IDs that have stories
+        if stories:
+            unique_user_ids = set(story["user_id"] for story in stories)
+            logger.info(f"📖 [STORIES] Stories found for user IDs: {unique_user_ids}")
         
         if not stories:
             return []
