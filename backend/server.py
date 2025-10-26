@@ -8797,6 +8797,7 @@ async def get_stories(
             logger.info(f"📖 [STORIES] Stories found for user IDs: {unique_user_ids}")
         
         if not stories:
+            logger.info(f"📖 [STORIES] No stories found, returning empty list")
             return []
         
         # Get story views for current user
