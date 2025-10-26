@@ -182,12 +182,12 @@ const StoriesViewer = ({ storiesGroups, onClose, initialUserIndex = 0 }) => {
       </div>
 
       {/* Story content */}
-      <div className="absolute inset-0 flex items-center justify-center">
+      <div className="absolute inset-0">
         {currentStory.media_type === 'image' ? (
           <img
             src={getFullMediaUrl(currentStory.media_url)}
             alt="Story"
-            className="w-full h-full object-contain"
+            className="w-full h-full object-cover"
             onError={(e) => {
               console.error('❌ [StoriesViewer] Error cargando imagen de historia:', e.target.src);
               console.error('   Media URL original:', currentStory.media_url);
@@ -197,7 +197,7 @@ const StoriesViewer = ({ storiesGroups, onClose, initialUserIndex = 0 }) => {
         ) : (
           <video
             src={getFullMediaUrl(currentStory.media_url)}
-            className="w-full h-full object-contain"
+            className="w-full h-full object-cover"
             autoPlay
             muted
             playsInline
