@@ -8854,6 +8854,10 @@ async def get_stories(
         # Sort: unviewed stories first, then by most recent
         result.sort(key=lambda x: (not x.has_unviewed, -x.stories[0].created_at.timestamp()))
         
+        logger.info(f"📖 [STORIES] Returning {len(result)} story groups to frontend")
+        for group in result:
+            logger.info(f"   - User {group.user.username} ({group.user.id}): {group.total_stories} stories, has_unviewed={group.has_unviewed}")
+        
         return result
         
     except Exception as e:
