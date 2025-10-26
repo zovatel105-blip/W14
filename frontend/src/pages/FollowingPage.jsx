@@ -712,37 +712,34 @@ const FollowingPage = () => {
                     {/* Story ring container - Solo mostrar borde cuando HAY historias */}
                     {hasStories ? (
                       // Usuario con historias - Mostrar borde de colores o gris según si fue visto
-                      <div className={`w-10 h-10 rounded-full overflow-hidden ${
+                      <div className={`w-10 h-10 rounded-full overflow-hidden p-[2px] ${
                         !story.hasViewed
-                          ? 'p-[2.5px] bg-gradient-to-tr from-[#00FFFF] via-[#8A2BE2] to-[#000000]'
-                          : 'p-[2.5px] bg-gray-300'
+                          ? 'bg-gradient-to-tr from-[#00FFFF] via-[#8A2BE2] to-[#000000]'
+                          : 'bg-gray-300'
                       }`}>
-                        {/* White separation between ring and avatar */}
-                        <div className="w-full h-full bg-white rounded-full overflow-hidden p-[2.5px]">
-                          {/* Avatar container */}
-                          <div className="w-full h-full bg-white rounded-full overflow-hidden relative">
-                            {/* Avatar image if available */}
-                            {story.userAvatar ? (
-                              <img
-                                src={story.userAvatar}
-                                alt={story.username}
-                                className="w-full h-full rounded-full object-cover"
-                                onError={(e) => {
-                                  // Fallback to gradient with initial
-                                  e.target.style.display = 'none';
-                                  if (e.target.nextSibling) {
-                                    e.target.nextSibling.style.display = 'flex';
-                                  }
-                                }}
-                              />
-                            ) : null}
-                            {/* Fallback gradient avatar with initial (like ProfilePage) */}
-                            <div 
-                              className={`w-full h-full rounded-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center text-gray-600 font-medium text-xs ${story.userAvatar ? 'hidden' : 'flex'}`}
-                              style={{ display: story.userAvatar ? 'none' : 'flex' }}
-                            >
-                              {initial}
-                            </div>
+                        {/* Avatar container - directo sin anillo blanco */}
+                        <div className="w-full h-full bg-black rounded-full overflow-hidden relative">
+                          {/* Avatar image if available */}
+                          {story.userAvatar ? (
+                            <img
+                              src={story.userAvatar}
+                              alt={story.username}
+                              className="w-full h-full rounded-full object-cover"
+                              onError={(e) => {
+                                // Fallback to gradient with initial
+                                e.target.style.display = 'none';
+                                if (e.target.nextSibling) {
+                                  e.target.nextSibling.style.display = 'flex';
+                                }
+                              }}
+                            />
+                          ) : null}
+                          {/* Fallback gradient avatar with initial (like ProfilePage) */}
+                          <div 
+                            className={`w-full h-full rounded-full bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center text-gray-600 font-medium text-xs ${story.userAvatar ? 'hidden' : 'flex'}`}
+                            style={{ display: story.userAvatar ? 'none' : 'flex' }}
+                          >
+                            {initial}
                           </div>
                         </div>
                       </div>
