@@ -10,6 +10,24 @@ const StoriesViewer = ({ storiesGroups, onClose, initialUserIndex = 0 }) => {
   const currentGroup = storiesGroups[currentUserIndex];
   const currentStory = currentGroup?.stories[currentStoryIndex];
   
+  // Debug logging
+  useEffect(() => {
+    console.log('📖 [StoriesViewer] Componente montado');
+    console.log('   Grupos de historias:', storiesGroups.length);
+    console.log('   Índice de usuario actual:', currentUserIndex);
+    if (currentGroup) {
+      console.log('   Usuario actual:', currentGroup.user?.username);
+      console.log('   Total de historias del usuario:', currentGroup.stories?.length);
+    }
+    if (currentStory) {
+      console.log('   Historia actual:');
+      console.log('     - ID:', currentStory.id);
+      console.log('     - Tipo:', currentStory.media_type);
+      console.log('     - URL:', currentStory.media_url);
+      console.log('     - Thumbnail:', currentStory.thumbnail_url);
+    }
+  }, [currentUserIndex, currentStoryIndex, storiesGroups]);
+  
   // Helper function to get full URL
   const getFullMediaUrl = (url) => {
     if (!url) return '';
