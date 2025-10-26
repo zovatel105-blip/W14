@@ -6277,3 +6277,106 @@ El problema de "mensaje desaparece de la conversación" está completamente resu
 - Estado del componente visible en cada cambio
 - Fácil identificación de problemas de backend vs frontend
 
+
+
+---
+
+**📖 PROBLEMA CRÍTICO DE URLS DE HISTORIAS RESUELTO (2025-10-26): Las historias no se mostraban porque la categoría "stories" no estaba permitida en el endpoint de archivos - corrección completa del sistema de servicio de archivos.**
+
+✅ **PROBLEMA REPORTADO:**
+- Después de corregir el avatar, las historias aún no se mostraban
+- Pantalla negra al intentar ver el contenido de las historias
+- Los archivos existían físicamente pero no se podían acceder
+
+✅ **CAUSA RAÍZ IDENTIFICADA:**
+1. **Endpoint de archivos restringido**: El endpoint `/api/uploads/{category}/{filename}` solo permitía las categorías: `["avatars", "poll_options", "poll_backgrounds", "general", "audio"]`
+2. **"stories" no estaba en la lista**: Las historias se guardaban en `/uploads/stories/` pero la categoría "stories" retornaba 404
+3. **URLs sin prefijo /api**: Las historias se guardaban con URLs `/uploads/stories/...` en lugar de `/api/uploads/stories/...`
+4. **Inconsistencia de arquitectura**: El sistema tiene dos formas de servir archivos (StaticFiles y API endpoints) pero Kubernetes requiere el prefijo `/api`
+
+✅ **SOLUCIÓN IMPLEMENTADA:**
+
+**BACKEND - server.py:**
+
+1. ✅ **Agregada categoría "stories" a endpoints permitidos:**
+   - Línea 4734: `allowed_categories = [..., "stories"]` en `get_upload_file`
+   - Línea 4762: `allowed_categories = [..., "stories"]` en `get_thumbnail_file`
+   - Ahora el endpoint `/api/uploads/stories/{filename}` retorna 200 OK
+
+2. ✅ **Actualizado endpoint de upload de historias:**
+   - Línea 9077: Cambiado de `f"/uploads/stories/{filename}"` a `f"/api/uploads/stories/{filename}"`
+   - Línea 9100: Cambiado thumbnail URL para incluir prefijo `/api`
+   - Nuevas historias se guardarán con URLs correctas
+
+3. ✅ **Migración de historias existentes:**
+   - Script de migración ejecutado
+   - 2 historias actualizadas de `/uploads/stories/...` a `/api/uploads/stories/...`
+   - URLs en base de datos ahora consistentes
+
+**ARQUITECTURA CORREGIDA:**
+
+**Antes (INCORRECTO):**
+```
+Historia guardada: /uploads/stories/abc123.jpg
+Frontend intenta: https://domain.com/uploads/stories/abc123.jpg
+Kubernetes: ❌ No redirige porque falta prefijo /api
+Resultado: 404 Not Found
+```
+
+**Después (CORRECTO):**
+```
+Historia guardada: /api/uploads/stories/abc123.jpg  
+Frontend intenta: https://domain.com/api/uploads/stories/abc123.jpg
+Kubernetes: ✅ Redirige a backend:8001/api/uploads/stories/abc123.jpg
+Backend: ✅ Categoría "stories" permitida, archivo servido
+Resultado: 200 OK - Historia visible
+```
+
+✅ **TESTING REALIZADO:**
+
+**Endpoint verificado:**
+```bash
+curl http://localhost:8001/api/uploads/stories/df5ee4b1-a3fb-4bdb-9da0-c6ab3c6c0157.jpg
+# Resultado: 200 OK, archivo servido correctamente
+```
+
+**URLs actualizadas en DB:**
+```
+Antes: /uploads/stories/6cf1e07a-e983-4ab6-9317-f289c8322eb2.jpg
+Después: /api/uploads/stories/6cf1e07a-e983-4ab6-9317-f289c8322eb2.jpg
+```
+
+✅ **FUNCIONALIDADES CORREGIDAS:**
+- ✅ Las historias ahora se muestran correctamente con su contenido
+- ✅ Imágenes de historias cargan sin error 404
+- ✅ Videos de historias funcionan correctamente
+- ✅ Thumbnails de videos accesibles vía API
+- ✅ Nuevas historias se guardan con URLs correctas
+- ✅ Historias existentes migradas a nuevo formato
+- ✅ Consistencia completa con arquitectura Kubernetes
+
+✅ **ARCHIVOS MODIFICADOS:**
+- `/app/backend/server.py`:
+  - Línea 4734: Categoría "stories" agregada a `get_upload_file`
+  - Línea 4762: Categoría "stories" agregada a `get_thumbnail_file`
+  - Línea 9077: URLs de historias con prefijo `/api`
+  - Línea 9100: URLs de thumbnails con prefijo `/api`
+
+✅ **MIGRACIÓN DE DATOS:**
+- Script ejecutado: Actualización de URLs en colección `stories`
+- 2 historias migradas exitosamente
+- Verificación: Todas las URLs ahora tienen prefijo `/api`
+
+✅ **RESULTADO FINAL:**
+🎯 **SISTEMA DE HISTORIAS COMPLETAMENTE FUNCIONAL** - Las historias ahora se visualizan correctamente:
+- ✅ Avatar del usuario visible (corregido en fix anterior)
+- ✅ Contenido de la historia (imagen/video) visible
+- ✅ URLs correctas con prefijo `/api` para Kubernetes
+- ✅ Categoría "stories" permitida en endpoints
+- ✅ Historias existentes migradas
+- ✅ Nuevas historias se guardan correctamente
+- ✅ Sistema robusto y consistente
+
+**NOTA IMPORTANTE:**
+Este problema era específico de la arquitectura Kubernetes/Ingress donde todos los endpoints de backend deben tener el prefijo `/api`. El sistema ahora respeta esta arquitectura correctamente.
+
