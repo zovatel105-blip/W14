@@ -14,7 +14,21 @@ const StoriesViewer = ({ storiesGroups, onClose, initialUserIndex = 0 }) => {
   const getFullMediaUrl = (url) => {
     if (!url) return '';
     if (url.startsWith('http')) return url;
-    return `${AppConfig.BACKEND_URL}${url}`;
+    // Asegurar que la URL tenga barra inicial
+    const cleanUrl = url.startsWith('/') ? url : `/${url}`;
+    const fullUrl = `${AppConfig.BACKEND_URL}${cleanUrl}`;
+    console.log('📸 [StoriesViewer] URL construida:', { original: url, full: fullUrl });
+    return fullUrl;
+  };
+  
+  // Helper function for avatar URLs
+  const getAvatarUrl = (user) => {
+    if (!user) return '/default-avatar.png';
+    if (user.profile_picture) {
+      return getFullMediaUrl(user.profile_picture);
+    }
+    // Fallback a avatar generado
+    return `https://ui-avatars.com/api/?name=${encodeURIComponent(user.username || 'User')}&background=random&color=fff`;
   };
 
   // Auto advance story
