@@ -6177,3 +6177,103 @@ enriched_msg = {
 
 El problema de "mensaje desaparece de la conversación" está completamente resuelto.
 
+
+
+---
+
+**📖 PROBLEMA DE VISUALIZACIÓN DE HISTORIAS CORREGIDO (2025-10-26): El contenido y el avatar de las historias no se mostraban correctamente - bugs de construcción de URLs resueltos.**
+
+✅ **PROBLEMA REPORTADO POR USUARIO:**
+- Usuario creó una historia y al publicarla no se mostraba el contenido
+- La pantalla aparecía completamente negra
+- El avatar del usuario tampoco se mostraba correctamente
+
+✅ **ANÁLISIS DEL PROBLEMA:**
+1. **Construcción incorrecta de URLs**: La función `getFullMediaUrl` no manejaba correctamente URLs sin barra inicial
+2. **Avatar sin procesamiento**: El avatar del usuario usaba directamente `profile_picture` sin pasar por `getFullMediaUrl`
+3. **Falta de manejo de errores**: No había logging ni fallbacks cuando las imágenes/videos fallaban al cargar
+4. **Sin debugging**: Imposible identificar qué URLs se estaban intentando cargar
+
+✅ **SOLUCIÓN IMPLEMENTADA:**
+
+**FRONTEND - StoriesViewer.jsx:**
+1. ✅ **Mejorada función getFullMediaUrl:**
+   - Asegura que todas las URLs relativas tengan barra inicial
+   - Agrega logging detallado de construcción de URLs
+   - Formato: `${AppConfig.BACKEND_URL}${cleanUrl}`
+
+2. ✅ **Nueva función getAvatarUrl:**
+   - Procesa correctamente `profile_picture` del usuario
+   - Usa `getFullMediaUrl` para URLs relativas
+   - Fallback a avatar generado con UI Avatars API
+   - Formato: `https://ui-avatars.com/api/?name=USERNAME&background=random`
+
+3. ✅ **Manejo de errores mejorado:**
+   - `onError` handlers en imagen de historia con logging
+   - `onError` handlers en avatar con fallback visual
+   - Placeholder visible cuando falla carga
+   - Console logs para debugging de URLs fallidas
+
+4. ✅ **Logging de debugging agregado:**
+   - useEffect que registra estado del componente
+   - Info de grupos de historias y usuario actual
+   - Detalles de la historia actual (ID, tipo, URLs)
+   - Construcción de URLs paso a paso
+
+**MEJORAS ESPECÍFICAS:**
+
+**Contenido de Historia:**
+```javascript
+<img
+  src={getFullMediaUrl(currentStory.media_url)}
+  onError={(e) => {
+    console.error('❌ Error cargando historia:', e.target.src);
+    e.target.src = 'placeholder...';
+  }}
+/>
+```
+
+**Avatar de Usuario:**
+```javascript
+<img
+  src={getAvatarUrl(currentGroup.user)}
+  onError={(e) => {
+    e.target.src = `https://ui-avatars.com/api/?name=...`;
+  }}
+/>
+```
+
+**Video Stories:**
+- Agregado atributo `playsInline` para compatibilidad móvil
+- `onError` handler con logging
+- URLs procesadas con `getFullMediaUrl`
+
+✅ **FUNCIONALIDADES CORREGIDAS:**
+- ✅ El contenido de las historias (imágenes/videos) ahora se muestra correctamente
+- ✅ Los avatares de los usuarios se cargan con URLs completas
+- ✅ Fallbacks visuales cuando algo falla al cargar
+- ✅ Logging detallado para debugging de problemas
+- ✅ Compatibilidad móvil mejorada con `playsInline`
+- ✅ Manejo robusto de URLs relativas y absolutas
+
+✅ **ARCHIVOS MODIFICADOS:**
+- `/app/frontend/src/components/StoriesViewer.jsx`:
+  - Función `getFullMediaUrl` mejorada (línea 14-22)
+  - Nueva función `getAvatarUrl` (línea 24-32)
+  - useEffect de debugging (línea 14)
+  - Avatar con `getAvatarUrl` (línea 125)
+  - Imagen/Video con mejor error handling (línea 150-169)
+
+✅ **RESULTADO FINAL:**
+🎯 **VISUALIZACIÓN DE HISTORIAS COMPLETAMENTE FUNCIONAL** - Los usuarios ahora pueden:
+- Ver correctamente el contenido de las historias (imágenes y videos)
+- Ver los avatares de los usuarios de forma consistente
+- Obtener feedback visual cuando algo falla al cargar
+- Los desarrolladores pueden debuggear problemas fácilmente con los logs
+
+**DEBUGGING DISPONIBLE:**
+- Console logs muestran construcción de URLs paso a paso
+- Errores de carga registrados con URL original y URL procesada
+- Estado del componente visible en cada cambio
+- Fácil identificación de problemas de backend vs frontend
+
