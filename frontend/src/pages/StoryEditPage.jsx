@@ -117,18 +117,14 @@ const StoryEditPage = () => {
         setPosY(0);
       }
     } else if (e.touches.length === 1 && scale > 1) {
-      // Pan/drag cuando hay zoom
+      // Pan/drag cuando hay zoom - movimiento libre
       e.preventDefault();
       const deltaX = e.touches[0].clientX - lastPanX;
       const deltaY = e.touches[0].clientY - lastPanY;
       
-      // Limitar el pan para que no se salga demasiado
-      const maxPan = 100 * scale;
-      const newPosX = Math.min(Math.max(posX + deltaX, -maxPan), maxPan);
-      const newPosY = Math.min(Math.max(posY + deltaY, -maxPan), maxPan);
-      
-      setPosX(newPosX);
-      setPosY(newPosY);
+      // Permitir movimiento libre sin límites estrictos
+      setPosX(posX + deltaX);
+      setPosY(posY + deltaY);
       setLastPanX(e.touches[0].clientX);
       setLastPanY(e.touches[0].clientY);
     }
