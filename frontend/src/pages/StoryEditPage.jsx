@@ -19,6 +19,7 @@ const StoryEditPage = () => {
   const { toast } = useToast();
   const fileInputRef = useRef(null);
   const videoRef = useRef(null);
+  const contentRef = useRef(null);
 
   // Obtener datos de sessionStorage
   const storedMediaType = sessionStorage.getItem('storyMediaType');
@@ -41,6 +42,15 @@ const StoryEditPage = () => {
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const [showStickerPicker, setShowStickerPicker] = useState(false);
   const [showMusicSelector, setShowMusicSelector] = useState(false);
+
+  // Estados para zoom y pan (pinch-to-zoom estilo Instagram)
+  const [scale, setScale] = useState(1);
+  const [posX, setPosX] = useState(0);
+  const [posY, setPosY] = useState(0);
+  const [initialDistance, setInitialDistance] = useState(0);
+  const [initialScale, setInitialScale] = useState(1);
+  const [lastPanX, setLastPanX] = useState(0);
+  const [lastPanY, setLastPanY] = useState(0);
 
   // Manejo de archivos
   const handleFileSelect = (e) => {
