@@ -13,10 +13,12 @@ import {
   X
 } from 'lucide-react';
 import { useToast } from '../hooks/use-toast';
+import { useAuth } from '../contexts/AuthContext';
 
 const StoryEditPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user } = useAuth();
   const fileInputRef = useRef(null);
   const videoRef = useRef(null);
   const contentRef = useRef(null);
