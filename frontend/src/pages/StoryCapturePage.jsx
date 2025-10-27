@@ -12,7 +12,6 @@ const StoryCapturePage = () => {
   const mediaRecorderRef = useRef(null);
   const chunksRef = useRef([]);
   const streamRef = useRef(null);
-  const captureInputRef = useRef(null); // Input para captura directa
   
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileType, setFileType] = useState(null);
