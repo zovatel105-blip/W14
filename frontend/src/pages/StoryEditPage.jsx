@@ -310,34 +310,38 @@ const StoryEditPage = () => {
       {mediaPreview ? (
         /* Vista previa del contenido con bordes curvos arriba y abajo */
         <div className="absolute top-0 left-0 right-0 bottom-32">
-          <div className="relative w-full h-full bg-black rounded-3xl overflow-hidden">
+          <div 
+            className="relative w-full h-full bg-black rounded-3xl overflow-hidden"
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            style={{ touchAction: 'none' }}
+          >
             {/* Preview de imagen o video con zoom */}
             <div
               ref={contentRef}
               className="w-full h-full"
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
               style={{
-                touchAction: 'none',
                 transform: `translate(${posX}px, ${posY}px) scale(${scale})`,
-                transition: initialDistance === 0 ? 'transform 0.3s ease-out' : 'none'
+                transition: initialDistance === 0 && scale === 1 ? 'transform 0.3s ease-out' : 'none',
+                transformOrigin: 'center center'
               }}
             >
               {mediaType === 'image' ? (
                 <img
                   src={mediaPreview}
                   alt="Story preview"
-                  className="w-full h-full object-cover pointer-events-none"
+                  className="w-full h-full object-cover pointer-events-none select-none"
                   draggable={false}
                 />
               ) : (
                 <video
                   ref={videoRef}
                   src={mediaPreview}
-                  className="w-full h-full object-cover pointer-events-none"
-                  controls
+                  className="w-full h-full object-cover"
+                  controls={scale === 1}
                   draggable={false}
+                  style={{ pointerEvents: scale > 1 ? 'none' : 'auto' }}
                 />
               )}
             </div>
