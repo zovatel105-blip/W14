@@ -189,25 +189,6 @@ const StoryCapturePage = () => {
     if (!streamRef.current) return;
 
     try {
-      // Reiniciar stream con audio para video
-      if (captureMode === 'video') {
-        await stopCamera();
-        const constraints = {
-          video: {
-            facingMode: facingMode,
-            width: { ideal: 1920 },
-            height: { ideal: 1080 }
-          },
-          audio: true
-        };
-        const stream = await navigator.mediaDevices.getUserMedia(constraints);
-        streamRef.current = stream;
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-          videoRef.current.play();
-        }
-      }
-
       chunksRef.current = [];
       const mediaRecorder = new MediaRecorder(streamRef.current, {
         mimeType: 'video/webm;codecs=vp8,opus'
@@ -251,16 +232,30 @@ const StoryCapturePage = () => {
     }
   };
 
-  // Manejar captura/grabación según el modo
-  const handleCapture = () => {
-    if (captureMode === 'photo') {
-      capturePhoto();
-    } else {
-      if (isRecording) {
-        stopRecording();
-      } else {
+  // Manejar inicio de presión (mouse o touch) - Iniciar video
+  const handlePressStart = (e) => {
+    e.preventDefault();
+    setIsPressingButton(true);
+    
+    // Iniciar grabación de video después de un pequeño delay
+    setTimeout(() => {
+      if (isPressingButton || true) { // Siempre iniciar si no se ha soltado
         startRecording();
       }
+    }, 200); // Delay de 200ms para distinguir entre click y mantener presionado
+  };
+
+  // Manejar fin de presión - Si es rápido = foto, si es largo = detener video
+  const handlePressEnd = (e) => {
+    e.preventDefault();
+    setIsPressingButton(false);
+    
+    // Si está grabando, detener
+    if (isRecording) {
+      stopRecording();
+    } else {
+      // Si no alcanzó a iniciar grabación, tomar foto
+      capturePhoto();
     }
   };
 
