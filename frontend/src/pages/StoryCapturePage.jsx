@@ -54,6 +54,14 @@ const StoryCapturePage = () => {
   // Iniciar cámara
   const startCamera = async () => {
     try {
+      // Verificar si getUserMedia está disponible
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        console.warn('getUserMedia no está disponible');
+        setCameraError(true);
+        setPermissionDenied(true);
+        return;
+      }
+
       // Detener stream anterior si existe
       if (streamRef.current) {
         streamRef.current.getTracks().forEach(track => track.stop());
@@ -75,6 +83,8 @@ const StoryCapturePage = () => {
         videoRef.current.srcObject = stream;
         videoRef.current.play();
         setCameraActive(true);
+        setCameraError(false);
+        setPermissionDenied(false);
       }
 
       // Aplicar flash si está habilitado
@@ -89,11 +99,19 @@ const StoryCapturePage = () => {
       }
     } catch (error) {
       console.error('Error al acceder a la cámara:', error);
-      toast({
-        title: "Error de cámara",
-        description: "No se pudo acceder a la cámara. Por favor verifica los permisos.",
-        variant: "destructive"
-      });
+      setCameraError(true);
+      
+      // Verificar tipo de error
+      if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
+        setPermissionDenied(true);
+      } else if (error.name === 'NotFoundError') {
+        console.warn('No se encontró cámara en el dispositivo');
+      } else if (error.name === 'NotReadableError') {
+        console.warn('La cámara está siendo usada por otra aplicación');
+      }
+      
+      // No mostrar toast de error inmediatamente, solo usar modo galería
+      console.log('Modo galería activado (sin cámara)');
     }
   };
 
