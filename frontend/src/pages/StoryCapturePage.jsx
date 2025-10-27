@@ -210,10 +210,10 @@ const StoryCapturePage = () => {
         const file = new File([blob], 'video.webm', { type: 'video/webm' });
         const previewUrl = URL.createObjectURL(blob);
         
-        setSelectedFile(file);
-        setFileType('video');
-        setPreviewUrl(previewUrl);
         stopCamera();
+        
+        // Navegar directamente a edición
+        navigateToEdit(file, 'video', previewUrl);
       };
       
       mediaRecorderRef.current = mediaRecorder;
