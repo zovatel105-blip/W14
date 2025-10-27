@@ -304,28 +304,19 @@ const StoryCapturePage = () => {
   };
 
   // Ir a la página de edición
-  const handleNext = async () => {
-    if (!selectedFile) {
-      toast({
-        title: "Error",
-        description: "Debes capturar o seleccionar una foto o video primero",
-        variant: "destructive"
-      });
-      return;
-    }
-
+  const navigateToEdit = (file, type, preview) => {
     // Convertir archivo a base64 para pasar a la siguiente página
     const reader = new FileReader();
     reader.onloadend = () => {
-      sessionStorage.setItem('storyMediaType', fileType);
-      sessionStorage.setItem('storyMediaPreview', previewUrl);
+      sessionStorage.setItem('storyMediaType', type);
+      sessionStorage.setItem('storyMediaPreview', preview);
       sessionStorage.setItem('storyMediaFile', reader.result);
-      sessionStorage.setItem('storyFileName', selectedFile.name);
+      sessionStorage.setItem('storyFileName', file.name);
       
       // Navegar a página de edición
       navigate('/story-edit');
     };
-    reader.readAsDataURL(selectedFile);
+    reader.readAsDataURL(file);
   };
 
   // Volver a captura (descartar preview)
