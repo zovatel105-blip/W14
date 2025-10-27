@@ -23,6 +23,7 @@ const StoryCapturePage = () => {
   const [recordingTime, setRecordingTime] = useState(0);
   const [cameraError, setCameraError] = useState(false);
   const [permissionDenied, setPermissionDenied] = useState(false);
+  const [isPressingButton, setIsPressingButton] = useState(false);
   const pressTimerRef = useRef(null);
   const pressStartTimeRef = useRef(null);
 
