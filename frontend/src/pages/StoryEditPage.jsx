@@ -434,10 +434,10 @@ const StoryEditPage = () => {
       )}
 
       {/* Área inferior - Botón publicar */}
-      <div className="absolute bottom-0 left-0 right-0 z-30 pb-8 px-4 bg-gradient-to-t from-black via-black/95 to-transparent pt-8">
+      <div className="absolute bottom-0 left-0 right-0 z-30 pb-6 px-4 bg-gradient-to-t from-black via-black/95 to-transparent pt-8">
         <div className="max-w-md mx-auto space-y-4">
           {/* Botón de "Tu historia" estilo Instagram */}
-          <div className="flex justify-start">
+          <div className="flex justify-end">
             <button
               onClick={handlePublishStory}
               disabled={!storedMediaFile || isPublishing}
@@ -452,7 +452,7 @@ const StoryEditPage = () => {
                     className="w-full h-full rounded-full object-cover border-2 border-white"
                   />
                 ) : (
-                  <div className="w-full h-full rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center border-2 border-white">
+                  <div className="w-full h-full rounded-full bg-gray-600 flex items-center justify-center border-2 border-white">
                     <span className="text-white text-lg font-bold">
                       {user?.username?.[0]?.toUpperCase() || 'T'}
                     </span>
