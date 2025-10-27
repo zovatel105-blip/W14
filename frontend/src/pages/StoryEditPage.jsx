@@ -72,6 +72,73 @@ const StoryEditPage = () => {
     setMediaFile(null);
     setMediaType(null);
     setMediaPreview(null);
+    // Reset zoom
+    setScale(1);
+    setPosX(0);
+    setPosY(0);
+  };
+
+  // Calcular distancia entre dos puntos táctiles
+  const getDistance = (touch1, touch2) => {
+    const dx = touch2.clientX - touch1.clientX;
+    const dy = touch2.clientY - touch1.clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+  };
+
+  // Handler para inicio de pinch gesture
+  const handleTouchStart = (e) => {
+    if (e.touches.length === 2) {
+      // Pinch con dos dedos
+      const distance = getDistance(e.touches[0], e.touches[1]);
+      setInitialDistance(distance);
+      setInitialScale(scale);
+    } else if (e.touches.length === 1 && scale > 1) {
+      // Pan con un dedo (solo si hay zoom aplicado)
+      setLastPanX(e.touches[0].clientX);
+      setLastPanY(e.touches[0].clientY);
+    }
+  };
+
+  // Handler para movimiento de pinch gesture
+  const handleTouchMove = (e) => {
+    if (e.touches.length === 2) {
+      // Pinch zoom
+      e.preventDefault();
+      const distance = getDistance(e.touches[0], e.touches[1]);
+      const newScale = (distance / initialDistance) * initialScale;
+      
+      // Limitar escala entre 1x y 3x (estilo Instagram)
+      const clampedScale = Math.min(Math.max(newScale, 1), 3);
+      setScale(clampedScale);
+      
+      // Si volvemos a escala 1, resetear posición
+      if (clampedScale === 1) {
+        setPosX(0);
+        setPosY(0);
+      }
+    } else if (e.touches.length === 1 && scale > 1) {
+      // Pan/drag cuando hay zoom
+      e.preventDefault();
+      const deltaX = e.touches[0].clientX - lastPanX;
+      const deltaY = e.touches[0].clientY - lastPanY;
+      
+      // Limitar el pan para que no se salga demasiado
+      const maxPan = 100 * scale;
+      const newPosX = Math.min(Math.max(posX + deltaX, -maxPan), maxPan);
+      const newPosY = Math.min(Math.max(posY + deltaY, -maxPan), maxPan);
+      
+      setPosX(newPosX);
+      setPosY(newPosY);
+      setLastPanX(e.touches[0].clientX);
+      setLastPanY(e.touches[0].clientY);
+    }
+  };
+
+  // Handler para fin de gesture
+  const handleTouchEnd = (e) => {
+    if (e.touches.length < 2) {
+      setInitialDistance(0);
+    }
   };
 
   // Publicar historia
