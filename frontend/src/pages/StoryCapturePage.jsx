@@ -22,11 +22,18 @@ const StoryCapturePage = () => {
   const [captureMode, setCaptureMode] = useState('photo'); // 'photo' o 'video'
   const [isRecording, setIsRecording] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
+  const [cameraError, setCameraError] = useState(false);
+  const [permissionDenied, setPermissionDenied] = useState(false);
 
   // Iniciar cámara al cargar la página
   useEffect(() => {
-    startCamera();
+    // Pequeño delay para que la página se renderice primero
+    const timer = setTimeout(() => {
+      startCamera();
+    }, 500);
+    
     return () => {
+      clearTimeout(timer);
       stopCamera();
     };
   }, [facingMode]);
