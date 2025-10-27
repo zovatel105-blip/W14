@@ -436,17 +436,39 @@ const StoryEditPage = () => {
       {/* Área inferior - Botón publicar */}
       <div className="absolute bottom-0 left-0 right-0 z-30 pb-8 px-4 bg-gradient-to-t from-black via-black/95 to-transparent pt-8">
         <div className="max-w-md mx-auto space-y-4">
-          {/* Botones de acción */}
-          <div className="flex justify-center">
-            {/* Botón "Tu historia" minimalista */}
+          {/* Botón de "Tu historia" estilo Instagram */}
+          <div className="flex justify-start">
             <button
               onClick={handlePublishStory}
               disabled={!storedMediaFile || isPublishing}
-              className="w-14 h-14 rounded-full bg-white hover:bg-gray-100 disabled:bg-white/40 disabled:cursor-not-allowed transition-all shadow-2xl flex items-center justify-center"
+              className="flex items-center gap-3 bg-gray-900/80 hover:bg-gray-800/80 disabled:bg-gray-900/40 disabled:cursor-not-allowed backdrop-blur-sm rounded-full px-4 py-2 transition-all"
             >
-              {isPublishing ? (
-                <div className="w-5 h-5 border-2 border-gray-400 border-t-gray-800 rounded-full animate-spin"></div>
-              ) : null}
+              {/* Avatar circular */}
+              <div className="relative w-12 h-12 flex-shrink-0">
+                {user?.avatar ? (
+                  <img
+                    src={user.avatar}
+                    alt={user.username}
+                    className="w-full h-full rounded-full object-cover border-2 border-white"
+                  />
+                ) : (
+                  <div className="w-full h-full rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center border-2 border-white">
+                    <span className="text-white text-lg font-bold">
+                      {user?.username?.[0]?.toUpperCase() || 'T'}
+                    </span>
+                  </div>
+                )}
+                {isPublishing && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full">
+                    <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  </div>
+                )}
+              </div>
+              
+              {/* Texto */}
+              <span className="text-white font-medium text-base pr-2">
+                Tu historia
+              </span>
             </button>
           </div>
 
