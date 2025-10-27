@@ -19,11 +19,11 @@ const StoryCapturePage = () => {
   const [cameraActive, setCameraActive] = useState(false);
   const [facingMode, setFacingMode] = useState('user'); // 'user' = frontal, 'environment' = trasera
   const [flashEnabled, setFlashEnabled] = useState(false);
-  const [captureMode, setCaptureMode] = useState('photo'); // 'photo' o 'video'
   const [isRecording, setIsRecording] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
   const [cameraError, setCameraError] = useState(false);
   const [permissionDenied, setPermissionDenied] = useState(false);
+  const [isPressingButton, setIsPressingButton] = useState(false);
 
   // Iniciar cámara al cargar la página
   useEffect(() => {
