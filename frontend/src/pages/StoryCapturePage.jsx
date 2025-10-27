@@ -329,11 +329,12 @@ const StoryCapturePage = () => {
       {/* Canvas oculto para capturar fotos */}
       <canvas ref={canvasRef} className="hidden" />
       
-      {/* Video oculto para input de archivo */}
+      {/* Input de archivo con captura directa del dispositivo */}
       <input
         ref={fileInputRef}
         type="file"
         accept="image/*,video/*"
+        capture="environment"
         onChange={handleFileSelect}
         className="hidden"
       />
