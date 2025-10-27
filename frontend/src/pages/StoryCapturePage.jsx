@@ -383,121 +383,78 @@ const StoryCapturePage = () => {
         </div>
       )}
 
-      {/* Área central - cámara en vivo o preview */}
-      {!previewUrl ? (
-        /* Cámara en vivo con marco redondeado */
-        <div className="absolute top-0 left-0 right-0 bottom-32">
-          <div className="relative w-full h-full bg-black rounded-3xl overflow-hidden">
-            <video
-              ref={videoRef}
-              autoPlay
-              playsInline
-              muted
-              className="w-full h-full object-cover"
-            />
-            
-            {/* Mensaje de ayuda si hay error de cámara */}
-            {cameraError && (
-              <div className="absolute inset-0 flex items-center justify-center bg-gray-900">
-                <div className="text-center px-6">
-                  <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gray-800 flex items-center justify-center">
-                    <Camera className="w-10 h-10 text-gray-400" />
-                  </div>
-                  <h3 className="text-white text-lg font-semibold mb-2">
-                    Cámara no disponible
-                  </h3>
-                  <p className="text-gray-400 text-sm mb-4">
-                    {permissionDenied 
-                      ? 'Necesitas dar permisos de cámara en tu navegador'
-                      : 'No se pudo acceder a la cámara'}
-                  </p>
-                  <p className="text-gray-500 text-xs mb-6">
-                    Puedes usar el botón de galería para subir una foto o video
-                  </p>
-                  <button
-                    onClick={() => fileInputRef.current?.click()}
-                    className="px-6 py-3 bg-white text-black rounded-full font-medium hover:bg-gray-100 transition-all"
-                  >
-                    Abrir Galería
-                  </button>
+      {/* Área central - cámara en vivo */}
+      <div className="absolute top-0 left-0 right-0 bottom-32">
+        <div className="relative w-full h-full bg-black rounded-3xl overflow-hidden">
+          <video
+            ref={videoRef}
+            autoPlay
+            playsInline
+            muted
+            className="w-full h-full object-cover"
+          />
+          
+          {/* Mensaje de ayuda si hay error de cámara */}
+          {cameraError && (
+            <div className="absolute inset-0 flex items-center justify-center bg-gray-900">
+              <div className="text-center px-6">
+                <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gray-800 flex items-center justify-center">
+                  <Camera className="w-10 h-10 text-gray-400" />
                 </div>
+                <h3 className="text-white text-lg font-semibold mb-2">
+                  Cámara no disponible
+                </h3>
+                <p className="text-gray-400 text-sm mb-4">
+                  {permissionDenied 
+                    ? 'Necesitas dar permisos de cámara en tu navegador'
+                    : 'No se pudo acceder a la cámara'}
+                </p>
+                <p className="text-gray-500 text-xs mb-6">
+                  Puedes usar el botón de galería para subir una foto o video
+                </p>
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  className="px-6 py-3 bg-white text-black rounded-full font-medium hover:bg-gray-100 transition-all"
+                >
+                  Abrir Galería
+                </button>
               </div>
-            )}
-          </div>
+            </div>
+          )}
         </div>
-      ) : (
-        /* Preview del contenido capturado */
-        <div className="absolute top-0 left-0 right-0 bottom-32">
-          <div className="relative w-full h-full bg-black rounded-3xl overflow-hidden">
-            {fileType === 'image' ? (
-              <img
-                src={previewUrl}
-                alt="Preview"
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <video
-                src={previewUrl}
-                className="w-full h-full object-cover"
-                controls
-              />
-            )}
-          </div>
-        </div>
-      )}
+      </div>
 
-      {/* Barra inferior */}
+      {/* Barra inferior en modo captura */}
       <div className="absolute bottom-0 left-0 right-0 z-30 pb-8">
-        {previewUrl ? (
-          /* Barra inferior con preview - botones de retake y siguiente */
-          <div className="flex items-center justify-around px-8">
-            <button
-              onClick={handleRetake}
-              className="w-16 h-16 rounded-full bg-gray-700/80 backdrop-blur-sm hover:bg-gray-600/80 transition-all shadow-2xl flex items-center justify-center"
-            >
-              <X className="w-8 h-8 text-white" />
-            </button>
-            <button
-              onClick={handleNext}
-              className="w-16 h-16 rounded-full bg-white hover:bg-gray-100 transition-all shadow-2xl flex items-center justify-center"
-            >
-              <svg className="w-8 h-8 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"/>
-              </svg>
-            </button>
-          </div>
-        ) : (
-          /* Barra inferior en modo captura */
-          <div className="flex items-center justify-center px-4 w-full">
-            {/* Botón de galería a la izquierda */}
-            <button
-              onClick={() => fileInputRef.current?.click()}
-              className="absolute left-8 w-14 h-14 rounded-2xl bg-white/90 hover:bg-white transition-all shadow-2xl flex items-center justify-center"
-            >
-              <ImageIcon className="w-7 h-7 text-black" />
-            </button>
-            
-            {/* Botón circular de captura en el centro - Click = foto, Mantener = video */}
-            <button
-              onMouseDown={handlePressStart}
-              onMouseUp={handlePressEnd}
-              onMouseLeave={handlePressEnd}
-              onTouchStart={handlePressStart}
-              onTouchEnd={handlePressEnd}
-              className={`w-20 h-20 rounded-full border-4 flex items-center justify-center transition-all ${
-                isRecording 
-                  ? 'border-red-500 bg-transparent scale-110' 
-                  : 'border-white bg-transparent hover:scale-105'
-              }`}
-            >
-              <div className={`transition-all ${
-                isRecording 
-                  ? 'w-8 h-8 rounded bg-red-500' 
-                  : 'w-16 h-16 rounded-full bg-white'
-              }`} />
-            </button>
-          </div>
-        )}
+        <div className="flex items-center justify-center px-4 w-full">
+          {/* Botón de galería a la izquierda */}
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            className="absolute left-8 w-14 h-14 rounded-2xl bg-white/90 hover:bg-white transition-all shadow-2xl flex items-center justify-center"
+          >
+            <ImageIcon className="w-7 h-7 text-black" />
+          </button>
+          
+          {/* Botón circular de captura en el centro - Click = foto, Mantener = video */}
+          <button
+            onMouseDown={handlePressStart}
+            onMouseUp={handlePressEnd}
+            onMouseLeave={handlePressEnd}
+            onTouchStart={handlePressStart}
+            onTouchEnd={handlePressEnd}
+            className={`w-20 h-20 rounded-full border-4 flex items-center justify-center transition-all ${
+              isRecording 
+                ? 'border-red-500 bg-transparent scale-110' 
+                : 'border-white bg-transparent hover:scale-105'
+            }`}
+          >
+            <div className={`transition-all ${
+              isRecording 
+                ? 'w-8 h-8 rounded bg-red-500' 
+                : 'w-16 h-16 rounded-full bg-white'
+            }`} />
+          </button>
+        </div>
       </div>
     </div>
   );
