@@ -238,25 +238,33 @@ const StoryCapturePage = () => {
   const handlePressStart = (e) => {
     e.preventDefault();
     setIsPressingButton(true);
+    pressStartTimeRef.current = Date.now();
     
-    // Iniciar grabación de video después de un pequeño delay
-    setTimeout(() => {
-      if (isPressingButton || true) { // Siempre iniciar si no se ha soltado
+    // Iniciar grabación de video después de mantener presionado
+    pressTimerRef.current = setTimeout(() => {
+      if (isPressingButton) {
         startRecording();
       }
-    }, 200); // Delay de 200ms para distinguir entre click y mantener presionado
+    }, 500); // Delay de 500ms para distinguir entre click y mantener presionado
   };
 
   // Manejar fin de presión - Si es rápido = foto, si es largo = detener video
   const handlePressEnd = (e) => {
     e.preventDefault();
+    const pressDuration = Date.now() - (pressStartTimeRef.current || 0);
     setIsPressingButton(false);
+    
+    // Limpiar el timer si no se completó
+    if (pressTimerRef.current) {
+      clearTimeout(pressTimerRef.current);
+      pressTimerRef.current = null;
+    }
     
     // Si está grabando, detener
     if (isRecording) {
       stopRecording();
-    } else {
-      // Si no alcanzó a iniciar grabación, tomar foto
+    } else if (pressDuration < 500) {
+      // Si fue un click rápido (menos de 500ms), tomar foto
       capturePhoto();
     }
   };
