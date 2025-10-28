@@ -404,22 +404,22 @@ const StoryEditPage = () => {
               <span className="text-white font-bold text-xl">Aa</span>
             </button>
 
-            {/* Emoji */}
+            {/* GIFs y Emojis */}
             <button
-              onClick={() => setShowEmojiPicker(!showEmojiPicker)}
+              onClick={() => setShowGifEmojiPicker(!showGifEmojiPicker)}
               className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-sm hover:bg-black/70 flex items-center justify-center transition-all"
-              title="Añadir emoji"
+              title="GIFs y Emojis"
             >
               <Smile className="w-5 h-5 text-white" />
             </button>
 
-            {/* Stickers */}
+            {/* Filtros */}
             <button
-              onClick={() => setShowStickerPicker(!showStickerPicker)}
+              onClick={() => setShowFilterPicker(!showFilterPicker)}
               className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-sm hover:bg-black/70 flex items-center justify-center transition-all"
-              title="Añadir sticker"
+              title="Filtros"
             >
-              <Sticker className="w-5 h-5 text-white" />
+              <Sparkles className="w-5 h-5 text-white" />
             </button>
 
             {/* Música */}
