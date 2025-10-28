@@ -490,22 +490,25 @@ const StoryEditPage = () => {
         />
       )}
 
-      {showEmojiPicker && (
-        <EmojiPickerModal
-          onClose={() => setShowEmojiPicker(false)}
+      {showGifEmojiPicker && (
+        <GifEmojiPickerModal
+          onClose={() => setShowGifEmojiPicker(false)}
           onSelect={(emoji) => {
             setStickers([...stickers, { emoji, x: 50, y: 50 }]);
-            setShowEmojiPicker(false);
+            setShowGifEmojiPicker(false);
           }}
         />
       )}
 
-      {showStickerPicker && (
-        <StickerPickerModal
-          onClose={() => setShowStickerPicker(false)}
-          onSelect={(sticker) => {
-            setStickers([...stickers, { emoji: sticker, x: 50, y: 50 }]);
-            setShowStickerPicker(false);
+      {showFilterPicker && (
+        <FilterPickerModal
+          onClose={() => setShowFilterPicker(false)}
+          onSelect={(filter) => {
+            toast({
+              title: "Filtro aplicado",
+              description: `Filtro ${filter} seleccionado`,
+            });
+            setShowFilterPicker(false);
           }}
         />
       )}
