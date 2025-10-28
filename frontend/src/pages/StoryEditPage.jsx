@@ -459,18 +459,24 @@ const StoryEditPage = () => {
                 >
                   {text.isEditing || editingTextIndex === index ? (
                     <div className="flex flex-col items-center">
-                      <input
-                        type="text"
+                      <textarea
                         value={text.content}
                         onChange={(e) => handleTextChange(index, e.target.value)}
-                        onBlur={() => handleFinishEditing(index)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            handleFinishEditing(index);
+                          }
+                        }}
                         autoFocus
-                        placeholder="Toca para escribir"
-                        className={`bg-transparent border-b-2 border-white outline-none text-center text-2xl font-bold ${styleConfig.font} ${styleConfig.bg} ${styleConfig.shadow || ''}`}
+                        placeholder="Escribe aquí..."
+                        rows={1}
+                        className={`bg-transparent border-b-2 border-white outline-none text-center text-3xl font-bold ${styleConfig.font} ${styleConfig.bg} ${styleConfig.shadow || ''} resize-none`}
                         style={{ 
                           color: text.color,
-                          minWidth: '150px',
-                          maxWidth: '300px'
+                          minWidth: '200px',
+                          maxWidth: '350px',
+                          caretColor: text.color
                         }}
                       />
                     </div>
@@ -479,8 +485,9 @@ const StoryEditPage = () => {
                       onClick={(e) => {
                         e.stopPropagation();
                         setEditingTextIndex(index);
+                        setIsTextMode(true);
                       }}
-                      className={`text-2xl font-bold cursor-pointer ${styleConfig.font} ${styleConfig.bg} ${styleConfig.shadow || ''}`}
+                      className={`text-3xl font-bold cursor-pointer ${styleConfig.font} ${styleConfig.bg} ${styleConfig.shadow || ''}`}
                     >
                       {text.content}
                     </div>
