@@ -709,48 +709,6 @@ const StickerPickerModal = ({ onClose, onSelect }) => {
   );
 };
 
-// Modal de selector de música
-const MusicSelectorModal = ({ onClose, onSelect }) => {
-  const musicTracks = [
-    { id: 1, name: 'Summer Vibes', artist: 'DJ Cool' },
-    { id: 2, name: 'Dance Night', artist: 'The Beats' },
-    { id: 3, name: 'Chill Mode', artist: 'Relaxer' },
-    { id: 4, name: 'Party Time', artist: 'DJ Fire' },
-    { id: 5, name: 'Love Song', artist: 'Romance' }
-  ];
-
-  return (
-    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-white rounded-3xl p-6 w-full max-w-md max-h-[80vh] overflow-y-auto">
-        <div className="flex justify-between items-center mb-4 sticky top-0 bg-white pb-4">
-          <h3 className="text-xl font-bold text-gray-900">Añadir música</h3>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
-            <X className="w-6 h-6" />
-          </button>
-        </div>
-
-        <div className="space-y-2">
-          {musicTracks.map((track) => (
-            <button
-              key={track.id}
-              onClick={() => onSelect(track)}
-              className="w-full text-left p-4 rounded-2xl hover:bg-gray-100 transition-all flex items-center gap-3"
-            >
-              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
-                <Music className="w-6 h-6 text-white" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="font-semibold text-gray-900 truncate">{track.name}</p>
-                <p className="text-sm text-gray-500 truncate">{track.artist}</p>
-              </div>
-            </button>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
-};
-
 // Modal de más opciones
 const MoreOptionsModal = ({ onClose, onReset }) => {
   const options = [
