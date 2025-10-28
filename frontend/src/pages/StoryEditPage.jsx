@@ -343,9 +343,9 @@ const StoryEditPage = () => {
 
   return (
     <div className="fixed inset-0 z-50 bg-black overflow-hidden">
-      {/* Header con botón de volver */}
+      {/* Header con botón de volver y botón Listo */}
       <div className="absolute top-0 left-0 right-0 z-30 pt-3 px-4">
-        <div className="flex items-start justify-start">
+        <div className="flex items-start justify-between">
           {/* Botón volver a la izquierda */}
           <button
             onClick={() => navigate(-1)}
@@ -353,6 +353,16 @@ const StoryEditPage = () => {
           >
             <ArrowLeft className="w-6 h-6 text-white" />
           </button>
+          
+          {/* Botón Listo - Solo visible cuando se está editando texto */}
+          {editingTextIndex !== null && (
+            <button
+              onClick={() => handleFinishEditing(editingTextIndex)}
+              className="px-4 py-2 rounded-full bg-white text-black font-semibold hover:bg-gray-100 transition-all"
+            >
+              Listo
+            </button>
+          )}
         </div>
       </div>
 
