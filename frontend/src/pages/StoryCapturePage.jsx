@@ -385,13 +385,7 @@ const StoryCapturePage = () => {
         </div>
       </div>
 
-      {/* Indicador de grabación */}
-      {isRecording && (
-        <div className="absolute top-20 left-1/2 transform -translate-x-1/2 z-30 bg-red-500 text-white px-4 py-2 rounded-full flex items-center gap-2">
-          <div className="w-3 h-3 bg-white rounded-full animate-pulse" />
-          <span className="font-semibold">{formatTime(recordingTime)}</span>
-        </div>
-      )}
+      {/* Indicador de grabación - ELIMINADO */}
 
       {/* Área central - cámara en vivo */}
       <div className="absolute top-0 left-0 right-0 bottom-32">
