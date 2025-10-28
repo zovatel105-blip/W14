@@ -497,10 +497,10 @@ const StoryEditPage = () => {
                   <img
                     src={user.avatar_url}
                     alt={user.username}
-                    className="w-full h-full rounded-full object-cover border-2 border-white"
+                    className="w-full h-full rounded-full object-cover border border-white"
                   />
                 ) : (
-                  <div className="w-full h-full rounded-full bg-gray-600 flex items-center justify-center border-2 border-white">
+                  <div className="w-full h-full rounded-full bg-gray-600 flex items-center justify-center border border-white">
                     <span className="text-white text-lg font-bold">
                       {user?.username?.[0]?.toUpperCase() || 'T'}
                     </span>
