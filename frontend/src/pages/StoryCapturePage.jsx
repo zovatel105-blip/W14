@@ -248,6 +248,7 @@ const StoryCapturePage = () => {
     e.preventDefault();
     e.stopPropagation();
     setIsPressingButton(true);
+    setRecordingTime(0); // Resetear tiempo al iniciar
     pressStartTimeRef.current = Date.now();
     
     // Iniciar grabación de video después de mantener presionado
