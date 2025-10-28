@@ -40,12 +40,20 @@ const StoryCapturePage = () => {
     };
   }, [facingMode]);
 
-  // Timer para grabación
+  // Timer para grabación con límite de 15 segundos
   useEffect(() => {
     let interval;
     if (isRecording) {
       interval = setInterval(() => {
-        setRecordingTime(prev => prev + 1);
+        setRecordingTime(prev => {
+          const newTime = prev + 1;
+          // Detener automáticamente después de 15 segundos
+          if (newTime >= 15) {
+            stopRecording();
+            return 15;
+          }
+          return newTime;
+        });
       }, 1000);
     } else {
       setRecordingTime(0);
