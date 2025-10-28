@@ -430,6 +430,15 @@ const StoryCapturePage = () => {
 
       {/* Barra inferior en modo captura */}
       <div className="absolute bottom-0 left-0 right-0 z-30 pb-8">
+        {/* Temporizador encima del círculo cuando está grabando */}
+        {isRecording && (
+          <div className="absolute bottom-36 left-1/2 transform -translate-x-1/2 bg-black/70 backdrop-blur-sm px-4 py-2 rounded-full">
+            <div className="text-white font-mono text-base font-semibold">
+              {formatTime(recordingTime)}
+            </div>
+          </div>
+        )}
+        
         <div className="flex items-center justify-center px-4 w-full">
           {/* Botón de galería a la izquierda */}
           <button
@@ -446,11 +455,9 @@ const StoryCapturePage = () => {
               <svg className="absolute inset-0 w-28 h-28 transform -rotate-90">
                 <defs>
                   <linearGradient id="storyGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" style={{ stopColor: '#feda75', stopOpacity: 1 }} />
-                    <stop offset="25%" style={{ stopColor: '#fa7e1e', stopOpacity: 1 }} />
-                    <stop offset="50%" style={{ stopColor: '#d62976', stopOpacity: 1 }} />
-                    <stop offset="75%" style={{ stopColor: '#962fbf', stopOpacity: 1 }} />
-                    <stop offset="100%" style={{ stopColor: '#4f5bd5', stopOpacity: 1 }} />
+                    <stop offset="0%" style={{ stopColor: '#00FFFF', stopOpacity: 1 }} />
+                    <stop offset="50%" style={{ stopColor: '#8A2BE2', stopOpacity: 1 }} />
+                    <stop offset="100%" style={{ stopColor: '#000000', stopOpacity: 1 }} />
                   </linearGradient>
                 </defs>
                 <circle
@@ -494,18 +501,7 @@ const StoryCapturePage = () => {
               )}
               
               {/* Círculo blanco interior - siempre circular */}
-              <div className={`rounded-full bg-white transition-all ${
-                isRecording 
-                  ? 'w-16 h-16' 
-                  : 'w-16 h-16'
-              }`}>
-                {/* Temporizador dentro del círculo cuando está grabando */}
-                {isRecording && (
-                  <div className="flex items-center justify-center h-full text-black font-mono text-sm font-bold">
-                    {formatTime(recordingTime)}
-                  </div>
-                )}
-              </div>
+              <div className="rounded-full bg-white w-16 h-16" />
             </button>
           </div>
         </div>
