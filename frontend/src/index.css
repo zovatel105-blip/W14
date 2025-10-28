@@ -322,3 +322,37 @@ div:hover {
 .image-loaded {
   filter: blur(0);
 }
+
+
+/* ==================== Story Edit Page - Slider Vertical ==================== */
+
+/* Slider vertical para Story Edit */
+.slider-vertical {
+  -webkit-appearance: slider-vertical;
+  appearance: none;
+  writing-mode: bt-lr;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+  outline: none;
+}
+
+.slider-vertical::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.slider-vertical::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: white;
+  cursor: pointer;
+  border: none;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
