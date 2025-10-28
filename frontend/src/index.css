@@ -49,6 +49,16 @@ code {
   user-select: none;
 }
 
+/* Hide scrollbar for horizontal scroll */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 /* TikTok-style scrollbar hide */
 .scrollbar-hide {
   -ms-overflow-style: none;  /* IE and Edge */
