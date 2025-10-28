@@ -193,6 +193,46 @@ const StoryEditPage = () => {
     }
   };
 
+  // Handler para cambiar tamaño del texto
+  const handleSizeChange = (newSize) => {
+    setCurrentTextSize(newSize);
+    if (editingTextIndex !== null) {
+      const updated = [...textOverlays];
+      updated[editingTextIndex].size = newSize;
+      setTextOverlays(updated);
+    }
+  };
+
+  // Handler para cambiar alineación del texto
+  const handleAlignChange = (newAlign) => {
+    setCurrentTextAlign(newAlign);
+    if (editingTextIndex !== null) {
+      const updated = [...textOverlays];
+      updated[editingTextIndex].align = newAlign;
+      setTextOverlays(updated);
+    }
+  };
+
+  // Handler para cambiar fondo del texto
+  const handleBgChange = (newBg) => {
+    setCurrentTextBg(newBg);
+    if (editingTextIndex !== null) {
+      const updated = [...textOverlays];
+      updated[editingTextIndex].bg = newBg;
+      setTextOverlays(updated);
+    }
+  };
+
+  // Handler para cambiar efecto del texto
+  const handleEffectChange = (newEffect) => {
+    setCurrentTextEffect(newEffect);
+    if (editingTextIndex !== null) {
+      const updated = [...textOverlays];
+      updated[editingTextIndex].effect = newEffect;
+      setTextOverlays(updated);
+    }
+  };
+
   // Handler para finalizar edición de texto
   const handleFinishEditing = (index) => {
     const updated = [...textOverlays];
