@@ -45,7 +45,6 @@ const StoryEditPage = () => {
   const [showStickerPicker, setShowStickerPicker] = useState(false);
   const [showMusicSelector, setShowMusicSelector] = useState(false);
   const [showMoreOptions, setShowMoreOptions] = useState(false);
-  const [isFullscreen, setIsFullscreen] = useState(false);
 
   // Estados para zoom y pan (pinch-to-zoom estilo Instagram)
   const [scale, setScale] = useState(1);
