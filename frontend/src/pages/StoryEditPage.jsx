@@ -39,7 +39,10 @@ const StoryEditPage = () => {
   const [isPublishing, setIsPublishing] = useState(false);
   
   // Estados de modales
-  const [showTextEditor, setShowTextEditor] = useState(false);
+  const [isTextMode, setIsTextMode] = useState(false);
+  const [currentTextStyle, setCurrentTextStyle] = useState('classic');
+  const [currentTextColor, setCurrentTextColor] = useState('#ffffff');
+  const [editingTextIndex, setEditingTextIndex] = useState(null);
   const [showGifEmojiPicker, setShowGifEmojiPicker] = useState(false);
   const [showFilterPicker, setShowFilterPicker] = useState(false);
   const [showMusicSelector, setShowMusicSelector] = useState(false);
