@@ -70,13 +70,47 @@ const StoryEditPage = () => {
   const [lastPanX, setLastPanX] = useState(0);
   const [lastPanY, setLastPanY] = useState(0);
 
-  // Estilos de texto disponibles
+  // Estilos de texto disponibles - 10+ fuentes variadas
   const textStyles = [
-    { id: 'classic', name: 'Classic', font: 'font-sans', bg: 'bg-transparent' },
-    { id: 'bold', name: 'Bold', font: 'font-black', bg: 'bg-transparent' },
-    { id: 'typewriter', name: 'Typewriter', font: 'font-mono', bg: 'bg-transparent' },
-    { id: 'neon', name: 'Neon', font: 'font-bold', bg: 'bg-transparent', shadow: 'shadow-[0_0_10px_currentColor]' },
-    { id: 'strong', name: 'Strong', font: 'font-extrabold', bg: 'bg-black/70 px-2 py-1' },
+    { id: 'classic', name: 'Classic', font: 'font-sans' },
+    { id: 'bold', name: 'Bold', font: 'font-black' },
+    { id: 'typewriter', name: 'Typewriter', font: 'font-mono' },
+    { id: 'neon', name: 'Neon', font: 'font-bold' },
+    { id: 'strong', name: 'Strong', font: 'font-extrabold' },
+    { id: 'serif', name: 'Serif', font: 'font-serif' },
+    { id: 'script', name: 'Script', font: 'font-cursive', style: { fontFamily: 'cursive' } },
+    { id: 'modern', name: 'Modern', font: 'font-sans', style: { fontFamily: 'system-ui' } },
+    { id: 'elegant', name: 'Elegant', font: 'font-serif', style: { fontFamily: 'Georgia, serif' } },
+    { id: 'playful', name: 'Playful', font: 'font-sans', style: { fontFamily: 'Comic Sans MS, cursive' } },
+    { id: 'tech', name: 'Tech', font: 'font-mono', style: { fontFamily: 'Courier New, monospace' } },
+    { id: 'display', name: 'Display', font: 'font-bold', style: { fontFamily: 'Impact, sans-serif' } },
+  ];
+
+  // Efectos de texto disponibles
+  const textEffects = [
+    { id: 'none', name: 'Sin efecto', style: {} },
+    { id: 'shadow', name: 'Sombra', style: { textShadow: '2px 2px 4px rgba(0,0,0,0.8)' } },
+    { id: 'glow', name: 'Resplandor', style: { textShadow: '0 0 10px currentColor, 0 0 20px currentColor' } },
+    { id: 'outline', name: 'Contorno', style: { 
+      textShadow: '-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000',
+      WebkitTextStroke: '1px black'
+    } },
+    { id: 'double', name: 'Doble', style: { textShadow: '3px 3px 0 rgba(0,0,0,0.3)' } },
+    { id: 'neon-glow', name: 'Neón', style: { 
+      textShadow: '0 0 5px currentColor, 0 0 10px currentColor, 0 0 15px currentColor, 0 0 20px currentColor' 
+    } },
+  ];
+
+  // Opciones de fondo de texto
+  const textBackgrounds = [
+    { id: 'none', name: 'Sin fondo', style: {} },
+    { id: 'solid', name: 'Sólido', style: { backgroundColor: 'rgba(0,0,0,0.7)', padding: '4px 12px', borderRadius: '4px' } },
+    { id: 'semi', name: 'Semi', style: { backgroundColor: 'rgba(0,0,0,0.4)', padding: '4px 12px', borderRadius: '4px' } },
+    { id: 'gradient', name: 'Degradado', style: { 
+      background: 'linear-gradient(90deg, rgba(147,51,234,0.8) 0%, rgba(219,39,119,0.8) 100%)',
+      padding: '4px 12px',
+      borderRadius: '4px'
+    } },
   ];
 
   // Handler para activar modo texto - Crea texto inmediatamente en el centro
