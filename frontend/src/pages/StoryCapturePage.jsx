@@ -461,9 +461,19 @@ const StoryCapturePage = () => {
           
           {/* Botón circular de captura en el centro - Click = foto, Mantener = video */}
           <div className="relative w-28 h-28 flex items-center justify-center">
-            {/* Anillo de progreso gris cuando está grabando */}
-            {isRecording && (
-              <svg className="absolute inset-0 w-28 h-28 transform -rotate-90">
+            {/* Anillo exterior gris con progreso - SIEMPRE visible */}
+            <svg className="absolute inset-0 w-28 h-28 transform -rotate-90 pointer-events-none">
+              {/* Círculo de fondo gris completo */}
+              <circle
+                cx="56"
+                cy="56"
+                r="52"
+                stroke="#9CA3AF"
+                strokeWidth="4"
+                fill="none"
+              />
+              {/* Círculo de progreso gris oscuro que se anima durante grabación */}
+              {isRecording && (
                 <circle
                   cx="56"
                   cy="56"
@@ -471,22 +481,13 @@ const StoryCapturePage = () => {
                   stroke="#374151"
                   strokeWidth="4"
                   fill="none"
-                  opacity="0.3"
-                />
-                <circle
-                  cx="56"
-                  cy="56"
-                  r="52"
-                  stroke="#9CA3AF"
-                  strokeWidth="4"
-                  fill="none"
                   strokeDasharray={326.73}
                   strokeDashoffset={326.73 * (1 - recordingTime / 15)}
                   strokeLinecap="round"
                   className="transition-all duration-1000 ease-linear"
                 />
-              </svg>
-            )}
+              )}
+            </svg>
             
             <button
               onMouseDown={handlePressStart}
@@ -500,11 +501,6 @@ const StoryCapturePage = () => {
                   : 'bg-transparent hover:scale-105'
               }`}
             >
-              {/* Anillo exterior gris (solo visible cuando NO está grabando) */}
-              {!isRecording && (
-                <div className="absolute inset-0 rounded-full border-4 border-gray-400" />
-              )}
-              
               {/* Botón circular con gradiente cuando NO está grabando, blanco cuando SÍ está grabando */}
               <div className={`w-16 h-16 rounded-full transition-all ${
                 isRecording 
