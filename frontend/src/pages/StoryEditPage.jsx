@@ -66,17 +66,33 @@ const StoryEditPage = () => {
     { id: 'strong', name: 'Strong', font: 'font-extrabold', bg: 'bg-black/70 px-2 py-1' },
   ];
 
-  // Handler para activar modo texto
+  // Handler para activar modo texto - Crea texto inmediatamente en el centro
   const handleTextMode = () => {
-    setIsTextMode(!isTextMode);
-    if (isTextMode) {
+    if (!isTextMode) {
+      // Activar modo texto y crear nuevo texto en el centro
+      const newText = {
+        content: '',
+        x: 50,
+        y: 50,
+        color: currentTextColor,
+        style: currentTextStyle,
+        isEditing: true
+      };
+      
+      setTextOverlays([...textOverlays, newText]);
+      setEditingTextIndex(textOverlays.length);
+      setIsTextMode(true);
+    } else {
+      // Desactivar modo texto
+      setIsTextMode(false);
       setEditingTextIndex(null);
     }
   };
 
-  // Handler para añadir texto al tocar la pantalla
+  // Handler para añadir texto al tocar la pantalla (opcional, para añadir más textos)
   const handleScreenTap = (e) => {
     if (!isTextMode) return;
+    if (editingTextIndex !== null) return; // No crear nuevo si ya hay uno editando
     
     const rect = e.currentTarget.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
