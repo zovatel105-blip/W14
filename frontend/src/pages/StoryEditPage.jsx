@@ -447,10 +447,10 @@ const StoryEditPage = () => {
             <button
               onClick={handlePublishStory}
               disabled={!storedMediaFile || isPublishing}
-              className="flex items-center gap-3 bg-gray-900/80 hover:bg-gray-800/80 disabled:bg-gray-900/40 disabled:cursor-not-allowed backdrop-blur-sm rounded-full px-4 py-2 transition-all"
+              className="flex items-center gap-2 bg-gray-900/80 hover:bg-gray-800/80 disabled:bg-gray-900/40 disabled:cursor-not-allowed backdrop-blur-sm rounded-full px-3 py-1.5 transition-all"
             >
               {/* Avatar circular */}
-              <div className="relative w-12 h-12 flex-shrink-0">
+              <div className="relative w-8 h-8 flex-shrink-0">
                 {user?.avatar_url ? (
                   <img
                     src={user.avatar_url}
@@ -459,20 +459,20 @@ const StoryEditPage = () => {
                   />
                 ) : (
                   <div className="w-full h-full rounded-full bg-gray-600 flex items-center justify-center border border-white">
-                    <span className="text-white text-lg font-bold">
+                    <span className="text-white text-sm font-bold">
                       {user?.username?.[0]?.toUpperCase() || 'T'}
                     </span>
                   </div>
                 )}
                 {isPublishing && (
                   <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full">
-                    <div className="w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                   </div>
                 )}
               </div>
               
               {/* Texto */}
-              <span className="text-white font-medium text-base pr-2">
+              <span className="text-white font-medium text-sm pr-1">
                 Tu historia
               </span>
             </button>
