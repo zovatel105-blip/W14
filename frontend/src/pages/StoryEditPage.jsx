@@ -446,6 +446,15 @@ const StoryEditPage = () => {
               <Sticker className="w-5 h-5 text-white" />
             </button>
 
+            {/* Música */}
+            <button
+              onClick={() => setShowMusicSelector(true)}
+              className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-sm hover:bg-black/70 flex items-center justify-center transition-all"
+              title="Añadir música"
+            >
+              <Music className="w-5 h-5 text-white" />
+            </button>
+
             {/* Más opciones */}
             <button 
               onClick={() => setShowMoreOptions(!showMoreOptions)}
