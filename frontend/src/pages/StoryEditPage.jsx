@@ -141,6 +141,27 @@ const StoryEditPage = () => {
     }
   };
 
+  // Toggle pantalla completa
+  const handleToggleFullscreen = () => {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().then(() => {
+        setIsFullscreen(true);
+        toast({
+          title: "Modo pantalla completa",
+          description: "Presiona ESC para salir"
+        });
+      }).catch(err => {
+        console.error('Error al activar pantalla completa:', err);
+      });
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen().then(() => {
+          setIsFullscreen(false);
+        });
+      }
+    }
+  };
+
   // Publicar historia
   const handlePublishStory = async () => {
     if (!storedMediaFile) {
