@@ -436,15 +436,6 @@ const StoryCapturePage = () => {
 
       {/* Barra inferior en modo captura */}
       <div className="absolute bottom-0 left-0 right-0 z-30 pb-8">
-        {/* Timer de grabación centrado arriba del botón */}
-        {isRecording && (
-          <div className="absolute bottom-32 left-1/2 transform -translate-x-1/2 bg-black/70 backdrop-blur-sm px-4 py-2 rounded-full">
-            <div className="text-white font-mono text-lg font-semibold">
-              {formatTime(recordingTime)}
-            </div>
-          </div>
-        )}
-        
         <div className="flex items-center justify-center px-4 w-full">
           {/* Botón de galería a la izquierda */}
           <button
@@ -455,27 +446,36 @@ const StoryCapturePage = () => {
           </button>
           
           {/* Botón circular de captura en el centro - Click = foto, Mantener = video */}
-          <div className="relative w-24 h-24 flex items-center justify-center">
-            {/* Círculo de progreso cuando está grabando */}
+          <div className="relative w-28 h-28 flex items-center justify-center">
+            {/* Círculo de progreso cuando está grabando con gradiente de historias */}
             {isRecording && (
-              <svg className="absolute inset-0 w-24 h-24 transform -rotate-90">
+              <svg className="absolute inset-0 w-28 h-28 transform -rotate-90">
+                <defs>
+                  <linearGradient id="storyGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style={{ stopColor: '#f7b733', stopOpacity: 1 }} />
+                    <stop offset="25%" style={{ stopColor: '#fc4a1a', stopOpacity: 1 }} />
+                    <stop offset="50%" style={{ stopColor: '#c71585', stopOpacity: 1 }} />
+                    <stop offset="75%" style={{ stopColor: '#8b5cf6', stopOpacity: 1 }} />
+                    <stop offset="100%" style={{ stopColor: '#3b82f6', stopOpacity: 1 }} />
+                  </linearGradient>
+                </defs>
                 <circle
-                  cx="48"
-                  cy="48"
-                  r="44"
+                  cx="56"
+                  cy="56"
+                  r="52"
                   stroke="#374151"
-                  strokeWidth="4"
+                  strokeWidth="3"
                   fill="none"
                 />
                 <circle
-                  cx="48"
-                  cy="48"
-                  r="44"
-                  stroke="#3b82f6"
-                  strokeWidth="4"
+                  cx="56"
+                  cy="56"
+                  r="52"
+                  stroke="url(#storyGradient)"
+                  strokeWidth="3"
                   fill="none"
-                  strokeDasharray={276.46}
-                  strokeDashoffset={276.46 * (1 - recordingTime / 15)}
+                  strokeDasharray={326.73}
+                  strokeDashoffset={326.73 * (1 - recordingTime / 15)}
                   strokeLinecap="round"
                   className="transition-all duration-1000 ease-linear"
                 />
@@ -488,17 +488,30 @@ const StoryCapturePage = () => {
               onMouseLeave={handlePressEnd}
               onTouchStart={handlePressStart}
               onTouchEnd={handlePressEnd}
-              className={`relative w-20 h-20 rounded-full border-4 flex items-center justify-center transition-all ${
+              className={`relative w-20 h-20 rounded-full flex items-center justify-center transition-all ${
                 isRecording 
-                  ? 'border-transparent bg-transparent scale-110' 
-                  : 'border-white bg-transparent hover:scale-105'
+                  ? 'bg-transparent scale-110' 
+                  : 'bg-transparent hover:scale-105'
               }`}
             >
-              <div className={`transition-all ${
+              {/* Anillo exterior gris cuando NO está grabando */}
+              {!isRecording && (
+                <div className="absolute inset-0 rounded-full border-4 border-gray-400" />
+              )}
+              
+              {/* Círculo blanco interior - siempre circular */}
+              <div className={`rounded-full bg-white transition-all ${
                 isRecording 
-                  ? 'w-8 h-8 rounded bg-red-500' 
-                  : 'w-16 h-16 rounded-full bg-white'
-              }`} />
+                  ? 'w-16 h-16' 
+                  : 'w-16 h-16'
+              }`}>
+                {/* Temporizador dentro del círculo cuando está grabando */}
+                {isRecording && (
+                  <div className="flex items-center justify-center h-full text-black font-mono text-sm font-bold">
+                    {formatTime(recordingTime)}
+                  </div>
+                )}
+              </div>
             </button>
           </div>
         </div>
