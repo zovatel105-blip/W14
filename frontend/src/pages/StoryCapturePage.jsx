@@ -506,15 +506,12 @@ const StoryCapturePage = () => {
                   : 'bg-transparent hover:scale-105'
               }`}
             >
-              {/* Botón con gradiente cuando NO está grabando */}
-              {!isRecording ? (
-                <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-[#00FFFF] via-[#8A2BE2] to-[#000000] p-[3px]">
-                  <div className="w-full h-full rounded-full bg-black" />
-                </div>
-              ) : (
-                /* Círculo blanco cuando está grabando */
-                <div className="rounded-full bg-white w-16 h-16" />
-              )}
+              {/* Botón circular con gradiente cuando NO está grabando, blanco cuando SÍ está grabando */}
+              <div className={`w-16 h-16 rounded-full transition-all ${
+                isRecording 
+                  ? 'bg-white' 
+                  : 'bg-gradient-to-tr from-[#00FFFF] via-[#8A2BE2] to-[#000000]'
+              }`} />
             </button>
           </div>
         </div>
