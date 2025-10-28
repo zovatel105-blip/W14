@@ -570,6 +570,25 @@ const StoryEditPage = () => {
           }}
         />
       )}
+
+      {showMoreOptions && (
+        <MoreOptionsModal
+          onClose={() => setShowMoreOptions(false)}
+          onReset={() => {
+            setScale(1);
+            setPosX(0);
+            setPosY(0);
+            setTextOverlays([]);
+            setStickers([]);
+            setSelectedMusic(null);
+            setShowMoreOptions(false);
+            toast({
+              title: "Reiniciado",
+              description: "Todos los elementos han sido eliminados"
+            });
+          }}
+        />
+      )}
     </div>
   );
 };
