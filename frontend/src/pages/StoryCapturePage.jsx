@@ -374,9 +374,7 @@ const StoryCapturePage = () => {
             {/* Botón Flash */}
             <button 
               onClick={toggleFlash}
-              className={`w-10 h-10 rounded-full backdrop-blur-sm flex items-center justify-center hover:bg-black/70 transition-all ${
-                flashEnabled ? 'bg-yellow-500/80' : 'bg-black/60'
-              }`}
+              className="w-10 h-10 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center hover:bg-black/70 transition-all"
             >
               {flashEnabled ? (
                 <Zap className="w-5 h-5 text-white" />
