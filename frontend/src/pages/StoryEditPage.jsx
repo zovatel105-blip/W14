@@ -402,7 +402,7 @@ const StoryEditPage = () => {
               className="w-12 h-12 rounded-full bg-black/60 backdrop-blur-sm hover:bg-black/70 flex items-center justify-center transition-all"
               title="Añadir texto"
             >
-              <Type className="w-5 h-5 text-white" />
+              <span className="text-white font-bold text-xl">Aa</span>
             </button>
 
             {/* Emoji */}
