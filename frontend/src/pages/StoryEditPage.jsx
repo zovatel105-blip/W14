@@ -609,28 +609,54 @@ const TextEditorModal = ({ onClose, onAdd }) => {
   );
 };
 
-// Modal de emojis
-const EmojiPickerModal = ({ onClose, onSelect }) => {
+// Modal de GIFs y emojis
+const GifEmojiPickerModal = ({ onClose, onSelect }) => {
+  const [activeTab, setActiveTab] = useState('emojis');
   const emojis = ['😀', '😂', '😍', '🥰', '😎', '🤩', '😭', '😱', '🔥', '💯', '❤️', '💕', '💪', '👏', '🙌', '✨', '⭐', '🎉', '🎊', '🎈'];
+  const gifs = ['🎸', '🎵', '🎤', '🎧', '🎬', '📸', '🌟', '💫', '✨', '🌈', '🦄', '🐶', '🐱', '🍕', '🍔', '☕', '🎮', '⚽', '🏀', '🎯'];
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
       <div className="bg-white rounded-3xl p-6 w-full max-w-md">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-xl font-bold text-gray-900">Emojis</h3>
+          <h3 className="text-xl font-bold text-gray-900">GIFs y Emojis</h3>
           <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
             <X className="w-6 h-6" />
           </button>
         </div>
 
+        {/* Tabs */}
+        <div className="flex gap-2 mb-4">
+          <button
+            onClick={() => setActiveTab('emojis')}
+            className={`flex-1 py-2 px-4 rounded-full font-medium transition-all ${
+              activeTab === 'emojis' 
+                ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white' 
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            }`}
+          >
+            Emojis
+          </button>
+          <button
+            onClick={() => setActiveTab('gifs')}
+            className={`flex-1 py-2 px-4 rounded-full font-medium transition-all ${
+              activeTab === 'gifs' 
+                ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white' 
+                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            }`}
+          >
+            GIFs
+          </button>
+        </div>
+
         <div className="grid grid-cols-5 gap-3">
-          {emojis.map((emoji, index) => (
+          {(activeTab === 'emojis' ? emojis : gifs).map((item, index) => (
             <button
               key={index}
-              onClick={() => onSelect(emoji)}
+              onClick={() => onSelect(item)}
               className="text-4xl hover:scale-125 transition-transform p-2"
             >
-              {emoji}
+              {item}
             </button>
           ))}
         </div>
@@ -639,28 +665,38 @@ const EmojiPickerModal = ({ onClose, onSelect }) => {
   );
 };
 
-// Modal de stickers
-const StickerPickerModal = ({ onClose, onSelect }) => {
-  const stickers = ['🎸', '🎵', '🎤', '🎧', '🎬', '📸', '🌟', '💫', '✨', '🌈', '🦄', '🐶', '🐱', '🍕', '🍔', '☕', '🎮', '⚽', '🏀', '🎯'];
+// Modal de filtros
+const FilterPickerModal = ({ onClose, onSelect }) => {
+  const filters = [
+    { id: 'normal', name: 'Normal', emoji: '📷' },
+    { id: 'vintage', name: 'Vintage', emoji: '📼' },
+    { id: 'bw', name: 'Blanco y Negro', emoji: '⚫' },
+    { id: 'sepia', name: 'Sepia', emoji: '🟤' },
+    { id: 'vivid', name: 'Vívido', emoji: '🌈' },
+    { id: 'warm', name: 'Cálido', emoji: '🔥' },
+    { id: 'cool', name: 'Frío', emoji: '❄️' },
+    { id: 'dramatic', name: 'Dramático', emoji: '🎭' },
+  ];
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
       <div className="bg-white rounded-3xl p-6 w-full max-w-md">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-xl font-bold text-gray-900">Stickers</h3>
+          <h3 className="text-xl font-bold text-gray-900">Filtros</h3>
           <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
             <X className="w-6 h-6" />
           </button>
         </div>
 
-        <div className="grid grid-cols-5 gap-3">
-          {stickers.map((sticker, index) => (
+        <div className="grid grid-cols-2 gap-3">
+          {filters.map((filter) => (
             <button
-              key={index}
-              onClick={() => onSelect(sticker)}
-              className="text-4xl hover:scale-125 transition-transform p-2"
+              key={filter.id}
+              onClick={() => onSelect(filter.name)}
+              className="p-4 rounded-2xl bg-gray-100 hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 hover:text-white transition-all text-center"
             >
-              {sticker}
+              <div className="text-3xl mb-2">{filter.emoji}</div>
+              <div className="font-medium text-sm">{filter.name}</div>
             </button>
           ))}
         </div>
