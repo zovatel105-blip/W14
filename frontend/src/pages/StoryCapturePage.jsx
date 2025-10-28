@@ -505,15 +505,15 @@ const StoryCapturePage = () => {
               onTouchEnd={handlePressEnd}
               className={`relative w-full h-full rounded-full flex items-center justify-center transition-all ${
                 isRecording 
-                  ? 'bg-transparent scale-110' 
+                  ? 'bg-transparent' 
                   : 'bg-transparent hover:scale-105'
               }`}
             >
-              {/* Botón circular con gradiente cuando NO está grabando, blanco cuando SÍ está grabando */}
-              <div className={`w-16 h-16 rounded-full transition-all ${
+              {/* Botón circular con gradiente cuando NO está grabando, blanco y pequeño cuando SÍ está grabando */}
+              <div className={`rounded-full transition-all duration-200 ${
                 isRecording 
-                  ? 'bg-white' 
-                  : 'bg-gradient-to-tr from-[#00FFFF] via-[#8A2BE2] to-[#000000]'
+                  ? 'w-10 h-10 bg-white' 
+                  : 'w-16 h-16 bg-gradient-to-tr from-[#00FFFF] via-[#8A2BE2] to-[#000000]'
               }`} />
             </button>
           </div>
