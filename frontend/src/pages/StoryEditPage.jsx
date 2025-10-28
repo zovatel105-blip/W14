@@ -337,14 +337,6 @@ const StoryEditPage = () => {
               )}
             </div>
 
-            {/* Botón para eliminar media */}
-            <button
-              onClick={handleRemoveMedia}
-              className="absolute top-4 right-4 z-20 w-10 h-10 rounded-full bg-black/60 backdrop-blur-sm flex items-center justify-center hover:bg-black/70 transition-all"
-            >
-              <X className="w-5 h-5 text-white" />
-            </button>
-
             {/* Overlays de texto (independientes del zoom) */}
             {textOverlays.map((text, index) => (
               <div
