@@ -163,6 +163,16 @@ const StoryEditPage = () => {
     }
   };
 
+  // Handler para seleccionar música
+  const handleMusicSelect = (music) => {
+    setSelectedMusic(music);
+    setShowMusicSelector(false);
+    toast({
+      title: "🎵 Música agregada",
+      description: `${music.title} - ${music.artist}`,
+    });
+  };
+
   // Publicar historia
   const handlePublishStory = async () => {
     if (!storedMediaFile) {
