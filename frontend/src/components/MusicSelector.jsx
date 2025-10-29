@@ -514,12 +514,12 @@ const MusicSelector = ({ onSelectMusic, selectedMusic, pollTitle = '' }) => {
 
       {/* Recomendaciones basadas en el título */}
       {pollTitle && !searchQuery && activeCategory === 'Popular' && (
-        <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-3 border border-purple-100">
+        <div className="bg-white/10 backdrop-blur-sm rounded-xl p-3 border border-white/20">
           <div className="flex items-center gap-2 mb-2">
-            <Sparkles className="w-4 h-4 text-purple-500" />
-            <span className="text-sm font-semibold text-purple-700">Recomendado para tu contenido</span>
+            <Sparkles className="w-4 h-4 text-purple-300" />
+            <span className="text-sm font-semibold text-white">Recomendado para tu contenido</span>
           </div>
-          <p className="text-xs text-purple-600">Basado en: "{pollTitle}"</p>
+          <p className="text-xs text-white/70">Basado en: "{pollTitle}"</p>
         </div>
       )}
 
