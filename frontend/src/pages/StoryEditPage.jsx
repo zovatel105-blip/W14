@@ -104,13 +104,8 @@ const StoryEditPage = () => {
   // Opciones de fondo de texto
   const textBackgrounds = [
     { id: 'none', name: 'Sin fondo', style: {} },
-    { id: 'solid', name: 'Sólido', style: { backgroundColor: 'rgba(0,0,0,0.7)', padding: '4px 12px', borderRadius: '4px' } },
-    { id: 'semi', name: 'Semi', style: { backgroundColor: 'rgba(0,0,0,0.4)', padding: '4px 12px', borderRadius: '4px' } },
-    { id: 'gradient', name: 'Degradado', style: { 
-      background: 'linear-gradient(90deg, rgba(147,51,234,0.8) 0%, rgba(219,39,119,0.8) 100%)',
-      padding: '4px 12px',
-      borderRadius: '4px'
-    } },
+    { id: 'white', name: 'Fondo blanco', style: { backgroundColor: 'rgba(255,255,255,0.95)', color: '#000000', padding: '4px 12px', borderRadius: '4px' } },
+    { id: 'black', name: 'Fondo negro', style: { backgroundColor: 'rgba(0,0,0,0.85)', color: '#ffffff', padding: '4px 12px', borderRadius: '4px' } },
   ];
 
   // Handler para activar modo texto - Crea texto inmediatamente en el centro
