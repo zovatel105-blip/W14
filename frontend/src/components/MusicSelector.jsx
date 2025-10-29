@@ -456,12 +456,12 @@ const MusicSelector = ({ onSelectMusic, selectedMusic, pollTitle = '' }) => {
   const mainCategories = ['Popular', 'Mi Música', 'Reggaeton', 'Trap', 'Urbano Español', 'Pop Latino'];
 
   return (
-    <div className="space-y-3 bg-white">
+    <div className="space-y-3 bg-transparent">
       {/* Header */}
-      <div className="flex items-center justify-between pb-2 border-b">
+      <div className="flex items-center justify-between pb-2 border-b border-white/20">
         <div className="flex items-center gap-2">
-          <Music className="w-5 h-5 text-gray-700" />
-          <h3 className="font-bold text-lg">Agregar música</h3>
+          <Music className="w-5 h-5 text-white" />
+          <h3 className="font-bold text-lg text-white">Agregar música</h3>
         </div>
         {selectedMusic && (
           <Button
