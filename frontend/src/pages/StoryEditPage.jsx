@@ -1060,12 +1060,12 @@ const StoryEditPage = () => {
 
       {showMusicSelector && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end justify-center">
-          <div className="bg-white rounded-t-3xl w-full max-w-md animate-slide-up overflow-hidden" style={{ maxHeight: '80vh' }}>
-            <div className="p-4 border-b border-gray-200 flex items-center justify-between">
-              <h3 className="text-xl font-bold text-gray-900">Seleccionar Música</h3>
+          <div className="bg-white/10 backdrop-blur-xl rounded-t-3xl w-full max-w-md animate-slide-up overflow-hidden border-t border-white/20" style={{ maxHeight: '80vh' }}>
+            <div className="p-4 border-b border-white/20 flex items-center justify-between">
+              <h3 className="text-xl font-bold text-white">Seleccionar Música</h3>
               <button
                 onClick={() => setShowMusicSelector(false)}
-                className="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-gray-700 rounded-full hover:bg-gray-100 transition-colors"
+                className="w-8 h-8 flex items-center justify-center text-white/80 hover:text-white rounded-full hover:bg-white/10 transition-colors"
               >
                 <X className="w-5 h-5" />
               </button>
