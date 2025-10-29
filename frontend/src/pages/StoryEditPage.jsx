@@ -691,14 +691,28 @@ const StoryEditPage = () => {
               const effectConfig = textEffects.find(e => e.id === text.effect) || textEffects[0];
               const bgConfig = textBackgrounds.find(b => b.id === text.bg) || textBackgrounds[0];
               
+              // Ajustar transform según alineación para mover físicamente el texto
+              const getTransform = (align) => {
+                if (align === 'left') return 'translate(0%, -50%)';
+                if (align === 'right') return 'translate(-100%, -50%)';
+                return 'translate(-50%, -50%)'; // center
+              };
+              
+              // Ajustar posición left según alineación
+              const getLeftPosition = (align, x) => {
+                if (align === 'left') return '5%';
+                if (align === 'right') return '95%';
+                return `${x}%`; // center usa la posición original
+              };
+              
               return (
                 <div
                   key={index}
                   className="absolute z-20"
                   style={{
                     top: `${text.y}%`,
-                    left: `${text.x}%`,
-                    transform: 'translate(-50%, -50%)',
+                    left: getLeftPosition(text.align || 'center', text.x),
+                    transform: getTransform(text.align || 'center'),
                   }}
                 >
                   {text.isEditing || editingTextIndex === index ? (
