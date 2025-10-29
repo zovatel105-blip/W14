@@ -484,46 +484,18 @@ const StoryEditPage = () => {
                 Aa
               </button>
 
-              {/* Botón paleta de color - Mejorado y adaptado al círculo */}
+              {/* Botón paleta de color - Ícono profesional de Lucide */}
               <button
                 onClick={() => {
                   setShowColorPicker(!showColorPicker);
                   setShowFontPicker(false);
                   setShowAlignPicker(false);
                 }}
-                className={`w-9 h-9 rounded-full flex items-center justify-center transition-all overflow-hidden ${
-                  showColorPicker ? 'bg-white scale-110' : 'bg-white/20 backdrop-blur-sm'
+                className={`w-9 h-9 rounded-full flex items-center justify-center transition-all ${
+                  showColorPicker ? 'bg-white text-black scale-110' : 'bg-white/20 backdrop-blur-sm text-white'
                 }`}
               >
-                <svg width="36" height="36" viewBox="0 0 36 36" className="absolute">
-                  {/* Fondo del círculo con degradado cónico */}
-                  <defs>
-                    <radialGradient id="colorWheel">
-                      <stop offset="0%" stopColor="white" />
-                      <stop offset="100%" stopColor="white" stopOpacity="0" />
-                    </radialGradient>
-                  </defs>
-                  {/* Segmentos de color formando la rueda */}
-                  <circle cx="18" cy="18" r="18" fill="url(#colorWheel)" opacity="0"/>
-                  {/* Círculo rojo */}
-                  <circle cx="18" cy="5" r="3" fill="#FF0000"/>
-                  {/* Círculo naranja */}
-                  <circle cx="27" cy="9" r="3" fill="#FF8800"/>
-                  {/* Círculo amarillo */}
-                  <circle cx="31" cy="18" r="3" fill="#FFFF00"/>
-                  {/* Círculo verde lima */}
-                  <circle cx="27" cy="27" r="3" fill="#00FF00"/>
-                  {/* Círculo cyan */}
-                  <circle cx="18" cy="31" r="3" fill="#00FFFF"/>
-                  {/* Círculo azul */}
-                  <circle cx="9" cy="27" r="3" fill="#0000FF"/>
-                  {/* Círculo magenta */}
-                  <circle cx="5" cy="18" r="3" fill="#FF00FF"/>
-                  {/* Círculo rosa */}
-                  <circle cx="9" cy="9" r="3" fill="#FF0088"/>
-                  {/* Círculo central blanco con borde */}
-                  <circle cx="18" cy="18" r="5" fill="white" stroke={showColorPicker ? '#000' : '#fff'} strokeWidth="1.5"/>
-                </svg>
+                <Palette className="w-4 h-4" strokeWidth={2.5} />
               </button>
 
               {/* Botón A con fondo - Mejorado y adaptado al círculo */}
