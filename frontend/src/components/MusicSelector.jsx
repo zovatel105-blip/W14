@@ -109,11 +109,11 @@ const SimpleMusicCard = ({ music, isSelected, isPlaying, onSelect, onPlay, showS
 
       {/* Music info */}
       <div className="flex-1 min-w-0">
-        <h4 className="font-semibold text-xs sm:text-sm text-gray-900 truncate flex items-center gap-1">
+        <h4 className="font-semibold text-xs sm:text-sm text-white truncate flex items-center gap-1">
           {music.title}
-          {music.isOriginal && <Sparkles className="w-3 h-3 text-yellow-500 flex-shrink-0" />}
+          {music.isOriginal && <Sparkles className="w-3 h-3 text-yellow-400 flex-shrink-0" />}
         </h4>
-        <p className="text-xs text-gray-500 truncate">
+        <p className="text-xs text-white/70 truncate">
           {music.artist}
         </p>
         
@@ -121,21 +121,21 @@ const SimpleMusicCard = ({ music, isSelected, isPlaying, onSelect, onPlay, showS
         <div className="flex items-center gap-2 mt-0.5">
           {showSource && music.source && (
             <div className="flex items-center gap-1">
-              <Globe className="w-2.5 h-2.5 text-gray-400" />
-              <span className="text-xs text-gray-400">{music.source}</span>
+              <Globe className="w-2.5 h-2.5 text-white/60" />
+              <span className="text-xs text-white/60">{music.source}</span>
             </div>
           )}
           {music.uses > 0 && (
             <div className="flex items-center gap-1">
-              <Users className="w-2.5 h-2.5 text-gray-400" />
-              <span className="text-xs text-gray-400">{formatUses(music.uses)}</span>
+              <Users className="w-2.5 h-2.5 text-white/60" />
+              <span className="text-xs text-white/60">{formatUses(music.uses)}</span>
             </div>
           )}
         </div>
       </div>
 
       {/* Duration */}
-      <div className="hidden sm:flex items-center gap-1 text-xs text-gray-400 flex-shrink-0">
+      <div className="hidden sm:flex items-center gap-1 text-xs text-white/70 flex-shrink-0">
         <Clock className="w-3 h-3" />
         {formatDuration(music.duration)}
       </div>
@@ -145,7 +145,7 @@ const SimpleMusicCard = ({ music, isSelected, isPlaying, onSelect, onPlay, showS
         {(music.waveform || []).slice(0, 4).map((height, index) => (
           <div
             key={index}
-            className={`w-1 bg-gray-400 rounded-full transition-all duration-75 ${
+            className={`w-1 bg-white/60 rounded-full transition-all duration-75 ${
               isPlaying ? 'animate-pulse' : ''
             }`}
             style={{
@@ -158,7 +158,7 @@ const SimpleMusicCard = ({ music, isSelected, isPlaying, onSelect, onPlay, showS
 
       {/* Selected indicator */}
       {isSelected && (
-        <div className="w-4 h-4 sm:w-5 sm:h-5 bg-blue-500 text-white rounded-full flex items-center justify-center flex-shrink-0">
+        <div className="w-4 h-4 sm:w-5 sm:h-5 bg-purple-500 text-white rounded-full flex items-center justify-center flex-shrink-0">
           <Check className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
         </div>
       )}
