@@ -863,88 +863,119 @@ const StoryEditPage = () => {
       {/* Área inferior - Paneles de selección encima del teclado + Botones de edición y botón publicar */}
       <div className="absolute bottom-0 left-0 right-0 z-30 pb-2 px-4">
         <div className="max-w-md mx-auto space-y-3">
-          {/* Paneles de selección - Aparecen encima del teclado cuando se está editando texto */}
-          {isTextMode && editingTextIndex !== null && (
-            <div className="space-y-2 mb-3">
-              {/* Panel de fuentes - Horizontal scroll */}
-              {showFontPicker && (
-                <div className="bg-black/70 backdrop-blur-sm rounded-2xl p-3">
-                  <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
-                    {textStyles.map((style) => (
-                      <button
-                        key={style.id}
-                        onClick={() => {
-                          handleStyleChange(style.id);
-                          setShowFontPicker(false);
-                        }}
-                        className={`px-5 py-2 rounded-full whitespace-nowrap font-semibold transition-all flex-shrink-0 ${
-                          currentTextStyle === style.id
-                            ? 'bg-white text-black'
-                            : 'bg-white/20 backdrop-blur-sm text-white'
-                        }`}
-                        style={style.style}
-                      >
-                        {style.name}
-                      </button>
-                    ))}
-                  </div>
+          {/* Paneles de selección - Aparecen encima de los botones */}
+          <div className="space-y-2 mb-3">
+            {/* Panel de fuentes - Solo cuando está editando texto */}
+            {isTextMode && editingTextIndex !== null && showFontPicker && (
+              <div className="bg-black/70 backdrop-blur-sm rounded-2xl p-3">
+                <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
+                  {textStyles.map((style) => (
+                    <button
+                      key={style.id}
+                      onClick={() => {
+                        handleStyleChange(style.id);
+                        setShowFontPicker(false);
+                      }}
+                      className={`px-5 py-2 rounded-full whitespace-nowrap font-semibold transition-all flex-shrink-0 ${
+                        currentTextStyle === style.id
+                          ? 'bg-white text-black'
+                          : 'bg-white/20 backdrop-blur-sm text-white'
+                      }`}
+                      style={style.style}
+                    >
+                      {style.name}
+                    </button>
+                  ))}
                 </div>
-              )}
+              </div>
+            )}
 
-              {/* Panel de colores - Grid compacto */}
-              {showColorPicker && (
-                <div className="bg-black/70 backdrop-blur-sm rounded-2xl p-3">
-                  <div className="grid grid-cols-8 gap-2 mb-3">
-                    {['#ffffff', '#000000', '#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', 
-                      '#ffa500', '#ff69b4', '#8b4513', '#9370db', '#20b2aa', '#ff6347', '#4169e1', '#32cd32'].map((color) => (
-                      <button
-                        key={color}
-                        onClick={() => handleColorChange(color)}
-                        className={`w-9 h-9 rounded-full border-2 transition-all ${
-                          currentTextColor === color ? 'border-white scale-110' : 'border-transparent'
-                        }`}
-                        style={{ backgroundColor: color }}
-                      />
-                    ))}
-                  </div>
-                  <div className="flex items-center justify-center">
-                    <input
-                      type="color"
-                      value={currentTextColor}
-                      onChange={(e) => handleColorChange(e.target.value)}
-                      className="w-full h-10 rounded-lg cursor-pointer"
+            {/* Panel de colores - Solo cuando está editando texto */}
+            {isTextMode && editingTextIndex !== null && showColorPicker && (
+              <div className="bg-black/70 backdrop-blur-sm rounded-2xl p-3">
+                <div className="grid grid-cols-8 gap-2 mb-3">
+                  {['#ffffff', '#000000', '#ff0000', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#00ffff', 
+                    '#ffa500', '#ff69b4', '#8b4513', '#9370db', '#20b2aa', '#ff6347', '#4169e1', '#32cd32'].map((color) => (
+                    <button
+                      key={color}
+                      onClick={() => handleColorChange(color)}
+                      className={`w-9 h-9 rounded-full border-2 transition-all ${
+                        currentTextColor === color ? 'border-white scale-110' : 'border-transparent'
+                      }`}
+                      style={{ backgroundColor: color }}
                     />
-                  </div>
+                  ))}
                 </div>
-              )}
+                <div className="flex items-center justify-center">
+                  <input
+                    type="color"
+                    value={currentTextColor}
+                    onChange={(e) => handleColorChange(e.target.value)}
+                    className="w-full h-10 rounded-lg cursor-pointer"
+                  />
+                </div>
+              </div>
+            )}
 
-              {/* Panel de alineación - 3 botones */}
-              {showAlignPicker && (
-                <div className="bg-black/70 backdrop-blur-sm rounded-2xl p-3">
-                  <div className="flex gap-2 justify-center">
-                    {['left', 'center', 'right'].map((align) => (
-                      <button
-                        key={align}
-                        onClick={() => {
-                          handleAlignChange(align);
-                          setShowAlignPicker(false);
-                        }}
-                        className={`w-12 h-12 rounded-full flex items-center justify-center transition-all ${
-                          currentTextAlign === align
-                            ? 'bg-white text-black'
-                            : 'bg-white/20 backdrop-blur-sm text-white'
-                        }`}
-                      >
-                        {align === 'left' && <AlignLeft className="w-5 h-5" />}
-                        {align === 'center' && <AlignCenter className="w-5 h-5" />}
-                        {align === 'right' && <AlignRight className="w-5 h-5" />}
-                      </button>
-                    ))}
-                  </div>
+            {/* Panel de alineación - Solo cuando está editando texto */}
+            {isTextMode && editingTextIndex !== null && showAlignPicker && (
+              <div className="bg-black/70 backdrop-blur-sm rounded-2xl p-3">
+                <div className="flex gap-2 justify-center">
+                  {['left', 'center', 'right'].map((align) => (
+                    <button
+                      key={align}
+                      onClick={() => {
+                        handleAlignChange(align);
+                        setShowAlignPicker(false);
+                      }}
+                      className={`w-12 h-12 rounded-full flex items-center justify-center transition-all ${
+                        currentTextAlign === align
+                          ? 'bg-white text-black'
+                          : 'bg-white/20 backdrop-blur-sm text-white'
+                      }`}
+                    >
+                      {align === 'left' && <AlignLeft className="w-5 h-5" />}
+                      {align === 'center' && <AlignCenter className="w-5 h-5" />}
+                      {align === 'right' && <AlignRight className="w-5 h-5" />}
+                    </button>
+                  ))}
                 </div>
-              )}
-            </div>
-          )}
+              </div>
+            )}
+
+            {/* Panel de filtros - Aparece cuando se hace clic en el botón de filtros */}
+            {showFilterPicker && (
+              <div className="bg-black/70 backdrop-blur-sm rounded-2xl p-3">
+                <div className="grid grid-cols-4 gap-2">
+                  {[
+                    { id: 'normal', name: 'Normal', emoji: '📷' },
+                    { id: 'vintage', name: 'Vintage', emoji: '📼' },
+                    { id: 'bw', name: 'B&N', emoji: '⚫' },
+                    { id: 'sepia', name: 'Sepia', emoji: '🟤' },
+                    { id: 'vivid', name: 'Vívido', emoji: '🌈' },
+                    { id: 'warm', name: 'Cálido', emoji: '🔥' },
+                    { id: 'cool', name: 'Frío', emoji: '❄️' },
+                    { id: 'dramatic', name: 'Dramático', emoji: '🎭' },
+                  ].map((filter) => (
+                    <button
+                      key={filter.id}
+                      onClick={() => {
+                        toast({
+                          title: "Filtro aplicado",
+                          description: `Filtro ${filter.name} seleccionado`,
+                        });
+                        setShowFilterPicker(false);
+                      }}
+                      className="p-3 rounded-xl bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-all text-center"
+                    >
+                      <div className="text-2xl mb-1">{filter.emoji}</div>
+                      <div className="font-medium text-xs text-white">{filter.name}</div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
 
           {/* Botones de edición en horizontal */}
           <div className="flex items-center justify-center gap-4 mb-3">
