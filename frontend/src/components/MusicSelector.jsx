@@ -535,8 +535,8 @@ const MusicSelector = ({ onSelectMusic, selectedMusic, pollTitle = '' }) => {
               onClick={() => setActiveCategory(category)}
               className={`whitespace-nowrap rounded-full px-4 py-1.5 text-xs font-medium ${
                 activeCategory === category
-                  ? 'bg-black text-white hover:bg-gray-800' 
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200 border-0'
+                  ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white hover:from-purple-600 hover:to-pink-600' 
+                  : 'bg-white/20 backdrop-blur-sm text-white hover:bg-white/30 border-0'
               }`}
             >
               {category}
