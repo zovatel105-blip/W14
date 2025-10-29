@@ -489,34 +489,58 @@ const StoryEditPage = () => {
                   Aa
                 </button>
 
-                {/* Botón rueda de color */}
+                {/* Botón paleta de color - Círculo multicolor mejorado */}
                 <button
                   onClick={() => {
                     setShowColorPicker(!showColorPicker);
                     setShowFontPicker(false);
                     setShowAlignPicker(false);
                   }}
-                  className={`w-9 h-9 rounded-full border-2 transition-all ${
-                    showColorPicker ? 'border-white scale-110' : 'border-white/50'
+                  className={`w-9 h-9 rounded-full flex items-center justify-center transition-all ${
+                    showColorPicker ? 'bg-white scale-110' : 'bg-white/20 backdrop-blur-sm'
                   }`}
-                  style={{ 
-                    background: `conic-gradient(red, yellow, lime, aqua, blue, magenta, red)`,
-                  }}
-                />
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="transition-all">
+                    {/* Círculo base */}
+                    <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" strokeWidth="1.5" className={showColorPicker ? 'stroke-black' : 'stroke-white'}/>
+                    {/* Segmentos de color */}
+                    <path d="M12 3 L12 12 L17.3 6.7 Z" fill="#FF0000"/>
+                    <path d="M12 12 L17.3 6.7 L21 12 Z" fill="#FFFF00"/>
+                    <path d="M12 12 L21 12 L17.3 17.3 Z" fill="#00FF00"/>
+                    <path d="M12 12 L17.3 17.3 L12 21 Z" fill="#00FFFF"/>
+                    <path d="M12 12 L12 21 L6.7 17.3 Z" fill="#0000FF"/>
+                    <path d="M12 12 L6.7 17.3 L3 12 Z" fill="#FF00FF"/>
+                    <path d="M12 12 L3 12 L6.7 6.7 Z" fill="#FF0000" opacity="0.5"/>
+                    <path d="M12 12 L6.7 6.7 L12 3 Z" fill="#FF8800"/>
+                    {/* Círculo central blanco */}
+                    <circle cx="12" cy="12" r="2.5" fill="white" stroke={showColorPicker ? 'black' : 'white'} strokeWidth="1"/>
+                  </svg>
+                </button>
 
-                {/* Botón //A - Fondo de texto */}
+                {/* Botón A con fondo - Mejorado */}
                 <button
                   onClick={() => {
                     const nextBg = currentTextBg === 'none' ? 'solid' : currentTextBg === 'solid' ? 'semi' : currentTextBg === 'semi' ? 'gradient' : 'none';
                     handleBgChange(nextBg);
                   }}
-                  className={`w-9 h-9 rounded-full flex items-center justify-center font-bold transition-all ${
-                    currentTextBg !== 'none' ? 'bg-white text-black' : 'bg-white/20 backdrop-blur-sm text-white'
+                  className={`w-9 h-9 rounded-full flex items-center justify-center transition-all ${
+                    currentTextBg !== 'none' ? 'bg-white' : 'bg-white/20 backdrop-blur-sm'
                   }`}
                 >
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="text-current">
-                    <text x="12" y="16" fontSize="12" fontWeight="bold" textAnchor="middle" fill="currentColor">A</text>
-                    <rect x="4" y="10" width="16" height="8" rx="2" fill="currentColor" opacity="0.3"/>
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    {/* Rectángulo de fondo */}
+                    <rect x="5" y="8" width="14" height="10" rx="2" 
+                          fill={currentTextBg !== 'none' ? '#000000' : '#ffffff'} 
+                          opacity={currentTextBg !== 'none' ? '0.9' : '0.3'}/>
+                    {/* Letra A */}
+                    <text x="12" y="16.5" 
+                          fontSize="11" 
+                          fontWeight="bold" 
+                          textAnchor="middle" 
+                          fill={currentTextBg !== 'none' ? '#ffffff' : '#ffffff'}
+                          style={{ fontFamily: 'Arial, sans-serif' }}>
+                      A
+                    </text>
                   </svg>
                 </button>
 
