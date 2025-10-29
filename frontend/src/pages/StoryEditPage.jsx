@@ -1103,15 +1103,15 @@ const StoryEditPage = () => {
   );
 };
 
-// Modal de GIFs y emojis
+// Modal de GIFs y emojis - Estilo bottom sheet como "Más opciones"
 const GifEmojiPickerModal = ({ onClose, onSelect }) => {
   const [activeTab, setActiveTab] = useState('emojis');
   const emojis = ['😀', '😂', '😍', '🥰', '😎', '🤩', '😭', '😱', '🔥', '💯', '❤️', '💕', '💪', '👏', '🙌', '✨', '⭐', '🎉', '🎊', '🎈'];
   const gifs = ['🎸', '🎵', '🎤', '🎧', '🎬', '📸', '🌟', '💫', '✨', '🌈', '🦄', '🐶', '🐱', '🍕', '🍔', '☕', '🎮', '⚽', '🏀', '🎯'];
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-white rounded-3xl p-6 w-full max-w-md">
+    <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end justify-center">
+      <div className="bg-white rounded-t-3xl p-6 w-full max-w-md animate-slide-up">
         <div className="flex justify-between items-center mb-4">
           <h3 className="text-xl font-bold text-gray-900">GIFs y Emojis</h3>
           <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
@@ -1143,7 +1143,7 @@ const GifEmojiPickerModal = ({ onClose, onSelect }) => {
           </button>
         </div>
 
-        <div className="grid grid-cols-5 gap-3">
+        <div className="grid grid-cols-5 gap-3 max-h-64 overflow-y-auto">
           {(activeTab === 'emojis' ? emojis : gifs).map((item, index) => (
             <button
               key={index}
