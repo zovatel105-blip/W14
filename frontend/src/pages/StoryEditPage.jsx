@@ -942,39 +942,6 @@ const StoryEditPage = () => {
                 </div>
               </div>
             )}
-
-            {/* Panel de filtros - Aparece cuando se hace clic en el botón de filtros */}
-            {showFilterPicker && (
-              <div className="bg-black/70 backdrop-blur-sm rounded-2xl p-3">
-                <div className="grid grid-cols-4 gap-2">
-                  {[
-                    { id: 'normal', name: 'Normal', emoji: '📷' },
-                    { id: 'vintage', name: 'Vintage', emoji: '📼' },
-                    { id: 'bw', name: 'B&N', emoji: '⚫' },
-                    { id: 'sepia', name: 'Sepia', emoji: '🟤' },
-                    { id: 'vivid', name: 'Vívido', emoji: '🌈' },
-                    { id: 'warm', name: 'Cálido', emoji: '🔥' },
-                    { id: 'cool', name: 'Frío', emoji: '❄️' },
-                    { id: 'dramatic', name: 'Dramático', emoji: '🎭' },
-                  ].map((filter) => (
-                    <button
-                      key={filter.id}
-                      onClick={() => {
-                        toast({
-                          title: "Filtro aplicado",
-                          description: `Filtro ${filter.name} seleccionado`,
-                        });
-                        setShowFilterPicker(false);
-                      }}
-                      className="p-3 rounded-xl bg-white/20 backdrop-blur-sm hover:bg-white/30 transition-all text-center"
-                    >
-                      <div className="text-2xl mb-1">{filter.emoji}</div>
-                      <div className="font-medium text-xs text-white">{filter.name}</div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
 
           {/* Botones de edición en horizontal */}
