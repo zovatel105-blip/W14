@@ -735,14 +735,14 @@ const StoryEditPage = () => {
                           textAlign: text.align || 'center',
                           caretColor: text.color,
                           display: 'inline-block',
-                          minWidth: text.content ? 'auto' : '50px',
+                          minWidth: '50px',
                           whiteSpace: 'nowrap',
                           ...styleConfig.style,
                           ...effectConfig.style,
                           ...bgConfig.style
                         }}
                       >
-                        {text.content || 'Escribe aquí...'}
+                        {text.content}
                       </span>
                     </div>
                   ) : (
