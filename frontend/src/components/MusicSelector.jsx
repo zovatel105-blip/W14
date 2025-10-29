@@ -469,7 +469,7 @@ const MusicSelector = ({ onSelectMusic, selectedMusic, pollTitle = '' }) => {
             variant="ghost"
             size="sm"
             onClick={() => onSelectMusic(null)}
-            className="text-gray-500 hover:text-red-500 text-xs"
+            className="text-white/70 hover:text-red-400 text-xs"
           >
             Quitar
           </Button>
