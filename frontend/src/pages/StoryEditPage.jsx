@@ -480,7 +480,6 @@ const StoryEditPage = () => {
                   onClick={() => {
                     setShowFontPicker(!showFontPicker);
                     setShowColorPicker(false);
-                    setShowEffectPicker(false);
                     setShowAlignPicker(false);
                   }}
                   className={`w-9 h-9 rounded-full flex items-center justify-center font-bold text-base transition-all ${
@@ -495,7 +494,6 @@ const StoryEditPage = () => {
                   onClick={() => {
                     setShowColorPicker(!showColorPicker);
                     setShowFontPicker(false);
-                    setShowEffectPicker(false);
                     setShowAlignPicker(false);
                   }}
                   className={`w-9 h-9 rounded-full border-2 transition-all ${
@@ -522,34 +520,12 @@ const StoryEditPage = () => {
                   </svg>
                 </button>
 
-                {/* Botón efectos - A con puntos alrededor */}
-                <button
-                  onClick={() => {
-                    setShowEffectPicker(!showEffectPicker);
-                    setShowFontPicker(false);
-                    setShowColorPicker(false);
-                    setShowAlignPicker(false);
-                  }}
-                  className={`w-9 h-9 rounded-full flex items-center justify-center transition-all ${
-                    showEffectPicker ? 'bg-white text-black' : 'bg-white/20 backdrop-blur-sm text-white'
-                  }`}
-                >
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                    <text x="12" y="17" fontSize="14" fontWeight="bold" textAnchor="middle" fill="currentColor">A</text>
-                    <circle cx="8" cy="7" r="1.5"/>
-                    <circle cx="16" cy="7" r="1.5"/>
-                    <circle cx="8" cy="19" r="1.5"/>
-                    <circle cx="16" cy="19" r="1.5"/>
-                  </svg>
-                </button>
-
                 {/* Botón alineación - Tres líneas */}
                 <button
                   onClick={() => {
                     setShowAlignPicker(!showAlignPicker);
                     setShowFontPicker(false);
                     setShowColorPicker(false);
-                    setShowEffectPicker(false);
                   }}
                   className={`w-9 h-9 rounded-full flex items-center justify-center transition-all ${
                     showAlignPicker ? 'bg-white text-black' : 'bg-white/20 backdrop-blur-sm text-white'
