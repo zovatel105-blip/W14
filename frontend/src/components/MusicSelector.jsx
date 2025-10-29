@@ -60,8 +60,8 @@ const SimpleMusicCard = ({ music, isSelected, isPlaying, onSelect, onPlay, showS
   return (
     <div 
       className={`
-        flex items-center gap-2 sm:gap-3 p-2 sm:p-3 rounded-lg cursor-pointer transition-all duration-200 hover:bg-gray-50
-        ${isSelected ? 'bg-blue-50 border-l-4 border-blue-500' : ''}
+        flex items-center gap-2 sm:gap-3 p-2 sm:p-3 rounded-lg cursor-pointer transition-all duration-200 hover:bg-white/10
+        ${isSelected ? 'bg-white/20 backdrop-blur-sm border-l-4 border-purple-400' : ''}
       `}
       onClick={() => onSelect(music)}
     >
