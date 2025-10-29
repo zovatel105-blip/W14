@@ -587,15 +587,14 @@ const StoryEditPage = () => {
                 </svg>
               </button>
 
-              {/* Botón alineación - Tres líneas */}
+              {/* Botón alineación - Cambia con cada clic */}
               <button
                 onClick={() => {
-                  setShowAlignPicker(!showAlignPicker);
-                  setShowFontPicker(false);
-                  setShowColorPicker(false);
+                  const nextAlign = currentTextAlign === 'left' ? 'center' : currentTextAlign === 'center' ? 'right' : 'left';
+                  handleAlignChange(nextAlign);
                 }}
                 className={`w-9 h-9 rounded-full flex items-center justify-center transition-all ${
-                  showAlignPicker ? 'bg-white text-black' : 'bg-white/20 backdrop-blur-sm text-white'
+                  'bg-white/20 backdrop-blur-sm text-white'
                 }`}
               >
                 {currentTextAlign === 'left' && <AlignLeft className="w-3.5 h-3.5" />}
