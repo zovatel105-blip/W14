@@ -1103,7 +1103,7 @@ const StoryEditPage = () => {
   );
 };
 
-// Modal de GIFs y emojis - Estilo bottom sheet como "Más opciones"
+// Modal de GIFs y emojis - Estilo bottom sheet difuminado
 const GifEmojiPickerModal = ({ onClose, onSelect }) => {
   const [activeTab, setActiveTab] = useState('emojis');
   const emojis = ['😀', '😂', '😍', '🥰', '😎', '🤩', '😭', '😱', '🔥', '💯', '❤️', '💕', '💪', '👏', '🙌', '✨', '⭐', '🎉', '🎊', '🎈'];
@@ -1111,10 +1111,10 @@ const GifEmojiPickerModal = ({ onClose, onSelect }) => {
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end justify-center">
-      <div className="bg-white rounded-t-3xl p-6 w-full max-w-md animate-slide-up">
+      <div className="bg-white/10 backdrop-blur-xl rounded-t-3xl p-6 w-full max-w-md animate-slide-up border-t border-white/20">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-xl font-bold text-gray-900">GIFs y Emojis</h3>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+          <h3 className="text-xl font-bold text-white">GIFs y Emojis</h3>
+          <button onClick={onClose} className="text-white/80 hover:text-white">
             <X className="w-6 h-6" />
           </button>
         </div>
@@ -1126,7 +1126,7 @@ const GifEmojiPickerModal = ({ onClose, onSelect }) => {
             className={`flex-1 py-2 px-4 rounded-full font-medium transition-all ${
               activeTab === 'emojis' 
                 ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white' 
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                : 'bg-white/20 backdrop-blur-sm text-white hover:bg-white/30'
             }`}
           >
             Emojis
@@ -1136,7 +1136,7 @@ const GifEmojiPickerModal = ({ onClose, onSelect }) => {
             className={`flex-1 py-2 px-4 rounded-full font-medium transition-all ${
               activeTab === 'gifs' 
                 ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white' 
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                : 'bg-white/20 backdrop-blur-sm text-white hover:bg-white/30'
             }`}
           >
             GIFs
