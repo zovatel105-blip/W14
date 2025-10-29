@@ -54,6 +54,7 @@ const StoryEditPage = () => {
   const [editingTextIndex, setEditingTextIndex] = useState(null);
   const [showGifEmojiPicker, setShowGifEmojiPicker] = useState(false);
   const [showFilterPicker, setShowFilterPicker] = useState(false);
+  const [selectedFilter, setSelectedFilter] = useState('normal'); // Filtro actual aplicado
   const [showMusicSelector, setShowMusicSelector] = useState(false);
   const [showMoreOptions, setShowMoreOptions] = useState(false);
   const [showColorPicker, setShowColorPicker] = useState(false);
