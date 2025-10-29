@@ -697,31 +697,46 @@ const StoryEditPage = () => {
                 >
                   {text.isEditing || editingTextIndex === index ? (
                     <div className="flex flex-col items-center">
-                      <input
-                        type="text"
-                        value={text.content}
-                        onChange={(e) => handleTextChange(index, e.target.value)}
+                      <span
+                        ref={(el) => {
+                          if (el) {
+                            el.focus();
+                            // Mover cursor al final del texto
+                            const range = document.createRange();
+                            const sel = window.getSelection();
+                            if (el.childNodes.length > 0) {
+                              range.setStart(el.childNodes[0], el.textContent.length);
+                              range.collapse(true);
+                              sel.removeAllRanges();
+                              sel.addRange(range);
+                            }
+                          }
+                        }}
+                        contentEditable={true}
+                        suppressContentEditableWarning={true}
+                        onInput={(e) => handleTextChange(index, e.target.textContent)}
                         onKeyDown={(e) => {
                           if (e.key === 'Enter') {
                             e.preventDefault();
                             handleFinishEditing(index);
                           }
                         }}
-                        autoFocus
-                        placeholder="Escribe aquí..."
                         className={`bg-transparent border-none outline-none ${styleConfig.font}`}
                         style={{ 
                           color: text.color,
                           fontSize: `${text.size || 36}px`,
                           textAlign: text.align || 'center',
                           caretColor: text.color,
-                          width: 'auto',
-                          minWidth: '100px',
+                          display: 'inline-block',
+                          minWidth: text.content ? 'auto' : '50px',
+                          whiteSpace: 'nowrap',
                           ...styleConfig.style,
                           ...effectConfig.style,
                           ...bgConfig.style
                         }}
-                      />
+                      >
+                        {text.content || 'Escribe aquí...'}
+                      </span>
                     </div>
                   ) : (
                     <div
