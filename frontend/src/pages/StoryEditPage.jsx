@@ -1076,19 +1076,6 @@ const StoryEditPage = () => {
         />
       )}
 
-      {showFilterPicker && (
-        <FilterPickerModal
-          onClose={() => setShowFilterPicker(false)}
-          onSelect={(filter) => {
-            toast({
-              title: "Filtro aplicado",
-              description: `Filtro ${filter} seleccionado`,
-            });
-            setShowFilterPicker(false);
-          }}
-        />
-      )}
-
       {showMusicSelector && (
         <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end justify-center">
           <div className="bg-white/10 backdrop-blur-xl rounded-t-3xl w-full max-w-md animate-slide-up overflow-hidden border-t border-white/20" style={{ maxHeight: '80vh' }}>
