@@ -109,6 +109,21 @@ const StoryEditPage = () => {
     { id: 'black', name: 'Fondo negro', style: { backgroundColor: 'rgba(0,0,0,0.85)', color: '#ffffff', padding: '4px 12px', borderRadius: '4px' } },
   ];
 
+  // Filtros de imagen disponibles con CSS
+  const getFilterStyle = (filterId) => {
+    const filters = {
+      normal: '',
+      vintage: 'sepia(40%) contrast(110%) brightness(105%) saturate(120%)',
+      bw: 'grayscale(100%)',
+      sepia: 'sepia(80%)',
+      vivid: 'saturate(200%) contrast(120%)',
+      warm: 'sepia(20%) saturate(130%) hue-rotate(-10deg)',
+      cool: 'saturate(110%) hue-rotate(180deg) brightness(105%)',
+      dramatic: 'contrast(150%) brightness(90%) saturate(130%)',
+    };
+    return filters[filterId] || '';
+  };
+
   // Handler para activar modo texto - Crea texto inmediatamente en el centro
   const handleTextMode = () => {
     if (!isTextMode) {
