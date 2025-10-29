@@ -1199,7 +1199,7 @@ const FilterPickerModal = ({ onClose, onSelect }) => {
   );
 };
 
-// Modal de más opciones
+// Modal de más opciones - Estilo bottom sheet difuminado
 const MoreOptionsModal = ({ onClose, onReset }) => {
   const options = [
     { 
@@ -1233,10 +1233,10 @@ const MoreOptionsModal = ({ onClose, onReset }) => {
 
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end justify-center">
-      <div className="bg-white rounded-t-3xl p-6 w-full max-w-md animate-slide-up">
+      <div className="bg-white/10 backdrop-blur-xl rounded-t-3xl p-6 w-full max-w-md animate-slide-up border-t border-white/20">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-xl font-bold text-gray-900">Más opciones</h3>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+          <h3 className="text-xl font-bold text-white">Más opciones</h3>
+          <button onClick={onClose} className="text-white/80 hover:text-white">
             <X className="w-6 h-6" />
           </button>
         </div>
@@ -1246,14 +1246,14 @@ const MoreOptionsModal = ({ onClose, onReset }) => {
             <button
               key={option.id}
               onClick={option.action}
-              className="w-full text-left p-4 rounded-2xl hover:bg-gray-100 transition-all flex items-center gap-3"
+              className="w-full text-left p-4 rounded-2xl hover:bg-white/20 backdrop-blur-sm transition-all flex items-center gap-3"
             >
               <div className="text-3xl">
                 {option.icon}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-semibold text-gray-900">{option.name}</p>
-                <p className="text-sm text-gray-500">{option.description}</p>
+                <p className="font-semibold text-white">{option.name}</p>
+                <p className="text-sm text-white/70">{option.description}</p>
               </div>
             </button>
           ))}
