@@ -709,7 +709,7 @@ const StoryEditPage = () => {
                         autoFocus
                         placeholder="Escribe aquí..."
                         rows={1}
-                        className={`bg-transparent border-b-2 border-white outline-none resize-none ${styleConfig.font}`}
+                        className={`bg-transparent border-none outline-none resize-none ${styleConfig.font}`}
                         style={{ 
                           color: text.color,
                           fontSize: `${text.size || 36}px`,
