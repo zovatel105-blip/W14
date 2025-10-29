@@ -824,31 +824,6 @@ const StoryEditPage = () => {
                 </div>
               )}
 
-              {/* Panel de efectos - Horizontal scroll */}
-              {showEffectPicker && (
-                <div className="bg-black/70 backdrop-blur-sm rounded-2xl p-3">
-                  <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
-                    {textEffects.map((effect) => (
-                      <button
-                        key={effect.id}
-                        onClick={() => {
-                          handleEffectChange(effect.id);
-                          setShowEffectPicker(false);
-                        }}
-                        className={`px-5 py-2 rounded-full whitespace-nowrap font-semibold transition-all flex-shrink-0 ${
-                          currentTextEffect === effect.id
-                            ? 'bg-white text-black'
-                            : 'bg-white/20 backdrop-blur-sm text-white'
-                        }`}
-                        style={effect.style}
-                      >
-                        {effect.name}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              )}
-
               {/* Panel de alineación - 3 botones */}
               {showAlignPicker && (
                 <div className="bg-black/70 backdrop-blur-sm rounded-2xl p-3">
