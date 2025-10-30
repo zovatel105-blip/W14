@@ -476,7 +476,7 @@ const StoryEditPage = () => {
           -webkit-appearance: none;
           -moz-appearance: none;
           appearance: none;
-          width: 160px;
+          width: 140px;
           height: 3px;
           background: transparent !important;
           cursor: pointer;
