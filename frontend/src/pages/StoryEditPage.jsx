@@ -774,18 +774,19 @@ const StoryEditPage = () => {
                       <stop offset="100%" stopColor="rgba(255,255,255,0.3)" />
                     </linearGradient>
                   </defs>
-                  {/* Path del embudo con bordes redondeados arriba y abajo - más ancho */}
+                  {/* Path del embudo con curva más pronunciada en la parte superior */}
                   <path
-                    d="M 10 4 
-                       C 10 2, 12 0, 14 0
+                    d="M 10 8 
+                       C 10 3, 12 0, 14 0
                        L 28 0
-                       C 30 0, 32 2, 32 4
-                       L 32 12
+                       C 30 0, 32 3, 32 8
+                       C 32 10, 32 12, 32 14
                        L 23 136
                        C 23 138, 22 140, 21 140
                        L 21 140
                        C 20 140, 19 138, 19 136
-                       L 10 12
+                       L 10 14
+                       C 10 12, 10 10, 10 8
                        Z"
                     fill="url(#funnelGradient)"
                     opacity="0.8"
