@@ -757,12 +757,12 @@ const StoryEditPage = () => {
           {/* Barra lateral izquierda - Control de tamaño del texto - Forma de embudo */}
           {isTextMode && editingTextIndex !== null && (
             <div className="absolute left-4 top-1/2 -translate-y-1/2 z-40">
-              <div className="relative flex items-center justify-center" style={{ width: '40px', height: '160px' }}>
+              <div className="relative flex items-center justify-center" style={{ width: '35px', height: '140px' }}>
                 {/* SVG de embudo en el fondo - más pequeño y con bordes redondeados */}
                 <svg 
-                  width="40" 
-                  height="160" 
-                  viewBox="0 0 40 160" 
+                  width="35" 
+                  height="140" 
+                  viewBox="0 0 35 140" 
                   className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none"
                   style={{ zIndex: 0 }}
                 >
@@ -776,16 +776,16 @@ const StoryEditPage = () => {
                   </defs>
                   {/* Path del embudo con bordes redondeados arriba y abajo */}
                   <path
-                    d="M 12 5 
-                       C 12 2, 14 0, 16 0
-                       L 24 0
-                       C 26 0, 28 2, 28 5
-                       L 28 15
-                       L 22 155
-                       C 22 157, 21 160, 20 160
-                       L 20 160
-                       C 19 160, 18 157, 18 155
-                       L 12 15
+                    d="M 11 4 
+                       C 11 2, 12.5 0, 14 0
+                       L 21 0
+                       C 22.5 0, 24 2, 24 4
+                       L 24 12
+                       L 19 136
+                       C 19 138, 18 140, 17.5 140
+                       L 17.5 140
+                       C 17 140, 16 138, 16 136
+                       L 11 12
                        Z"
                     fill="url(#funnelGradient)"
                     opacity="0.8"
