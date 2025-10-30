@@ -469,137 +469,71 @@ const StoryEditPage = () => {
 
   return (
     <>
-      {/* Estilos personalizados para el slider de texto - Estilo videojuego moderno */}
+      {/* Estilos personalizados para el slider de texto - Estilo TikTok */}
       <style>{`
-        /* Slider vertical estilo videojuego moderno */
+        /* Slider vertical estilo TikTok - Simple y minimalista */
         .text-size-slider {
           -webkit-appearance: none;
           appearance: none;
           background: transparent;
           cursor: pointer;
-          position: relative;
         }
 
-        /* Track - Riel alargado con fondo translúcido oscuro */
+        /* Track - Línea delgada translúcida */
         .text-size-slider::-webkit-slider-runnable-track {
-          width: 16px;
-          height: 220px;
-          background: rgba(20, 20, 30, 0.75);
-          backdrop-filter: blur(10px);
-          border-radius: 30px;
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          box-shadow: 
-            inset 0 2px 8px rgba(0, 0, 0, 0.5),
-            0 4px 12px rgba(0, 0, 0, 0.4);
+          width: 3px;
+          height: 180px;
+          background: rgba(255, 255, 255, 0.3);
+          border-radius: 10px;
+          border: none;
         }
 
         .text-size-slider::-moz-range-track {
-          width: 16px;
-          height: 220px;
-          background: rgba(20, 20, 30, 0.75);
-          backdrop-filter: blur(10px);
-          border-radius: 30px;
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          box-shadow: 
-            inset 0 2px 8px rgba(0, 0, 0, 0.5),
-            0 4px 12px rgba(0, 0, 0, 0.4);
+          width: 3px;
+          height: 180px;
+          background: rgba(255, 255, 255, 0.3);
+          border-radius: 10px;
+          border: none;
         }
 
-        /* Thumb - Círculo blanco brillante */
+        /* Thumb - Círculo blanco sólido simple */
         .text-size-slider::-webkit-slider-thumb {
           -webkit-appearance: none;
           appearance: none;
-          width: 32px;
-          height: 32px;
+          width: 24px;
+          height: 24px;
           border-radius: 50%;
-          background: radial-gradient(circle at 30% 30%, #ffffff, #f0f0f0);
-          cursor: grab;
-          border: 2px solid rgba(255, 255, 255, 0.8);
-          box-shadow: 
-            0 0 15px rgba(255, 255, 255, 0.6),
-            0 4px 12px rgba(0, 0, 0, 0.4),
-            inset 0 1px 3px rgba(255, 255, 255, 0.8);
-          margin-left: -8px;
-          transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+          background: #ffffff;
+          cursor: pointer;
+          border: none;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+          margin-left: -10.5px;
+          transition: transform 0.15s ease;
         }
 
         .text-size-slider::-moz-range-thumb {
-          width: 32px;
-          height: 32px;
+          width: 24px;
+          height: 24px;
           border-radius: 50%;
-          background: radial-gradient(circle at 30% 30%, #ffffff, #f0f0f0);
-          cursor: grab;
-          border: 2px solid rgba(255, 255, 255, 0.8);
-          box-shadow: 
-            0 0 15px rgba(255, 255, 255, 0.6),
-            0 4px 12px rgba(0, 0, 0, 0.4),
-            inset 0 1px 3px rgba(255, 255, 255, 0.8);
-          transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+          background: #ffffff;
+          cursor: pointer;
+          border: none;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+          transition: transform 0.15s ease;
         }
 
-        /* Estado activo - Al arrastrar */
+        /* Efecto al arrastrar */
         .text-size-slider:active::-webkit-slider-thumb {
-          cursor: grabbing;
-          transform: scale(1.1);
-          box-shadow: 
-            0 0 25px rgba(255, 255, 255, 0.9),
-            0 6px 16px rgba(0, 0, 0, 0.5),
-            inset 0 1px 3px rgba(255, 255, 255, 0.8);
+          transform: scale(1.15);
         }
 
         .text-size-slider:active::-moz-range-thumb {
-          cursor: grabbing;
-          transform: scale(1.1);
-          box-shadow: 
-            0 0 25px rgba(255, 255, 255, 0.9),
-            0 6px 16px rgba(0, 0, 0, 0.5),
-            inset 0 1px 3px rgba(255, 255, 255, 0.8);
+          transform: scale(1.15);
         }
 
-        /* Efecto hover */
-        .text-size-slider:hover::-webkit-slider-thumb {
-          transform: scale(1.05);
-          box-shadow: 
-            0 0 20px rgba(255, 255, 255, 0.8),
-            0 5px 14px rgba(0, 0, 0, 0.45),
-            inset 0 1px 3px rgba(255, 255, 255, 0.8);
-        }
-
-        .text-size-slider:hover::-moz-range-thumb {
-          transform: scale(1.05);
-          box-shadow: 
-            0 0 20px rgba(255, 255, 255, 0.8),
-            0 5px 14px rgba(0, 0, 0, 0.45),
-            inset 0 1px 3px rgba(255, 255, 255, 0.8);
-        }
-
-        /* Contenedor del slider con fondo */
-        .slider-container {
-          position: relative;
-          padding: 20px;
-          background: rgba(15, 15, 25, 0.6);
-          backdrop-filter: blur(20px);
-          border-radius: 40px;
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          box-shadow: 
-            0 8px 32px rgba(0, 0, 0, 0.5),
-            inset 0 1px 0 rgba(255, 255, 255, 0.05);
-        }
-
-        /* Animación de aparición */
-        @keyframes slideIn {
-          from {
-            opacity: 0;
-            transform: translateY(-10px) translateX(-50%);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(-50%) translateX(-50%);
-          }
-        }
-
-        .slider-container.active {
-          animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        /* Sin outline al hacer focus */
+        .text-size-slider:focus {
+          outline: none;
         }
       `}</style>
       
