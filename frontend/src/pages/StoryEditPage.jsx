@@ -756,9 +756,9 @@ const StoryEditPage = () => {
         <div className="absolute top-0 left-0 right-0 bottom-32">
           {/* Barra lateral izquierda - Control de tamaño del texto - Forma de embudo */}
           {isTextMode && editingTextIndex !== null && (
-            <div className="absolute left-3 top-1/2 -translate-y-1/2 z-40" style={{ marginTop: '-100px' }}>
+            <div className="absolute left-2 top-1/2 -translate-y-1/2 z-40" style={{ marginTop: '-100px' }}>
               <div className="relative flex items-center justify-center" style={{ width: '42px', height: '140px' }}>
-                {/* SVG de embudo en el fondo - más ancho y con bordes redondeados */}
+                {/* SVG de embudo en el fondo - con parte superior más redondeada */}
                 <svg 
                   width="42" 
                   height="140" 
@@ -766,7 +766,7 @@ const StoryEditPage = () => {
                   className="absolute top-0 left-1/2 -translate-x-1/2 pointer-events-none"
                   style={{ zIndex: 0 }}
                 >
-                  {/* Forma de embudo - más ancho arriba, estrecho abajo con bordes redondeados */}
+                  {/* Forma de embudo - más ancho arriba con borde superior redondeado */}
                   <defs>
                     <linearGradient id="funnelGradient" x1="0%" y1="0%" x2="0%" y2="100%">
                       <stop offset="0%" stopColor="rgba(255,255,255,0.3)" />
@@ -774,19 +774,20 @@ const StoryEditPage = () => {
                       <stop offset="100%" stopColor="rgba(255,255,255,0.3)" />
                     </linearGradient>
                   </defs>
-                  {/* Path del embudo con curva más pronunciada en la parte superior */}
+                  {/* Path del embudo con parte superior completamente redondeada como semicírculo */}
                   <path
-                    d="M 10 8 
-                       C 10 3, 12 0, 14 0
-                       L 28 0
-                       C 30 0, 32 3, 32 8
-                       C 32 10, 32 12, 32 14
+                    d="M 10 12
+                       L 10 12
+                       C 10 12, 10 6, 14 3
+                       C 16 1.5, 18 0, 21 0
+                       C 24 0, 26 1.5, 28 3
+                       C 32 6, 32 12, 32 12
+                       L 32 14
                        L 23 136
                        C 23 138, 22 140, 21 140
                        L 21 140
                        C 20 140, 19 138, 19 136
                        L 10 14
-                       C 10 12, 10 10, 10 8
                        Z"
                     fill="url(#funnelGradient)"
                     opacity="0.8"
