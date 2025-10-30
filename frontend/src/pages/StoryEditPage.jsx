@@ -479,45 +479,53 @@ const StoryEditPage = () => {
           cursor: pointer;
         }
 
-        /* Track (la cola translúcida gris) */
+        /* Track (la cola translúcida gris que se estrecha) */
         .text-size-slider::-webkit-slider-runnable-track {
-          width: 4px;
+          width: 12px;
           height: 200px;
-          background: rgba(180, 180, 180, 0.4);
-          border-radius: 10px;
+          background: linear-gradient(to bottom, 
+            rgba(200, 200, 200, 0.5) 0%, 
+            rgba(200, 200, 200, 0.4) 50%, 
+            rgba(200, 200, 200, 0.3) 100%
+          );
+          border-radius: 20px;
           border: none;
         }
 
         .text-size-slider::-moz-range-track {
-          width: 4px;
+          width: 12px;
           height: 200px;
-          background: rgba(180, 180, 180, 0.4);
-          border-radius: 10px;
+          background: linear-gradient(to bottom, 
+            rgba(200, 200, 200, 0.5) 0%, 
+            rgba(200, 200, 200, 0.4) 50%, 
+            rgba(200, 200, 200, 0.3) 100%
+          );
+          border-radius: 20px;
           border: none;
         }
 
-        /* Thumb (el botón circular blanco) */
+        /* Thumb (el botón circular blanco) - Más grande */
         .text-size-slider::-webkit-slider-thumb {
           -webkit-appearance: none;
           appearance: none;
-          width: 20px;
-          height: 20px;
+          width: 28px;
+          height: 28px;
           border-radius: 50%;
           background: #ffffff;
           cursor: pointer;
           border: none;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-          margin-left: -8px; /* Centrar el thumb sobre el track */
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+          margin-left: -8px;
         }
 
         .text-size-slider::-moz-range-thumb {
-          width: 20px;
-          height: 20px;
+          width: 28px;
+          height: 28px;
           border-radius: 50%;
           background: #ffffff;
           cursor: pointer;
           border: none;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
         }
 
         /* Efecto al hacer focus (cuando está siendo usado) */
@@ -526,11 +534,22 @@ const StoryEditPage = () => {
         }
 
         .text-size-slider:focus::-webkit-slider-thumb {
-          box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+          box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.25), 0 2px 6px rgba(0, 0, 0, 0.3);
         }
 
         .text-size-slider:focus::-moz-range-thumb {
-          box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+          box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.25), 0 2px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Efecto hover */
+        .text-size-slider:hover::-webkit-slider-thumb {
+          transform: scale(1.05);
+          box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.2), 0 2px 8px rgba(0, 0, 0, 0.4);
+        }
+
+        .text-size-slider:hover::-moz-range-thumb {
+          transform: scale(1.05);
+          box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.2), 0 2px 8px rgba(0, 0, 0, 0.4);
         }
       `}</style>
       
