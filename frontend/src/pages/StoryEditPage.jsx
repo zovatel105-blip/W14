@@ -771,11 +771,11 @@ const StoryEditPage = () => {
       {mediaPreview ? (
         /* Vista previa del contenido con bordes curvos arriba y abajo */
         <div className="absolute top-0 left-0 right-0 bottom-32">
-          {/* Barra lateral izquierda - Control de tamaño del texto */}
+          {/* Barra lateral izquierda - Control de tamaño del texto - Estilo videojuego */}
           {isTextMode && editingTextIndex !== null && (
-            <div className="absolute left-3 top-1/2 -translate-y-1/2 z-40">
-              <div className="flex flex-col items-center">
-                {/* Slider vertical estilo Instagram sin números */}
+            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-40">
+              <div className="slider-container active flex flex-col items-center">
+                {/* Slider vertical estilo videojuego moderno */}
                 <input
                   type="range"
                   min="16"
@@ -786,8 +786,8 @@ const StoryEditPage = () => {
                   style={{
                     writingMode: 'bt-lr',
                     WebkitAppearance: 'slider-vertical',
-                    width: '12px',
-                    height: '200px',
+                    width: '16px',
+                    height: '220px',
                     background: 'transparent',
                     outline: 'none',
                     border: 'none',
