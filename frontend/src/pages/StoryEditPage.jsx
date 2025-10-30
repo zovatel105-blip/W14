@@ -780,7 +780,7 @@ const StoryEditPage = () => {
                   />
                 </svg>
                 
-                {/* Slider vertical sobre el embudo */}
+                {/* Slider horizontal rotado 270 grados para hacerlo vertical */}
                 <input
                   type="range"
                   min="16"
@@ -789,13 +789,6 @@ const StoryEditPage = () => {
                   onChange={(e) => handleSizeChange(Number(e.target.value))}
                   className="text-size-slider"
                   style={{
-                    writingMode: 'bt-lr',
-                    WebkitAppearance: 'slider-vertical',
-                    width: '3px',
-                    height: '180px',
-                    background: 'transparent',
-                    outline: 'none',
-                    border: 'none',
                     position: 'relative',
                     zIndex: 10,
                   }}
