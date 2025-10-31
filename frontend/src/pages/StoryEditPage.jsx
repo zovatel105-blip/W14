@@ -949,14 +949,7 @@ const StoryEditPage = () => {
               handleTextDragEnd();
               handleStickerDragEnd();
             }}
-            onClick={(e) => {
-              // Deseleccionar sticker si se hace clic fuera
-              if (selectedStickerIndex !== null) {
-                setSelectedStickerIndex(null);
-              } else {
-                handleScreenTap(e);
-              }
-            }}
+            onClick={handleScreenTap}
             style={{ touchAction: 'none' }}
           >
             {/* Preview de imagen o video con zoom */}
