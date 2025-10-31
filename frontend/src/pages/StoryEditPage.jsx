@@ -1406,14 +1406,12 @@ const MoreOptionsModal = ({ onClose, onReset }) => {
       id: 'reset',
       name: 'Reiniciar todo',
       description: 'Eliminar texto, stickers y música',
-      icon: '🔄',
       action: onReset
     },
     {
       id: 'save_draft',
       name: 'Guardar borrador',
       description: 'Guardar para continuar después',
-      icon: '💾',
       action: () => {
         // Funcionalidad futura
         onClose();
@@ -1423,7 +1421,6 @@ const MoreOptionsModal = ({ onClose, onReset }) => {
       id: 'settings',
       name: 'Configuración',
       description: 'Ajustes de privacidad y duración',
-      icon: '⚙️',
       action: () => {
         // Funcionalidad futura
         onClose();
@@ -1446,11 +1443,8 @@ const MoreOptionsModal = ({ onClose, onReset }) => {
             <button
               key={option.id}
               onClick={option.action}
-              className="w-full text-left p-4 rounded-2xl hover:bg-white/20 backdrop-blur-sm transition-all flex items-center gap-3"
+              className="w-full text-left p-4 rounded-2xl hover:bg-white/20 backdrop-blur-sm transition-all"
             >
-              <div className="text-3xl">
-                {option.icon}
-              </div>
               <div className="flex-1 min-w-0">
                 <p className="font-semibold text-white">{option.name}</p>
                 <p className="text-sm text-white/70">{option.description}</p>
