@@ -71,6 +71,11 @@ const StoryEditPage = () => {
   const [lastPanX, setLastPanX] = useState(0);
   const [lastPanY, setLastPanY] = useState(0);
 
+  // Estados para arrastre de elementos
+  const [draggingTextIndex, setDraggingTextIndex] = useState(null);
+  const [draggingStickerIndex, setDraggingStickerIndex] = useState(null);
+  const [dragStartPos, setDragStartPos] = useState({ x: 0, y: 0 });
+
   // Estilos de texto disponibles - 10+ fuentes variadas
   const textStyles = [
     { id: 'classic', name: 'Classic', font: 'font-sans' },
