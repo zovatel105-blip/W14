@@ -884,9 +884,35 @@ const StoryEditPage = () => {
           
           <div 
             className="relative w-full h-full bg-black rounded-3xl overflow-hidden"
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
+            onTouchStart={(e) => {
+              if (draggingTextIndex !== null || draggingStickerIndex !== null) return;
+              handleTouchStart(e);
+            }}
+            onTouchMove={(e) => {
+              if (draggingTextIndex !== null) {
+                handleTextDragMove(e, e.currentTarget);
+              } else if (draggingStickerIndex !== null) {
+                handleStickerDragMove(e, e.currentTarget);
+              } else {
+                handleTouchMove(e);
+              }
+            }}
+            onTouchEnd={(e) => {
+              handleTextDragEnd();
+              handleStickerDragEnd();
+              handleTouchEnd(e);
+            }}
+            onMouseMove={(e) => {
+              if (draggingTextIndex !== null) {
+                handleTextDragMove(e, e.currentTarget);
+              } else if (draggingStickerIndex !== null) {
+                handleStickerDragMove(e, e.currentTarget);
+              }
+            }}
+            onMouseUp={() => {
+              handleTextDragEnd();
+              handleStickerDragEnd();
+            }}
             onClick={handleScreenTap}
             style={{ touchAction: 'none' }}
           >
