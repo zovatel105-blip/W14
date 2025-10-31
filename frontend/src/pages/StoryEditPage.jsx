@@ -289,6 +289,15 @@ const StoryEditPage = () => {
     const clientX = e.touches ? e.touches[0].clientX : e.clientX;
     const clientY = e.touches ? e.touches[0].clientY : e.clientY;
     
+    // Verificar si está sobre la papelera
+    const trashElement = document.getElementById('trash-zone');
+    if (trashElement) {
+      const trashRect = trashElement.getBoundingClientRect();
+      const isOver = clientX >= trashRect.left && clientX <= trashRect.right &&
+                     clientY >= trashRect.top && clientY <= trashRect.bottom;
+      setIsOverTrash(isOver);
+    }
+    
     const rect = containerRef.getBoundingClientRect();
     const newX = ((clientX - rect.left) / rect.width) * 100;
     const newY = ((clientY - rect.top) / rect.height) * 100;
@@ -300,7 +309,12 @@ const StoryEditPage = () => {
   };
 
   const handleTextDragEnd = () => {
+    // Si está sobre la papelera, eliminar el texto
+    if (isOverTrash && draggingTextIndex !== null) {
+      handleDeleteText(draggingTextIndex);
+    }
     setDraggingTextIndex(null);
+    setIsOverTrash(false);
   };
 
   // Handlers para arrastrar stickers
