@@ -8922,33 +8922,21 @@ async def get_user_stories(
         })
         viewed_story_ids = set([view["story_id"] async for view in views_cursor])
         
-        # Get music data for stories that have music_id
+        # Get music data for stories that have music_id using get_music_info helper
         music_ids = [story.get("music_id") for story in stories if story.get("music_id")]
         music_dict = {}
         if music_ids:
-            # Try to get music from user_audio collection
-            user_audio_cursor = db.user_audio.find({"id": {"$in": music_ids}})
-            async for audio in user_audio_cursor:
-                music_dict[audio["id"]] = {
-                    "id": audio["id"],
-                    "title": audio.get("title", "Unknown"),
-                    "artist": audio.get("artist", "Unknown Artist"),
-                    "preview_url": audio.get("audio_url"),
-                    "cover_url": audio.get("cover_url")
-                }
-            
-            # Also try system music (iTunes, trending)
-            remaining_music_ids = [mid for mid in music_ids if mid not in music_dict]
-            if remaining_music_ids:
-                system_music_cursor = db.system_music.find({"id": {"$in": remaining_music_ids}})
-                async for music in system_music_cursor:
-                    music_dict[music["id"]] = {
-                        "id": music["id"],
-                        "title": music.get("title", "Unknown"),
-                        "artist": music.get("artist", "Unknown Artist"),
-                        "preview_url": music.get("preview_url"),
-                        "cover_url": music.get("cover_url")
-                    }
+            logger.info(f"📖 [USER_STORIES] Fetching music data for {len(set(music_ids))} unique music IDs")
+            for music_id in set(music_ids):  # Remove duplicates
+                try:
+                    music_info = await get_music_info(music_id)
+                    if music_info:
+                        music_dict[music_id] = music_info
+                        logger.info(f"   ✅ Got music: {music_info.get('title')} - {music_info.get('artist')}")
+                    else:
+                        logger.warning(f"   ⚠️ No music found for ID: {music_id}")
+                except Exception as e:
+                    logger.error(f"   ❌ Error fetching music {music_id}: {str(e)}")
         
         # Convert stories to StoryResponse
         story_responses = []
