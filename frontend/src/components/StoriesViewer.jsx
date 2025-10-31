@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { X, ChevronLeft, ChevronRight } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { X, ChevronLeft, ChevronRight, Volume2, VolumeX } from 'lucide-react';
 import AppConfig from '../config/config';
 
 const StoriesViewer = ({ storiesGroups, onClose, initialUserIndex = 0 }) => {
   const [currentUserIndex, setCurrentUserIndex] = useState(initialUserIndex);
   const [currentStoryIndex, setCurrentStoryIndex] = useState(0);
   const [progress, setProgress] = useState(0);
+  const [isMuted, setIsMuted] = useState(false);
+  const audioRef = useRef(null); // Reference for background music
 
   const currentGroup = storiesGroups[currentUserIndex];
   const currentStory = currentGroup?.stories[currentStoryIndex];
