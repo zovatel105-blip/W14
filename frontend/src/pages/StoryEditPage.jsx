@@ -1021,23 +1021,29 @@ const StoryEditPage = () => {
                     </div>
                   ) : (
                     <div
+                      onTouchStart={(e) => handleTextDragStart(e, index)}
+                      onMouseDown={(e) => handleTextDragStart(e, index)}
                       onClick={(e) => {
-                        e.stopPropagation();
-                        setEditingTextIndex(index);
-                        setIsTextMode(true);
-                        // Cargar configuración del texto actual
-                        setCurrentTextColor(text.color);
-                        setCurrentTextStyle(text.style);
-                        setCurrentTextSize(text.size || 36);
-                        setCurrentTextAlign(text.align || 'center');
-                        setCurrentTextBg(text.bg || 'none');
-                        setCurrentTextEffect(text.effect || 'none');
+                        if (draggingTextIndex === null) {
+                          e.stopPropagation();
+                          setEditingTextIndex(index);
+                          setIsTextMode(true);
+                          // Cargar configuración del texto actual
+                          setCurrentTextColor(text.color);
+                          setCurrentTextStyle(text.style);
+                          setCurrentTextSize(text.size || 36);
+                          setCurrentTextAlign(text.align || 'center');
+                          setCurrentTextBg(text.bg || 'none');
+                          setCurrentTextEffect(text.effect || 'none');
+                        }
                       }}
-                      className={`cursor-pointer ${styleConfig.font}`}
+                      className={`cursor-move ${styleConfig.font}`}
                       style={{
                         color: text.color,
                         fontSize: `${text.size || 36}px`,
                         textAlign: text.align || 'center',
+                        userSelect: 'none',
+                        WebkitUserSelect: 'none',
                         ...styleConfig.style,
                         ...effectConfig.style,
                         ...bgConfig.style
