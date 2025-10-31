@@ -1031,27 +1031,29 @@ const StoryEditPage = () => {
         <div className="max-w-md mx-auto space-y-3">
           {/* Paneles de selección - Aparecen encima de los botones */}
           <div className="space-y-2 mb-3">
-            {/* Panel de fuentes - Solo cuando está editando texto */}
+            {/* Panel de fuentes - Solo cuando está editando texto - Centrado en la pantalla */}
             {isTextMode && editingTextIndex !== null && showFontPicker && (
-              <div className="bg-black/70 backdrop-blur-sm rounded-2xl p-3">
-                <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
-                  {textStyles.map((style) => (
-                    <button
-                      key={style.id}
-                      onClick={() => {
-                        handleStyleChange(style.id);
-                        setShowFontPicker(false);
-                      }}
-                      className={`px-5 py-2 rounded-full whitespace-nowrap font-semibold transition-all flex-shrink-0 ${
-                        currentTextStyle === style.id
-                          ? 'bg-white text-black'
-                          : 'bg-white/20 backdrop-blur-sm text-white'
-                      }`}
-                      style={style.style}
-                    >
-                      {style.name}
-                    </button>
-                  ))}
+              <div className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
+                <div className="bg-black/70 backdrop-blur-sm rounded-2xl p-3 pointer-events-auto max-w-md w-full mx-4">
+                  <div className="flex gap-2 overflow-x-auto pb-2 no-scrollbar">
+                    {textStyles.map((style) => (
+                      <button
+                        key={style.id}
+                        onClick={() => {
+                          handleStyleChange(style.id);
+                          setShowFontPicker(false);
+                        }}
+                        className={`px-5 py-2 rounded-full whitespace-nowrap font-semibold transition-all flex-shrink-0 ${
+                          currentTextStyle === style.id
+                            ? 'bg-white text-black'
+                            : 'bg-white/20 backdrop-blur-sm text-white'
+                        }`}
+                        style={style.style}
+                      >
+                        {style.name}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
             )}
