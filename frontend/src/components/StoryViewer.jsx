@@ -8,6 +8,7 @@ const StoryViewer = ({ stories, initialIndex = 0, onClose, onStoryView }) => {
   const [isMuted, setIsMuted] = useState(false);
   const [progress, setProgress] = useState(0);
   const progressIntervalRef = useRef(null);
+  const audioRef = useRef(null); // Reference for background music
 
   const currentUser = stories[currentUserIndex];
   const currentStory = currentUser?.stories[currentStoryIndex];
@@ -19,6 +20,62 @@ const StoryViewer = ({ stories, initialIndex = 0, onClose, onStoryView }) => {
       onStoryView(currentStory.id);
     }
   }, [currentStory, onStoryView]);
+
+  // Handle background music playback
+  useEffect(() => {
+    if (!currentStory) return;
+
+    // Stop any existing audio
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+
+    // Play new audio if story has music
+    if (currentStory.music && currentStory.music.preview_url) {
+      console.log('🎵 Story has music:', currentStory.music);
+      
+      // Create new audio element
+      const audio = new Audio(currentStory.music.preview_url);
+      audio.loop = false; // Don't loop, story will advance
+      audio.volume = isMuted ? 0 : 1;
+      
+      // Play audio automatically
+      audio.play().catch(error => {
+        console.error('Error playing story audio:', error);
+      });
+
+      audioRef.current = audio;
+    }
+
+    // Cleanup function
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, [currentUserIndex, currentStoryIndex, currentStory]);
+
+  // Handle mute/unmute for background music
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.volume = isMuted ? 0 : 1;
+    }
+  }, [isMuted]);
+
+  // Handle pause/play for background music
+  useEffect(() => {
+    if (audioRef.current) {
+      if (isPaused) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play().catch(error => {
+          console.error('Error resuming story audio:', error);
+        });
+      }
+    }
+  }, [isPaused]);
 
   // Auto-advance story progress
   useEffect(() => {
@@ -85,6 +142,10 @@ const StoryViewer = ({ stories, initialIndex = 0, onClose, onStoryView }) => {
     setIsPaused(!isPaused);
   };
 
+  const toggleMute = () => {
+    setIsMuted(!isMuted);
+  };
+
   if (!currentUser || !currentStory) return null;
 
   return (
@@ -128,6 +189,19 @@ const StoryViewer = ({ stories, initialIndex = 0, onClose, onStoryView }) => {
         </div>
         
         <div className="flex items-center gap-2">
+          {/* Mute/Unmute button - only show if story has music */}
+          {currentStory.music && currentStory.music.preview_url && (
+            <button
+              onClick={toggleMute}
+              className="w-10 h-10 rounded-full bg-black/30 backdrop-blur-sm flex items-center justify-center hover:bg-black/50 transition-colors"
+            >
+              {isMuted ? (
+                <VolumeX className="w-5 h-5 text-white" />
+              ) : (
+                <Volume2 className="w-5 h-5 text-white" />
+              )}
+            </button>
+          )}
           <button
             onClick={togglePause}
             className="w-10 h-10 rounded-full bg-black/30 backdrop-blur-sm flex items-center justify-center hover:bg-black/50 transition-colors"
@@ -171,6 +245,27 @@ const StoryViewer = ({ stories, initialIndex = 0, onClose, onStoryView }) => {
           />
         )}
       </div>
+
+      {/* Music info - show at bottom if story has music */}
+      {currentStory.music && currentStory.music.preview_url && (
+        <div className="absolute bottom-6 left-0 right-0 px-6 z-10">
+          <div className="flex items-center gap-3 bg-black/40 backdrop-blur-sm rounded-full px-4 py-2 max-w-sm mx-auto">
+            <div className="flex-shrink-0">
+              <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
+                <Volume2 className="w-4 h-4 text-white" />
+              </div>
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-white text-sm font-medium truncate">
+                {currentStory.music.title || 'Unknown Song'}
+              </p>
+              <p className="text-white/70 text-xs truncate">
+                {currentStory.music.artist || 'Unknown Artist'}
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Navigation hints (mobile) */}
       <div className="absolute inset-y-0 left-0 w-1/3 z-[5]" onClick={goToPreviousStory} />
