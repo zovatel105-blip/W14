@@ -1050,25 +1050,27 @@ const ContentCreationPage = () => {
 
   return (
     <div className="fixed inset-0 z-50 relative h-screen w-screen overflow-hidden bg-black" style={{ margin: 0, padding: 0 }}>
-      {/* Main Content Area - Preview ocupa TODA la pantalla con fondo negro */}
-      <div className="w-full h-full min-h-screen">
-        <LayoutPreview
-          layout={selectedLayout}
-          options={options}
-          title="" 
-          selectedMusic={selectedMusic}
-          onImageUpload={handleImageUpload}
-          onImageRemove={handleImageRemove}
-          onOptionTextChange={handleOptionTextChange}
-          onMentionSelect={handleMentionSelect}
-          onMentionInputChange={handleMentionInputChange}
-          mentionInputValues={mentionInputValues}
-          onCropFromPreview={handleCropFromPreview}
-          cropActiveSlot={cropActiveSlot}
-          onInlineCropSave={handleInlineCropSave}
-          onInlineCropCancel={handleInlineCropCancel}
-          fullscreen={previewMode}
-        />
+      {/* Main Content Area - Con espacio inferior como StoryEditPage */}
+      <div className="absolute top-0 left-0 right-0 bottom-32">
+        <div className="relative w-full h-full bg-black rounded-3xl overflow-hidden">
+          <LayoutPreview
+            layout={selectedLayout}
+            options={options}
+            title="" 
+            selectedMusic={selectedMusic}
+            onImageUpload={handleImageUpload}
+            onImageRemove={handleImageRemove}
+            onOptionTextChange={handleOptionTextChange}
+            onMentionSelect={handleMentionSelect}
+            onMentionInputChange={handleMentionInputChange}
+            mentionInputValues={mentionInputValues}
+            onCropFromPreview={handleCropFromPreview}
+            cropActiveSlot={cropActiveSlot}
+            onInlineCropSave={handleInlineCropSave}
+            onInlineCropCancel={handleInlineCropCancel}
+            fullscreen={previewMode}
+          />
+        </div>
       </div>
 
       {/* Header Controls - Floating on top - Hidden in preview mode */}
