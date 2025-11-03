@@ -1159,23 +1159,6 @@ const ContentCreationPage = () => {
             )}
           </div>
 
-          {/* Next Button (Siguiente) - Story style */}
-          <button
-            onClick={handleCreate}
-            disabled={isCreating || options.filter(opt => opt && opt.media).length < 2}
-            className="px-6 py-3 bg-white hover:bg-gray-100 disabled:bg-gray-500/70 rounded-full flex items-center justify-center text-black font-semibold transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed border border-white/10"
-            title={isCreating ? 'Continuando...' : 'Siguiente'}
-          >
-            {isCreating ? (
-              <div className="flex items-center gap-2">
-                <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
-                <span>Cargando...</span>
-              </div>
-            ) : (
-              <span>Siguiente</span>
-            )}
-          </button>
-
           {/* Add Slot Button - Only for "off" layout and not at max capacity */}
           {selectedLayout.id === 'off' && options.filter(opt => opt && opt.media).length < 6 && (
             <button
