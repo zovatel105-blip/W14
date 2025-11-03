@@ -1189,6 +1189,46 @@ const ContentCreationPage = () => {
         </div>
       )}
 
+      {/* Botón "Siguiente" estilo "Tu historia" - Parte inferior */}
+      {!previewMode && (
+        <div className="absolute bottom-0 left-0 right-0 z-30 pb-6 px-4">
+          <div className="max-w-md mx-auto flex justify-end">
+            <button
+              onClick={handleCreate}
+              disabled={isCreating || options.filter(opt => opt && opt.media).length < 2}
+              className="flex items-center gap-2 bg-gray-900/80 hover:bg-gray-800/80 disabled:bg-gray-900/40 disabled:cursor-not-allowed backdrop-blur-sm rounded-full px-3 py-1.5 transition-all"
+            >
+              {/* Avatar circular */}
+              <div className="relative w-8 h-8 flex-shrink-0">
+                {user?.avatar_url || user?.profile_picture ? (
+                  <img
+                    src={user.avatar_url || user.profile_picture}
+                    alt={user.username}
+                    className="w-full h-full rounded-full object-cover border border-white"
+                  />
+                ) : (
+                  <div className="w-full h-full rounded-full bg-gray-600 flex items-center justify-center border border-white">
+                    <span className="text-white text-sm font-bold">
+                      {user?.username?.[0]?.toUpperCase() || 'U'}
+                    </span>
+                  </div>
+                )}
+                {isCreating && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full">
+                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  </div>
+                )}
+              </div>
+              
+              {/* Texto */}
+              <span className="text-white font-medium text-sm pr-1">
+                Siguiente
+              </span>
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Music Selector Modal */}
       {showMusicSelector && (
         <div className="fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4">
