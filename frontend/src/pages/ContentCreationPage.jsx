@@ -1159,19 +1159,20 @@ const ContentCreationPage = () => {
             )}
           </div>
 
-          {/* Publish Button */}
+          {/* Next Button (Siguiente) - Story style */}
           <button
             onClick={handleCreate}
             disabled={isCreating || options.filter(opt => opt && opt.media).length < 2}
-            className="w-10 h-10 sm:w-12 sm:h-12 bg-red-500/90 backdrop-blur-sm hover:bg-red-600/90 disabled:bg-gray-500/70 rounded-full flex items-center justify-center text-white transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed border border-white/10"
-            title={isCreating ? 'Continuando...' : 'Continuar a Publicación'}
+            className="px-6 py-3 bg-white hover:bg-gray-100 disabled:bg-gray-500/70 rounded-full flex items-center justify-center text-black font-semibold transition-all shadow-lg disabled:opacity-50 disabled:cursor-not-allowed border border-white/10"
+            title={isCreating ? 'Continuando...' : 'Siguiente'}
           >
             {isCreating ? (
-              <div className="w-4 h-4 sm:w-5 sm:h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+              <div className="flex items-center gap-2">
+                <div className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></div>
+                <span>Cargando...</span>
+              </div>
             ) : (
-              <svg className="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
-              </svg>
+              <span>Siguiente</span>
             )}
           </button>
 
