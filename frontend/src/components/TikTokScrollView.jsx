@@ -909,8 +909,8 @@ const TikTokPollCard = ({
             <span className="text-xs font-light" style={{ textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>
               {(() => {
                 const fullTitle = `${poll.music.title} - ${poll.music.artist}`;
-                const halfLength = Math.ceil(fullTitle.length / 2);
-                return fullTitle.length > halfLength ? `${fullTitle.substring(0, halfLength)}...` : fullTitle;
+                const truncateLength = Math.ceil(fullTitle.length * 0.6);
+                return fullTitle.length > truncateLength ? `${fullTitle.substring(0, truncateLength)}...` : fullTitle;
               })()}
             </span>
           </div>
