@@ -179,7 +179,7 @@ const FeedMenu = ({
       <button
         onClick={(e) => {
           e.stopPropagation();
-          setIsOpen(!isOpen);
+          handleSetIsOpen(!isOpen);
         }}
         className={`flex items-center justify-center text-white hover:text-gray-300 hover:scale-105 transition-all duration-200 h-auto p-2 rounded-lg bg-black/20 backdrop-blur-sm ${className}`}
       >
