@@ -264,7 +264,7 @@ const FeedMenu = ({
                 <button
                   onClick={() => {
                     setShowReportModal(true);
-                    setIsOpen(false);
+                    handleSetIsOpen(false);
                   }}
                   className="w-full px-6 py-4 text-left hover:bg-red-50 active:bg-red-100/50 transition-colors duration-150 flex items-center gap-4"
                 >
