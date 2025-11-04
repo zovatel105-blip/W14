@@ -21,9 +21,18 @@ const FeedMenu = ({
   onToggleNotifications, 
   onReport,
   className = "",
-  isNotificationEnabled = false 
+  isNotificationEnabled = false,
+  onOpenChange
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  
+  // Notify parent when menu opens/closes
+  const handleSetIsOpen = (value) => {
+    setIsOpen(value);
+    if (onOpenChange) {
+      onOpenChange(value);
+    }
+  };
   const [showReportModal, setShowReportModal] = useState(false);
   const [selectedReportCategory, setSelectedReportCategory] = useState(null);
   const [reportComment, setReportComment] = useState('');
