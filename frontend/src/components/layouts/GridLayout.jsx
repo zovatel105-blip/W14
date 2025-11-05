@@ -192,7 +192,7 @@ const GridLayout = ({
         return (
           <div
             key={option.id}
-            className="relative cursor-pointer group h-full w-full overflow-hidden touch-manipulation"
+            className="relative cursor-pointer group h-full w-full overflow-hidden touch-manipulation rounded-lg"
             onClick={() => onVote(option.id)}
             style={{ 
               WebkitTapHighlightColor: 'transparent',
