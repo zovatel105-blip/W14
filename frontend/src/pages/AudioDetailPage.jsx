@@ -380,7 +380,7 @@ const AudioDetailPage = () => {
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
-      <header className="bg-white sticky top-0 z-40">
+      <header className="bg-gray-50 sticky top-0 z-40">
         <div className="flex items-center justify-between px-4 py-3">
           <Button 
             variant="ghost" 
@@ -397,7 +397,7 @@ const AudioDetailPage = () => {
         </div>
       </header>
 
-      <div className="w-full px-4 py-6 space-y-6">
+      <div className="w-full px-4 py-6 space-y-6 bg-gray-50">
         
         {/* Audio Info */}
         <div className="max-w-md mx-auto bg-white rounded-lg border border-gray-200 p-6">
