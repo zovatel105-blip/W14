@@ -207,7 +207,7 @@ const CarouselLayout = ({
                         if (el) videoRefs.current.set(option.id, el);
                       }}
                       src={option.media.url} 
-                      className="w-full h-full object-cover object-center"
+                      className="w-full h-full object-cover object-center rounded-lg"
                       // ✅ FIXED: Play video for current slide when active
                       autoPlay={isActive && currentSlide === optionIndex}
                       muted
