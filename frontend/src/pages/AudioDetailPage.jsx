@@ -23,11 +23,69 @@ const AudioDetailPage = () => {
   const [error, setError] = useState(null);
   const [showTikTokView, setShowTikTokView] = useState(false);
   const [selectedPostIndex, setSelectedPostIndex] = useState(0);
+  const [dominantColor, setDominantColor] = useState('rgb(249, 250, 251)'); // Default gray-50
 
   useEffect(() => {
     fetchAudioDetails();
     fetchPostsUsingAudio();
   }, [audioId]);
+
+  // Extract dominant color from cover image
+  useEffect(() => {
+    if (audio?.cover_url) {
+      extractDominantColor(audio.cover_url);
+    }
+  }, [audio?.cover_url]);
+
+  const extractDominantColor = (imageUrl) => {
+    const img = new Image();
+    img.crossOrigin = 'Anonymous';
+    
+    img.onload = () => {
+      try {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Resize for performance
+        canvas.width = 100;
+        canvas.height = 100;
+        
+        ctx.drawImage(img, 0, 0, 100, 100);
+        const imageData = ctx.getImageData(0, 0, 100, 100).data;
+        
+        let r = 0, g = 0, b = 0;
+        let count = 0;
+        
+        // Sample every 4th pixel for performance
+        for (let i = 0; i < imageData.length; i += 16) {
+          r += imageData[i];
+          g += imageData[i + 1];
+          b += imageData[i + 2];
+          count++;
+        }
+        
+        r = Math.floor(r / count);
+        g = Math.floor(g / count);
+        b = Math.floor(b / count);
+        
+        // Make color lighter (add white) for background
+        r = Math.floor(r + (255 - r) * 0.7);
+        g = Math.floor(g + (255 - g) * 0.7);
+        b = Math.floor(b + (255 - b) * 0.7);
+        
+        setDominantColor(`rgb(${r}, ${g}, ${b})`);
+      } catch (error) {
+        console.error('Error extracting color:', error);
+        setDominantColor('rgb(249, 250, 251)'); // Fallback to gray-50
+      }
+    };
+    
+    img.onerror = () => {
+      setDominantColor('rgb(249, 250, 251)'); // Fallback to gray-50
+    };
+    
+    img.src = imageUrl;
+  };
 
   const fetchAudioDetails = async () => {
     try {
