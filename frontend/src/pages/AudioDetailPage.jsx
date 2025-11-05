@@ -458,7 +458,10 @@ const AudioDetailPage = () => {
       <div className="w-full px-4 py-6 space-y-6">
         
         {/* Audio Info */}
-        <div className="max-w-md mx-auto bg-gray-50 rounded-lg border border-gray-200 p-6">
+        <div 
+          className="max-w-md mx-auto rounded-lg border border-gray-200 p-6 transition-colors duration-500"
+          style={{ backgroundColor: dominantColor }}
+        >
           <div className="flex items-center space-x-4">
             <div 
               className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0 cursor-pointer hover:bg-gray-200 transition-colors relative"
