@@ -240,7 +240,7 @@ const GridLayout = ({
                   <img 
                     src={option.media.url} 
                     alt={option.text}
-                    className="w-full h-full object-cover object-center"
+                    className="w-full h-full object-cover object-center rounded-lg"
                     // 🚀 IMAGE OPTIMIZATION: Lazy loading
                     loading={isActive ? "eager" : "lazy"}
                     style={{
