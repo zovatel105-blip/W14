@@ -208,7 +208,7 @@ const GridLayout = ({
                       if (el) videoRefs.current.set(option.id, el);
                     }}
                     src={option.media.url} 
-                    className="w-full h-full object-cover object-center"
+                    className="w-full h-full object-cover object-center rounded-lg"
                     // ✅ FIXED: Show videos when active (less restrictive)
                     autoPlay={isActive}
                     muted
