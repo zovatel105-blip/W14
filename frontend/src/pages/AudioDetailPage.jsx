@@ -403,7 +403,7 @@ const AudioDetailPage = () => {
         <div className="max-w-md mx-auto bg-white rounded-lg border border-gray-200 p-6">
           <div className="flex items-center space-x-4">
             <div 
-              className="w-16 h-16 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0 cursor-pointer hover:bg-purple-200 transition-colors relative"
+              className="w-16 h-16 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0 cursor-pointer hover:bg-gray-200 transition-colors relative"
               onClick={handlePlayPause}
             >
               {audio.cover_url ? (
@@ -413,7 +413,7 @@ const AudioDetailPage = () => {
                   className="w-full h-full object-cover rounded-lg"
                 />
               ) : (
-                <Music className="w-8 h-8 text-purple-600" />
+                <Music className="w-8 h-8 text-gray-600" />
               )}
               
               {/* Botón invisible de play superpuesto */}
