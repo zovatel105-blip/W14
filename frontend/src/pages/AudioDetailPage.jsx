@@ -531,7 +531,7 @@ const AudioDetailPage = () => {
 
       {/* Posts using this audio - SECCIÓN INDEPENDIENTE SIN PADDING LATERAL */}
       <div className="space-y-2">
-        <div className="px-4">
+        <div className="pl-2">
           <div className="flex items-center gap-2">
             <h3 className="text-lg font-semibold text-gray-900">
               Videos con este audio
