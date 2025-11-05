@@ -68,10 +68,10 @@ const AudioDetailPage = () => {
         g = Math.floor(g / count);
         b = Math.floor(b / count);
         
-        // Make color lighter (add white) for background
-        r = Math.floor(r + (255 - r) * 0.7);
-        g = Math.floor(g + (255 - g) * 0.7);
-        b = Math.floor(b + (255 - b) * 0.7);
+        // Make color lighter (add white) for background - less lightening for more vibrant color
+        r = Math.floor(r + (255 - r) * 0.4);
+        g = Math.floor(g + (255 - g) * 0.4);
+        b = Math.floor(b + (255 - b) * 0.4);
         
         setDominantColor(`rgb(${r}, ${g}, ${b})`);
       } catch (error) {
