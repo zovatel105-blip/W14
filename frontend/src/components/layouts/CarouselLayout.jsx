@@ -242,7 +242,7 @@ const CarouselLayout = ({
                     <img 
                       src={option.media.url} 
                       alt={option.text || `Slide ${optionIndex + 1}`}
-                      className="w-full h-full object-cover object-center"
+                      className="w-full h-full object-cover object-center rounded-lg"
                       // 🚀 IMAGE OPTIMIZATION: Lazy load non-current slides
                       loading={currentSlide === optionIndex ? "eager" : "lazy"}
                       style={{
