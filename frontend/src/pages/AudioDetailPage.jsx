@@ -23,7 +23,7 @@ const AudioDetailPage = () => {
   const [error, setError] = useState(null);
   const [showTikTokView, setShowTikTokView] = useState(false);
   const [selectedPostIndex, setSelectedPostIndex] = useState(0);
-  const [dominantColor, setDominantColor] = useState('rgb(249, 250, 251)'); // Default gray-50
+  const [dominantColor, setDominantColor] = useState('rgba(176, 97, 255, 0.1)'); // Default soft purple like EditProfile
 
   useEffect(() => {
     fetchAudioDetails();
