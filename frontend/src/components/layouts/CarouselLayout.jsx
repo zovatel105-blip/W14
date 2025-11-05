@@ -190,7 +190,7 @@ const CarouselLayout = ({
           return (
             <div
               key={option.id}
-              className="relative flex-shrink-0 h-full cursor-pointer group overflow-hidden touch-manipulation"
+              className="relative flex-shrink-0 h-full cursor-pointer group overflow-hidden touch-manipulation rounded-lg"
               onClick={() => onVote(option.id)}
               style={{ 
                 WebkitTapHighlightColor: 'transparent',
