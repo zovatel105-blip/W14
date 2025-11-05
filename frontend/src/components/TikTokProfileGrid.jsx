@@ -69,7 +69,7 @@ const TikTokProfileGrid = ({ polls, onPollClick, onUpdatePoll, onDeletePoll, cur
         return (
           <motion.div
             key={poll.id}
-            className="tiktok-profile-grid-item group relative overflow-hidden"
+            className="tiktok-profile-grid-item group relative overflow-hidden rounded-lg"
             onClick={() => onPollClick && onPollClick(poll)}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
