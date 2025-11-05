@@ -68,10 +68,10 @@ const AudioDetailPage = () => {
         g = Math.floor(g / count);
         b = Math.floor(b / count);
         
-        // Make color very light like "Editar perfil" - almost white with a subtle tint
-        r = Math.floor(r + (255 - r) * 0.85);
-        g = Math.floor(g + (255 - g) * 0.85);
-        b = Math.floor(b + (255 - b) * 0.85);
+        // Make color extremely light like "Editar perfil" - almost white with barely visible tint
+        r = Math.floor(r + (255 - r) * 0.92);
+        g = Math.floor(g + (255 - g) * 0.92);
+        b = Math.floor(b + (255 - b) * 0.92);
         
         setDominantColor(`rgb(${r}, ${g}, ${b})`);
       } catch (error) {
